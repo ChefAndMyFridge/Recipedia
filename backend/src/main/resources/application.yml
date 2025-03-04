@@ -6,7 +6,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://my-mysql:3306/recipidia
     username: root
-    password: 1234
+    password: ${MYSQL_ROOT_PASSWORD}
 
   jpa:
     hibernate:

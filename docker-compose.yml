@@ -15,6 +15,8 @@ services:
 
   server:
     container_name: my-springboot
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}  # .env에서 가져옴
     build:
       context: ./backend   # server 폴더를 빌드 컨텍스트로 지정
       dockerfile: Dockerfile  # 서버용 Dockerfile 경로
