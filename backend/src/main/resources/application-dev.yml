@@ -1,0 +1,33 @@
+server:
+  port: 8080
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/recipidia
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
+    open-in-view: false
+
+logging.level:
+  org.hibernate.SQL: DEBUG
+  org.springframework:
+    security: DEBUG
+    web.socket: DEBUG
+    messaging: DEBUG
+
+springdoc:
+  swagger-ui:
+    path: /index.html
