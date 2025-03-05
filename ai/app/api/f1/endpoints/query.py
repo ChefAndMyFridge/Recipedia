@@ -4,17 +4,19 @@ from fastapi import APIRouter, Request, HTTPException
 from fastapi.responses import JSONResponse
 from app.services.YoutubeQuery import YoutubeQuery
 from app.models.ingredients import Ingredients
+from app.utils.docs import QueryDocs
 
 router = APIRouter()
 youtube = YoutubeQuery()
+docs = QueryDocs()
 
-dummy = Ingredients(items={"계란": 1, "파": 1}, user="아버지")
-
-@router.post("/")
-async def get_recipe_url(request: Request, test: int=1, data: Ingredients=dummy):
-    if (test==2):
-        raise HTTPException(status_code=404, detail="Not Found")
-    
+@router.post("/",
+    summary="유튜브 레시피 영상 URL 획득",
+    description="재료목록으로 만들 수 있는 요리 레시피 영상 제목과 URL을 얻습니다.",
+    response_description="유튜브 레시피 검색 결과",
+    responses=docs.base["res"],
+)
+async def get_recipe_url(request: Request, data: Ingredients=docs.base["data"]):
     recipe_name = await youtube.make_query_from_items(data)
 
     print(recipe_name)
