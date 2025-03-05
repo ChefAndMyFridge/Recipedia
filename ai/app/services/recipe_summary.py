@@ -109,7 +109,7 @@ class RecipeSummary:
 
         try:
             # OpenAI API 호출 (RequestGPT.run이 비동기 함수라고 가정)
-            summary = await self.request_gpt.run(system_input, user_input, False)
+            summary = await self.request_gpt.run(system_input, user_input)
             end = time.time()
             print(f"\n{end - start:.5f} sec")
             return summary
