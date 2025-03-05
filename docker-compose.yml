@@ -1,11 +1,13 @@
 services:
   client:
     container_name: my-react
+    environment:
+      - APP_URL=${APP_URL}  # ec2 URL
     build:
       context: ./frontend   # client 폴더를 빌드 컨텍스트로 지정
       dockerfile: Dockerfile  # 클라이언트용 Dockerfile 경로 (디폴트는 'Dockerfile')
     ports:
-      - "3000:80"        # 클라이언트 애플리케이션의 포트를 호스트와 연결
+      - "80:80"        # ec2 url은 80번 포트만 열려있음음
     depends_on:
       - server
     volumes:
@@ -52,7 +54,7 @@ services:
     # ports:
     #   - "3306:3306"
     volumes:
-      - mysql-data:/var/lib/mysql
+      - /home/ubuntu/mysql_data:/var/lib/mysql
     networks:
       - app-network
     healthcheck:
@@ -70,7 +72,7 @@ services:
       - "8081:8080"  # 웹 UI 접근 (기본 포트 8080)
       - "50000:50000"  # 에이전트와 통신용 포트
     volumes:
-      - jenkins_home:/var/jenkins_home  # Jenkins 데이터 유지
+      - /home/ubuntu/jenkins_data:/var/jenkins_home  # Jenkins 데이터 유지
       - /var/run/docker.sock:/var/run/docker.sock  # Docker 컨테이너 제어를 위해 필요
     # environment:
     #   - JENKINS_OPTS="--prefix=/jenkins"  # URL Prefix 설정 (옵션)
