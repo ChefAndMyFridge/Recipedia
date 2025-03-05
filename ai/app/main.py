@@ -6,8 +6,10 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.api.f1 import endpoints
+from app.utils.docs import RootDocs
 
 app = FastAPI(title=settings.APP_NAME, debug=settings.DEBUG)
+docs = RootDocs()
 
 # CORS 미들웨어 등록
 app.add_middleware(
@@ -21,6 +23,11 @@ app.add_middleware(
 # 라우터 등록
 app.include_router(endpoints.router, prefix="/api/f1")
 
-@app.get("/")
+@app.get("/",
+    summary="서버 연결 테스트",
+    description="루트 디렉토리에 접근해 서버가 활성화되어 있는 지 확인합니다.",
+    response_description="서버 상태 코드",
+    responses=docs.base["res"],
+)
 async def read_root(request: Request):
     return JSONResponse(status_code=200, content={"message": "Hello, FastAPI!"},)
