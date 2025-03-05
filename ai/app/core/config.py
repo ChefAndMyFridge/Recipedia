@@ -19,12 +19,6 @@ class Settings(BaseSettings):
     # YouTube 설정
     YOUTUBE_MAX_RESULTS: int = 3
 
-    # 기본 재료 목록
-    DEFAULT_INGREDIENTS: List[str] = ["소고기", "계란", "파", "마늘", "양파"]
-
-    # 기본 주재료
-    DEFAULT_MAIN_INGREDIENT: Optional[str] = None
-
     # 생성할 음식 이름 개수
     NUM_DISHES_TO_GENERATE: int = 6
 

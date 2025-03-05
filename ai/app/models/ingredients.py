@@ -1,8 +1,8 @@
 # app/models/ingredients.py
 
-from typing import Dict
+from typing import List, Optional
 from pydantic import BaseModel
 
 class Ingredients(BaseModel):
-    items: Dict[str, int]
-    user: str
+    ingredients: List[str]
+    main_ingredient: Optional[str] = None

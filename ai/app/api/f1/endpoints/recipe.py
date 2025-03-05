@@ -4,6 +4,9 @@ from fastapi import APIRouter, Request, HTTPException
 from fastapi.responses import JSONResponse
 from app.services.recipe_summary import RecipeSummary
 from app.utils.docs import RecipeDocs
+import logging
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 recipe_summary = RecipeSummary()

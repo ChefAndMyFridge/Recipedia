@@ -17,8 +17,8 @@ class QueryMaker:
             ingredients (list): 사용할 재료 목록. 기본값은 app_config에서 가져옴
             main_ingredient (str): 주재료. 기본값은 app_config에서 가져옴
         """
-        self.ingredients = ingredients or settings.DEFAULT_INGREDIENTS
-        self.main_ingredient = main_ingredient or settings.DEFAULT_MAIN_INGREDIENT
+        self.ingredients = ingredients
+        self.main_ingredient = main_ingredient
         self.dishes = []
         self.all_videos = {}
         self.execution_time = 0
