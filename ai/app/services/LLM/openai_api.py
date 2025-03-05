@@ -2,6 +2,7 @@
 import os
 import json
 import asyncio
+import re
 import openai
 from app.core.config import settings
 
@@ -9,6 +10,19 @@ class RequestGPT:
     def __init__(self, api_key):
         self.client = openai.AsyncOpenAI(api_key = api_key)
         self.model = "gpt-4o"
+
+    def extract_json(self, markdown_output: str) -> dict:
+        # 만약 문자열이 큰따옴표로 감싸져 있다면 unescape 처리합니다.
+        if markdown_output.startswith('"') and markdown_output.endswith('"'):
+            markdown_output = json.loads(markdown_output)
+        
+        # ```json 코드 블록 내부의 JSON 부분 추출
+        match = re.search(r'```json\s*(\{.*\})\s*```', markdown_output, re.DOTALL)
+        if match:
+            json_str = match.group(1)
+            return json.loads(json_str)
+        else:
+            raise ValueError("JSON 형식의 코드 블록을 찾을 수 없습니다.")
 
     async def run(self, system_input, user_input, stream: bool = False) -> str:
         """
@@ -40,12 +54,9 @@ class RequestGPT:
                 print(delta_content, end="")
         else:
             ret_message = completion.choices[0].message.content
-            json_msg = json.dumps(ret_message)
-            # print(ret_message)
-            # print("==========================================")
-            # print(json_msg)
-            print(json.loads(json_msg))
-            return json_msg
+            data = self.extract_json(ret_message)
+            print(data)
+            return data
 
 
 if __name__ == "__main__":
