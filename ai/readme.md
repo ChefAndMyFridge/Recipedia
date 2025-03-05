@@ -51,7 +51,7 @@
 ┃   ┗━ 📜 main.py                   # FastAPI 메인 애플리케이션
 ┃
 ┣━ 📂 test                          # 기능 테스트 용 디렉토리
-┃   ┗━ 📜 test_v1_api.py            # test 실행용 python 코드드
+┃   ┗━ 📜 test_v1_api.py            # test 실행용 python 코드
 ┣━ 📂 venv                          # 가상환경 디렉토리
 ┣━ ⚙️ .env                          # 환경 변수 설정
 ┣━ ⚙️ .gitignore                    # gitignore 설정 파일

@@ -2,12 +2,12 @@
 
 from fastapi import APIRouter, Request, HTTPException
 from fastapi.responses import JSONResponse
-from app.utils.docs import RecipeDocs
 from app.services.recipe_summary import RecipeSummary
+from app.utils.docs import RecipeDocs
 
 router = APIRouter()
-docs = RecipeDocs()
 recipe_summary = RecipeSummary()
+docs = RecipeDocs()
 
 @router.post("/",
     summary="텍스트 레시피 추출",

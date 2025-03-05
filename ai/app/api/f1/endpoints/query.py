@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter, Request, HTTPException
 from fastapi.responses import JSONResponse
-from app.services.YoutubeQuery import YoutubeQuery
+from app.services.youtube_query import YoutubeQuery
 from app.models.ingredients import Ingredients
 from app.utils.docs import QueryDocs
 
