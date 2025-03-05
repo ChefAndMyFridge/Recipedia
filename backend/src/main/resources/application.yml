@@ -25,3 +25,7 @@ logging.level:
 springdoc:
   swagger-ui:
     path: /index.html
+
+fastapi:
+  base:
+    url: http://localhost:8000

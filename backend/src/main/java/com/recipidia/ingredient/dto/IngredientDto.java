@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * DTO for {@link Ingredient}
  */
-public record IngredientDto(Long id, String storagePlace, LocalDateTime expirationDate,
+public record IngredientDto(Long ingredientId, String storagePlace, LocalDateTime expirationDate,
                             LocalDateTime incomingDate, LocalDateTime releasingDate) implements
     Serializable {
 
