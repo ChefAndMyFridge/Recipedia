@@ -5,9 +5,10 @@ import asyncio
 import re
 import openai
 from app.core.config import settings
+from app.models.prompt_input import UserInput, SystemInput
 
 class RequestGPT:
-    def __init__(self, api_key):
+    def __init__(self, api_key: str):
         self.client = openai.AsyncOpenAI(api_key = api_key)
 
     def extract_json(self, markdown_output: str) -> dict:
@@ -23,7 +24,7 @@ class RequestGPT:
         else:
             raise ValueError("JSON 형식의 코드 블록을 찾을 수 없습니다.")
 
-    async def run(self, system_input, user_input) -> str:
+    async def run(self, system_input: SystemInput, user_input: UserInput) -> str:
         """
         시스템 입력과 사용자 입력을 받아 OpenAI API를 호출합니다.
         stream이 True이면 스트리밍으로 결과를 출력하고, 그렇지 않으면 전체 응답을 반환합니다.
