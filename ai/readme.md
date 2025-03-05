@@ -18,11 +18,11 @@
 
     ``` sh
     python -m venv venv
-    source venv/Script/activate
+    source venv/Scripts/activate
     pip install -r requirements.txt
     ```
 
-3. 루트 디렉토리에서 uvicorn 서버를 실행합니다.
+3. /ai 디렉토리에서 uvicorn 서버를 실행합니다.
 
     ``` sh
     uvicorn app.main:app --reload
@@ -35,7 +35,7 @@
 ┃   ┣━ 📂 api.f1.endpoints                  # Controller 모음
 ┃   ┃   ┣━ 📜 __init__.py                   # Endpoints 라우팅 설정                 (/api/f1)
 ┃   ┃   ┣━ 📜 query.py                      # Youtube 레시피 검색 기능 controller     (/query)
-┃   ┃   ┣━ 📜 recipe.py                     # 레시피 추출 기능 controller           (/recipe)
+┃   ┃   ┗━ 📜 recipe.py                     # 레시피 추출 기능 controller           (/recipe)
 ┃   ┣━ 📂 core
 ┃   ┃   ┣━ 📜 __init__.py             
 ┃   ┃   ┗━ 📜 config.py                     # config 파일 (환경변수, 기타 등등 서버 초기 세팅)
@@ -59,15 +59,15 @@
 ┣━ 📂 test                                  # 기능 테스트 용 디렉토리
 ┃   ┗━ 📜 test_v1_api.py                    # test 실행용 python 코드
 ┣━ 📂 venv                                  # 가상환경 디렉토리
-┣━ ⚙️ .env                                    # 환경 변수 설정
-┣━ ⚙️ .gitignore                              # gitignore 설정 파일
-┣━ ⚙️ pytest.ini                              # python 테스트 용 설정
+┣━ ⚙️ .env                                  # 환경 변수 설정
+┣━ ⚙️ .gitignore                            # gitignore 설정 파일
+┣━ ⚙️ pytest.ini                            # python 테스트 용 설정
 ┣━ 📜 readme.md                             # readme 파일
 ┗━ 📜 requirements.txt                      # 필요한 패키지 모음
 ```
 
 ### 🔧 Test 방법
-루트 디렉토리에서 터미널에 pytest 입력해 실행
+/ai 디렉토리에서 터미널에 pytest 입력해 실행
 
 
 ### 📝 Docs 및 기능 테스트
