@@ -45,7 +45,6 @@ const RAW_RUNTIME_STATE =
           ["globals", "npm:15.14.0"],\
           ["postcss", "npm:8.4.49"],\
           ["prettier", "npm:3.4.2"],\
-          ["prettier-plugin-tailwindcss", "virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:0.6.10"],\
           ["react", "npm:18.3.1"],\
           ["react-dom", "virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:18.3.1"],\
           ["react-router-dom", "virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:7.1.1"],\
@@ -2813,7 +2812,6 @@ const RAW_RUNTIME_STATE =
           ["globals", "npm:15.14.0"],\
           ["postcss", "npm:8.4.49"],\
           ["prettier", "npm:3.4.2"],\
-          ["prettier-plugin-tailwindcss", "virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:0.6.10"],\
           ["react", "npm:18.3.1"],\
           ["react-dom", "virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:18.3.1"],\
           ["react-router-dom", "virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:7.1.1"],\
@@ -4379,92 +4377,6 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["prettier-linter-helpers", "npm:1.0.0"],\
           ["fast-diff", "npm:1.3.0"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["prettier-plugin-tailwindcss", [\
-      ["npm:0.6.10", {\
-        "packageLocation": "./.yarn/cache/prettier-plugin-tailwindcss-npm-0.6.10-ee34d33221-9e1e8d5928.zip/node_modules/prettier-plugin-tailwindcss/",\
-        "packageDependencies": [\
-          ["prettier-plugin-tailwindcss", "npm:0.6.10"]\
-        ],\
-        "linkType": "SOFT"\
-      }],\
-      ["virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:0.6.10", {\
-        "packageLocation": "./.yarn/__virtual__/prettier-plugin-tailwindcss-virtual-0686e7945b/0/cache/prettier-plugin-tailwindcss-npm-0.6.10-ee34d33221-9e1e8d5928.zip/node_modules/prettier-plugin-tailwindcss/",\
-        "packageDependencies": [\
-          ["prettier-plugin-tailwindcss", "virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:0.6.10"],\
-          ["@ianvs/prettier-plugin-sort-imports", null],\
-          ["@prettier/plugin-pug", null],\
-          ["@shopify/prettier-plugin-liquid", null],\
-          ["@trivago/prettier-plugin-sort-imports", null],\
-          ["@types/ianvs__prettier-plugin-sort-imports", null],\
-          ["@types/prettier", null],\
-          ["@types/prettier-plugin-astro", null],\
-          ["@types/prettier-plugin-css-order", null],\
-          ["@types/prettier-plugin-import-sort", null],\
-          ["@types/prettier-plugin-jsdoc", null],\
-          ["@types/prettier-plugin-marko", null],\
-          ["@types/prettier-plugin-multiline-arrays", null],\
-          ["@types/prettier-plugin-organize-attributes", null],\
-          ["@types/prettier-plugin-organize-imports", null],\
-          ["@types/prettier-plugin-sort-imports", null],\
-          ["@types/prettier-plugin-style-order", null],\
-          ["@types/prettier-plugin-svelte", null],\
-          ["@types/prettier__plugin-pug", null],\
-          ["@types/shopify__prettier-plugin-liquid", null],\
-          ["@types/trivago__prettier-plugin-sort-imports", null],\
-          ["@types/zackad__prettier-plugin-twig", null],\
-          ["@zackad/prettier-plugin-twig", null],\
-          ["prettier", "npm:3.4.2"],\
-          ["prettier-plugin-astro", null],\
-          ["prettier-plugin-css-order", null],\
-          ["prettier-plugin-import-sort", null],\
-          ["prettier-plugin-jsdoc", null],\
-          ["prettier-plugin-marko", null],\
-          ["prettier-plugin-multiline-arrays", null],\
-          ["prettier-plugin-organize-attributes", null],\
-          ["prettier-plugin-organize-imports", null],\
-          ["prettier-plugin-sort-imports", null],\
-          ["prettier-plugin-style-order", null],\
-          ["prettier-plugin-svelte", null]\
-        ],\
-        "packagePeers": [\
-          "@ianvs/prettier-plugin-sort-imports",\
-          "@prettier/plugin-pug",\
-          "@shopify/prettier-plugin-liquid",\
-          "@trivago/prettier-plugin-sort-imports",\
-          "@types/ianvs__prettier-plugin-sort-imports",\
-          "@types/prettier-plugin-astro",\
-          "@types/prettier-plugin-css-order",\
-          "@types/prettier-plugin-import-sort",\
-          "@types/prettier-plugin-jsdoc",\
-          "@types/prettier-plugin-marko",\
-          "@types/prettier-plugin-multiline-arrays",\
-          "@types/prettier-plugin-organize-attributes",\
-          "@types/prettier-plugin-organize-imports",\
-          "@types/prettier-plugin-sort-imports",\
-          "@types/prettier-plugin-style-order",\
-          "@types/prettier-plugin-svelte",\
-          "@types/prettier",\
-          "@types/prettier__plugin-pug",\
-          "@types/shopify__prettier-plugin-liquid",\
-          "@types/trivago__prettier-plugin-sort-imports",\
-          "@types/zackad__prettier-plugin-twig",\
-          "@zackad/prettier-plugin-twig",\
-          "prettier-plugin-astro",\
-          "prettier-plugin-css-order",\
-          "prettier-plugin-import-sort",\
-          "prettier-plugin-jsdoc",\
-          "prettier-plugin-marko",\
-          "prettier-plugin-multiline-arrays",\
-          "prettier-plugin-organize-attributes",\
-          "prettier-plugin-organize-imports",\
-          "prettier-plugin-sort-imports",\
-          "prettier-plugin-style-order",\
-          "prettier-plugin-svelte",\
-          "prettier"\
         ],\
         "linkType": "HARD"\
       }]\
@@ -6210,7 +6122,7 @@ async function copyImpl(prelayout, postlayout, destinationFs, destination, sourc
 async function maybeLStat(baseFs, p) {
   try {
     return await baseFs.lstatPromise(p);
-  } catch (e) {
+  } catch {
     return null;
   }
 }
@@ -6469,7 +6381,7 @@ class CustomStatWatcher extends events.EventEmitter {
   stat() {
     try {
       return this.fakeFs.statSync(this.path, { bigint: this.bigint });
-    } catch (error) {
+    } catch {
       const statInstance = this.bigint ? new BigIntStatsEntry() : new StatEntry();
       return clearStats(statInstance);
     }
@@ -6795,7 +6707,7 @@ class FakeFS {
     let current = Buffer.alloc(0);
     try {
       current = await this.readFilePromise(p);
-    } catch (error) {
+    } catch {
     }
     if (Buffer.compare(current, content) === 0)
       return;
@@ -6805,7 +6717,7 @@ class FakeFS {
     let current = ``;
     try {
       current = await this.readFilePromise(p, `utf8`);
-    } catch (error) {
+    } catch {
     }
     const normalizedContent = automaticNewlines ? normalizeLineEndings(current, content) : content;
     if (current === normalizedContent)
@@ -6823,7 +6735,7 @@ class FakeFS {
     let current = Buffer.alloc(0);
     try {
       current = this.readFileSync(p);
-    } catch (error) {
+    } catch {
     }
     if (Buffer.compare(current, content) === 0)
       return;
@@ -6833,7 +6745,7 @@ class FakeFS {
     let current = ``;
     try {
       current = this.readFileSync(p, `utf8`);
-    } catch (error) {
+    } catch {
     }
     const normalizedContent = automaticNewlines ? normalizeLineEndings(current, content) : content;
     if (current === normalizedContent)
@@ -6873,13 +6785,13 @@ class FakeFS {
       let pid;
       try {
         [pid] = await this.readJsonPromise(lockPath);
-      } catch (error) {
+      } catch {
         return Date.now() - startTime < 500;
       }
       try {
         process.kill(pid, 0);
         return true;
-      } catch (error) {
+      } catch {
         return false;
       }
     };
@@ -6892,7 +6804,7 @@ class FakeFS {
             try {
               await this.unlinkPromise(lockPath);
               continue;
-            } catch (error2) {
+            } catch {
             }
           }
           if (Date.now() - startTime < 60 * 1e3) {
@@ -6912,7 +6824,7 @@ class FakeFS {
       try {
         await this.closePromise(fd);
         await this.unlinkPromise(lockPath);
-      } catch (error) {
+      } catch {
       }
     }
   }
@@ -8062,7 +7974,7 @@ class MountFS extends BasePortableFakeFS {
       let content;
       try {
         content = await sourceFs.readFilePromise(sourceP2);
-      } catch (error) {
+      } catch {
         throw Object.assign(new Error(`EINVAL: invalid argument, copyfile '${sourceP2}' -> '${destP2}'`), { code: `EINVAL` });
       }
       await destFs.writeFilePromise(destP2, content);
@@ -8094,7 +8006,7 @@ class MountFS extends BasePortableFakeFS {
       let content;
       try {
         content = sourceFs.readFileSync(sourceP2);
-      } catch (error) {
+      } catch {
         throw Object.assign(new Error(`EINVAL: invalid argument, copyfile '${sourceP2}' -> '${destP2}'`), { code: `EINVAL` });
       }
       destFs.writeFileSync(destP2, content);
@@ -9009,7 +8921,7 @@ function patchFs(patchedFs, fakeFs) {
     setupFn(patchedFs, `existsSync`, (p) => {
       try {
         return fakeFs.existsSync(p);
-      } catch (error) {
+      } catch {
         return false;
       }
     });
@@ -10370,7 +10282,7 @@ class ZipFS extends BasePortableFakeFS {
     let resolvedP;
     try {
       resolvedP = this.resolveFilename(`stat '${p}'`, p, void 0, false);
-    } catch (error) {
+    } catch {
       return false;
     }
     if (resolvedP === void 0)
@@ -11411,7 +11323,7 @@ Require stack:
         } else {
           resolution = originalFindPath.call(require$$0.Module, request, [path], isMain);
         }
-      } catch (error) {
+      } catch {
         continue;
       }
       if (resolution) {
@@ -12494,7 +12406,7 @@ function makeApi(runtimeState, opts) {
     try {
       candidates.push(unqualifiedPath);
       stat = opts.fakeFs.statSync(unqualifiedPath);
-    } catch (error) {
+    } catch {
     }
     if (stat && !stat.isDirectory())
       return opts.fakeFs.realpathSync(unqualifiedPath);
@@ -12502,7 +12414,7 @@ function makeApi(runtimeState, opts) {
       let pkgJson;
       try {
         pkgJson = JSON.parse(opts.fakeFs.readFileSync(ppath.join(unqualifiedPath, Filename.manifest), `utf8`));
-      } catch (error) {
+      } catch {
       }
       let nextUnqualifiedPath;
       if (pkgJson && pkgJson.main)
