@@ -17,7 +17,13 @@ class Settings(BaseSettings):
     QUERY_OPENAI_TOP_P: float = 0.85      # 상위 확률 토큰 제한
     QUERY_OPENAI_FREQUENCY_PENALTY: float = 0.2  # 중복 방지
 
-    
+    # Summary OpenAI 설정
+    SUMMARY_OPENAI_MODEL: str = "gpt-4o"
+    SUMMARY_OPENAI_MAX_TOKENS: int = 5000  # 간결한 응답을 위한 적절한 값
+    SUMMARY_OPENAI_TEMPERATURE: float = 0.1  # 재료 목록에 더 충실하도록 낮은 값 설정
+    SUMMARY_OPENAI_TOP_P: float = 0.80      # 상위 확률 토큰 제한
+    SUMMARY_OPENAI_FREQUENCY_PENALTY: float = 0.1  # 중복 방지
+    SUMMARY_OPENAI_STREAM : bool = False # 스트리밍 사용 여부
 
     # YouTube 설정
     YOUTUBE_MAX_RESULTS: int = 3

@@ -9,7 +9,6 @@ from app.core.config import settings
 class RequestGPT:
     def __init__(self, api_key):
         self.client = openai.AsyncOpenAI(api_key = api_key)
-        self.model = "gpt-4o"
 
     def extract_json(self, markdown_output: str) -> dict:
         # 만약 문자열이 큰따옴표로 감싸져 있다면 unescape 처리합니다.
@@ -24,7 +23,7 @@ class RequestGPT:
         else:
             raise ValueError("JSON 형식의 코드 블록을 찾을 수 없습니다.")
 
-    async def run(self, system_input, user_input, stream: bool = False) -> str:
+    async def run(self, system_input, user_input) -> str:
         """
         시스템 입력과 사용자 입력을 받아 OpenAI API를 호출합니다.
         stream이 True이면 스트리밍으로 결과를 출력하고, 그렇지 않으면 전체 응답을 반환합니다.
@@ -37,14 +36,16 @@ class RequestGPT:
             prompt.append(input)
 
         completion = await self.client.chat.completions.create(
-            model=self.model,
+            model=settings.SUMMARY_OPENAI_MODEL,
             messages=prompt,
-            max_tokens=5000,
-            temperature=0.1,
-            stream=stream,
+            max_tokens=settings.SUMMARY_OPENAI_MAX_TOKENS,
+            temperature=settings.SUMMARY_OPENAI_TEMPERATURE,
+            top_p=settings.SUMMARY_OPENAI_TOP_P,
+            frequency_penalty=settings.SUMMARY_OPENAI_FREQUENCY_PENALTY,
+            stream=settings.SUMMARY_OPENAI_STREAM,
         )
 
-        if stream:
+        if settings.SUMMARY_OPENAI_STREAM:
             result = ""
             async for chunk in completion:
                 delta_content = chunk.choices[0].delta.get("content")
@@ -55,7 +56,6 @@ class RequestGPT:
         else:
             ret_message = completion.choices[0].message.content
             data = self.extract_json(ret_message)
-            print(data)
             return data
 
 
