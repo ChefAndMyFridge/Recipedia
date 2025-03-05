@@ -2,12 +2,12 @@
 
 from fastapi import APIRouter, Request, HTTPException
 from fastapi.responses import JSONResponse
-from app.utils.docs import RecipeDocs
 from app.services.recipe_summary import RecipeSummary
+from app.utils.docs import RecipeDocs
 
 router = APIRouter()
-docs = RecipeDocs()
 recipe_summary = RecipeSummary()
+docs = RecipeDocs()
 
 @router.post("/",
     summary="텍스트 레시피 추출",
@@ -18,7 +18,7 @@ recipe_summary = RecipeSummary()
 async def get_recipe_summary(request: Request, video_id: str):
     try:
         summary = await recipe_summary.summarize_recipe(video_id)
-        return JSONResponse(status_code=200, content={"summary": summary})
+        return JSONResponse(status_code=200, content=summary)
     except HTTPException as e:
         raise e
     except Exception as e:

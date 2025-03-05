@@ -1,3 +1,4 @@
+# app/services/LLM/openai_api.py
 import os
 import json
 import asyncio
@@ -6,9 +7,6 @@ from app.core.config import settings
 
 class RequestGPT:
     def __init__(self, api_key):
-        # config/.env 경로에서 환경 변수 로드
-        
-        # 환경 변수 사용
         self.client = openai.AsyncOpenAI(api_key = api_key)
         self.model = "gpt-4o"
 
@@ -47,7 +45,7 @@ class RequestGPT:
             # print("==========================================")
             # print(json_msg)
             print(json.loads(json_msg))
-            return ret_message
+            return json_msg
 
 
 if __name__ == "__main__":

@@ -1,13 +1,13 @@
-# app/services/recipe_summary/summary_test.py
+# app/services/recipe_summary.py
 import time
 import logging
 
 from youtube_transcript_api import YouTubeTranscriptApi, NoTranscriptFound, TranscriptsDisabled
-from app.services.LLM.openai_api import *
+from app.services.LLM.openai_api import RequestGPT
 
 from fastapi import HTTPException
-from app.utils.prompts.few_shot import *
-from app.utils.prompts.user_input_caution import *
+from app.utils.prompts.few_shot import SUMMARY_FEW_SHOT_DATA, SUMMARY_FEW_SHOT_DATA_DICT
+from app.utils.prompts.user_input_caution import SUMMARY_EXTRA_INPUT
 from app.core.config import settings
 
 logger = logging.getLogger(__name__)
