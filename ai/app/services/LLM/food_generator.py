@@ -8,8 +8,8 @@ from app.core.config import settings
 def generate_dish_names(ingredients=None, main_ingredient=None, num_dishes=None) -> list:
     """여러 개의 요리 이름을 생성하는 함수"""
     # 기본값 설정
-    ingredients = ingredients or settings.DEFAULT_INGREDIENTS
-    main_ingredient = main_ingredient or settings.DEFAULT_MAIN_INGREDIENT
+    ingredients = ingredients
+    main_ingredient = main_ingredient
     num_dishes = num_dishes or settings.NUM_DISHES_TO_GENERATE
 
     # 프롬프트 생성

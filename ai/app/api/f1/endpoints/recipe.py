@@ -3,7 +3,11 @@
 from fastapi import APIRouter, Request, HTTPException
 from fastapi.responses import JSONResponse
 from app.services.recipe_summary import RecipeSummary
+from app.models.youtube_url import YoutubeURL
 from app.utils.docs import RecipeDocs
+import logging
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 recipe_summary = RecipeSummary()
@@ -15,8 +19,9 @@ docs = RecipeDocs()
     response_description="레시피 추출 결과",
     responses=docs.base["res"],
 )
-async def get_recipe_summary(request: Request, video_id: str):
+async def get_recipe_summary(request: Request, data: YoutubeURL=docs.base["data"]):
     try:
+        video_id = data.youtube_url.split("v=")[1].split("&")[0]
         summary = await recipe_summary.summarize_recipe(video_id)
         return JSONResponse(status_code=200, content=summary)
     except HTTPException as e:
