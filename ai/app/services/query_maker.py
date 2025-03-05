@@ -8,10 +8,10 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-class RecipeMaker:
+class QueryMaker:
     def __init__(self, ingredients=None, main_ingredient=None):
         """
-        RecipeMaker 클래스 초기화
+        QueryMaker 클래스 초기화
         
         Args:
             ingredients (list): 사용할 재료 목록. 기본값은 app_config에서 가져옴
@@ -146,7 +146,7 @@ class RecipeMaker:
 # 로컬 테스트 실행 용
 if __name__ == "__main__":
     async def main():
-        recipe_maker = RecipeMaker()
+        recipe_maker = QueryMaker()
         result = await recipe_maker.run()
         print("\n최종 결과:")
         print(result)

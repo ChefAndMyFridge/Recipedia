@@ -45,7 +45,7 @@ class RequestGPT:
             # print("==========================================")
             # print(json_msg)
             print(json.loads(json_msg))
-            return ret_message
+            return json_msg
 
 
 if __name__ == "__main__":

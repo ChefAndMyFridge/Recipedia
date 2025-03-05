@@ -18,7 +18,7 @@ docs = RecipeDocs()
 async def get_recipe_summary(request: Request, video_id: str):
     try:
         summary = await recipe_summary.summarize_recipe(video_id)
-        return JSONResponse(status_code=200, content={"summary": summary})
+        return JSONResponse(status_code=200, content=summary)
     except HTTPException as e:
         raise e
     except Exception as e:

@@ -5,7 +5,6 @@
 1. .env 파일을 작성합니다.
 
     ``` plaintext
-    DATABASE_URL=sqlite:///./test.db
     ALLOWED_ORIGINS=["http://localhost:8080"]
     YOUTUBE_API_KEY=<YOUR_API_KEY>
     OPENAI_API_KEY=<YOUR_API_KEY>
