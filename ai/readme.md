@@ -31,33 +31,39 @@
 ### 📦 프로젝트 디렉토리 구조
 ```plaintext
 .
-┣━ 📂 app                           # FastAPI application
-┃   ┣━ 📂 api.f1.endpoints          # Controller 모음
-┃   ┃   ┣━ 📜 __init__.py           # Endpoints 라우팅 설정                 (/api/f1)
-┃   ┃   ┣━ 📜 query.py              # Youtube 레시피 검색 기능 controller     (/query)
-┃   ┃   ┣━ 📜 recipe.py             # 레시피 추출 기능 controller           (/recipe)
+┣━ 📂 app                                   # FastAPI application
+┃   ┣━ 📂 api.f1.endpoints                  # Controller 모음
+┃   ┃   ┣━ 📜 __init__.py                   # Endpoints 라우팅 설정                 (/api/f1)
+┃   ┃   ┣━ 📜 query.py                      # Youtube 레시피 검색 기능 controller     (/query)
+┃   ┃   ┣━ 📜 recipe.py                     # 레시피 추출 기능 controller           (/recipe)
 ┃   ┣━ 📂 core
 ┃   ┃   ┣━ 📜 __init__.py             
-┃   ┃   ┗━ 📜 config.py             # config 파일 (환경변수, 기타 등등 서버 초기 세팅)
-┃   ┣━ 📂 models                    # DTO, req, res 구조 정의
+┃   ┃   ┗━ 📜 config.py                     # config 파일 (환경변수, 기타 등등 서버 초기 세팅)
+┃   ┣━ 📂 models                            # DTO, req, res 구조 정의
 ┃   ┃   ┣━ 📜 __init__.py 
-┃   ┃   ┗━ 📜 ingredients.py        # 재료 관련 모델 정의
-┃   ┣━ 📂 services                   # service 모음
+┃   ┃   ┗━ 📜 ingredients.py                # 재료 관련 모델 정의
+┃   ┣━ 📂 services                          # service 모음
+┃   ┃   ┣━ 📂 LLM
+┃   ┃   ┃   ┗━ 📜 openai_api.py             # openAI API 설정 
 ┃   ┃   ┣━ 📜 __init__.py
-┃   ┃   ┗━ 📜 YoutubeQuery.py       # Youtube 검색 관련 서비스 모음
-┃   ┣━ 📂 utils                     # utils 모음
+┃   ┃   ┗━ 📜 recipe_summary.py             # recipe 요약 관련 서비스 모음
+┃   ┃   ┗━ 📜 youtube_query.py              # Youtube 검색 관련 서비스 모음
+┃   ┣━ 📂 utils                             # utils 모음
+┃   ┃   ┣━ 📂 prompts                       # prompt 모음
+┃   ┃   ┃   ┣━ 📜 few_shot.py               # 레시피 요약에 사용할 퓨샷 프롬프트
+┃   ┃   ┃   ┗━ 📜 user_input_caution.py     # 레시피 요약에 사용할 주의사항 프롬프트
 ┃   ┃   ┣━ 📜 __init__.py
-┃   ┃   ┗━ 📜 docs.py               # docs 설정 모음
-┃   ┗━ 📜 main.py                   # FastAPI 메인 애플리케이션
+┃   ┃   ┗━ 📜 docs.py                       # docs 설정 모음
+┃   ┗━ 📜 main.py                           # FastAPI 메인 애플리케이션
 ┃
-┣━ 📂 test                          # 기능 테스트 용 디렉토리
-┃   ┗━ 📜 test_v1_api.py            # test 실행용 python 코드
-┣━ 📂 venv                          # 가상환경 디렉토리
-┣━ ⚙️ .env                          # 환경 변수 설정
-┣━ ⚙️ .gitignore                    # gitignore 설정 파일
-┣━ ⚙️ pytest.ini                    # python 테스트 용 설정
-┣━ 📜 readme.md                     # readme 파일
-┗━ 📜 requirements.txt
+┣━ 📂 test                                  # 기능 테스트 용 디렉토리
+┃   ┗━ 📜 test_v1_api.py                    # test 실행용 python 코드
+┣━ 📂 venv                                  # 가상환경 디렉토리
+┣━ ⚙️ .env                                    # 환경 변수 설정
+┣━ ⚙️ .gitignore                              # gitignore 설정 파일
+┣━ ⚙️ pytest.ini                              # python 테스트 용 설정
+┣━ 📜 readme.md                             # readme 파일
+┗━ 📜 requirements.txt                      # 필요한 패키지 모음
 ```
 
 ### 🔧 Test 방법
