@@ -25,26 +25,46 @@ class QueryMaker:
     
     async def generate_dishes(self):
         """음식 이름을 생성하고 저장합니다."""
-        self.dishes = generate_dish_names(self.ingredients, self.main_ingredient)
+        # generate_dish_names가 동기 함수이면 비동기로 변환 필요
+        loop = asyncio.get_running_loop()
+        self.dishes = await loop.run_in_executor(None, 
+                                                lambda: generate_dish_names(self.ingredients, self.main_ingredient))
         return self.dishes
     
     async def search_recipes(self):
-        """생성된 음식에 대한 YouTube 레시피를 검색합니다."""
+        """생성된 음식에 대한 YouTube 레시피를 비동기 방식으로 검색합니다."""
         self.all_videos = {}
         
-        # 병렬 처리 적용
-        with concurrent.futures.ThreadPoolExecutor(max_workers=settings.NUM_DISHES_TO_GENERATE) as executor:
-            future_to_dish = {executor.submit(get_youtube_videos, dish): dish for dish in self.dishes}
-            for future in concurrent.futures.as_completed(future_to_dish):
-                dish = future_to_dish[future]
-                try:
-                    videos = future.result()
-                    self.all_videos[dish] = videos
-                except Exception as e:
-                    print(f"⚠️ {dish} 검색 중 오류 발생: {e}")
-                    self.all_videos[dish] = []
+        # 각 요리별로 비동기 작업 생성
+        tasks = []
+        for dish in self.dishes:
+            task = self.search_recipe_with_timeout(dish)
+            tasks.append(task)
         
+        # 모든 작업을 동시에 실행
+        try:
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+            
+            # 결과를 딕셔너리에 저장
+            for dish, result in zip(self.dishes, results):
+                if isinstance(result, Exception):
+                    print(f"⚠️ {dish} 검색 중 오류: {result}")
+                    self.all_videos[dish] = []
+                else:
+                    self.all_videos[dish] = result
+        except Exception as e:
+            print(f"⚠️ 레시피 검색 중 오류 발생: {e}")
+            
         return self.all_videos
+
+    async def search_recipe_with_timeout(self, dish):
+        """각 요청에 타임아웃 설정"""
+        try:
+            result = await asyncio.wait_for(get_youtube_videos(dish), timeout=10.0)
+        except asyncio.TimeoutError:
+            print(f"⚠️ {dish} 검색 타임아웃")
+            result = []
+        return result
     
     def print_ingredients(self):
         """재료 정보를 출력합니다."""
@@ -148,6 +168,6 @@ if __name__ == "__main__":
     async def main():
         recipe_maker = QueryMaker(["소고기", "계란", "파", "마늘", "양파"], "계란")
         result = await recipe_maker.run()
-        print("\n최종 결과:")
-        print(result)
+        # print("\n최종 결과:")
+        # print(result)
     asyncio.run(main())
