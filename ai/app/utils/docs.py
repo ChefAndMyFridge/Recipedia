@@ -47,8 +47,7 @@ class RecipeDocs:
                 "content": {
                     "application/json": {
                         "example": {
-                                "title": "레시피",
-                                "url": "레시피"
+                                "summary": "레시피",
                                 }
                     }
                 },

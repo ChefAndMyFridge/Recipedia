@@ -3,11 +3,11 @@ import time
 import logging
 
 from youtube_transcript_api import YouTubeTranscriptApi, NoTranscriptFound, TranscriptsDisabled
-from LLM.openai_api import *
+from app.services.LLM.openai_api import *
 
 from fastapi import HTTPException
-from app.utils.prompt.few_shot.recipe_summary import *
-from app.utils.prompt.user_input_caution.extra_input import *
+from app.utils.prompts.few_shot import *
+from app.utils.prompts.user_input_caution import *
 from app.core.config import settings
 
 logger = logging.getLogger(__name__)
