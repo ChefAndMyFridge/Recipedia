@@ -1,10 +1,15 @@
 /** @type {import('tailwindcss').Config} */
+
 export default {
   content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     center: true,
     screens: {
       mobile: "344px", // mobile(344px) 이상
+      sm: "375px", // 스마트폰 모바일(세로) ~ 479px
+      md: "480px", // 스마트폰 모바일(가로) & 태블릿 세로
+      lg: "768px", // 태블릿 가로
+      xl: "1024px", // 노트북 & 이외 사이즈
     },
     fontFamily: {
       preLight: ["Pretendard-Light"],
