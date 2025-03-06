@@ -5,11 +5,10 @@ import com.recipidia.ingredient.dto.IngredientInfoDto;
 import com.recipidia.ingredient.service.IngredientService;
 import com.recipidia.recipe.dto.RecipeDto;
 import com.recipidia.recipe.entity.Recipe;
-import com.recipidia.recipe.entity.RecipeIngredient;
-import com.recipidia.recipe.repository.RecipeIngredientRepository;
 import com.recipidia.recipe.repository.RecipeRepository;
 import com.recipidia.recipe.request.RecipeQueryReq;
 import com.recipidia.recipe.response.RecipeQueryRes;
+import com.recipidia.recipe.response.VideoInfo;
 import com.recipidia.recipe.service.RecipeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,62 +32,64 @@ public class RecipeServiceImpl implements RecipeService {
     private final IngredientService ingredientService;
     private final WebClient webClient;
     private final RecipeRepository recipeRepository;
-    private final RecipeIngredientRepository recipeIngredientRepository;
     private final ObjectMapper objectMapper;
 
     public RecipeServiceImpl(IngredientService ingredientService, WebClient.Builder webClientBuilder,
-                             RecipeRepository recipeRepository, RecipeIngredientRepository recipeIngredientRepository,
-                             ObjectMapper objectMapper) {
+                             RecipeRepository recipeRepository, ObjectMapper objectMapper) {
         this.ingredientService = ingredientService;
         // FastAPI 컨테이너의 서비스명을 사용
         this.webClient = webClientBuilder.baseUrl("http://my-fastapi:8000").build();
         this.recipeRepository = recipeRepository;
-        this.recipeIngredientRepository = recipeIngredientRepository;
         this.objectMapper = objectMapper;
     }
 
     @Override
     @Transactional
     public Mono<ResponseEntity<String>> handleRecipeQuery(RecipeQueryReq request) {
-        // DB에서 전체 재료 목록을 조회하는 블로킹 작업은 boundedElastic 스케줄러에서 실행
-        return Mono.fromCallable(ingredientService::getAllIngredients)
+        // 1. 전체 재료 목록 조회 단계 (DB 호출)
+        Mono<List<String>> fullIngredientsMono = Mono.fromCallable(ingredientService::getAllIngredients)
             .subscribeOn(Schedulers.boundedElastic())
-                .map(ingredientInfoDtoList ->
-                        ingredientInfoDtoList.stream()
-                                .map(IngredientInfoDto::getName)
-                                .collect(Collectors.toList())
-                )
-                .flatMap(fullIngredients -> {
-                    Map<String, Object> payload = new HashMap<>();
-                    // 요청으로 받은 재료 목록 전체를 main_ingredient 리스트로 사용
-                    payload.put("ingredients", fullIngredients);
-                    payload.put("main_ingredients", request.getIngredients());
+            .map(ingredientInfoDtoList ->
+                ingredientInfoDtoList.stream()
+                    .map(IngredientInfoDto::getName)
+                    .collect(Collectors.toList())
+            );
 
-                    return webClient.post()
-                            .uri("/api/f1/query/")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .bodyValue(payload)
-                            .retrieve()
-                            .bodyToMono(String.class);
-                })
+        // 2. FastAPI 호출 단계
+        Mono<String> fastApiResponseMono = fullIngredientsMono.flatMap(fullIngredients -> {
+            Map<String, Object> payload = new HashMap<>();
+            payload.put("ingredients", fullIngredients);
+            payload.put("main_ingredients", request.getIngredients());
+
+            return webClient.post()
+                .uri("/api/f1/query/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(payload)
+                .retrieve()
+                .bodyToMono(String.class);
+        });
+
+        // 최종적으로 ResponseEntity로 매핑
+        return fastApiResponseMono
             .map(ResponseEntity::ok)
             .onErrorResume(e ->
-                        Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                .body("Error: " + e.getMessage()))
-                );
+                Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error: " + e.getMessage()))
+            );
     }
 
     @Override
     @Transactional
-    public Mono<Void> saveRecipeResult(ResponseEntity<String> responseEntity, String mainIngredient) {
+    public Mono<Void> saveRecipeResult(ResponseEntity<String> responseEntity) {
         return Mono.fromCallable(() -> {
                 RecipeQueryRes recipeQueryRes = objectMapper.readValue(responseEntity.getBody(), RecipeQueryRes.class);
                 // 각 dish(레시피 이름)에 대해 반복
                 for (String dish : recipeQueryRes.getDishes()) {
-                    List<RecipeQueryRes.VideoInfo> videoInfos = recipeQueryRes.getVideos().get(dish);
+                    // 별도 파일로 분리된 VideoInfo를 사용
+                    List<VideoInfo> videoInfos = recipeQueryRes.getVideos().get(dish);
                     if (videoInfos != null && !videoInfos.isEmpty()) {
                         // dish 내의 모든 영상 정보를 반복 처리
-                        for (RecipeQueryRes.VideoInfo videoInfo : videoInfos) {
+                        for (VideoInfo videoInfo : videoInfos) {
                             String youtubeUrl = videoInfo.getUrl();
                             Optional<Recipe> existing = recipeRepository.findByYoutubeUrl(youtubeUrl);
                             if (existing.isEmpty()) {
@@ -97,13 +98,6 @@ public class RecipeServiceImpl implements RecipeService {
                                     .youtubeUrl(youtubeUrl)
                                     .build();
                                 Recipe savedRecipe = recipeRepository.save(recipe);
-                                // 재료는 추가 방법 고민. 이 단계엔 안 넘기고 추출 시에 해도 좋을듯
-//                                RecipeIngredient recipeIngredient = RecipeIngredient.builder()
-//                                    .recipe(savedRecipe)
-//                                    .name(mainIngredient)
-//                                    .quantity("") // 수량은 추후 업데이트
-//                                    .build();
-//                                recipeIngredientRepository.save(recipeIngredient);
                             }
                         }
                     }

@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 /**
  * DTO for {@link Recipe}
  */
-public record RecipeDto(Long id, String name, String youtubeUrl,
+public record RecipeDto(Long recipeId, String name, String youtubeUrl,
                         String textRecipe, List<RecipeIngredientDto> ingredients) implements
         Serializable {
 

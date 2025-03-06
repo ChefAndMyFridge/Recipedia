@@ -46,9 +46,8 @@ public class RecipeController {
   public Mono<ResponseEntity<String>> queryRecipe(@RequestBody RecipeQueryReq request) {
     return recipeService.handleRecipeQuery(request)
         .flatMap(response ->
-            recipeService.saveRecipeResult(response,
-                request.getIngredients().isEmpty() ? null : request.getIngredients().get(0)
-            ).thenReturn(response)
+            recipeService.saveRecipeResult(response)
+                .thenReturn(response)
         );
   }
 
@@ -73,7 +72,7 @@ public class RecipeController {
                                       "id": 1,
                                       "recipeId": 1,
                                       "name": "돼지고기",
-                                      "quantity": ""
+                                      "quantity": "1근"
                                     }
                                   ]
                                 },
@@ -87,7 +86,7 @@ public class RecipeController {
                                       "id": 2,
                                       "recipeId": 2,
                                       "name": "돼지고기",
-                                      "quantity": ""
+                                      "quantity": "1근"
                                     }
                                   ]
                                 }

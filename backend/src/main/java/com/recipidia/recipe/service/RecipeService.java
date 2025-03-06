@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface RecipeService {
     Mono<ResponseEntity<String>> handleRecipeQuery(RecipeQueryReq request);
-    Mono<Void> saveRecipeResult(ResponseEntity<String> responseEntity, String mainIngredient);
+    Mono<Void> saveRecipeResult(ResponseEntity<String> responseEntity);
     Mono<ResponseEntity<List<RecipeDto>>> getAllRecipes();
 }
