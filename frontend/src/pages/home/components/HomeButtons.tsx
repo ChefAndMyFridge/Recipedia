@@ -1,4 +1,4 @@
-import HomeButton from "./HomeButton.tsx";
+import HomeButton from "@/pages/home/components/HomeButton.tsx";
 
 const HomeButtons = () => {
   return (

@@ -1,5 +1,5 @@
-import HomeHeader from "./components/HomeHeader";
-import HomeButtons from "./components/HomeButtons";
+import HomeHeader from "@pages/home/components/HomeHeader.tsx";
+import HomeButtons from "@pages/home/components/HomeButtons.tsx";
 
 const HomePage = () => {
   return (
