@@ -26,10 +26,10 @@ class Settings(BaseSettings):
     SUMMARY_OPENAI_STREAM : bool = False # 스트리밍 사용 여부
 
     # YouTube 설정
-    YOUTUBE_MAX_RESULTS: int = 3
+    YOUTUBE_MAX_RESULTS: int = 1
 
     # 생성할 음식 이름 개수
-    NUM_DISHES_TO_GENERATE: int = 6
+    NUM_DISHES_TO_GENERATE: int = 5
 
     # 영상 검증 설정
     VIDEO_VALIDATION_ENABLED: bool = True  # 영상 제목 검증 활성화 여부
