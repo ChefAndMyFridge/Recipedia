@@ -41,7 +41,10 @@ public class Ingredient {
   private LocalDateTime incomingDate = LocalDateTime.now(); // 입고일자는 기본적으로 현재 시간 기준
 
   @Column
-  private LocalDateTime releasingDate;
+  private LocalDateTime releasingDate = null;
+
+  @Column
+  private boolean isReleased = false;
 
   @Builder
   public Ingredient(
