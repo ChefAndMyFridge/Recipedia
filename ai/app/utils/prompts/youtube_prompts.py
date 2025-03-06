@@ -1,6 +1,6 @@
 # 시스템 메시지
 CHEF_SYSTEM_MESSAGE = """
-당신은 전문 요리사 AI입니다. 사용자가 제공하는 냉장고 재료 목록에 포함된 재료만을 사용하여, 선택된 주재료를 중심으로 만들 수 있는 음식 이름을 제안해야 합니다.
+당신은 전문 요리사 AI입니다. 사용자가 제공하는 냉장고 재료 목록에 포함된 재료만을 사용하여, 선택된 주재료들을 중심으로 만들 수 있는 음식 이름을 제안해야 합니다.
 반드시 주어진 재료 목록 외의 재료를 사용하지 마세요. 만약 주어진 재료만으로 만들 수 있는 적절한 요리가 없다면, "적당한 요리를 찾기 어렵습니다"라고 답하십시오.
 최종 출력에서는 오직 음식 이름만을 불릿 리스트 형식으로 나열합니다.
 """
@@ -8,29 +8,46 @@ CHEF_SYSTEM_MESSAGE = """
 # 음식 생성 프롬프트 템플릿
 FOOD_GENERATOR_PROMPT = """
 냉장고 재료: [{ingredients}]
-주재료: {main_ingredient}
+주재료: [{main_ingredients}]
 제안할 음식 이름 개수: 최대 {num_dishes}개
 
-위 재료들을 활용하여 만들 수 있는, {main_ingredient}를 주재료로 하는 음식 이름을 제안해주세요.
+위 냉장고 재료들을 활용하여 만들 수 있는, 주재료를 중심으로 하는 음식 이름을 제안해주세요.
+{main_ingredients_instruction}
 
 예시)
 냉장고 재료: [토마토, 치즈, 바질]
-주재료: 토마토
+주재료: [토마토]
 출력:
 - 카프레제 샐러드
 - 토마토 브루스케타
 """
 
 
-def get_chef_prompt(ingredients_list, main_ingredient=None, num_dishes=5):
-    """요리사 AI에게 전달할 프롬프트를 생성합니다."""
-    if main_ingredient is None and ingredients_list:
-        main_ingredient = ingredients_list[0]  # 첫 번째 재료를 주재료로 설정
-
+def get_chef_prompt(ingredients_list, main_ingredients=None, num_dishes=5):
+    """요리사 AI에게 전달할 프롬프트를 생성합니다.
+    
+    Args:
+        ingredients_list (list): 사용 가능한 모든 재료 목록
+        main_ingredients (list, optional): 주재료 목록. 기본값은 None
+        num_dishes (int, optional): 생성할 요리 개수. 기본값은 5
+    
+    Returns:
+        str: 포맷팅된 프롬프트
+    """
+    # 주재료가 None이거나 빈 리스트인 경우 처리
+    if not main_ingredients:
+        main_ingredients = []
+        main_ingredients_instruction = "주재료가 지정되지 않았으므로, 모든 재료를 활용하여 다양한 요리를 제안해주세요."
+    else:
+        main_ingredients_instruction = "주재료를 중심으로 요리를 제안해주세요. 여러 주재료가 있다면 하나 이상의 주재료를 활용한 요리를 제안해주세요."
+    
     ingredients_str = ', '.join(ingredients_list)
+    main_ingredients_str = ', '.join(main_ingredients)
+    
     return FOOD_GENERATOR_PROMPT.format(
         ingredients=ingredients_str,
-        main_ingredient=main_ingredient,
+        main_ingredients=main_ingredients_str,
+        main_ingredients_instruction=main_ingredients_instruction,
         num_dishes=num_dishes
     )
 
