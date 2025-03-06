@@ -1,5 +1,6 @@
+import "@/components/common/modal/Modal.css";
+
 import React, { useRef, useEffect } from "react";
-import { createPortal } from "react-dom";
 
 import useModalStore from "@/stores/modalStore.ts";
 
@@ -15,26 +16,29 @@ const Modal = () => {
 
   useEffect(() => {
     const modal = dialog.current;
+    if (!modal) return;
 
-    if (isOpen && modal && modalContent) {
+    if (isOpen) {
       modal.showModal();
+    } else if (modal.open) {
+      modal.close();
     }
-
-    return () => {
-      if (modal) modal.close();
-    };
   }, [isOpen, modalContent]);
 
-  // ESC, backdrop 클릭시에도 모달이 닫히도록
+  // ESC 클릭시에도 모달이 닫히도록
   const handleClose = () => {
     closeModal();
   };
 
-  return createPortal(
-    <dialog ref={dialog} onClose={handleClose}>
+  return (
+    <dialog
+      ref={dialog}
+      onClose={handleClose}
+      className="fixed top-0 z-50 mx-auto w-full rounded-b-xl"
+      style={{ maxWidth: "clamp(344px, 100vw, 576px)" }}
+    >
       {modalContent}
-    </dialog>,
-    document.getElementById("modal-root") as HTMLElement
+    </dialog>
   );
 };
 
