@@ -9,16 +9,24 @@ import logging
 logger = logging.getLogger(__name__)
 
 class QueryMaker:
-    def __init__(self, ingredients=None, main_ingredient=None):
+    def __init__(self, ingredients=None, main_ingredients=None):
         """
         QueryMaker 클래스 초기화
         
         Args:
-            ingredients (list): 사용할 재료 목록. 기본값은 app_config에서 가져옴
-            main_ingredient (str): 주재료. 기본값은 app_config에서 가져옴
+            ingredients (list): 사용할 재료 목록
+            main_ingredients (list): 주재료 목록. 기본값은 None
         """
-        self.ingredients = ingredients
-        self.main_ingredient = main_ingredient
+        self.ingredients = ingredients or []
+        
+        # main_ingredients가 None이거나 빈 값이면 빈 리스트로, 문자열이면 단일 항목 리스트로 변환
+        if main_ingredients is None:
+            self.main_ingredients = []
+        elif isinstance(main_ingredients, str):
+            self.main_ingredients = [main_ingredients]
+        else:
+            self.main_ingredients = main_ingredients
+            
         self.dishes = []
         self.all_videos = {}
         self.execution_time = 0
@@ -28,7 +36,7 @@ class QueryMaker:
         # generate_dish_names가 동기 함수이면 비동기로 변환 필요
         loop = asyncio.get_running_loop()
         self.dishes = await loop.run_in_executor(None, 
-                                                lambda: generate_dish_names(self.ingredients, self.main_ingredient))
+                                                lambda: generate_dish_names(self.ingredients, self.main_ingredients))
         return self.dishes
     
     async def search_recipes(self):
@@ -69,7 +77,11 @@ class QueryMaker:
     def print_ingredients(self):
         """재료 정보를 출력합니다."""
         print(f"\n냉장고 재료: {', '.join(self.ingredients)}")
-        print(f"주재료: {self.main_ingredient}")
+        
+        if self.main_ingredients:
+            print(f"주재료: {', '.join(self.main_ingredients)}")
+        else:
+            print("주재료: 지정되지 않음")
     
     def print_dishes(self):
         """생성된 음식 목록을 출력합니다."""
