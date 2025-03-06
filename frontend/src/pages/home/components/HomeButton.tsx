@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 
 interface HomeButtonProps {
+  // title: 버튼 이름, imgSrc: 버튼 이미지, link: 넘길 링크, onAction: 버튼 클릭 실행할 모달 open 함수
   title: string;
   imgSrc?: string;
   link?: string;
