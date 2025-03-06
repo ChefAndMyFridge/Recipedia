@@ -25,7 +25,9 @@ def _sync_search_youtube_recipe(dish: str, max_results) -> list:
         part="snippet",
         q=query,
         maxResults=max_results,
-        type="video"
+        type="video",
+        videoDuration="medium",        # 중간 길이의 영상만 검색
+        videoCaption="closedCaption",  # 자막이 있는 영상만 검색
     )
     search_response = search_request.execute()
     
