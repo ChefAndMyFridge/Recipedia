@@ -9,7 +9,7 @@ import com.recipidia.ingredient.response.IngredientUpdateRes;
 import java.util.List;
 import java.util.Map;
 
-public interface IngredientService {
+public interface IngredientCrudService {
     List<IngredientInfoDto> getAllIngredients();
     IngredientInfoDto getIngredient(Long ingredientId);
     IngredientIncomingRes stockItem(IngredientIncomingReq request);

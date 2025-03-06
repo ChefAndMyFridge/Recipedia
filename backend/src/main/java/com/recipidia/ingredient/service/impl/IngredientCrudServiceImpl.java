@@ -10,7 +10,7 @@ import com.recipidia.ingredient.request.IngredientIncomingReq;
 import com.recipidia.ingredient.request.IngredientUpdateReq;
 import com.recipidia.ingredient.response.IngredientIncomingRes;
 import com.recipidia.ingredient.response.IngredientUpdateRes;
-import com.recipidia.ingredient.service.IngredientService;
+import com.recipidia.ingredient.service.IngredientCrudService;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -21,17 +21,23 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class IngredientServiceImpl implements IngredientService {
+public class IngredientCrudServiceImpl implements IngredientCrudService {
 
   private final IngredientInfoRepository ingredientInfoRepository;
   private final IngredientRepository ingredientRepository;
 
   @Override
   public List<IngredientInfoDto> getAllIngredients() {
-    List<IngredientInfo> ingredientInfos = ingredientInfoRepository.findAllWithIngredients();
+    List<IngredientInfo> ingredientInfos = ingredientInfoRepository.findAllAccessibleWithIngredients();
     return ingredientInfos.stream()
         .map(IngredientInfoDto::fromEntity)
         .toList();
+  }
+
+  @Override
+  public IngredientInfoDto getIngredient(Long ingredientId) {
+    IngredientInfo ingredientInfo = ingredientInfoRepository.findAccessibleWithIngredients(ingredientId);
+    return IngredientInfoDto.fromEntity(ingredientInfo);
   }
 
   @Override
@@ -112,11 +118,5 @@ public class IngredientServiceImpl implements IngredientService {
     ingredients.subList(startIdx, endIndex).clear();
 
     return Map.of("remainCount", remainCount);
-  }
-
-  @Override
-  public IngredientInfoDto getIngredient(Long ingredientId) {
-    IngredientInfo ingredientInfo = ingredientInfoRepository.findWithIngredients(ingredientId);
-    return IngredientInfoDto.fromEntity(ingredientInfo);
   }
 }

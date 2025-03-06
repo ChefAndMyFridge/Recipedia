@@ -11,9 +11,15 @@ import org.springframework.stereotype.Repository;
 public interface IngredientInfoRepository extends JpaRepository<IngredientInfo, Long> {
     Optional<IngredientInfo> findByName(String name);
 
-    @Query("select if from IngredientInfo if left join fetch if.ingredients")
+    @Query("select if from IngredientInfo if join fetch if.ingredients")
     List<IngredientInfo> findAllWithIngredients();
 
-    @Query("select if from IngredientInfo if left join fetch if.ingredients where if.id = :ingredientId")
+    @Query("select if from IngredientInfo if join fetch if.ingredients i where i.isReleased = false")
+    List<IngredientInfo> findAllAccessibleWithIngredients();
+
+    @Query("select if from IngredientInfo if join fetch if.ingredients where if.id = :ingredientId")
     IngredientInfo findWithIngredients(Long ingredientId);
+
+    @Query("select if from IngredientInfo if join fetch if.ingredients i where if.id = :ingredientId and i.isReleased = false")
+    IngredientInfo findAccessibleWithIngredients(Long ingredientId);
 }
