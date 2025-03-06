@@ -1,9 +1,10 @@
+import HomeHeader from "./components/HomeHeader";
 import HomeButtons from "./components/HomeButtons";
 
 const HomePage = () => {
   return (
     <div>
-      <div>HomePage</div>
+      <HomeHeader />
       <HomeButtons />
     </div>
   );
