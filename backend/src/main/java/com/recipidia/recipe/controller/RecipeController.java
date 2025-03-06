@@ -2,6 +2,7 @@ package com.recipidia.recipe.controller;
 
 import com.recipidia.recipe.dto.RecipeDto;
 import com.recipidia.recipe.request.RecipeQueryReq;
+import com.recipidia.recipe.response.RecipeExtractRes;
 import com.recipidia.recipe.service.RecipeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -96,8 +98,58 @@ public class RecipeController {
                   }))
       }
   )
-  @GetMapping
+  @GetMapping("/check")
   public Mono<ResponseEntity<List<RecipeDto>>> getAllRecipes() {
     return recipeService.getAllRecipes();
+  }
+
+
+  @Operation(
+      summary = "특정 레시피 텍스트 추출",
+      description = "FIGMA : 레시피 ㅇㅇ ㅇㅇ",
+      responses = {
+          @ApiResponse(responseCode = "200", description = "텍스트 레시피 추출 성공",
+              content = @Content(schema = @Schema(implementation = RecipeExtractRes.class),
+                  examples = {
+                      @ExampleObject(
+                          name = "응답 데이터",
+                          value = """
+                              {
+                                  title: string,
+                                  cooking_info: {
+                                      cooking_time: string,
+                                      kcal: number
+                                  },
+                                  ingredients: string[],
+                                  cooking_tools: string[],
+                                  cooking_tips: string[],
+                                  cooking_sequence: {
+                                      [step: string]: string[]
+                                  }
+                              }
+                              """
+                      )
+                  }))
+      }
+  )
+  @GetMapping("/{recipeId}")
+  public Mono<ResponseEntity<RecipeExtractRes>> extractAndSaveRecipe(@PathVariable Long recipeId) {
+    return recipeService.extractRecipe(recipeId)
+        .flatMap(extractRes ->
+            recipeService.saveExtractResult(recipeId, extractRes)
+                .thenReturn(extractRes)
+        )
+        .map(ResponseEntity::ok)
+        .doOnError(e -> {
+          // 예외 발생 시 로그 출력
+          System.err.println("Error during extractAndSaveRecipe: " + e.getMessage());
+          e.printStackTrace();
+        })
+        .onErrorResume(e -> {
+          if(e.getMessage().equals("Recipe not found")){
+            return Mono.just(ResponseEntity.notFound().build());
+          }
+          return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
+        });
   }
 }

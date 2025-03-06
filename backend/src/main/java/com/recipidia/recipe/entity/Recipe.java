@@ -1,6 +1,7 @@
 package com.recipidia.recipe.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.recipidia.ingredient.request.IngredientUpdateReq;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,7 +28,7 @@ public class Recipe {
     @Column
     private String textRecipe = null;
 
-    @OneToMany(mappedBy = "recipe", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private final List<RecipeIngredient> ingredients = new ArrayList<>(); // 빈 리스트로 초기화
 
@@ -36,6 +37,10 @@ public class Recipe {
     public Recipe(String name, String youtubeUrl) {
         this.name = name;
         this.youtubeUrl = youtubeUrl;
+    }
+
+    public void setTextRecipe(String textRecipe) {
+        this.textRecipe = textRecipe;
     }
 
 }

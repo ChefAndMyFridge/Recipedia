@@ -5,8 +5,10 @@ import com.recipidia.ingredient.dto.IngredientInfoDto;
 import com.recipidia.ingredient.service.IngredientService;
 import com.recipidia.recipe.dto.RecipeDto;
 import com.recipidia.recipe.entity.Recipe;
+import com.recipidia.recipe.entity.RecipeIngredient;
 import com.recipidia.recipe.repository.RecipeRepository;
 import com.recipidia.recipe.request.RecipeQueryReq;
+import com.recipidia.recipe.response.RecipeExtractRes;
 import com.recipidia.recipe.response.RecipeQueryRes;
 import com.recipidia.recipe.response.VideoInfo;
 import com.recipidia.recipe.service.RecipeService;
@@ -119,5 +121,55 @@ public class RecipeServiceImpl implements RecipeService {
             .onErrorResume(e ->
                 Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build())
             );
+    }
+
+    @Override
+    @Transactional
+    public Mono<RecipeExtractRes> extractRecipe(Long recipeId) {
+        return Mono.fromCallable(() -> recipeRepository.findById(recipeId))
+            .subscribeOn(Schedulers.boundedElastic())
+            .flatMap(optionalRecipe -> {
+                if (optionalRecipe.isEmpty()) {
+                    return Mono.error(new RuntimeException("Recipe not found"));
+                }
+                Recipe recipe = optionalRecipe.get();
+                Map<String, String> payload = new HashMap<>();
+                payload.put("youtube_url", recipe.getYoutubeUrl());
+                return webClient.post()
+                    .uri("/api/f1/recipe/") // FastAPI의 추출 엔드포인트 URL
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(payload)
+                    .retrieve()
+                    .bodyToMono(RecipeExtractRes.class);
+            });
+    }
+
+    @Override
+    @Transactional
+    public Mono<Void> saveExtractResult(Long recipeId, RecipeExtractRes extractRes) {
+        return Mono.fromCallable(() -> recipeRepository.findByIdWithIngredients(recipeId))
+            .subscribeOn(Schedulers.boundedElastic())
+            .flatMap(optionalRecipe -> {
+                if (optionalRecipe.isEmpty()) {
+                    return Mono.error(new RuntimeException("Recipe not found"));
+                }
+                Recipe recipe = optionalRecipe.get();
+                // 추출 결과를 이용해 Recipe 업데이트
+                recipe.setTextRecipe(extractRes.getTitle()); // 현재 Title만 가져다 붙이는데, 파싱한 텍스트를 넣거나 Json을 통으로 붙여야 할 것
+                // AI 쪽과 협의 후 진행
+                // 기존 ingredients를 모두 제거한 후, 새로 추가
+                recipe.getIngredients().clear();
+                extractRes.getIngredients().forEach(ingredientName -> {
+                    RecipeIngredient ingredient = RecipeIngredient.builder()
+                        .recipe(recipe)
+                        .name(ingredientName)
+                        .quantity("1개") // 수량은 추후 업데이트
+                        .build();
+                    recipe.getIngredients().add(ingredient);
+                });
+                return Mono.fromCallable(() -> recipeRepository.save(recipe))
+                    .subscribeOn(Schedulers.boundedElastic())
+                    .then();
+            });
     }
 }
