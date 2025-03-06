@@ -1,3 +1,4 @@
+# app/utils/prompts/few_shot.py
 SUMMARY_FEW_SHOT_DATA = [
     {
         "role" : "user",
@@ -166,7 +167,7 @@ SUMMARY_FEW_SHOT_DATA_DICT = [
                 "센 불에서 빠르게 조리: 소고기는 센 불에서 빠르게 익혀야 육즙을 보존할 수 있습니다.",
                 "당근의 식감 유지: 당근은 너무 오래 볶지 않도록 마지막에 넣고 빠르게 조리하는 것이 좋습니다."  
             ],
-            "cooking_sequence" : [
+            "cooking_sequence" : {
                 "재료 손질" : [
                     "소고기는 먹기 좋은 크기로 자르고, 간장(1큰술), 후추, 다진 마늘을 넣어 10분간 재워둡니다.",
                     "당근과 양파는 채 썰어 준비합니다."  
@@ -191,7 +192,7 @@ SUMMARY_FEW_SHOT_DATA_DICT = [
                 "완성 및 서빙" : [
                     "따뜻한 밥과 함께 먹거나 반찬으로 곁들입니다.",
                 ],
-            ]
+            }
         }
         """
     },
