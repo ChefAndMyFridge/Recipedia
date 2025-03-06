@@ -178,7 +178,7 @@ class QueryMaker:
 # 로컬 테스트 실행 용
 if __name__ == "__main__":
     async def main():
-        recipe_maker = QueryMaker(["소고기", "계란", "파", "마늘", "양파"], "계란")
+        recipe_maker = QueryMaker(["소고기", "계란", "파", "마늘", "양파"], ["계란"])
         result = await recipe_maker.run()
         # print("\n최종 결과:")
         # print(result)
