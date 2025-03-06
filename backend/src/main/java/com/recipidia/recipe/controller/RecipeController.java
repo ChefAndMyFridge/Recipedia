@@ -71,6 +71,7 @@ public class RecipeController {
                                   "ingredients": [
                                     {
                                       "id": 1,
+                                      "recipeId": 1,
                                       "name": "돼지고기",
                                       "quantity": ""
                                     }
@@ -84,6 +85,7 @@ public class RecipeController {
                                   "ingredients": [
                                     {
                                       "id": 2,
+                                      "recipeId": 2,
                                       "name": "돼지고기",
                                       "quantity": ""
                                     }

@@ -60,12 +60,9 @@ public class RecipeServiceImpl implements RecipeService {
                 )
                 .flatMap(fullIngredients -> {
                     Map<String, Object> payload = new HashMap<>();
-                    // 요청으로 받은 재료 목록에서 첫 번째 값을 main ingredient로 사용
-                    String mainIngredient = request.getIngredients().isEmpty()
-                            ? null
-                            : request.getIngredients().get(0);
+                    // 요청으로 받은 재료 목록 전체를 main_ingredient 리스트로 사용
                     payload.put("ingredients", fullIngredients);
-                    payload.put("main_ingredient", mainIngredient);
+                    payload.put("main_ingredients", request.getIngredients());
 
                     return webClient.post()
                             .uri("/api/f1/query/")
@@ -100,12 +97,13 @@ public class RecipeServiceImpl implements RecipeService {
                                     .youtubeUrl(youtubeUrl)
                                     .build();
                                 Recipe savedRecipe = recipeRepository.save(recipe);
-                                RecipeIngredient recipeIngredient = RecipeIngredient.builder()
-                                    .recipe(savedRecipe)
-                                    .name(mainIngredient)
-                                    .quantity("") // 수량은 추후 업데이트
-                                    .build();
-                                recipeIngredientRepository.save(recipeIngredient);
+                                // 재료는 추가 방법 고민. 이 단계엔 안 넘기고 추출 시에 해도 좋을듯
+//                                RecipeIngredient recipeIngredient = RecipeIngredient.builder()
+//                                    .recipe(savedRecipe)
+//                                    .name(mainIngredient)
+//                                    .quantity("") // 수량은 추후 업데이트
+//                                    .build();
+//                                recipeIngredientRepository.save(recipeIngredient);
                             }
                         }
                     }
