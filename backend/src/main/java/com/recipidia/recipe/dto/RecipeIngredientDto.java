@@ -8,14 +8,15 @@ import java.util.List;
 /**
  * DTO for {@link RecipeIngredient}
  */
-public record RecipeIngredientDto(Long id, String name, String quantity) implements
-        Serializable {
+public record RecipeIngredientDto(Long id, Long recipeId, String name, String quantity) implements
+    Serializable {
 
     public static RecipeIngredientDto fromEntity(RecipeIngredient recipeIngredient) {
         return new RecipeIngredientDto(
-                recipeIngredient.getId(),
-                recipeIngredient.getName(),
-                recipeIngredient.getQuantity()
+            recipeIngredient.getId(),
+            recipeIngredient.getRecipe() != null ? recipeIngredient.getRecipe().getId() : null,
+            recipeIngredient.getName(),
+            recipeIngredient.getQuantity()
         );
     }
 
