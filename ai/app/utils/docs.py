@@ -129,7 +129,7 @@ class QueryDocs:
             },
             400: {"description": "잘못된 요청"}
         },
-        "data" : Ingredients(ingredients=["소고기", "계란", "파", "마늘", "양파"], main_ingredient="소고기"),
+        "data" : Ingredients(ingredients=["소고기", "계란", "파", "마늘", "양파"], main_ingredients=["소고기", "파"]),
         
     }
 
