@@ -2,11 +2,13 @@
 import time
 import logging
 
-from youtube_transcript_api import YouTubeTranscriptApi, NoTranscriptFound, TranscriptsDisabled
+import asyncio
+
+from youtube_transcript_api import YouTubeTranscriptApi, NoTranscriptFound
 from app.services.LLM.openai_api import RequestGPT
 
 from fastapi import HTTPException
-from app.utils.prompts.few_shot import SUMMARY_FEW_SHOT_DATA, SUMMARY_FEW_SHOT_DATA_DICT
+from app.utils.prompts.few_shot import SUMMARY_FEW_SHOT_DATA_DICT
 from app.utils.prompts.user_input_caution import SUMMARY_EXTRA_INPUT
 from app.core.config import settings
 
@@ -21,43 +23,33 @@ class RecipeSummary:
         # OpenAI 클라이언트 (비동기) 생성 – YoutubeQuery와 유사하게 생성자에서 한 번만 초기화
         self.request_gpt = RequestGPT(self.api_key)
 
-    async def get_transcript(self, video_id: str, target_language: str = 'ko'):
+    def safe_find(self, method, languages):
+        try:
+            return method(languages)
+        except NoTranscriptFound:
+            return None
+
+    async def get_transcript(self, video_id: str):
         """
         유튜브 영상 ID를 받아 자막(번역 포함)을 가져옵니다.
         """
-        try:
-            # 자막  목록 가져오기
-            transcripts_list = YouTubeTranscriptApi.list_transcripts(video_id)
-            
-            try:
-                # 수동 생성된 자막이 있으면 우선적으로 사용
-                transcript = transcripts_list.find_manually_created_transcript(
-                    transcripts_list._manually_created_transcripts.keys()
-                )
-            except NoTranscriptFound:
-                try:
-                    # 자동 생성된 자막 중 영어('en')뿐만 아니라 다른 언어도 포함해서 가져오기
-                    transcript = transcripts_list.find_generated_transcript(
-                        transcripts_list._generated_transcripts.keys()
-                    )
-                except NoTranscriptFound:
-                    logger.error("사용할 수 있는 자동 생성 자막이 없습니다.")
-                    return None
-                
-            # 원하는 언어로 번역
-            translated_transcript = transcript.translate(target_language)
-            
-            # 자막 데이터 가져오기
-            return translated_transcript.fetch()
-        
-        except TranscriptsDisabled:
-            logger.error(f"이 영상은 자막이 비활성화되었습니다.")
-        except NoTranscriptFound:
-            logger.error(f"이 영상에 사용할 수 있는 자막이 없습니다.")
-        except Exception as e:
-            logger.error(f"오류 발생: {e}")
-        return None
+        transcripts_list = YouTubeTranscriptApi.list_transcripts(video_id)
 
+        # 영어 자막을 우선적으로 가져오기기
+        transcript = (
+            self.safe_find(transcripts_list.find_manually_created_transcript, ['en'])
+            or self.safe_find(transcripts_list.find_manually_created_transcript, transcripts_list._manually_created_transcripts.keys())
+            or self.safe_find(transcripts_list.find_generated_transcript, ['en'])
+            or self.safe_find(transcripts_list.find_generated_transcript, transcripts_list._generated_transcripts.keys())
+        )
+
+        if transcript is None:
+            logger.error("사용 가능한 자막이 없습니다.")
+            return None
+            
+        # 자막 데이터 가져오기
+        return transcript.fetch()
+    
     async def summarize_recipe(self, video_id: str) -> str:
         """
         주어진 영상 ID를 기반으로 자막을 가져와 OpenAI API로 요약된 레시피를 반환합니다.
@@ -68,8 +60,8 @@ class RecipeSummary:
             raise HTTPException(status_code=404, detail="자막을 가져올 수 없습니다.")
 
         # 자막 텍스트를 모두 결합
-        scripts = "".join([item["text"] for item in transcription])
-        
+        scripts = " ".join([item["text"].replace("\n", "").replace("\r", "") for item in transcription])
+
         # OpenAI 요청을 위한 메시지 구성
         system_input = [
             {
@@ -78,15 +70,11 @@ class RecipeSummary:
             },
             {
                 "role": "system",
-                "content": "너는 레시피 스크립트만 보고도 어떤 요리 도구를 사용해야 할 지 유추할 수 있어."
-            },
-            {
-                "role": "system",
                 "content": "스크립트가 한국어로 번역되어서 보여질텐데, 너는 이것을 자연스럽게 한국어로 변환할 수 있어."
             },
             {
                 "role": "system",
-                "content": "너는 주어지지 않는 정보를 맘대로 유추하지 않아."
+                "content": "스크립트를 요약할 때 엄격하게 스크립트에 대한 내용을 기반으로 요약할 수 있어."
             }
         ]
         user_input = [
@@ -109,10 +97,24 @@ class RecipeSummary:
 
         try:
             # OpenAI API 호출 (RequestGPT.run이 비동기 함수라고 가정)
-            summary = await self.request_gpt.run(system_input, user_input)
+            recipe_summary = await self.request_gpt.run(system_input, user_input)
             end = time.time()
             print(f"\n{end - start:.5f} sec")
+            time_dict = {"exec time cons" : f"{end - start:.5f}"}
+            summary = recipe_summary | time_dict
             return summary
         except Exception as e:
             logger.error(f"요약 API 호출 오류: {e}")
             raise HTTPException(status_code=500, detail="요약 처리 중 오류가 발생했습니다.")
+        
+if __name__ == "__main__":
+    async def main():
+        try:
+            recipe_summary = RecipeSummary()
+            summary = await recipe_summary.summarize_recipe("qWbHSOplcvY")
+            print(summary)
+        except HTTPException as e:
+            raise e
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"요약 처리 중 오류가 발생했습니다: {e}")
+    asyncio.run(main())
