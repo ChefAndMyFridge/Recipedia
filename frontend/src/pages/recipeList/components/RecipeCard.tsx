@@ -1,10 +1,7 @@
-import IconClock from "@assets/icons/IconClock";
 import IconHeart from "@assets/icons/IconHeart";
-import IconLike from "@assets/icons/IconLike";
-import IconView from "@assets/icons/IconView";
 import { Video } from "@/types/recipeListTypes";
 import { getYoutubeThumbnailUrl } from "@utils/getYoutubeThumbnailUrl";
-import VideoInfo from "@components/common/VideoInfo";
+import VideoInfos from "@components/common/videoInfo/VideoInfos";
 
 interface RecipeCardProps {
   video: Video;
@@ -28,11 +25,7 @@ const RecipeCard = ({ video }: RecipeCardProps) => {
             <IconHeart width={30} height={30} strokeColor="black" />
           </button>
         </div>
-        <div className="flex justify-around items-center">
-          <VideoInfo IconName={IconClock} InfoData={video.duration} InfoType="TIME" />
-          <VideoInfo IconName={IconLike} InfoData={video.like_count.toLocaleString()} InfoType="LIKE" />
-          <VideoInfo IconName={IconView} InfoData={video.view_count.toLocaleString()} InfoType="VIEW" />
-        </div>
+        <VideoInfos video={video} />
         <div className="w-full flex justify-end items-center">
           <button className="p-2 rounded-xl bg-primary font-preSemiBold text-white text-sm">요리하기</button>
         </div>
