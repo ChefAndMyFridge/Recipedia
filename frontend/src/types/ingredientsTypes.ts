@@ -3,7 +3,7 @@ export interface Ingredient {
   storagePlace: string;
   expirationDate: string;
   incomingDate: string;
-  releasingDate: string;
+  releasingDate: string | null;
 }
 
 export interface Ingredients {
@@ -12,4 +12,11 @@ export interface Ingredients {
   imageUrl: string;
   totalCount: number;
   ingredients: Ingredient[];
+}
+
+export interface SelectedIngredients {
+  ingredientInfoId: number;
+  name: string;
+  imageUrl: string;
+  selectedCount: number;
 }

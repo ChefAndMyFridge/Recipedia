@@ -1,4 +1,4 @@
-const ALL_INGREDIENTS = [
+export const ALL_INGREDIENTS = [
   {
     ingredientInfoId: 1,
     name: "대파",
@@ -224,5 +224,3 @@ const ALL_INGREDIENTS = [
     ],
   },
 ];
-
-export default ALL_INGREDIENTS;
