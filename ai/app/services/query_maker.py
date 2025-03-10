@@ -1,6 +1,5 @@
 import time
 import asyncio
-import concurrent.futures
 from app.services.LLM.food_generator import generate_dish_names
 from app.services.external_api.youtube_api import get_youtube_videos
 from app.core.config import settings
@@ -128,25 +127,7 @@ class QueryMaker:
     def print_execution_time(self):
         """실행 시간을 출력합니다."""
         print(f"\n실행 시간: {self.execution_time:.2f}초")
-    
-    def get_best_recipe(self, dish_index=0):
-        """
-        특정 요리의 최고 레시피를 반환합니다.
         
-        Args:
-            dish_index (int): 요리 인덱스 (0부터 시작)
-            
-        Returns:
-            dict: 레시피 정보 또는 결과가 없을 경우 None
-        """
-        if not self.dishes or dish_index >= len(self.dishes):
-            return None
-        
-        dish = self.dishes[dish_index]
-        if dish in self.all_videos and self.all_videos[dish]:
-            return self.all_videos[dish][0]
-        return None
-    
     async def run(self):
         """전체 레시피 생성 및 검색 과정을 실행합니다."""
         start_time = time.time()
