@@ -22,8 +22,8 @@ class RequestGPT:
             json_str = match.group(1)
             return json.loads(json_str)
         else:
-            raise ValueError("JSON 형식의 코드 블록을 찾을 수 없습니다.")
-
+            return markdown_output
+    
     async def run(self, system_input: SystemInput, user_input: UserInput) -> str:
         """
         시스템 입력과 사용자 입력을 받아 OpenAI API를 호출합니다.
