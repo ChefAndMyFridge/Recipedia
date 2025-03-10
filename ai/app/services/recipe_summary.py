@@ -29,7 +29,7 @@ class RecipeSummary:
         except NoTranscriptFound:
             return None
 
-    async def get_transcript(self, video_id: str, target_language: str = 'ko'):
+    async def get_transcript(self, video_id: str):
         """
         유튜브 영상 ID를 받아 자막(번역 포함)을 가져옵니다.
         """
@@ -48,7 +48,7 @@ class RecipeSummary:
             return None
             
         # 자막 데이터 가져오기
-        return transcript.translate(target_language).fetch()
+        return transcript.fetch()
     
     async def summarize_recipe(self, video_id: str) -> str:
         """
@@ -60,8 +60,8 @@ class RecipeSummary:
             raise HTTPException(status_code=404, detail="자막을 가져올 수 없습니다.")
 
         # 자막 텍스트를 모두 결합
-        scripts = "".join([item["text"] for item in transcription])
-        
+        scripts = "".join([item["text"].replace("\n", " ").replace("\r", " ") for item in transcription])
+
         # OpenAI 요청을 위한 메시지 구성
         system_input = [
             {
