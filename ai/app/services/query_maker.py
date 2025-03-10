@@ -29,7 +29,9 @@ class QueryMaker:
             
         self.dishes = []
         self.all_videos = {}
-        self.execution_time = 0
+        self.openai_time = 0  # OpenAI API 호출 시간
+        self.youtube_time = 0  # YouTube API 호출 시간
+        self.execution_time = 0  # 전체 실행 시간
     
     async def generate_dishes(self):
         """음식 이름을 생성하고 저장합니다."""
@@ -150,27 +152,43 @@ class QueryMaker:
         start_time = time.time()
         
         # 1단계: 음식 이름 생성
+        openai_start = time.time()
         await self.generate_dishes()
+        openai_end = time.time()
+        self.openai_time = openai_end - openai_start
         
         # 정보 출력
         self.print_ingredients()
         self.print_dishes()
+        print(f"\n🕒 음식 이름 생성 시간 (OpenAI API): {self.openai_time:.2f}초")
         
         # 2단계: YouTube 레시피 검색
+        youtube_start = time.time()
         await self.search_recipes()
+        youtube_end = time.time()
+        self.youtube_time = youtube_end - youtube_start
         
         # 결과 표시
         self.print_recipes()
+        print(f"\n🕒 레시피 검색 시간 (YouTube API): {self.youtube_time:.2f}초")
         
         end_time = time.time()
         self.execution_time = end_time - start_time
         
         self.print_execution_time()
         
+        # API 시간 비교 출력
+        print("\n===== API 호출 시간 비교 =====")
+        print(f"OpenAI API 호출: {self.openai_time:.2f}초 ({self.openai_time/self.execution_time*100:.1f}%)")
+        print(f"YouTube API 호출: {self.youtube_time:.2f}초 ({self.youtube_time/self.execution_time*100:.1f}%)")
+        print(f"기타 처리 시간: {(self.execution_time - self.openai_time - self.youtube_time):.2f}초 ({(self.execution_time - self.openai_time - self.youtube_time)/self.execution_time*100:.1f}%)")
+        
         return {
             'dishes': self.dishes,
             'videos': self.all_videos,
-            'execution_time': self.execution_time
+            'execution_time': self.execution_time,
+            'openai_time': self.openai_time,
+            'youtube_time': self.youtube_time
         }
 
 
@@ -186,13 +204,17 @@ if __name__ == "__main__":
         # QueryMaker 생성
         qm = QueryMaker(ingredients, main_ingredients)
         
-        # 음식 이름만 생성
+        # 음식 이름 생성 시간 측정
+        start_time = time.time()
         await qm.generate_dishes()
+        end_time = time.time()
+        generation_time = end_time - start_time
         
         # 결과 출력
         print("\n생성된 음식 이름:")
         for i, dish in enumerate(qm.dishes, 1):
             print(f"{i}. {dish}")
+        print(f"\n🕒 음식 이름 생성 시간: {generation_time:.2f}초")
         print("-" * 50)
         
         return qm.dishes
