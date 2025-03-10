@@ -35,6 +35,7 @@ const HomeIngredient = ({ ingredient }: HomeIngredientProps) => {
     if (count < ingredient.totalCount) {
       setCount(count + 1);
       setSelectedCount(ingredient.ingredientInfoId, {
+        ingredientInfoId: ingredient.ingredientInfoId,
         name: ingredient.name,
         imageUrl: ingredient.imageUrl,
         selectedCount: count + 1,
@@ -46,6 +47,7 @@ const HomeIngredient = ({ ingredient }: HomeIngredientProps) => {
     if (count > 0) {
       setCount(count - 1);
       setSelectedCount(ingredient.ingredientInfoId, {
+        ingredientInfoId: ingredient.ingredientInfoId,
         name: ingredient.name,
         imageUrl: ingredient.imageUrl,
         selectedCount: count - 1,
@@ -54,7 +56,7 @@ const HomeIngredient = ({ ingredient }: HomeIngredientProps) => {
   };
 
   return (
-    <div className="flex flex-col w-1/5 h-[160px] p-1 justify-center items-center ">
+    <div className="flex flex-col w-1/5 h-fit p-1 justify-center items-center ">
       <div className="relative bg-content2 w-full aspect-[1/1] rounded-3xl">
         {/* <img src={ingredient.imageUrl} /> */}
         <p className="absolute bottom-0.5 w-full font-preMedium text-xs text-center">{ingredient.name}</p>

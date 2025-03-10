@@ -25,6 +25,7 @@ interface IngredientItem {
 }
 
 interface SelectedIngredientInfo {
+  ingredientInfoId: number;
   name: string;
   imageUrl: string;
   selectedCount: number;
@@ -41,7 +42,8 @@ const useIngredientsStore = create<IngredientsState>((set) => ({
       if (ingredientInfo.selectedCount > 0) {
         newSelected[ingredientInfoId] = ingredientInfo;
       } else {
-        delete newSelected[ingredientInfoId]; // 0이면 삭제
+        // 0이면 삭제
+        delete newSelected[ingredientInfoId];
       }
 
       return { selectedIngredients: newSelected };

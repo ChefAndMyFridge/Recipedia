@@ -165,6 +165,64 @@ const ALL_INGREDIENTS = [
       },
     ],
   },
+  {
+    ingredientInfoId: 1,
+    name: "대파",
+    imageUrl: "https://image.com",
+    totalCount: 3,
+    ingredients: [
+      {
+        ingredientId: 1,
+        storagePlace: "냉장고",
+        expirationDate: "2025-03-08T11:00:00",
+        incomingDate: "2025-03-01T12:00:00",
+        releasingDate: null,
+      },
+      {
+        ingredientId: 2,
+        storagePlace: "냉장고",
+        expirationDate: "2025-03-08T11:00:00",
+        incomingDate: "2025-03-01T12:00:00",
+        releasingDate: null,
+      },
+      {
+        ingredientId: 3,
+        storagePlace: "냉장고",
+        expirationDate: "2025-03-08T11:00:00",
+        incomingDate: "2025-03-01T12:00:00",
+        releasingDate: null,
+      },
+    ],
+  },
+  {
+    ingredientInfoId: 1,
+    name: "대파",
+    imageUrl: "https://image.com",
+    totalCount: 3,
+    ingredients: [
+      {
+        ingredientId: 1,
+        storagePlace: "냉장고",
+        expirationDate: "2025-03-08T11:00:00",
+        incomingDate: "2025-03-01T12:00:00",
+        releasingDate: null,
+      },
+      {
+        ingredientId: 2,
+        storagePlace: "냉장고",
+        expirationDate: "2025-03-08T11:00:00",
+        incomingDate: "2025-03-01T12:00:00",
+        releasingDate: null,
+      },
+      {
+        ingredientId: 3,
+        storagePlace: "냉장고",
+        expirationDate: "2025-03-08T11:00:00",
+        incomingDate: "2025-03-01T12:00:00",
+        releasingDate: null,
+      },
+    ],
+  },
 ];
 
 export default ALL_INGREDIENTS;
