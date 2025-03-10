@@ -1,7 +1,6 @@
 package com.recipidia.recipe.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.recipidia.ingredient.request.IngredientUpdateReq;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;

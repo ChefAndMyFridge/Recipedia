@@ -134,22 +134,11 @@ public class RecipeController {
   )
   @GetMapping("/{recipeId}")
   public Mono<ResponseEntity<RecipeExtractRes>> extractAndSaveRecipe(@PathVariable Long recipeId) {
-    return recipeService.extractRecipe(recipeId)
-        .flatMap(extractRes ->
-            recipeService.saveExtractResult(recipeId, extractRes)
-                .thenReturn(extractRes)
-        )
-        .map(ResponseEntity::ok)
-        .doOnError(e -> {
-          // 예외 발생 시 로그 출력
-          System.err.println("Error during extractAndSaveRecipe: " + e.getMessage());
-          e.printStackTrace();
-        })
-        .onErrorResume(e -> {
-          if(e.getMessage().equals("Recipe not found")){
-            return Mono.just(ResponseEntity.notFound().build());
-          }
-          return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
-        });
+      return recipeService.extractRecipe(recipeId)
+              .flatMap(extractRes ->
+                      recipeService.saveExtractResult(recipeId, extractRes)
+                              .thenReturn(extractRes)
+              )
+              .map(ResponseEntity::ok);
   }
 }

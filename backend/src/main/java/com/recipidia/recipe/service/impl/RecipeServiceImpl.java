@@ -6,6 +6,7 @@ import com.recipidia.ingredient.service.IngredientService;
 import com.recipidia.recipe.dto.RecipeDto;
 import com.recipidia.recipe.entity.Recipe;
 import com.recipidia.recipe.entity.RecipeIngredient;
+import com.recipidia.recipe.exception.NoRecipeException;
 import com.recipidia.recipe.repository.RecipeRepository;
 import com.recipidia.recipe.request.RecipeQueryReq;
 import com.recipidia.recipe.response.RecipeExtractRes;
@@ -130,7 +131,7 @@ public class RecipeServiceImpl implements RecipeService {
             .subscribeOn(Schedulers.boundedElastic())
             .flatMap(optionalRecipe -> {
                 if (optionalRecipe.isEmpty()) {
-                    return Mono.error(new RuntimeException("Recipe not found"));
+                    return Mono.error(new NoRecipeException("Recipe not found"));
                 }
                 Recipe recipe = optionalRecipe.get();
                 Map<String, String> payload = new HashMap<>();
@@ -151,7 +152,7 @@ public class RecipeServiceImpl implements RecipeService {
             .subscribeOn(Schedulers.boundedElastic())
             .flatMap(optionalRecipe -> {
                 if (optionalRecipe.isEmpty()) {
-                    return Mono.error(new RuntimeException("Recipe not found"));
+                    return Mono.error(new NoRecipeException("Recipe not found"));
                 }
                 Recipe recipe = optionalRecipe.get();
                 // 추출 결과를 이용해 Recipe 업데이트
