@@ -1,5 +1,6 @@
 import time
 import asyncio
+from typing import List, Dict, Optional, Any, Union
 from app.services.LLM.food_generator import generate_dish_names
 from app.services.external_api.youtube_api import get_youtube_videos
 from app.core.config import settings
@@ -8,40 +9,48 @@ import logging
 logger = logging.getLogger(__name__)
 
 class QueryMaker:
-    def __init__(self, ingredients=None, main_ingredients=None):
+    def __init__(self, ingredients: Optional[List[str]] = None, main_ingredients: Optional[Union[List[str], str]] = None) -> None:
         """
         QueryMaker 클래스 초기화
         
         Args:
-            ingredients (list): 사용할 재료 목록
-            main_ingredients (list): 주재료 목록. 기본값은 None
+            ingredients: 사용할 재료 목록
+            main_ingredients: 주재료 목록. 기본값은 None
         """
-        self.ingredients = ingredients or []
+        self.ingredients: List[str] = ingredients or []
         
         # main_ingredients가 None이거나 빈 값이면 빈 리스트로, 문자열이면 단일 항목 리스트로 변환
         if main_ingredients is None:
-            self.main_ingredients = []
+            self.main_ingredients: List[str] = []
         elif isinstance(main_ingredients, str):
             self.main_ingredients = [main_ingredients]
         else:
             self.main_ingredients = main_ingredients
             
-        self.dishes = []
-        self.all_videos = {}
-        self.openai_time = 0  # OpenAI API 호출 시간
-        self.youtube_time = 0  # YouTube API 호출 시간
-        self.execution_time = 0  # 전체 실행 시간
+        self.dishes: List[str] = []
+        self.all_videos: Dict[str, List[Dict[str, Any]]] = {}
+        self.openai_time: float = 0  # OpenAI API 호출 시간
+        self.youtube_time: float = 0  # YouTube API 호출 시간
+        self.execution_time: float = 0  # 전체 실행 시간
     
-    async def generate_dishes(self):
-        """음식 이름을 생성하고 저장합니다."""
+    async def generate_dishes(self) -> List[str]:
+        """
+        입력: 없음
+        반환: 생성된 음식 이름 목록
+        기능: OpenAI API를 사용해 재료에 맞는 요리 이름 생성
+        """
         # generate_dish_names가 동기 함수이면 비동기로 변환 필요
         loop = asyncio.get_running_loop()
         self.dishes = await loop.run_in_executor(None, 
                                                 lambda: generate_dish_names(self.ingredients, self.main_ingredients))
         return self.dishes
     
-    async def search_recipes(self):
-        """생성된 음식에 대한 YouTube 레시피를 비동기 방식으로 검색합니다."""
+    async def search_recipes(self) -> Dict[str, List[Dict[str, Any]]]:
+        """
+        입력: 없음
+        반환: {요리이름 : 동영상 목록} 형태의 딕셔너리
+        기능: YouTube API를 사용해 요리 이름에 맞는 레시피 동영상 검색
+        """
         self.all_videos = {}
         
         # 각 요리별로 비동기 작업 생성
@@ -66,8 +75,12 @@ class QueryMaker:
             
         return self.all_videos
 
-    async def search_recipe_with_timeout(self, dish):
-        """각 요청에 타임아웃 설정"""
+    async def search_recipe_with_timeout(self, dish: str) -> List[Dict[str, Any]]:
+        """
+        입력: 요리 이름
+        반환: 검색된 동영상 목록
+        기능: 각 요청에 타임아웃 설정
+        """
         try:
             result = await asyncio.wait_for(get_youtube_videos(dish), timeout=10.0)
         except asyncio.TimeoutError:
@@ -128,8 +141,12 @@ class QueryMaker:
         """실행 시간을 출력합니다."""
         print(f"\n실행 시간: {self.execution_time:.2f}초")
         
-    async def run(self):
-        """전체 레시피 생성 및 검색 과정을 실행합니다."""
+    async def run(self) -> Dict[str, Any]:
+        """
+        입력: 없음
+        반환: 딕셔너리 (요리이름, 동영상, 실행시간 정보)
+        기능: 전체 과정 실행(요리 이름 생성, 유튜브 레시피 검색)
+        """
         start_time = time.time()
         
         # 1단계: 음식 이름 생성
@@ -176,7 +193,7 @@ class QueryMaker:
 ##########################################################
 # 로컬 테스트 실행 용
 if __name__ == "__main__":
-    async def test_dish_generation(ingredients, main_ingredients=None, title=""):
+    async def test_dish_generation(ingredients: List[str], main_ingredients: Optional[List[str]] = None, title: str = "") -> List[str]:
         """음식 이름 생성만 테스트하는 간소화된 함수"""
         print(f"\n===== {title} =====")
         print(f"냉장고 재료: {', '.join(ingredients)}")
