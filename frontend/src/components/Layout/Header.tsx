@@ -8,7 +8,7 @@ interface HeaderProps {
 
 const Header = ({ title, isIcon, className }: HeaderProps) => {
   return (
-    <header className={`${className} flex items-center justify-left gap-[10px] p-3 font-preSemiBold`}>
+    <header className={`${className} flex items-center justify-left gap-[10px] p-1 font-preSemiBold`}>
       {isIcon && <ArrowLeft width={30} height={30} strokeColor="#3C3C3C" />}
       <p className="text-lg">{title}</p>
     </header>

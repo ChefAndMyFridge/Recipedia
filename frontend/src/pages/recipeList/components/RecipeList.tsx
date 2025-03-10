@@ -12,7 +12,7 @@ const RecipeList = () => {
   const [selectedDish, setSelectedDish] = useState<keyof typeof VIDEOS>(DISHES[0]);
 
   return (
-    <section className="flex flex-col h-[80%]">
+    <section className="h-full flex flex-col">
       <MenuList dishes={DISHES} selectedDish={selectedDish} setSelectedDish={setSelectedDish} />
       <Carousel videos={VIDEOS[selectedDish]} />
     </section>
