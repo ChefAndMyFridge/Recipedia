@@ -74,7 +74,7 @@ class RecipeSummary:
             },
             {
                 "role": "system",
-                "content": "너는 주어지지 않는 정보를 맘대로 유추하지 않아."
+                "content": "스크립트를 요약할 때 엄격하게 스크립트에 대한 내용을 기반으로 요약할 수 있어."
             }
         ]
         user_input = [
@@ -107,14 +107,14 @@ class RecipeSummary:
             logger.error(f"요약 API 호출 오류: {e}")
             raise HTTPException(status_code=500, detail="요약 처리 중 오류가 발생했습니다.")
         
-# if __name__ == "__main__":
-#     async def main():
-#         try:
-#             recipe_summary = RecipeSummary()
-#             summary = await recipe_summary.summarize_recipe("nVzwOOJLt24")
-#             print(summary)
-#         except HTTPException as e:
-#             raise e
-#         except Exception as e:
-#             raise HTTPException(status_code=500, detail=f"요약 처리 중 오류가 발생했습니다: {e}")
-#     asyncio.run(main())
+if __name__ == "__main__":
+    async def main():
+        try:
+            recipe_summary = RecipeSummary()
+            summary = await recipe_summary.summarize_recipe("qWbHSOplcvY")
+            print(summary)
+        except HTTPException as e:
+            raise e
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"요약 처리 중 오류가 발생했습니다: {e}")
+    asyncio.run(main())
