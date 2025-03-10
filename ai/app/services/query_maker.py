@@ -88,59 +88,6 @@ class QueryMaker:
             result = []
         return result
     
-    def print_ingredients(self):
-        """재료 정보를 출력합니다."""
-        print(f"\n냉장고 재료: {', '.join(self.ingredients)}")
-        
-        if self.main_ingredients:
-            print(f"주재료: {', '.join(self.main_ingredients)}")
-        else:
-            print("주재료: 지정되지 않음")
-    
-    def print_dishes(self):
-        """생성된 음식 목록을 출력합니다."""
-        print("\n생성된 음식 이름 목록:")
-        for i, dish in enumerate(self.dishes, 1):
-            print(f"{i}. {dish}")
-    
-    def print_recipes(self):
-        """검색된 레시피 정보를 출력합니다."""
-        print("\n각 요리별 추천 레시피 동영상:")
-        if settings.VIDEO_VALIDATION_ENABLED:
-            print("(영상 관련성 검증이 활성화되었습니다)")
-        
-        for i, dish in enumerate(self.dishes, 1):
-            if dish in self.all_videos and self.all_videos[dish]:
-                first_video = self.all_videos[dish][0]
-                print(f"{i}. {dish}: {first_video['title']}")
-                print(f"   URL: {first_video['url']}")
-                
-                # 검증 결과가 있으면 표시
-                if settings.VIDEO_VALIDATION_ENABLED and 'relevance_score' in first_video:
-                    print(f"   관련성 점수: {first_video['relevance_score']:.2f}")
-                
-                # 추가 정보 표시
-                if 'description' in first_video:
-                    desc = first_video['description'][:100] + "..." if len(first_video['description']) > 100 else first_video['description']
-                    print(f"   설명: {desc}")
-                    
-                if 'channel_title' in first_video:
-                    print(f"   채널: {first_video['channel_title']}")
-                    
-                if 'view_count' in first_video:
-                    print(f"   조회수: {first_video['view_count']}")
-            else:
-                print(f"{i}. {dish}: 검색 결과 없음")
-
-        # 추가 정보
-        total_videos = sum(len(videos) for videos in self.all_videos.values())
-        print(f"\n총 {len(self.dishes)}개 요리에 대해 {total_videos}개의 레시피 동영상을 찾았습니다.")
-        print("각 요리별로 첫 번째 동영상만 표시되었습니다.")
-    
-    def print_execution_time(self):
-        """실행 시간을 출력합니다."""
-        print(f"\n실행 시간: {self.execution_time:.2f}초")
-        
     async def run(self) -> Dict[str, Any]:
         """
         입력: 없음
@@ -155,31 +102,17 @@ class QueryMaker:
         openai_end = time.time()
         self.openai_time = openai_end - openai_start
         
-        # 정보 출력
-        self.print_ingredients()
-        self.print_dishes()
-        print(f"\n🕒 음식 이름 생성 시간 (OpenAI API): {self.openai_time:.2f}초")
-        
         # 2단계: YouTube 레시피 검색
         youtube_start = time.time()
         await self.search_recipes()
         youtube_end = time.time()
         self.youtube_time = youtube_end - youtube_start
         
-        # 결과 표시
-        self.print_recipes()
-        print(f"\n🕒 레시피 검색 시간 (YouTube API): {self.youtube_time:.2f}초")
-        
         end_time = time.time()
         self.execution_time = end_time - start_time
         
-        self.print_execution_time()
-        
-        # API 시간 비교 출력
-        print("\n===== API 호출 시간 비교 =====")
-        print(f"OpenAI API 호출: {self.openai_time:.2f}초 ({self.openai_time/self.execution_time*100:.1f}%)")
-        print(f"YouTube API 호출: {self.youtube_time:.2f}초 ({self.youtube_time/self.execution_time*100:.1f}%)")
-        print(f"기타 처리 시간: {(self.execution_time - self.openai_time - self.youtube_time):.2f}초 ({(self.execution_time - self.openai_time - self.youtube_time)/self.execution_time*100:.1f}%)")
+        # 통합된 출력 함수 호출
+        self.print_results()
         
         return {
             'dishes': self.dishes,
@@ -188,6 +121,87 @@ class QueryMaker:
             'openai_time': self.openai_time,
             'youtube_time': self.youtube_time
         }
+
+    def print_results(self, include_ingredients=True, include_dishes=True, 
+                      include_recipes=True, include_time=True, include_api_times=True) -> None:
+        """
+        결과를 통합적으로 출력하는 함수
+        
+        Args:
+            include_ingredients (bool): 재료 정보 출력 여부
+            include_dishes (bool): 생성된 요리 이름 출력 여부
+            include_recipes (bool): 검색된 레시피 출력 여부
+            include_time (bool): 실행 시간 출력 여부
+            include_api_times (bool): API 호출 시간 비교 출력 여부
+        """
+        # 1. 재료 정보 출력
+        if include_ingredients:
+            print(f"\n냉장고 재료: {', '.join(self.ingredients)}")
+            
+            if self.main_ingredients:
+                print(f"주재료: {', '.join(self.main_ingredients)}")
+            else:
+                print("주재료: 지정되지 않음")
+        
+        # 2. 생성된 음식 목록 출력
+        if include_dishes:
+            print("\n생성된 음식 이름 목록:")
+            for i, dish in enumerate(self.dishes, 1):
+                print(f"{i}. {dish}")
+                
+            if hasattr(self, 'openai_time'):
+                print(f"\n🕒 음식 이름 생성 시간 (OpenAI API): {self.openai_time:.2f}초")
+        
+        # 3. 검색된 레시피 정보 출력
+        if include_recipes and hasattr(self, 'all_videos'):
+            print("\n각 요리별 추천 레시피 동영상:")
+            if settings.VIDEO_VALIDATION_ENABLED:
+                print("(영상 관련성 검증이 활성화되었습니다)")
+            
+            for i, dish in enumerate(self.dishes, 1):
+                if dish in self.all_videos and self.all_videos[dish]:
+                    first_video = self.all_videos[dish][0]
+                    print(f"{i}. {dish}: {first_video['title']}")
+                    print(f"   URL: {first_video['url']}")
+                    
+                    # 검증 결과가 있으면 표시
+                    if settings.VIDEO_VALIDATION_ENABLED and 'relevance_score' in first_video:
+                        print(f"   관련성 점수: {first_video['relevance_score']:.2f}")
+                    
+                    # 추가 정보 표시
+                    if 'description' in first_video:
+                        desc = first_video['description'][:100] + "..." if len(first_video['description']) > 100 else first_video['description']
+                        print(f"   설명: {desc}")
+                        
+                    if 'channel_title' in first_video:
+                        print(f"   채널: {first_video['channel_title']}")
+                        
+                    if 'view_count' in first_video:
+                        print(f"   조회수: {first_video['view_count']}")
+                else:
+                    print(f"{i}. {dish}: 검색 결과 없음")
+
+            # 추가 정보
+            total_videos = sum(len(videos) for videos in self.all_videos.values())
+            print(f"\n총 {len(self.dishes)}개 요리에 대해 {total_videos}개의 레시피 동영상을 찾았습니다.")
+            print("각 요리별로 첫 번째 동영상만 표시되었습니다.")
+            
+            if hasattr(self, 'youtube_time'):
+                print(f"\n🕒 레시피 검색 시간 (YouTube API): {self.youtube_time:.2f}초")
+        
+        # 4. 실행 시간 출력
+        if include_time and hasattr(self, 'execution_time'):
+            print(f"\n실행 시간: {self.execution_time:.2f}초")
+            
+        # 5. API 시간 비교 출력
+        if include_api_times and hasattr(self, 'execution_time'):
+            print("\n===== API 호출 시간 비교 =====")
+            print(f"OpenAI API 호출: {self.openai_time:.2f}초 ({self.openai_time/self.execution_time*100:.1f}%)")
+            if hasattr(self, 'youtube_time'):
+                print(f"YouTube API 호출: {self.youtube_time:.2f}초 ({self.youtube_time/self.execution_time*100:.1f}%)")
+                print(f"기타 처리 시간: {(self.execution_time - self.openai_time - self.youtube_time):.2f}초 ({(self.execution_time - self.openai_time - self.youtube_time)/self.execution_time*100:.1f}%)")
+            else:
+                print(f"기타 처리 시간: {(self.execution_time - self.openai_time):.2f}초 ({(self.execution_time - self.openai_time)/self.execution_time*100:.1f}%)")
 
 
 ##########################################################
