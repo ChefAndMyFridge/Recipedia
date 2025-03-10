@@ -15,9 +15,3 @@ export interface InputProps {
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
-
-export interface ModalStoreState {
-  isOpen: boolean;
-  modalContent: React.ReactNode | null;
-  closeModal: () => void;
-}

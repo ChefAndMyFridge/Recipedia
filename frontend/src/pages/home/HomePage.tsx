@@ -1,5 +1,5 @@
 import HomeHeader from "@pages/home/components/HomeHeader.tsx";
-import HomeButtons from "@pages/home/components/HomeButtons.tsx";
+import HomeIngredients from "./components/HomeIngredients.tsx";
 
 import Modal from "@/components/common/modal/Modal";
 
@@ -8,7 +8,7 @@ const HomePage = () => {
     <>
       <div>
         <HomeHeader />
-        <HomeButtons />
+        <HomeIngredients />
       </div>
       <Modal />
     </>
