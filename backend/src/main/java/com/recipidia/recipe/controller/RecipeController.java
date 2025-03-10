@@ -2,6 +2,7 @@ package com.recipidia.recipe.controller;
 
 import com.recipidia.recipe.dto.RecipeDto;
 import com.recipidia.recipe.request.RecipeQueryReq;
+import com.recipidia.recipe.response.RecipeExtractRes;
 import com.recipidia.recipe.service.RecipeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -96,8 +97,47 @@ public class RecipeController {
                   }))
       }
   )
-  @GetMapping
+  @GetMapping("/check")
   public Mono<ResponseEntity<List<RecipeDto>>> getAllRecipes() {
     return recipeService.getAllRecipes();
+  }
+
+
+  @Operation(
+      summary = "특정 레시피 텍스트 추출",
+      description = "FIGMA : 레시피 ㅇㅇ ㅇㅇ",
+      responses = {
+          @ApiResponse(responseCode = "200", description = "텍스트 레시피 추출 성공",
+              content = @Content(schema = @Schema(implementation = RecipeExtractRes.class),
+                  examples = {
+                      @ExampleObject(
+                          name = "응답 데이터",
+                          value = """
+                              {
+                                  title: string,
+                                  cooking_info: {
+                                      cooking_time: string,
+                                      kcal: number
+                                  },
+                                  ingredients: string[],
+                                  cooking_tools: string[],
+                                  cooking_tips: string[],
+                                  cooking_sequence: {
+                                      [step: string]: string[]
+                                  }
+                              }
+                              """
+                      )
+                  }))
+      }
+  )
+  @GetMapping("/{recipeId}")
+  public Mono<ResponseEntity<RecipeExtractRes>> extractAndSaveRecipe(@PathVariable Long recipeId) {
+      return recipeService.extractRecipe(recipeId)
+              .flatMap(extractRes ->
+                      recipeService.saveExtractResult(recipeId, extractRes)
+                              .thenReturn(extractRes)
+              )
+              .map(ResponseEntity::ok);
   }
 }

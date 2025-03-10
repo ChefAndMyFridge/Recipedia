@@ -1,6 +1,7 @@
 package com.recipidia.recipe.dto;
 
 import com.recipidia.recipe.entity.Recipe;
+import com.recipidia.recipe.response.RecipeExtractRes;
 
 import java.io.Serializable;
 import java.util.List;
@@ -9,8 +10,8 @@ import java.util.stream.Collectors;
 /**
  * DTO for {@link Recipe}
  */
-public record RecipeDto(Long recipeId, String name, String youtubeUrl,
-                        String textRecipe, List<RecipeIngredientDto> ingredients) implements
+public record RecipeDto(Long recipeId, String name, String title, String youtubeUrl,
+                        boolean hasTextRecipe, List<RecipeIngredientDto> ingredients) implements
         Serializable {
 
     public static RecipeDto fromEntity(Recipe recipe) {
@@ -20,8 +21,9 @@ public record RecipeDto(Long recipeId, String name, String youtubeUrl,
         return new RecipeDto(
             recipe.getId(),
             recipe.getName(),
+            recipe.getTitle(),
             recipe.getYoutubeUrl(),
-            recipe.getTextRecipe(),
+            recipe.getTextRecipe() != null,
             ingredientDtos
         );
     }

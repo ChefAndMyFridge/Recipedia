@@ -5,8 +5,11 @@ import com.recipidia.ingredient.dto.IngredientInfoDto;
 import com.recipidia.ingredient.service.IngredientService;
 import com.recipidia.recipe.dto.RecipeDto;
 import com.recipidia.recipe.entity.Recipe;
+import com.recipidia.recipe.entity.RecipeIngredient;
+import com.recipidia.recipe.exception.NoRecipeException;
 import com.recipidia.recipe.repository.RecipeRepository;
 import com.recipidia.recipe.request.RecipeQueryReq;
+import com.recipidia.recipe.response.RecipeExtractRes;
 import com.recipidia.recipe.response.RecipeQueryRes;
 import com.recipidia.recipe.response.VideoInfo;
 import com.recipidia.recipe.service.RecipeService;
@@ -95,6 +98,7 @@ public class RecipeServiceImpl implements RecipeService {
                             if (existing.isEmpty()) {
                                 Recipe recipe = Recipe.builder()
                                     .name(dish)
+                                    .title(videoInfo.getTitle())
                                     .youtubeUrl(youtubeUrl)
                                     .build();
                                 Recipe savedRecipe = recipeRepository.save(recipe);
@@ -119,5 +123,63 @@ public class RecipeServiceImpl implements RecipeService {
             .onErrorResume(e ->
                 Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build())
             );
+    }
+
+    @Override
+    @Transactional
+    public Mono<RecipeExtractRes> extractRecipe(Long recipeId) {
+        return Mono.fromCallable(() -> recipeRepository.findById(recipeId))
+                .subscribeOn(Schedulers.boundedElastic())
+                .flatMap(optionalRecipe -> {
+                    if (optionalRecipe.isEmpty()) {
+                        return Mono.error(new NoRecipeException("Recipe not found"));
+                    }
+                    Recipe recipe = optionalRecipe.get();
+                    // 이미 추출된 결과가 있으면 재추출하지 않고 반환
+                    if (recipe.getTextRecipe() != null) {
+                        return Mono.just(recipe.getTextRecipe());
+                    }
+                    // 없으면 웹 클라이언트를 통해 추출 수행
+                    Map<String, String> payload = new HashMap<>();
+                    payload.put("youtube_url", recipe.getYoutubeUrl());
+                    return webClient.post()
+                            .uri("/api/f1/recipe/")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .bodyValue(payload)
+                            .retrieve()
+                            .bodyToMono(RecipeExtractRes.class)
+                            // 추출 후 DB에 저장하는 로직 추가
+                            .flatMap(extractRes -> saveExtractResult(recipeId, extractRes)
+                                    .thenReturn(extractRes)
+                            );
+                });
+    }
+
+    @Override
+    @Transactional
+    public Mono<Void> saveExtractResult(Long recipeId, RecipeExtractRes extractRes) {
+        return Mono.fromCallable(() -> recipeRepository.findByIdWithIngredients(recipeId))
+                .subscribeOn(Schedulers.boundedElastic())
+                .flatMap(optionalRecipe -> {
+                    if (optionalRecipe.isEmpty()) {
+                        return Mono.error(new NoRecipeException("Recipe not found"));
+                    }
+                    Recipe recipe = optionalRecipe.get();
+                    // 추출 결과 전체를 RecipeExtractRes로 저장
+                    recipe.modifyTextRecipe(extractRes);
+                    // 기존 ingredients 업데이트 (필요 시)
+                    recipe.getIngredients().clear();
+                    extractRes.getIngredients().forEach(ingredientName -> {
+                        RecipeIngredient ingredient = RecipeIngredient.builder()
+                                .recipe(recipe)
+                                .name(ingredientName)
+                                .quantity("1개") // 수량은 추후 업데이트
+                                .build();
+                        recipe.getIngredients().add(ingredient);
+                    });
+                    return Mono.fromCallable(() -> recipeRepository.save(recipe))
+                            .subscribeOn(Schedulers.boundedElastic())
+                            .then();
+                });
     }
 }
