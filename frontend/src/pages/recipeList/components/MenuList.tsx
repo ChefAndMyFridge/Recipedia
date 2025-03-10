@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { VideoList } from "@/types/recipeListTypes";
 
 interface MenuListProps {
   dishes: string[];
+  selectedDish: keyof VideoList;
+  setSelectedDish: (dish: keyof VideoList) => void;
 }
 
-const MenuList = ({ dishes }: MenuListProps) => {
-  const [selectedDish, setSelectedDish] = useState<string>(dishes[0]);
+const MenuList = ({ dishes, selectedDish, setSelectedDish }: MenuListProps) => {
   return (
     <div className="w-full">
       <div className="relative">
@@ -13,7 +14,7 @@ const MenuList = ({ dishes }: MenuListProps) => {
           {dishes.map((dish) => (
             <div
               key={dish}
-              onClick={() => setSelectedDish(dish)}
+              onClick={() => setSelectedDish(dish as keyof VideoList)}
               className={` flex justify-center ${
                 selectedDish === dish ? "text-black font-preBold" : "text-content2 font-preMedium"
               }`}

@@ -1,27 +1,46 @@
-import IconHeart from "@/assets/icons/IconHeart";
+import IconClock from "@assets/icons/IconClock";
+import IconHeart from "@assets/icons/IconHeart";
+import IconLike from "@assets/icons/IconLike";
+import IconView from "@assets/icons/IconView";
 import { Video } from "@/types/recipeListTypes";
+import { getYoutubeThumbnailUrl } from "@utils/getYoutubeThumbnailUrl";
 
 interface RecipeCardProps {
   video: Video;
 }
 
 const RecipeCard = ({ video }: RecipeCardProps) => {
+  const thumbnailUrl = getYoutubeThumbnailUrl(video.url);
   return (
     <div className={`w-full shrink-0 flex justify-center`}>
-      <div className="w-[70%] p-3 flex flex-col gap-3 bg-white rounded-2xl">
-        <img
-          src="https://i.ytimg.com/vi/F5eBeXuI3ZU/maxresdefault.jpg"
-          alt={video.title}
-          className="w-full h-[60%] rounded-xl"
-        />
-        <div className="flex justify-between gap-2 h-[20%]">
-          <p className="font-preSemiBold text-sm break-keep">{video.title}</p>
+      <div className="w-[70%] min-h-[450px] max-h-[550px] p-3 flex flex-col justify-between bg-white rounded-2xl">
+        <img src={thumbnailUrl} alt={video.title} className="w-full max-h-[200px] rounded-xl" />
+        <div className="flex justify-between items-center">
+          <p className="max-w-[90%] overflow-hidden text-ellipsis whitespace-nowrap font-preSemiBold text-base break-keep">
+            {video.title}
+          </p>
           <button className="text-sm">
             <IconHeart width={30} height={30} strokeColor="black" />
           </button>
         </div>
-        <div>Video info</div>
-        <div className="w-full flex justify-end">
+        <div className="flex justify-around items-center">
+          <div className="flex flex-col gap-1 justify-center items-center text-sm">
+            <IconClock width={45} height={45} strokeColor="black" />
+            <p className="font-preBold">{video.duration}</p>
+            <p>TIME</p>
+          </div>
+          <div className="flex flex-col gap-1 justify-center items-center text-sm">
+            <IconLike width={45} height={45} strokeColor="black" />
+            <p className="font-preBold">{video.like_count.toLocaleString()}</p>
+            <p>LIKE</p>
+          </div>
+          <div className="flex flex-col gap-1 justify-center items-center text-sm">
+            <IconView width={45} height={45} strokeColor="black" />
+            <p className="font-preBold">{video.view_count.toLocaleString()}</p>
+            <p>VIEW</p>
+          </div>
+        </div>
+        <div className="w-full flex justify-end items-center">
           <button className="p-2 rounded-xl bg-primary font-preSemiBold text-white text-sm">요리하기</button>
         </div>
       </div>
