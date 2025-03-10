@@ -38,7 +38,7 @@ public class Recipe {
         this.youtubeUrl = youtubeUrl;
     }
 
-    public void setTextRecipe(String textRecipe) {
+    public void modifyTextRecipe(String textRecipe) {
         this.textRecipe = textRecipe;
     }
 

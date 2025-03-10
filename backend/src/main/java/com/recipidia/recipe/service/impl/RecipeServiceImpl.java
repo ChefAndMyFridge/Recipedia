@@ -156,7 +156,7 @@ public class RecipeServiceImpl implements RecipeService {
                 }
                 Recipe recipe = optionalRecipe.get();
                 // 추출 결과를 이용해 Recipe 업데이트
-                recipe.setTextRecipe(extractRes.getTitle()); // 현재 Title만 가져다 붙이는데, 파싱한 텍스트를 넣거나 Json을 통으로 붙여야 할 것
+                recipe.modifyTextRecipe(extractRes.getTitle()); // 현재 Title만 가져다 붙이는데, 파싱한 텍스트를 넣거나 Json을 통으로 붙여야 할 것
                 // AI 쪽과 협의 후 진행
                 // 기존 ingredients를 모두 제거한 후, 새로 추가
                 recipe.getIngredients().clear();
