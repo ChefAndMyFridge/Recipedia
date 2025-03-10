@@ -1,14 +1,6 @@
-import React from "react";
+import { InputProps } from "@/types/commonProps.ts";
 
 // 부모 요소에서 접근 방법: onChange={(event) => setEffect(event.target.value)}
-
-interface InputProps {
-  label?: string;
-  type: string;
-  placeHolder?: string;
-  value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
 
 const Input = ({ label, type, placeHolder, value, onChange }: InputProps) => {
   return (

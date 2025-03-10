@@ -1,10 +1,4 @@
-interface ButtonProps {
-  type: "confirm" | "cancel";
-  content: string;
-  width?: string;
-  height?: string;
-  onAction?: () => void;
-}
+import { ButtonProps } from "@/types/commonProps.ts";
 
 const Button = ({ type, content, width, height, onAction }: ButtonProps) => {
   return (
