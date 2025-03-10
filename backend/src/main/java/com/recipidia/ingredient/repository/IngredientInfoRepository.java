@@ -16,4 +16,11 @@ public interface IngredientInfoRepository extends JpaRepository<IngredientInfo, 
 
     @Query("select if from IngredientInfo if left join fetch if.ingredients where if.id = :ingredientId")
     IngredientInfo findWithIngredients(Long ingredientId);
+
+    @Query("SELECT i FROM IngredientInfo i "
+            + "LEFT JOIN FETCH i.ingredients "
+            + "LEFT JOIN FETCH i.ingredientNutrients "
+            + "WHERE i.id = :ingredientId")
+    IngredientInfo findWithIngredientsAndNutrients(Long ingredientId);
+
 }

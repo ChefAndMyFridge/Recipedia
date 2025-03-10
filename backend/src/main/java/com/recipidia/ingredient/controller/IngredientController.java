@@ -1,6 +1,7 @@
 package com.recipidia.ingredient.controller;
 
 import com.recipidia.ingredient.dto.IngredientInfoDto;
+import com.recipidia.ingredient.dto.IngredientInfoWithNutrientDto;
 import com.recipidia.ingredient.request.IngredientDeleteReq;
 import com.recipidia.ingredient.request.IngredientIncomingReq;
 import com.recipidia.ingredient.request.IngredientUpdateReq;
@@ -201,4 +202,10 @@ public class IngredientController {
       @RequestBody @Valid IngredientDeleteReq deleteReq) {
     return ingredientService.releaseItems(ingredientId, deleteReq.quantity());
   }
+
+  @GetMapping("/nutrient/{id}")
+  public IngredientInfoWithNutrientDto getIngredientInfoDetail(@PathVariable Long id) {
+      return ingredientService.getIngredientInfoWithNutrients(id);
+  }
+
 }

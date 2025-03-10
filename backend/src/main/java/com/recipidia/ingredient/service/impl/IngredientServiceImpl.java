@@ -1,6 +1,7 @@
 package com.recipidia.ingredient.service.impl;
 
 import com.recipidia.ingredient.dto.IngredientInfoDto;
+import com.recipidia.ingredient.dto.IngredientInfoWithNutrientDto;
 import com.recipidia.ingredient.entity.Ingredient;
 import com.recipidia.ingredient.entity.IngredientInfo;
 import com.recipidia.ingredient.exception.IngredientDeleteException;
@@ -14,6 +15,7 @@ import com.recipidia.ingredient.service.IngredientService;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -118,5 +120,12 @@ public class IngredientServiceImpl implements IngredientService {
   public IngredientInfoDto getIngredient(Long ingredientId) {
     IngredientInfo ingredientInfo = ingredientInfoRepository.findWithIngredients(ingredientId);
     return IngredientInfoDto.fromEntity(ingredientInfo);
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public IngredientInfoWithNutrientDto getIngredientInfoWithNutrients(Long id) {
+    IngredientInfo ingredientInfo = ingredientInfoRepository.findWithIngredientsAndNutrients(id);
+    return IngredientInfoWithNutrientDto.fromEntity(ingredientInfo);
   }
 }
