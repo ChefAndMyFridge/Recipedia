@@ -20,7 +20,7 @@ const Carousel = ({ videos }: CarouselProps) => {
   }
 
   return (
-    <div className="relative flex flex-col gap-3 justify-center items-center">
+    <div className="relative flex flex-col gap-8 justify-center items-center flex-[3]">
       <div className="overflow-hidden w-full">
         <div
           className="flex transition-transform duration-500"

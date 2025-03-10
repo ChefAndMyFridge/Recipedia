@@ -12,9 +12,9 @@ interface RecipeCardProps {
 const RecipeCard = ({ video }: RecipeCardProps) => {
   const thumbnailUrl = getYoutubeThumbnailUrl(video.url);
   return (
-    <div className={`w-full shrink-0 flex justify-center`}>
-      <div className="w-[70%] min-h-[450px] max-h-[550px] p-3 flex flex-col justify-between bg-white rounded-2xl">
-        <img src={thumbnailUrl} alt={video.title} className="w-full max-h-[200px] rounded-xl" />
+    <div className={`flex justify-center`}>
+      <div className="w-[80%] h-[60vh] min-h-[450px] p-3 flex flex-col justify-between bg-white rounded-2xl">
+        <img src={thumbnailUrl} alt={video.title} className="w-full h-[45%] min-h-[200px] rounded-xl object-cover" />
         <div className="flex justify-between items-center">
           <p className="max-w-[90%] overflow-hidden text-ellipsis whitespace-nowrap font-preSemiBold text-base break-keep">
             {video.title}
