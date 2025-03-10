@@ -6,7 +6,7 @@ import Modal from "@/components/common/modal/Modal";
 const HomePage = () => {
   return (
     <>
-      <div>
+      <div className="w-full h-full">
         <HomeHeader />
         <HomeIngredients />
       </div>

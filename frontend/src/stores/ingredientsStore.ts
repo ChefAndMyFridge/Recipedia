@@ -1,10 +1,11 @@
 import { create } from "zustand";
-
 import ALL_INGREDIENTS from "@/data/ALL_INGREDIENTS.ts";
 
 interface IngredientsState {
   ingredients: IngredientCategory[];
   setIngredients: (ingredients: IngredientCategory[]) => void;
+  selectedIngredients: Record<number, SelectedIngredientInfo>; // { ingredientInfoId: selectedCount }
+  setSelectedCount: (ingredientInfoId: number, ingredientInfo: SelectedIngredientInfo) => void;
 }
 
 interface IngredientCategory {
@@ -23,9 +24,29 @@ interface IngredientItem {
   releasingDate: string | null;
 }
 
+interface SelectedIngredientInfo {
+  name: string;
+  imageUrl: string;
+  selectedCount: number;
+}
+
 const useIngredientsStore = create<IngredientsState>((set) => ({
   ingredients: [...ALL_INGREDIENTS],
   setIngredients: (ingredients) => set({ ingredients }),
+  selectedIngredients: {},
+  setSelectedCount: (ingredientInfoId, ingredientInfo) => {
+    set((state) => {
+      const newSelected = { ...state.selectedIngredients };
+
+      if (ingredientInfo.selectedCount > 0) {
+        newSelected[ingredientInfoId] = ingredientInfo;
+      } else {
+        delete newSelected[ingredientInfoId]; // 0이면 삭제
+      }
+
+      return { selectedIngredients: newSelected };
+    });
+  },
 }));
 
 export default useIngredientsStore;
