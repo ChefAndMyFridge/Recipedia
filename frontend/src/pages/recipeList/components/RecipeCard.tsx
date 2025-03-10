@@ -27,17 +27,17 @@ const RecipeCard = ({ video }: RecipeCardProps) => {
           <div className="flex flex-col gap-1 justify-center items-center text-sm">
             <IconClock width={45} height={45} strokeColor="black" />
             <p className="font-preBold">{video.duration}</p>
-            <p>TIME</p>
+            <p className="font-preRegular">TIME</p>
           </div>
           <div className="flex flex-col gap-1 justify-center items-center text-sm">
             <IconLike width={45} height={45} strokeColor="black" />
             <p className="font-preBold">{video.like_count.toLocaleString()}</p>
-            <p>LIKE</p>
+            <p className="font-preRegular">LIKE</p>
           </div>
           <div className="flex flex-col gap-1 justify-center items-center text-sm">
             <IconView width={45} height={45} strokeColor="black" />
             <p className="font-preBold">{video.view_count.toLocaleString()}</p>
-            <p>VIEW</p>
+            <p className="font-preRegular">VIEW</p>
           </div>
         </div>
         <div className="w-full flex justify-end items-center">
