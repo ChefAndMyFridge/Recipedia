@@ -1,5 +1,6 @@
 import VideoInfos from "@components/common/videoInfo/VideoInfos";
 import Header from "@components/Layout/Header";
+import RecipeInfos from "./components/RecipeInfos";
 
 const video = {
   title:
@@ -20,8 +21,9 @@ const DetailRecipePage = () => {
   return (
     <section className="flex flex-col h-screen p-3">
       <Header title="레시피" isIcon />
-      <div className="flex-1 overflow-auto relative">
+      <div className="flex-1 flex flex-col gap-4 items-center overflow-auto relative">
         <VideoInfos video={video} />
+        <RecipeInfos />
       </div>
     </section>
   );
