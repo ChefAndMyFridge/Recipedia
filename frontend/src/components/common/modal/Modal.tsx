@@ -1,17 +1,11 @@
 import "@/components/common/modal/Modal.css";
 
-import React, { useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 
 import useModalStore from "@/stores/modalStore.ts";
 
-interface ModalStoreState {
-  isOpen: boolean;
-  modalContent: React.ReactNode | null;
-  closeModal: () => void;
-}
-
 const Modal = () => {
-  const { isOpen, modalContent, closeModal } = useModalStore() as ModalStoreState;
+  const { isOpen, modalContent, closeModal } = useModalStore();
   const dialog = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {

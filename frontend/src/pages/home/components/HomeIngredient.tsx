@@ -1,0 +1,88 @@
+import { useState } from "react";
+
+import useIngredientsStore from "@/stores/ingredientsStore.ts";
+
+import Decrease from "@/assets/icons/Decrease.tsx";
+import Increase from "@/assets/icons/Increase.tsx";
+
+interface HomeIngredientProps {
+  ingredient: IngredientCategory;
+}
+
+interface IngredientCategory {
+  ingredientInfoId: number;
+  name: string;
+  imageUrl: string;
+  totalCount: number;
+  ingredients: IngredientItem[];
+}
+
+interface IngredientItem {
+  ingredientId: number;
+  storagePlace: string;
+  expirationDate: string;
+  incomingDate: string;
+  releasingDate: string | null;
+}
+
+const HomeIngredient = ({ ingredient }: HomeIngredientProps) => {
+  const { selectedIngredients, setSelectedCount } = useIngredientsStore();
+
+  const selectedIngredient = selectedIngredients[ingredient.ingredientInfoId];
+  const [count, setCount] = useState<number>(selectedIngredient?.selectedCount || 0);
+
+  const handleIncrease = () => {
+    if (count < ingredient.totalCount) {
+      setCount(count + 1);
+      setSelectedCount(ingredient.ingredientInfoId, {
+        ingredientInfoId: ingredient.ingredientInfoId,
+        name: ingredient.name,
+        imageUrl: ingredient.imageUrl,
+        selectedCount: count + 1,
+      });
+    }
+  };
+
+  const handleDecrease = () => {
+    if (count > 0) {
+      setCount(count - 1);
+      setSelectedCount(ingredient.ingredientInfoId, {
+        ingredientInfoId: ingredient.ingredientInfoId,
+        name: ingredient.name,
+        imageUrl: ingredient.imageUrl,
+        selectedCount: count - 1,
+      });
+    }
+  };
+
+  return (
+    <div className="flex flex-col w-1/5 h-fit p-1 justify-center items-center ">
+      {/* 아이콘 부분 */}
+      <div className="relative bg-content2 w-full aspect-[1/1] rounded-3xl">
+        {/* <img src={ingredient.imageUrl} /> */}
+        <p className="absolute bottom-0.5 w-full font-preMedium text-xs text-center">{ingredient.name}</p>
+      </div>
+
+      {/* 재료 조작 관련 부분 */}
+      <div className="flex w-full justify-between items-center p-1">
+        <button
+          disabled={count <= 0}
+          onClick={handleDecrease}
+          className="flex justify-center items-center w-3.5 aspect-[1/1] p-[2px] bg-subContent rounded-full"
+        >
+          <Decrease strokeColor="black" />
+        </button>
+        <span className="font-preSemiBold text-center">{count}</span>
+        <button
+          disabled={count >= ingredient.totalCount}
+          onClick={handleIncrease}
+          className="flex justify-center items-center w-3.5 aspect-[1/1] p-[2px] bg-subContent rounded-full"
+        >
+          <Increase strokeColor="black" />
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default HomeIngredient;

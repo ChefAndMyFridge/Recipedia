@@ -1,14 +1,16 @@
 import HomeHeader from "@pages/home/components/HomeHeader.tsx";
-import HomeButtons from "@pages/home/components/HomeButtons.tsx";
+import HomeIngredients from "@pages/home/components/HomeIngredients.tsx";
+import HomeFooter from "@pages/home/components/HomeFooter.tsx";
 
 import Modal from "@/components/common/modal/Modal";
 
 const HomePage = () => {
   return (
     <>
-      <div>
+      <div className="flex flex-col justify-between w-full h-[100vh]">
         <HomeHeader />
-        <HomeButtons />
+        <HomeIngredients />
+        <HomeFooter />
       </div>
       <Modal />
     </>
