@@ -1,4 +1,6 @@
-const DETAIL_RECIPE = {
+import { RecipeInfo } from "@/types/recipeListTypes";
+
+const DETAIL_RECIPE: RecipeInfo = {
   title: "매콤 달콤 소고기 볶음",
   cooking_info: {
     cooking_time: "30",
@@ -16,7 +18,7 @@ const DETAIL_RECIPE = {
     "간장 4큰술",
     "설탕 1큰술",
   ],
-  cooking_tools: ["도마", "칼", "볼 (재료 재우기용)", "후라이팬", "나무 주걱ㄱ"],
+  cooking_tools: ["도마", "칼", "볼 (재료 재우기용)", "후라이팬", "나무 주걱"],
   cooking_tips: [
     "콜라에 재우면 고기가 부드러워집니다.",
     "양파는 채 썰어야 볶을 때 잘 익습니다.",

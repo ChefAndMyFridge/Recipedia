@@ -19,3 +19,19 @@ export interface RecipeList {
   dishes: string[];
   videos: VideoList;
 }
+
+export interface RecipeInfo {
+  title: string;
+  cooking_info: {
+    cooking_time: string;
+    kcal: number;
+  };
+  ingredients: string[];
+  cooking_tools: string[];
+  cooking_tips: string[];
+  cooking_sequence: {
+    [key: string]: string[];
+  };
+}
+
+export type RecipeInfoKeys = "ingredients" | "cooking_tools" | "cooking_tips";
