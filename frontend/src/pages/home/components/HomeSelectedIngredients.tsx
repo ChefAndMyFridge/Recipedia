@@ -17,6 +17,7 @@ const HomeSelectedIngredients = () => {
           </div>
         ))}
       </div>
+
       <div className="flex justify-center items-center w-1/5 h-full">
         <Button width="10" height="10" type="confirm" content="출고" />
       </div>

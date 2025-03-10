@@ -57,11 +57,13 @@ const HomeIngredient = ({ ingredient }: HomeIngredientProps) => {
 
   return (
     <div className="flex flex-col w-1/5 h-fit p-1 justify-center items-center ">
+      {/* 아이콘 부분 */}
       <div className="relative bg-content2 w-full aspect-[1/1] rounded-3xl">
         {/* <img src={ingredient.imageUrl} /> */}
         <p className="absolute bottom-0.5 w-full font-preMedium text-xs text-center">{ingredient.name}</p>
       </div>
 
+      {/* 재료 조작 관련 부분 */}
       <div className="flex w-full justify-between items-center p-1">
         <button
           disabled={count <= 0}

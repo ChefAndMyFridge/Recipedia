@@ -2,6 +2,7 @@ import { create } from "zustand";
 import ALL_INGREDIENTS from "@/data/ALL_INGREDIENTS.ts";
 
 interface IngredientsState {
+  // ingredients: 조회된 재료 목록, selectedIngredients: 선택된 재료 목록
   ingredients: IngredientCategory[];
   setIngredients: (ingredients: IngredientCategory[]) => void;
   selectedIngredients: Record<number, SelectedIngredientInfo>; // { ingredientInfoId: selectedCount }
