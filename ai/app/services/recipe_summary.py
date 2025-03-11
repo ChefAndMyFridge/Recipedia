@@ -9,7 +9,7 @@ from youtube_transcript_api import YouTubeTranscriptApi, NoTranscriptFound
 from app.services.LLM.openai_api import RequestGPT
 
 from fastapi import HTTPException
-from app.utils.prompts.few_shot import SUMMARY_FEW_SHOT_DATA_DICT
+from app.utils.prompts.few_shot import SUMMARY_FEW_SHOT_DATA
 from app.utils.prompts.recipe_summary_prompts import SUMMARY_SYSTEM_INPUT, SUMMARY_USER_INPUT
 from app.core.config import settings
 
@@ -64,11 +64,10 @@ class RecipeSummary:
         scripts = " ".join([item["text"].replace("\n", "").replace("\r", "") for item in transcription])
 
         # OpenAI 요청을 위한 메시지 구성
-        system_input, user_input = SUMMARY_SYSTEM_INPUT, copy.deepcopy(SUMMARY_USER_INPUT)
+        system_input, user_input = SUMMARY_SYSTEM_INPUT, SUMMARY_USER_INPUT
 
-        # few shot 데이터 정보
-        for data in SUMMARY_FEW_SHOT_DATA_DICT:
-            user_input.append(data)
+        # Few shot 데이터 적용
+        user_input += SUMMARY_FEW_SHOT_DATA
 
         # 마지막 입력에 자막 스크립트 삽입
         user_input[-1]["content"] = scripts
