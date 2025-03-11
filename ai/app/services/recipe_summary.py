@@ -1,7 +1,6 @@
 # app/services/recipe_summary.py
 import time
 import logging
-import copy
 
 import asyncio
 
