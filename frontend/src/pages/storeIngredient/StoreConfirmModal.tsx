@@ -4,7 +4,7 @@ import StoreConfirmMessage from "@pages/storeIngredient/components/StoreConfirmM
 const StoreConfirmModal = () => {
   return (
     <div>
-      <ModalHeader title="재료 입고 완료" />
+      <ModalHeader title="재료 입고" />
       <StoreConfirmMessage />
     </div>
   );
