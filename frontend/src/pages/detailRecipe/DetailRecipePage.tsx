@@ -1,8 +1,9 @@
+import ReactPlayer from "react-player";
 import VideoInfos from "@components/common/videoInfo/VideoInfos";
 import Header from "@components/Layout/Header";
-import RecipeInfos from "./components/RecipeInfos";
-import ReactPlayer from "react-player";
-import RecipeTitle from "./components/RecipeTitle";
+import Button from "@components/common/button/Button";
+import RecipeInfos from "@pages/detailRecipe/components/RecipeInfos";
+import RecipeTitle from "@pages/detailRecipe/components/RecipeTitle";
 import { Video } from "@/types/recipeListTypes";
 const video: Video = {
   title:
@@ -37,6 +38,11 @@ const DetailRecipePage = () => {
       <div className="flex-1 flex flex-col gap-4 items-center overflow-auto relative">
         <VideoInfos video={video} />
         <RecipeInfos />
+      </div>
+      {/* 버튼 컨테이너 */}
+      <div className="w-full flex justify-end items-center gap-2">
+        <Button type="cancel" content="요리 취소" width="50" className="px-4" />
+        <Button type="confirm" content="요리 종료" width="50" className="px-4" />
       </div>
     </section>
   );

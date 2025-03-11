@@ -6,6 +6,7 @@ export interface ButtonProps {
   width?: string;
   height?: string;
   onAction?: () => void;
+  className?: string;
 }
 
 export interface InputProps {
