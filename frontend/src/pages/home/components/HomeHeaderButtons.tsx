@@ -2,7 +2,7 @@ import useModalStore from "@stores/modalStore.ts";
 
 import Button from "@components/common/button/Button.tsx";
 
-import StoreIngredientModal from "@/pages/storeIngredient/StoreIngredientModal";
+import StoreIngredientModal from "@pages/storeIngredient/StoreIngredientModal";
 
 const HomeHeaderButtons = () => {
   const { openModal } = useModalStore();
