@@ -29,7 +29,7 @@ services:
         condition: service_healthy  # 🔥 MySQL이 "완전히 준비될 때까지" 대기
     networks:
       - app-network
-    restart: always
+    # restart: always
   
   fastapi:  # FastAPI 서비스 추가! 🚀
     container_name: my-fastapi
@@ -43,7 +43,7 @@ services:
     #     condition: service_healthy  # MySQL이 완전히 실행된 후 시작
     networks:
       - app-network
-    restart: always
+    # restart: always
 
   db:
     image: mysql:8

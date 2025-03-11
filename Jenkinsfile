@@ -16,6 +16,7 @@ pipeline {
             steps {
                 script {
                     sh 'cd $WORKSPACE && docker-compose down' // 기존 컨테이너 종료
+                    sh 'while [ $(docker-compose ps -q | wc -l) -ne 0 ]; do sleep 3; done' // 컨테이너 완전 종료될 때까지 대기
                 }
             }
         }
@@ -23,7 +24,9 @@ pipeline {
         stage('Build & Start New Containers') {
             steps {
                 script {
-                    sh 'cd $WORKSPACE && docker-compose up -d --build' // 새 컨테이너 빌드 & 실행
+                    retry(3) {
+                        sh 'cd $WORKSPACE && docker-compose up -d --build' // 새 컨테이너 빌드 & 실행
+                    }
                 }
             }
         }
