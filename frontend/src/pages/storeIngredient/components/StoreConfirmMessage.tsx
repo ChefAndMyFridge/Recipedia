@@ -1,0 +1,29 @@
+import { useEffect } from "react";
+
+import useModalStore from "@stores/modalStore";
+
+import Button from "@components/common/button/Button.tsx";
+
+const StoreConfirmMessage = () => {
+  const { closeModal } = useModalStore();
+
+  useEffect(() => {
+    setTimeout(() => {
+      closeModal();
+    }, 5000);
+  }, []);
+
+  return (
+    <div className="p-4">
+      <div className="flex flex-col w-full items-center px-4 py-10 font-preMedium">
+        <p className="m-0">재료 입고가 완료되었습니다.</p>
+        <p className="m-0">5초 뒤 자동으로 홈으로 이동합니다.</p>
+      </div>
+      <div className="flex w-full justify-center items-center font-preRegular">
+        <Button type="button" design="confirm" onAction={closeModal} content="홈으로 이동" />
+      </div>
+    </div>
+  );
+};
+
+export default StoreConfirmMessage;

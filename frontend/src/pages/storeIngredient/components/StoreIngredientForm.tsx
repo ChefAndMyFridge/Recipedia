@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 
-import useModalStore from "@/stores/modalStore";
+import useModalStore from "@stores/modalStore";
 
-import Input from "@/components/common/input/Input.tsx";
-import Button from "@/components/common/button/Button.tsx";
+import Input from "@components/common/input/Input.tsx";
+import Button from "@components/common/button/Button.tsx";
+
+import StoreConfirm from "@pages/storeIngredient/StoreConfirm";
 
 const StoreIngredientForm = () => {
   const [storagePlace, setStoragePlace] = useState("냉장실");
 
-  const { closeModal } = useModalStore();
+  const { openModal, closeModal } = useModalStore();
 
   function handleStoragePlace(place: string): void {
     setStoragePlace(place);
@@ -35,6 +37,9 @@ const StoreIngredientForm = () => {
     console.log(ingredient);
 
     // API 호출
+
+    // 모달 이동
+    openModal(<StoreConfirm />);
   }
 
   return (

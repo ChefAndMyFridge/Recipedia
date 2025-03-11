@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 
-import useIngredientsStore from "@/stores/ingredientsStore";
+import useIngredientsStore from "@stores/ingredientsStore";
 
-import Button from "@/components/common/button/Button.tsx";
-import HomeSelectedIngredients from "./HomeSelectedIngredients.tsx";
+import Button from "@components/common/button/Button.tsx";
+import HomeSelectedIngredients from "@pages/home/components/HomeSelectedIngredients.tsx";
 
 const HomeFooter = () => {
   const { selectedIngredients } = useIngredientsStore();

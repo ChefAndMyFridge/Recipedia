@@ -1,6 +1,6 @@
-import useIngredientsStore from "@/stores/ingredientsStore.ts";
+import useIngredientsStore from "@stores/ingredientsStore.ts";
 
-import HomeIngredient from "@/pages/home/components/HomeIngredient.tsx";
+import HomeIngredient from "@pages/home/components/HomeIngredient.tsx";
 
 const HomeIngredients = () => {
   const { ingredients } = useIngredientsStore();

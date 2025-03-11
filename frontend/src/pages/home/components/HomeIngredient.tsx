@@ -1,11 +1,11 @@
 import { useState } from "react";
 
-import useIngredientsStore from "@/stores/ingredientsStore.ts";
+import useIngredientsStore from "@stores/ingredientsStore.ts";
 
 import { Ingredients } from "@/types/ingredientsTypes";
 
-import Decrease from "@/assets/icons/Decrease.tsx";
-import Increase from "@/assets/icons/Increase.tsx";
+import Decrease from "@assets/icons/Decrease.tsx";
+import Increase from "@assets/icons/Increase.tsx";
 
 interface HomeIngredientProps {
   ingredient: Ingredients;

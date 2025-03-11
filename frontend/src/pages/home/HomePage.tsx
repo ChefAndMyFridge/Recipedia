@@ -2,7 +2,7 @@ import HomeHeader from "@pages/home/components/HomeHeader.tsx";
 import HomeIngredients from "@pages/home/components/HomeIngredients.tsx";
 import HomeFooter from "@pages/home/components/HomeFooter.tsx";
 
-import Modal from "@/components/common/modal/Modal";
+import Modal from "@components/common/modal/Modal";
 
 const HomePage = () => {
   return (
