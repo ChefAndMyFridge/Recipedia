@@ -1,7 +1,7 @@
 const HomePage = () => {
   return (
     <div>
-      <div>HomePage</div>
+      <div>Jenkins CI/CD Test</div>
     </div>
   );
 }
