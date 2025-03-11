@@ -25,6 +25,9 @@ class RecipeSummary:
         # OpenAI 클라이언트 (비동기) 생성 – YoutubeQuery와 유사하게 생성자에서 한 번만 초기화
         self.request_gpt = RequestGPT(self.api_key)
 
+        # 디버그 모드
+        self.debug_mode = settings.DEBUG
+
     def safe_find(self, method, languages):
         """ 유튜브 자막을 try except 문으로 안전한게 찾아 반환합니다.
 
@@ -77,7 +80,9 @@ class RecipeSummary:
         Returns:
             str: 레시피 요약 데이터
         """
-        start = time.time()
+        if self.debug_mode:
+            start = time.time()
+
         transcription = await self.get_transcript(video_id)
         if transcription is None:
             raise HTTPException(status_code=404, detail="자막을 가져올 수 없습니다.")
@@ -97,15 +102,14 @@ class RecipeSummary:
 
         try:
             # OpenAI API 호출 (RequestGPT.run이 비동기 함수라고 가정)
-            opeanai_start = time.time()
-            recipe_summary = await self.request_gpt.run(system_input, user_input)
-            opeanai_end = time.time()
-            print(f'opeanai api time cons : {opeanai_end - opeanai_start:.5f}')
+            summary = await self.request_gpt.run(system_input, user_input)
 
-            end = time.time()
-            print(f"\n{end - start:.5f} sec")
-            time_dict = {"exec time cons": f"{end - start:.5f}"}
-            summary = recipe_summary | time_dict
+            if self.debug_mode:
+                end = time.time()
+                time_dict = {"exec time cons": f"{end - start:.5f}"}
+                print(f"\n{end - start:.5f} sec")
+                summary = summary | time_dict
+
             return summary
         except Exception as e:
             logger.error(f"요약 API 호출 오류: {e}")
