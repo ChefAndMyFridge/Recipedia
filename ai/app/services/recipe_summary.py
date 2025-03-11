@@ -26,14 +26,28 @@ class RecipeSummary:
         self.request_gpt = RequestGPT(self.api_key)
 
     def safe_find(self, method, languages):
+        """ 유튜브 자막을 try except 문으로 안전한게 찾아 반환합니다.
+
+        Args:
+            method: 유튜브 자막 찾는 메서드
+            languages: 자막 언어
+
+        Returns:
+            Optional[method]: 찾고자 하는 메서드
+        """
         try:
             return method(languages)
         except NoTranscriptFound:
             return None
 
     async def get_transcript(self, video_id: str) -> list[dict]:
-        """
-        유튜브 영상 ID를 받아 자막(번역 포함)을 가져옵니다.
+        """ 유튜브 영상 ID를 받아 자막(번역 포함)을 가져옵니다.
+
+        Args:
+            video_id(str): 유튜브 비디오 ID
+
+        Returns:
+            list[dict]: 자막 데이터
         """
         transcripts_list = YouTubeTranscriptApi.list_transcripts(video_id)
 
@@ -54,8 +68,13 @@ class RecipeSummary:
         return transcript.fetch()
 
     async def summarize_recipe(self, video_id: str) -> str:
-        """
-        주어진 영상 ID를 기반으로 자막을 가져와 OpenAI API로 요약된 레시피를 반환합니다.
+        """ 주어진 영상 ID를 기반으로 자막을 가져와 OpenAI API로 요약된 레시피를 반환합니다.
+
+        Args:
+            video_id(str): 유튜브 비디오 ID
+
+        Returns:
+            str: 레시피 요약 데이터
         """
         start = time.time()
         transcription = await self.get_transcript(video_id)
