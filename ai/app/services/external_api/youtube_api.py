@@ -1,13 +1,15 @@
 import asyncio
-import openai
+import re
 from googleapiclient.discovery import build
 from app.core.config import settings
-from app.utils.prompts.youtube_prompts import RECIPE_VALIDATOR_SYSTEM_MESSAGE, get_recipe_validation_prompt
-from datetime import timedelta
 
 
 async def search_youtube_recipe(dish: str, max_results=None) -> list:
-    """유튜브 레시피를 비동기적으로 검색합니다."""
+    """
+    입력: 요리 이름, 최대 결과 수(선택)
+    반환: 유튜브 동영상 정보 목록
+    기능: 유튜브 레시피를 비동기적으로 검색
+"""
     if max_results is None:
         max_results = settings.YOUTUBE_MAX_RESULTS
 
@@ -18,7 +20,11 @@ async def search_youtube_recipe(dish: str, max_results=None) -> list:
 
 
 def _sync_search_youtube_recipe(dish: str, max_results) -> list:
-    """동기식 YouTube API 호출 함수"""
+    """
+    입력: 요리 이름, 최대 결과 수
+    반환: 유튜브 동영상 정보 목록
+    기능: 동기식 YouTube API 호출 수행 (내부 함수)
+"""
     youtube = build("youtube", "v3", developerKey=settings.YOUTUBE_API_KEY)
     query = f"{dish} 레시피"
 
@@ -79,10 +85,11 @@ def _sync_search_youtube_recipe(dish: str, max_results) -> list:
 
 
 def _parse_duration(duration_iso):
-    """ISO 8601 형식의 지속 시간을 읽기 쉬운 형식으로 변환합니다."""
-    # PT1H30M15S -> 1:30:15
-    import re
-
+    """
+    입력: ISO 8601 형식의 지속 시간 문자열
+    반환: 분:초 형식의 영상 길이 문자열
+    기능: YouTube API의 ISO 8601 시간 형식을 사용자 친화적인 형식으로 변환
+"""
     try:
         # 시간, 분, 초 추출을 위한 정규식 패턴
         hours_pattern = re.compile(r'(\d+)H')
@@ -110,6 +117,10 @@ def _parse_duration(duration_iso):
 
 
 async def get_youtube_videos(dish):
-    """요리 이름으로 유튜브 비디오를 비동기적으로 검색합니다."""
+    """
+    입력: 요리 이름
+    반환: 유튜브 동영상 정보 목록
+    기능: 요리 이름으로 유튜브 비디오를 검색하여 결과 반환
+"""
     videos = await search_youtube_recipe(dish)
     return videos
