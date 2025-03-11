@@ -2,7 +2,7 @@ import useModalStore from "@stores/modalStore.ts";
 
 import Button from "@components/common/button/Button.tsx";
 
-import StoreIngredient from "@pages/storeIngredient/StoreIngredient";
+import StoreIngredientModal from "@/pages/storeIngredient/StoreIngredientModal";
 
 const HomeHeaderButtons = () => {
   const { openModal } = useModalStore();
@@ -15,7 +15,7 @@ const HomeHeaderButtons = () => {
         design="confirm"
         content="입고"
         className="w-10 aspect-[1/1]"
-        onAction={() => openModal(<StoreIngredient />)}
+        onAction={() => openModal(<StoreIngredientModal />)}
       />
     </div>
   );

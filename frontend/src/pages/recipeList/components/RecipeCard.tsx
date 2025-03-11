@@ -28,7 +28,7 @@ const RecipeCard = ({ video }: RecipeCardProps) => {
         </div>
         <VideoInfos video={video} />
         <div className="w-full flex justify-end items-center">
-          <Button type="button" design="confirm" content="요리하기" width="28" className="px-4" />
+          <Button type="button" design="confirm" content="요리하기" className="w-24 h-8" />
         </div>
       </div>
     </div>

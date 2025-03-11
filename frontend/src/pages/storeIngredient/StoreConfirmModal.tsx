@@ -1,7 +1,7 @@
 import ModalHeader from "@components/common/modal/ModalHeader";
 import StoreConfirmMessage from "@pages/storeIngredient/components/StoreConfirmMessage";
 
-const StoreConfirm = () => {
+const StoreConfirmModal = () => {
   return (
     <div>
       <ModalHeader title="재료 입고 완료" />
@@ -10,4 +10,4 @@ const StoreConfirm = () => {
   );
 };
 
-export default StoreConfirm;
+export default StoreConfirmModal;
