@@ -7,23 +7,25 @@ import openai
 from app.core.config import settings
 from app.models.prompt_input import UserInput, SystemInput
 
+
 class RequestGPT:
     def __init__(self, api_key: str):
-        self.client = openai.AsyncOpenAI(api_key = api_key)
+        self.client = openai.AsyncOpenAI(api_key=api_key)
 
     def extract_json(self, markdown_output: str) -> dict:
         # 만약 문자열이 큰따옴표로 감싸져 있다면 unescape 처리합니다.
         if markdown_output.startswith('"') and markdown_output.endswith('"'):
             markdown_output = json.loads(markdown_output)
-        
+
         # ```json 코드 블록 내부의 JSON 부분 추출
-        match = re.search(r'```json\s*(\{.*\})\s*```', markdown_output, re.DOTALL)
+        match = re.search(
+            r'```json\s*(\{.*\})\s*```', markdown_output, re.DOTALL)
         if match:
             json_str = match.group(1)
             return json.loads(json_str)
         else:
             return markdown_output
-    
+
     async def run(self, system_input: SystemInput, user_input: UserInput) -> dict:
         """
         시스템 입력과 사용자 입력을 받아 OpenAI API를 호출합니다.
@@ -32,7 +34,7 @@ class RequestGPT:
         prompt = []
         for input in system_input:
             prompt.append(input)
-        
+
         for input in user_input:
             prompt.append(input)
 
@@ -68,7 +70,7 @@ if __name__ == "__main__":
         if not api_key:
             raise Exception("OPENAI_API_KEY가 설정되지 않았습니다.")
         request_gpt = RequestGPT(api_key)
-        
+
         system_input = [
             {
                 "role": "system",
@@ -93,9 +95,9 @@ if __name__ == "__main__":
                 "content": "치즈를 활용한 레시피 추천해줘"
             }
         ]
-        
+
         result = await request_gpt.run(system_input, user_input)
         print("\n\n요약 결과:")
         print(result)
-    
+
     asyncio.run(main())

@@ -1,12 +1,12 @@
 # app/utils/prompts/few_shot.py
 SUMMARY_FEW_SHOT_DATA = [
     {
-        "role" : "user",
-        "content" : "다음 3개는 내가 원하는 프롬프트의 예시야. 이것을 보고 참고해서 만들어주면 돼."
+        "role": "user",
+        "content": "다음 3개는 내가 원하는 프롬프트의 예시야. 이것을 보고 참고해서 만들어주면 돼."
     },
     {
-        "role" : "user",
-        "content" : """
+        "role": "user",
+        "content": """
         {
             "title" : "소고기 당근 볶음 1인분",
             "cooking_info" : {
@@ -98,8 +98,8 @@ SUMMARY_FEW_SHOT_DATA = [
         """
     },
     {
-        "role" : "user",
-        "content" : """ 
+        "role": "user",
+        "content": """ 
         {
             "title": "소고기 당근 수프 1인분",
             "cooking_info": {
@@ -180,5 +180,3 @@ SUMMARY_FEW_SHOT_DATA = [
         """
     },
 ]
-
-
