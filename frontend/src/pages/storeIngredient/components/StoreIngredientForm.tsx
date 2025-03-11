@@ -59,24 +59,22 @@ const StoreIngredientForm = () => {
               type="button"
               design={storagePlace === "냉장실" ? "confirm" : "cancel"}
               content="냉장실"
-              width="20"
-              height="8"
+              className="w-16 h-8"
               onAction={() => handleStoragePlace("냉장실")}
             />
             <Button
               type="button"
               design={storagePlace === "냉동실" ? "confirm" : "cancel"}
               content="냉동실"
-              width="20"
-              height="8"
+              className="w-16 h-8"
               onAction={() => handleStoragePlace("냉동실")}
             />
           </div>
         </div>
       </div>
       <div className="flex justify-end align-center px-4 py-4 gap-2">
-        <Button type="button" design="cancel" content="취소" width="24" height="10" onAction={closeModal} />
-        <Button type="submit" design="confirm" content="입고" width="24" height="10" />
+        <Button type="button" design="cancel" content="취소" className="w-24 h-10" onAction={closeModal} />
+        <Button type="submit" design="confirm" content="입고" className="w-24 h-10" />
       </div>
     </form>
   );

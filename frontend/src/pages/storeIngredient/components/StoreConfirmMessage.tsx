@@ -20,7 +20,7 @@ const StoreConfirmMessage = () => {
         <p className="m-0">5초 뒤 자동으로 홈으로 이동합니다.</p>
       </div>
       <div className="flex w-full justify-center items-center font-preRegular">
-        <Button type="button" design="confirm" onAction={closeModal} content="홈으로 이동" />
+        <Button type="button" design="confirm" onAction={closeModal} content="홈으로 이동" className="w-full h-10" />
       </div>
     </div>
   );
