@@ -32,9 +32,9 @@ public class IngredientNutrient {
 
     @Builder
     public IngredientNutrient(IngredientInfo ingredientInfo, float calories, float carbohydrate,
-                               float protein, float fat, float sodium, float sugars,
-                               float cholesterol, float saturatedFat, float unsaturatedFat,
-                               float transFat, String allergenInfo) {
+                              float protein, float fat, float sodium, float sugars,
+                              float cholesterol, float saturatedFat, float unsaturatedFat,
+                              float transFat, String allergenInfo) {
         this.ingredientInfo = ingredientInfo;
         this.calories = calories;
         this.carbohydrate = carbohydrate;

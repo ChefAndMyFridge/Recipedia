@@ -25,4 +25,5 @@ public interface IngredientInfoRepository extends JpaRepository<IngredientInfo, 
             + "WHERE i.id = :ingredientId")
     IngredientInfo findWithIngredientsAndNutrients(Long ingredientId);
 
+    List<IngredientInfo> findByIngredientNutrientsIsNull();
 }
