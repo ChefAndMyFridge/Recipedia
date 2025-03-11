@@ -1,9 +1,13 @@
 import useIngredientsStore from "@stores/ingredientsStore";
+import useModalStore from "@stores/modalStore";
 
-import Button from "@/components/common/button/Button.tsx";
+import Button from "@components/common/button/Button.tsx";
+
+import TakeoutIngredientModal from "@pages/takeoutIngredient/TakeoutIngredientModal";
 
 const HomeSelectedIngredients = () => {
   const { selectedIngredients } = useIngredientsStore();
+  const { openModal } = useModalStore();
 
   return (
     <div className="flex justify-between items-center w-full h-full p-2 bg-white rounded-xl">
@@ -19,7 +23,13 @@ const HomeSelectedIngredients = () => {
       </div>
 
       <div className="flex justify-center items-center w-1/5 h-full">
-        <Button type="button" design="confirm" content="출고" width="10" height="10" />
+        <Button
+          type="button"
+          design="confirm"
+          content="출고"
+          className="w-12 aspect-[1/1]"
+          onAction={() => openModal(<TakeoutIngredientModal />)}
+        />
       </div>
     </div>
   );

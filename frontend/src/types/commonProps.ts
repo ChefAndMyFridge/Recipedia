@@ -4,8 +4,6 @@ export interface ButtonProps {
   type: "button" | "submit" | "reset";
   design: "confirm" | "cancel";
   content: string;
-  width?: string;
-  height?: string;
   onAction?: () => void;
   className?: string;
 }
