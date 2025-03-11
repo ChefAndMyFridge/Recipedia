@@ -13,6 +13,7 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 docs = QueryDocs()
 
+
 @router.post(
     "/",
     summary="레시피 생성 및 검색",
@@ -20,7 +21,7 @@ docs = QueryDocs()
     response_description="생성된 음식 목록, 동영상 정보 및 실행 시간",
     responses=docs.base["res"],
 )
-async def query_maker_endpoint(request: Request, data: Ingredients=docs.base["data"]):
+async def query_maker_endpoint(request: Request, data: Ingredients = docs.base["data"]):
     try:
         query_maker = QueryMaker(data.ingredients, data.main_ingredients)
         # 비동기로 전체 프로세스 실행
