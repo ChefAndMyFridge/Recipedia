@@ -5,7 +5,7 @@ import useModalStore from "@stores/modalStore";
 import Input from "@components/common/input/Input.tsx";
 import Button from "@components/common/button/Button.tsx";
 
-import StoreConfirmModal from "@/pages/storeIngredient/StoreConfirmModal";
+import StoreConfirmModal from "@pages/storeIngredient/StoreConfirmModal";
 
 const StoreIngredientForm = () => {
   const [storagePlace, setStoragePlace] = useState("냉장실");
