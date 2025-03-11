@@ -14,7 +14,7 @@ const Toggle = ({ isToggle, onToggle }: ToggleProps) => {
       onClick={handleToggle}
     >
       <input type="checkbox" id="check" className="sr-only peer" checked={isToggle} readOnly />
-      <span className="w-2/5 h-4/5 rounded-full bg-white absolute top-1/2 -translate-y-1/2 left-1 peer-checked:left-6 transition-all duration-500"></span>
+      <span className="w-5 h-5 rounded-full bg-white absolute top-1/2 -translate-y-1/2 left-1 peer-checked:left-6 transition-all duration-500"></span>
     </label>
   );
 };
