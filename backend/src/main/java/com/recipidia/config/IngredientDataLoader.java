@@ -25,7 +25,7 @@ public class IngredientDataLoader implements CommandLineRunner {
     public void run(String... args) throws Exception {
         if (ingredientInfoRepository.count() > 0) return; // 이미 데이터 있으면 실행 안 함
 
-        try (InputStream is = new ClassPathResource("data/ingredients.csv").getInputStream();
+        try (InputStream is = new ClassPathResource("data/ingredients_db.csv").getInputStream();
              BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
 
             String line = reader.readLine(); // 헤더 읽기 (skip)
