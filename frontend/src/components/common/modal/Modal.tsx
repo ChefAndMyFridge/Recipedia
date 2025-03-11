@@ -2,7 +2,7 @@ import "@/components/common/modal/Modal.css";
 
 import { useRef, useEffect } from "react";
 
-import useModalStore from "@/stores/modalStore.ts";
+import useModalStore from "@stores/modalStore.ts";
 
 const Modal = () => {
   const { isOpen, modalContent, closeModal } = useModalStore();

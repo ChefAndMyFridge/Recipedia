@@ -1,4 +1,4 @@
-import HomeHeaderButtons from "@/pages/home/components/HomeHeaderButtons.tsx";
+import HomeHeaderButtons from "@pages/home/components/HomeHeaderButtons.tsx";
 
 const HomeHeader = () => {
   // 나중에 스토어에 날짜 상태 추가할 예정

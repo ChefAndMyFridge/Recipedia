@@ -1,4 +1,4 @@
-import useIngredientsStore from "@/stores/ingredientsStore";
+import useIngredientsStore from "@stores/ingredientsStore";
 
 import Button from "@/components/common/button/Button.tsx";
 

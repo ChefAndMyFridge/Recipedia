@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 
-import useModalStore from "@/stores/modalStore";
+import useModalStore from "@stores/modalStore";
 
-import Input from "@/components/common/input/Input.tsx";
-import Button from "@/components/common/button/Button.tsx";
+import Input from "@components/common/input/Input.tsx";
+import Button from "@components/common/button/Button.tsx";
 
 const StoreIngredientForm = () => {
   const [storagePlace, setStoragePlace] = useState("냉장실");
