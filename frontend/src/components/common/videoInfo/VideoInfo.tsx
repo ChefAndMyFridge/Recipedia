@@ -9,9 +9,9 @@ interface VideoInfoProps {
 const VideoInfo = ({ IconName, InfoData, InfoType }: VideoInfoProps) => {
   return (
     <div className="flex flex-col gap-1 justify-center items-center text-sm">
-      <IconName width={45} height={45} strokeColor="black" />
+      <IconName width={35} height={35} strokeColor="black" />
       <p className="font-preBold">{InfoData}</p>
-      <p className="font-preRegular">{InfoType}</p>
+      <p className="font-preRegular text-xs">{InfoType}</p>
     </div>
   );
 };

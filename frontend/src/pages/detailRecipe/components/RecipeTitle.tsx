@@ -4,7 +4,7 @@ const RecipeTitle = ({ video }: { video: Video }) => {
   return (
     <div className="w-full flex justify-between px-2">
       {/* 영상 제목 및 채널 이름 표시 */}
-      <div className="max-w-[65%] flex flex-col gap-3">
+      <div className="max-w-[65%] flex flex-col gap-1">
         <p className="line-clamp-2 font-preSemiBold text-base">{video.title}</p>
         <p className="text-sm font-preSemiBold text-content">{video.channel_title}</p>
       </div>
