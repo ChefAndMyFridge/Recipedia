@@ -51,12 +51,13 @@ class RecipeSummary:
         """
         transcripts_list = YouTubeTranscriptApi.list_transcripts(video_id)
 
-        # 영어 자막을 우선적으로 가져오기기
+        # 제공된 한국어 자막을 우선 시도해보고, 영어 자막을 우선적으로 가져오기
         transcript = (
             self.safe_find(
-                transcripts_list.find_manually_created_transcript, ['en'])
-            or self.safe_find(transcripts_list.find_manually_created_transcript, transcripts_list._manually_created_transcripts.keys())
+                transcripts_list.find_manually_created_transcript, ['ko'])
+            or self.safe_find(transcripts_list.find_manually_created_transcript, ['en'])
             or self.safe_find(transcripts_list.find_generated_transcript, ['en'])
+            or self.safe_find(transcripts_list.find_manually_created_transcript, transcripts_list._manually_created_transcripts.keys())
             or self.safe_find(transcripts_list.find_generated_transcript, transcripts_list._generated_transcripts.keys())
         )
 
