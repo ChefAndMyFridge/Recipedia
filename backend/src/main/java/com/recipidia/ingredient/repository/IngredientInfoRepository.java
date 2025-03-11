@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IngredientInfoRepository extends JpaRepository<IngredientInfo, Long> {
+    boolean existsByName(String name);
+
     Optional<IngredientInfo> findByName(String name);
 
     @Query("select if from IngredientInfo if left join fetch if.ingredients")

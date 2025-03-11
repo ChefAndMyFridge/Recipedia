@@ -37,4 +37,9 @@ public class IngredientInfo {
         this.imageUrl = imageUrl;
     }
 
+    public void setIngredientNutrients(IngredientNutrient ingredientNutrients) {
+        this.ingredientNutrients = ingredientNutrients;
+        ingredientNutrients.setIngredientInfo(this);  // 양방향 관계 설정
+    }
+
 }

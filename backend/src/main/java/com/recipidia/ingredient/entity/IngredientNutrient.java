@@ -48,5 +48,9 @@ public class IngredientNutrient {
         this.transFat = transFat;
         this.allergenInfo = allergenInfo;
     }
+
+    public void setIngredientInfo(IngredientInfo ingredientInfo) {
+        this.ingredientInfo = ingredientInfo;
+    }
 }
 
