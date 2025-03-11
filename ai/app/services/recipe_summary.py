@@ -1,6 +1,7 @@
 # app/services/recipe_summary.py
 import time
 import logging
+import copy
 
 import asyncio
 
@@ -9,7 +10,7 @@ from app.services.LLM.openai_api import RequestGPT
 
 from fastapi import HTTPException
 from app.utils.prompts.few_shot import SUMMARY_FEW_SHOT_DATA_DICT
-from app.utils.prompts.user_input_caution import SUMMARY_EXTRA_INPUT
+from app.utils.prompts.recipe_summary_prompts import SUMMARY_SYSTEM_INPUT, SUMMARY_USER_INPUT
 from app.core.config import settings
 
 logger = logging.getLogger(__name__)
@@ -63,30 +64,7 @@ class RecipeSummary:
         scripts = " ".join([item["text"].replace("\n", "").replace("\r", "") for item in transcription])
 
         # OpenAI 요청을 위한 메시지 구성
-        system_input = [
-            {
-                "role": "system",
-                "content": "너는 주어진 스크립트를 읽고 요약을 잘하는 인공지능이야."
-            },
-            {
-                "role": "system",
-                "content": "스크립트가 한국어로 번역되어서 보여질텐데, 너는 이것을 자연스럽게 한국어로 변환할 수 있어."
-            },
-            {
-                "role": "system",
-                "content": "스크립트를 요약할 때 엄격하게 스크립트에 대한 내용을 기반으로 요약할 수 있어."
-            }
-        ]
-        user_input = [
-            {
-                "role" : "user",
-                "content" : "내가 아래에 준 요리 레시피를 요약해줘."
-            },
-        ]
-
-        # user input 추가 정보
-        for data in SUMMARY_EXTRA_INPUT:
-            user_input.append(data)
+        system_input, user_input = SUMMARY_SYSTEM_INPUT, copy.deepcopy(SUMMARY_USER_INPUT)
 
         # few shot 데이터 정보
         for data in SUMMARY_FEW_SHOT_DATA_DICT:
