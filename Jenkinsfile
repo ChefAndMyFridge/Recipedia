@@ -15,7 +15,7 @@ pipeline {
         stage('Stop & Remove Old Containers') {
             steps {
                 script {
-                    sh 'docker-compose down' // 기존 컨테이너 종료
+                    sh 'cd $WORKSPACE && docker-compose down' // 기존 컨테이너 종료
                 }
             }
         }
@@ -23,7 +23,7 @@ pipeline {
         stage('Build & Start New Containers') {
             steps {
                 script {
-                    sh 'docker-compose up -d --build' // 새 컨테이너 빌드 & 실행
+                    sh 'cd $WORKSPACE && docker-compose up -d --build' // 새 컨테이너 빌드 & 실행
                 }
             }
         }
@@ -31,7 +31,7 @@ pipeline {
         stage('Check Running Containers') {
             steps {
                 script {
-                    sh 'docker ps -a' // 실행 중인 컨테이너 확인
+                    sh 'cd $WORKSPACE && docker ps -a' // 실행 중인 컨테이너 확인
                 }
             }
         }
