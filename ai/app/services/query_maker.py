@@ -207,6 +207,9 @@ class QueryMaker:
 ##########################################################
 # 로컬 테스트 실행 용
 if __name__ == "__main__":
+    # 테스트 모드 설정: False - 음식 이름 생성만, True - 전체 과정(이름 생성 + 유튜브 검색)
+    FULL_TEST_MODE = True  # 테스트 모드 변경을 위한 플래그
+    
     async def test_dish_generation(ingredients: List[str], main_ingredients: Optional[List[str]] = None, title: str = "") -> List[str]:
         """음식 이름 생성만 테스트하는 간소화된 함수"""
         print(f"\n===== {title} =====")
@@ -231,47 +234,46 @@ if __name__ == "__main__":
         
         return qm.dishes
     
+    async def test_full_process(ingredients: List[str], main_ingredients: Optional[List[str]] = None, title: str = "") -> None:
+        """전체 과정(음식 이름 생성 + 유튜브 검색)을 테스트하는 함수"""
+        print(f"\n===== {title} (전체 과정) =====")
+        
+        # QueryMaker 생성
+        qm = QueryMaker(ingredients, main_ingredients)
+        
+        # 전체 과정 실행
+        await qm.run()
+        print("-" * 50)
+        
     async def main():
-        # 테스트 케이스 1: 한식 재료 조합 (주재료 없음)
-        await test_dish_generation(
-            ["김치", "두부", "대파", "쌀", "고추장", "된장", "간장", "마늘", "양파", "참기름"], 
-            [], 
-            "테스트 케이스 1: 한식 재료 (주재료 없음)"
-        )
+        test_cases = [
+            # [재료 리스트, 주재료 리스트, 케이스 제목]
+            [["김치", "두부", "대파", "쌀", "고추장", "된장", "간장", "마늘", "양파", "참기름"], 
+             [], "테스트 케이스 1: 한식 재료 (주재료 없음)"],
+            
+            [["소고기", "감자", "양파", "당근", "토마토", "버터", "올리브오일", "로즈마리", "버섯", "화이트와인"], 
+             ["소고기"], "테스트 케이스 2: 양식 재료 (주재료: 소고기)"],
+            
+            [["새우", "오징어", "양파", "마늘", "고추", "파", "식용유", "밀가루", "달걀", "소금"], 
+             ["새우", "오징어"], "테스트 케이스 3: 해산물 요리 (주재료: 새우, 오징어)"],
+            
+            [["닭고기", "코코넛밀크", "레몬그라스", "생강", "칠리", "바질", "카피르라임잎", "피시소스", "쌀", "콩나물"], 
+             ["닭고기"], "테스트 케이스 4: 아시안 요리 (주재료: 닭고기)"],
+            
+            [["닭고기", "감자", "당근", "양파", "간장"], 
+             ["닭고기", "감자"], "테스트 케이스 5: 기존 테스트 케이스"],
+            
+            [["돼지뼈", "감자", "당근", "양파", "고추장", "마늘", "대파"], 
+             ["돼지뼈", "감자"], "테스트 케이스 6: 돼지뼈와 감자 조합"]
+        ]
         
-        # 테스트 케이스 2: 양식 재료 조합 (주재료 1개)
-        await test_dish_generation(
-            ["소고기", "감자", "양파", "당근", "토마토", "버터", "올리브오일", "로즈마리", "버섯", "화이트와인"], 
-            ["소고기"], 
-            "테스트 케이스 2: 양식 재료 (주재료: 소고기)"
-        )
-        
-        # 테스트 케이스 3: 해산물 요리 재료 (주재료 2개)
-        await test_dish_generation(
-            ["새우", "오징어", "양파", "마늘", "고추", "파", "식용유", "밀가루", "달걀", "소금"], 
-            ["새우", "오징어"], 
-            "테스트 케이스 3: 해산물 요리 (주재료: 새우, 오징어)"
-        )
-        
-        # 테스트 케이스 4: 아시안 요리 재료 (주재료 1개, 다양한 향신료)
-        await test_dish_generation(
-            ["닭고기", "코코넛밀크", "레몬그라스", "생강", "칠리", "바질", "카피르라임잎", "피시소스", "쌀", "콩나물"], 
-            ["닭고기"], 
-            "테스트 케이스 4: 아시안 요리 (주재료: 닭고기)"
-        )
-        
-        # 테스트 케이스 5: 기존 테스트 케이스
-        await test_dish_generation(
-            ["닭고기", "감자", "당근", "양파", "간장"], 
-            ["닭고기", "감자"], 
-            "테스트 케이스 5: 기존 테스트 케이스"
-        )
-        
-        # 추가 테스트: 돼지뼈와 감자 조합
-        await test_dish_generation(
-            ["돼지뼈", "감자", "당근", "양파", "고추장", "마늘", "대파"], 
-            ["돼지뼈", "감자"], 
-            "테스트 케이스 6: 돼지뼈와 감자 조합"
-        )
+        if FULL_TEST_MODE:
+            # 전체 과정 테스트 (이름 생성 + 유튜브 검색)
+            for ingredients, main_ingredients, title in test_cases:
+                await test_full_process(ingredients, main_ingredients, title)
+        else:
+            # 음식 이름 생성만 테스트
+            for ingredients, main_ingredients, title in test_cases:
+                await test_dish_generation(ingredients, main_ingredients, title)
         
     asyncio.run(main())
