@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     ALLOWED_ORIGINS: List[str]
     YOUTUBE_API_KEY: str
     OPENAI_API_KEY: str
+    USDA_API_KEY: str
 
     # 할루시네이션 줄이기 위한 파라미터 최적화
     # Query OpenAI 설정
