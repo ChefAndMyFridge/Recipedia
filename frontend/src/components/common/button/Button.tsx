@@ -1,6 +1,6 @@
 import { ButtonProps } from "@/types/commonProps.ts";
 
-const Button = ({ type, design, content, width, height, onAction }: ButtonProps) => {
+const Button = ({ type, design, content, width, height, onAction, className }: ButtonProps) => {
   const getWidthClass = () => {
     if (!width) return "w-full";
     switch (width) {
@@ -145,7 +145,7 @@ const Button = ({ type, design, content, width, height, onAction }: ButtonProps)
     <button
       type={type}
       onClick={onAction}
-      className={`font-preMedium text-sm rounded-full ${getWidthClass()} ${getHeightClass()} ${design === "confirm" ? "bg-primary text-white hover:bg-primaryDark" : "bg-subContent text-white hover:bg-content2"}`}
+      className={`font-preMedium text-sm rounded-full ${getWidthClass()} ${getHeightClass()} ${design === "confirm" ? "bg-primary text-white hover:bg-primaryDark" : "bg-subContent text-white hover:bg-content2"} ${className}`}
     >
       {content}
     </button>

@@ -2,6 +2,7 @@ import IconHeart from "@assets/icons/IconHeart";
 import { Video } from "@/types/recipeListTypes";
 import { getYoutubeThumbnailUrl } from "@utils/getYoutubeThumbnailUrl";
 import VideoInfos from "@components/common/videoInfo/VideoInfos";
+import Button from "@components/common/button/Button";
 
 interface RecipeCardProps {
   video: Video;
@@ -27,7 +28,7 @@ const RecipeCard = ({ video }: RecipeCardProps) => {
         </div>
         <VideoInfos video={video} />
         <div className="w-full flex justify-end items-center">
-          <button className="p-2 rounded-xl bg-primary font-preSemiBold text-white text-sm">요리하기</button>
+          <Button type="button" design="confirm" content="요리하기" width="28" className="px-4" />
         </div>
       </div>
     </div>

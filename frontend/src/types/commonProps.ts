@@ -7,6 +7,7 @@ export interface ButtonProps {
   width?: string;
   height?: string;
   onAction?: () => void;
+  className?: string;
 }
 
 export interface InputProps {
@@ -16,4 +17,9 @@ export interface InputProps {
   placeHolder?: string;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+export interface ToggleProps {
+  isToggle: boolean;
+  onToggle: (isToggle: boolean) => void;
 }

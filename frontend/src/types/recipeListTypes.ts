@@ -34,4 +34,9 @@ export interface RecipeInfo {
   };
 }
 
+//레시피 텍스트 타입
+export interface RecipeText {
+  [key: string]: string[];
+}
+
 export type RecipeInfoKeys = "ingredients" | "cooking_tools" | "cooking_tips";

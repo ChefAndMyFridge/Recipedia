@@ -14,12 +14,12 @@ const RecipeInfos = () => {
       />
       {/* 선택된 인덱스별 자세한 정보 표시
       추후 데이터 변경 필요 */}
-      <div className="w-full h-[210px] overflow-auto p-4 bg-white rounded-2xl shadow-lg">
+      <div className="w-full max-h-[210px] overflow-auto p-4 bg-white rounded-2xl shadow-md">
         <div className="flex flex-wrap gap-2">
           {DETAIL_RECIPE[selectedIndex].map((item: string) => (
             <div
               key={item}
-              className="px-4 py-2 text-base font-preSemiBold break-keep rounded-3xl shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]"
+              className="px-4 py-2 text-sm font-preSemiBold break-keep rounded-3xl shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]"
             >
               {item}
             </div>
