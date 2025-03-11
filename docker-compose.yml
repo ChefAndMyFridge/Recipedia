@@ -64,7 +64,10 @@ services:
       start_period: 10s
 
   jenkins:
-    image: jenkins/jenkins:lts  # 최신 LTS 버전 사용
+    build:
+      context: ./jenkins  # Jenkins 코드가 있는 폴더
+      dockerfile: Dockerfile  # Jenkins용 Dockerfile
+    # image: jenkins/jenkins:lts  # 최신 LTS 버전 사용
     container_name: my-jenkins
     user: root  # 권한 문제 방지 (필수)
     # network_mode: host
