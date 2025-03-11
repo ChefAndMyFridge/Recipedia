@@ -1,7 +1,8 @@
 import React from "react";
 
 export interface ButtonProps {
-  type: "confirm" | "cancel";
+  type: "button" | "submit" | "reset";
+  design: "confirm" | "cancel";
   content: string;
   width?: string;
   height?: string;
@@ -10,6 +11,7 @@ export interface ButtonProps {
 
 export interface InputProps {
   label?: string;
+  name?: string;
   type: string;
   placeHolder?: string;
   value?: string;
