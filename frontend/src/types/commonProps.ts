@@ -16,3 +16,8 @@ export interface InputProps {
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
+
+export interface ToggleProps {
+  isToggle: boolean;
+  onToggle: (isToggle: boolean) => void;
+}
