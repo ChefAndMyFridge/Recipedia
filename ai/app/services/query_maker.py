@@ -13,7 +13,7 @@ class QueryMaker:
     def __init__(self, ingredients: Optional[List[str]] = None, main_ingredients: Optional[Union[List[str], str]] = None) -> None:
         """
         QueryMaker 클래스 초기화
-        
+
         Args:
             ingredients: 사용할 재료 목록
             main_ingredients: 주재료 목록. 기본값은 None
@@ -127,7 +127,7 @@ class QueryMaker:
                       include_recipes=True, include_time=True, include_api_times=True) -> None:
         """
         결과를 통합적으로 출력하는 함수
-        
+
         Args:
             include_ingredients (bool): 재료 정보 출력 여부
             include_dishes (bool): 생성된 요리 이름 출력 여부
@@ -156,19 +156,12 @@ class QueryMaker:
         # 3. 검색된 레시피 정보 출력
         if include_recipes and hasattr(self, 'all_videos'):
             print("\n각 요리별 추천 레시피 동영상:")
-            if settings.VIDEO_VALIDATION_ENABLED:
-                print("(영상 관련성 검증이 활성화되었습니다)")
 
             for i, dish in enumerate(self.dishes, 1):
                 if dish in self.all_videos and self.all_videos[dish]:
                     first_video = self.all_videos[dish][0]
                     print(f"{i}. {dish}: {first_video['title']}")
                     print(f"   URL: {first_video['url']}")
-
-                    # 검증 결과가 있으면 표시
-                    if settings.VIDEO_VALIDATION_ENABLED and 'relevance_score' in first_video:
-                        print(
-                            f"   관련성 점수: {first_video['relevance_score']:.2f}")
 
                     # 추가 정보 표시
                     if 'description' in first_video:

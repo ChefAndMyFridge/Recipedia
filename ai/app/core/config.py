@@ -2,6 +2,7 @@
 from typing import List, Optional
 from pydantic_settings import BaseSettings
 
+
 class Settings(BaseSettings):
     APP_NAME: str = "FastAPI Server"
     DEBUG: bool = False
@@ -23,7 +24,7 @@ class Settings(BaseSettings):
     SUMMARY_OPENAI_TEMPERATURE: float = 0.1  # 레시피 요약에 대해서 일관적인 답을 받도록 낮은 값 설정정
     SUMMARY_OPENAI_TOP_P: float = 0.80      # 상위 확률 토큰 제한
     SUMMARY_OPENAI_FREQUENCY_PENALTY: float = 0.1  # 중복 방지
-    SUMMARY_OPENAI_STREAM : bool = False # 스트리밍 사용 여부
+    SUMMARY_OPENAI_STREAM: bool = False  # 스트리밍 사용 여부
 
     # YouTube 설정
     YOUTUBE_MAX_RESULTS: int = 1
@@ -31,13 +32,8 @@ class Settings(BaseSettings):
     # 생성할 음식 이름 개수
     NUM_DISHES_TO_GENERATE: int = 5
 
-    # 영상 검증 설정
-    VIDEO_VALIDATION_ENABLED: bool = True  # 영상 제목 검증 활성화 여부
-    VIDEO_RELEVANCE_THRESHOLD: float = 0.7  # 최소 관련성 점수 (0.0 ~ 1.0)
-    VIDEO_VALIDATION_MODEL: str = "gpt-4o-mini"  # 검증에 사용할 모델
-    VIDEO_VALIDATION_TEMPERATURE: float = 0.1  # 더 일관된 평가를 위한 낮은 온도값
-
     class Config:
         env_file = ".env"
+
 
 settings = Settings()
