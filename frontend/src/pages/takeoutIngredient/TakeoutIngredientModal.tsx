@@ -6,9 +6,11 @@ import Button from "@components/common/button/Button";
 
 import TakeoutIngredient from "@pages/takeoutIngredient/components/TakeoutIngredient";
 
+import TakeoutConfirmModal from "@pages/takeoutIngredient/TakeoutConfirmModal";
+
 const TakeoutIngredientModal = () => {
   const { selectedIngredients } = useIngredientsStore();
-  const { closeModal } = useModalStore();
+  const { openModal, closeModal } = useModalStore();
 
   if (Object.keys(selectedIngredients).length === 0) return;
 
@@ -28,7 +30,13 @@ const TakeoutIngredientModal = () => {
       {/* 액션 */}
       <div className="flex justify-end align-center px-4 py-4 gap-2">
         <Button type="button" design="cancel" content="취소" className="w-24 h-10" onAction={closeModal} />
-        <Button type="button" design="confirm" content="출고" className="w-24 h-10" />
+        <Button
+          type="button"
+          design="confirm"
+          content="출고"
+          className="w-24 h-10"
+          onAction={() => openModal(<TakeoutConfirmModal />)}
+        />
       </div>
     </div>
   );

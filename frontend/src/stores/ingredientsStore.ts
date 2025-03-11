@@ -10,6 +10,7 @@ interface IngredientsState {
   setIngredients: (ingredients: Ingredients[]) => void;
   selectedIngredients: Record<number, SelectedIngredients>; // { ingredientInfoId: selectedCount }
   setSelectedCount: (ingredientInfoId: number, ingredientInfo: SelectedIngredients) => void;
+  setClearSelectedIngredients: () => void;
 }
 
 const useIngredientsStore = create<IngredientsState>((set) => ({
@@ -30,6 +31,7 @@ const useIngredientsStore = create<IngredientsState>((set) => ({
       return { selectedIngredients: newSelected };
     });
   },
+  setClearSelectedIngredients: () => set({ selectedIngredients: {} }),
 }));
 
 export default useIngredientsStore;
