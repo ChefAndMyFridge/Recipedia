@@ -2,27 +2,13 @@ import { useState } from "react";
 
 import useIngredientsStore from "@/stores/ingredientsStore.ts";
 
+import { Ingredients } from "@/types/ingredientsTypes";
+
 import Decrease from "@/assets/icons/Decrease.tsx";
 import Increase from "@/assets/icons/Increase.tsx";
 
 interface HomeIngredientProps {
-  ingredient: IngredientCategory;
-}
-
-interface IngredientCategory {
-  ingredientInfoId: number;
-  name: string;
-  imageUrl: string;
-  totalCount: number;
-  ingredients: IngredientItem[];
-}
-
-interface IngredientItem {
-  ingredientId: number;
-  storagePlace: string;
-  expirationDate: string;
-  incomingDate: string;
-  releasingDate: string | null;
+  ingredient: Ingredients;
 }
 
 const HomeIngredient = ({ ingredient }: HomeIngredientProps) => {

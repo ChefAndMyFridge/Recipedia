@@ -1,39 +1,19 @@
 import { create } from "zustand";
-import ALL_INGREDIENTS from "@/data/ALL_INGREDIENTS.ts";
+
+import { INGREDIENTS } from "@/data/INGREDIENTS.ts";
+
+import { Ingredients, SelectedIngredients } from "@/types/ingredientsTypes.ts";
 
 interface IngredientsState {
   // ingredients: 조회된 재료 목록, selectedIngredients: 선택된 재료 목록
-  ingredients: IngredientCategory[];
-  setIngredients: (ingredients: IngredientCategory[]) => void;
-  selectedIngredients: Record<number, SelectedIngredientInfo>; // { ingredientInfoId: selectedCount }
-  setSelectedCount: (ingredientInfoId: number, ingredientInfo: SelectedIngredientInfo) => void;
-}
-
-interface IngredientCategory {
-  ingredientInfoId: number;
-  name: string;
-  imageUrl: string;
-  totalCount: number;
-  ingredients: IngredientItem[];
-}
-
-interface IngredientItem {
-  ingredientId: number;
-  storagePlace: string;
-  expirationDate: string;
-  incomingDate: string;
-  releasingDate: string | null;
-}
-
-interface SelectedIngredientInfo {
-  ingredientInfoId: number;
-  name: string;
-  imageUrl: string;
-  selectedCount: number;
+  ingredients: Ingredients[];
+  setIngredients: (ingredients: Ingredients[]) => void;
+  selectedIngredients: Record<number, SelectedIngredients>; // { ingredientInfoId: selectedCount }
+  setSelectedCount: (ingredientInfoId: number, ingredientInfo: SelectedIngredients) => void;
 }
 
 const useIngredientsStore = create<IngredientsState>((set) => ({
-  ingredients: [...ALL_INGREDIENTS],
+  ingredients: [...INGREDIENTS],
   setIngredients: (ingredients) => set({ ingredients }),
   selectedIngredients: {},
   setSelectedCount: (ingredientInfoId, ingredientInfo) => {
