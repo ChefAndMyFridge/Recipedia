@@ -1,8 +1,10 @@
 import VideoInfos from "@components/common/videoInfo/VideoInfos";
 import Header from "@components/Layout/Header";
 import RecipeInfos from "./components/RecipeInfos";
-
-const video = {
+import ReactPlayer from "react-player";
+import RecipeTitle from "./components/RecipeTitle";
+import { Video } from "@/types/recipeListTypes";
+const video: Video = {
   title:
     "부침가루에 그냥 물 넣지 마세요! 집에 있는 이걸 넣으면 2배 바삭바삭 전이 맛있어져요~! /파전, 파전 만들기, 파전 바삭하게 하는법, 부추전, 해물파전",
   url: "https://www.youtube.com/watch?v=Z2q-1zffE_8",
@@ -19,8 +21,19 @@ const video = {
 
 const DetailRecipePage = () => {
   return (
-    <section className="flex flex-col h-screen p-3">
+    <section className="w-full flex flex-col justify-center items-center gap-2 h-screen p-3">
       <Header title="레시피" isIcon />
+      <ReactPlayer
+        url={video.url}
+        width="100%"
+        height="40%"
+        playing={true}
+        muted={true}
+        controls={true}
+        light={false}
+        pip={true}
+      />
+      <RecipeTitle video={video} />
       <div className="flex-1 flex flex-col gap-4 items-center overflow-auto relative">
         <VideoInfos video={video} />
         <RecipeInfos />

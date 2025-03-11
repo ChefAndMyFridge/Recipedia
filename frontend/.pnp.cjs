@@ -48,6 +48,7 @@ const RAW_RUNTIME_STATE =
           ["prettier", "npm:3.4.2"],\
           ["react", "npm:18.3.1"],\
           ["react-dom", "virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:18.3.1"],\
+          ["react-player", "virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:2.16.0"],\
           ["react-router-dom", "virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:7.1.1"],\
           ["tailwind-scrollbar-hide", "virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:2.0.0"],\
           ["tailwindcss", "npm:3.4.17"],\
@@ -2212,6 +2213,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["deepmerge", [\
+      ["npm:4.3.1", {\
+        "packageLocation": "./.yarn/cache/deepmerge-npm-4.3.1-4f751a0844-e53481aaf1.zip/node_modules/deepmerge/",\
+        "packageDependencies": [\
+          ["deepmerge", "npm:4.3.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["define-data-property", [\
       ["npm:1.1.4", {\
         "packageLocation": "./.yarn/cache/define-data-property-npm-1.1.4-4cbd8efc51-dea0606d14.zip/node_modules/define-data-property/",\
@@ -3028,6 +3038,7 @@ const RAW_RUNTIME_STATE =
           ["prettier", "npm:3.4.2"],\
           ["react", "npm:18.3.1"],\
           ["react-dom", "virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:18.3.1"],\
+          ["react-player", "virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:2.16.0"],\
           ["react-router-dom", "virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:7.1.1"],\
           ["tailwind-scrollbar-hide", "virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:2.0.0"],\
           ["tailwindcss", "npm:3.4.17"],\
@@ -3901,6 +3912,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["load-script", [\
+      ["npm:1.0.0", {\
+        "packageLocation": "./.yarn/cache/load-script-npm-1.0.0-32a3163a57-9919c777fe.zip/node_modules/load-script/",\
+        "packageDependencies": [\
+          ["load-script", "npm:1.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["locate-path", [\
       ["npm:6.0.0", {\
         "packageLocation": "./.yarn/cache/locate-path-npm-6.0.0-06a1e4c528-d3972ab70d.zip/node_modules/locate-path/",\
@@ -3972,6 +3992,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/math-intrinsics-npm-1.1.0-9204d80e7d-7579ff94e8.zip/node_modules/math-intrinsics/",\
         "packageDependencies": [\
           ["math-intrinsics", "npm:1.1.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["memoize-one", [\
+      ["npm:5.2.1", {\
+        "packageLocation": "./.yarn/cache/memoize-one-npm-5.2.1-ee0f8be979-fd22dbe9a9.zip/node_modules/memoize-one/",\
+        "packageDependencies": [\
+          ["memoize-one", "npm:5.2.1"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -4812,11 +4841,47 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["react-fast-compare", [\
+      ["npm:3.2.2", {\
+        "packageLocation": "./.yarn/cache/react-fast-compare-npm-3.2.2-45b585a872-0bbd2f3eb4.zip/node_modules/react-fast-compare/",\
+        "packageDependencies": [\
+          ["react-fast-compare", "npm:3.2.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["react-is", [\
       ["npm:16.13.1", {\
         "packageLocation": "./.yarn/cache/react-is-npm-16.13.1-a9b9382b4f-33977da7a5.zip/node_modules/react-is/",\
         "packageDependencies": [\
           ["react-is", "npm:16.13.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["react-player", [\
+      ["npm:2.16.0", {\
+        "packageLocation": "./.yarn/cache/react-player-npm-2.16.0-c3172d3dd2-ee0f4cd3bd.zip/node_modules/react-player/",\
+        "packageDependencies": [\
+          ["react-player", "npm:2.16.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:2.16.0", {\
+        "packageLocation": "./.yarn/__virtual__/react-player-virtual-ba83005fc3/0/cache/react-player-npm-2.16.0-c3172d3dd2-ee0f4cd3bd.zip/node_modules/react-player/",\
+        "packageDependencies": [\
+          ["react-player", "virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:2.16.0"],\
+          ["@types/react", "npm:18.3.18"],\
+          ["deepmerge", "npm:4.3.1"],\
+          ["load-script", "npm:1.0.0"],\
+          ["memoize-one", "npm:5.2.1"],\
+          ["prop-types", "npm:15.8.1"],\
+          ["react", "npm:18.3.1"],\
+          ["react-fast-compare", "npm:3.2.2"]\
+        ],\
+        "packagePeers": [\
+          "@types/react",\
+          "react"\
         ],\
         "linkType": "HARD"\
       }]\
