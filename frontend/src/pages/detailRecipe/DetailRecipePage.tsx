@@ -42,8 +42,8 @@ const DetailRecipePage = () => {
 
       {/* 버튼 컨테이너 */}
       <div className="w-full flex justify-end items-center gap-2">
-        <Button type="cancel" content="요리 취소" width="50" className="px-4" />
-        <Button type="confirm" content="요리 종료" width="50" className="px-4" />
+        <Button type="button" design="cancel" content="요리 취소" width="32" className="px-4" />
+        <Button type="button" design="confirm" content="요리 종료" width="32" className="px-4" />
       </div>
     </section>
   );
