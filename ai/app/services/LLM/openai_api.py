@@ -24,7 +24,7 @@ class RequestGPT:
         else:
             return markdown_output
     
-    async def run(self, system_input: SystemInput, user_input: UserInput) -> str:
+    async def run(self, system_input: SystemInput, user_input: UserInput) -> dict:
         """
         시스템 입력과 사용자 입력을 받아 OpenAI API를 호출합니다.
         stream이 True이면 스트리밍으로 결과를 출력하고, 그렇지 않으면 전체 응답을 반환합니다.
@@ -57,6 +57,8 @@ class RequestGPT:
         else:
             ret_message = completion.choices[0].message.content
             data = self.extract_json(ret_message)
+            if type(data) is str:
+                data = json.loads(data)
             return data
 
 
