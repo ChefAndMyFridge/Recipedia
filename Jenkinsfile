@@ -40,12 +40,11 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    ssh -i /root/.ssh/id_rsa ubuntu@j12s003.p.ssafy.io
-                    cd /home/ubuntu/S12P21S003
-                    docker cp .env my-jenkins:/var/jenkins_home/workspace/recipedia/.env
-                    docker cp backend/.env my-jenkins:/var/jenkins_home/workspace/recipedia/backend/.env
-                    docker cp frontend/.env my-jenkins:/var/jenkins_home/workspace/recipedia/frontend/.env
-                    docker cp ai/.env my-jenkins:/var/jenkins_home/workspace/recipedia/ai/.env
+                    ssh -i /root/.ssh/id_rsa ubuntu@j12s003.p.ssafy.io \
+                        "docker cp /home/ubuntu/S12P21S003/.env my-jenkins:/var/jenkins_home/workspace/recipedia/.env && \
+                        docker cp /home/ubuntu/S12P21S003/backend/.env my-jenkins:/var/jenkins_home/workspace/recipedia/backend/.env && \
+                        docker cp /home/ubuntu/S12P21S003/frontend/.env my-jenkins:/var/jenkins_home/workspace/recipedia/frontend/.env && \
+                        docker cp /home/ubuntu/S12P21S003/ai/.env my-jenkins:/var/jenkins_home/workspace/recipedia/ai/.env"
                     '''
                 }
             }
@@ -71,7 +70,7 @@ pipeline {
                 script {
                     sh '''
                     cd /var/jenkins_home/workspace/recipedia
-                    docker-compose -f docker-compose-app.yml up -d --build' // 새 컨테이너 빌드 & 실행
+                    docker-compose -f docker-compose-app.yml up -d --build // 새 컨테이너 빌드 & 실행
                     '''
                 }
             }
