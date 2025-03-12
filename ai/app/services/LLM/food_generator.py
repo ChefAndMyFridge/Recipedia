@@ -68,8 +68,6 @@ def generate_dish_names(ingredients=None, main_ingredient=None, num_dishes=None)
           OpenAI API에 전송해 받은 결과를 파싱해 음식 이름을 추출한다.
     """
     # 기본값 설정
-    ingredients = ingredients
-    main_ingredient = main_ingredient
     num_dishes = num_dishes or settings.NUM_DISHES_TO_GENERATE
 
     # 프롬프트 생성
