@@ -3,7 +3,7 @@ import time
 import logging
 
 from youtube_transcript_api import YouTubeTranscriptApi, NoTranscriptFound, TranscriptsDisabled
-from LLM.openai_api import *
+from app.services.recipe_summary.LLM.openai_api import *
 
 from fastapi import HTTPException
 from app.utils.prompt.few_shot.recipe_summary import *
