@@ -1,12 +1,12 @@
 import { VideoList } from "@/types/recipeListTypes";
 
-interface MenuListProps {
+interface RecipeMenuListProps {
   dishes: string[];
   selectedDish: keyof VideoList;
   setSelectedDish: (dish: keyof VideoList) => void;
 }
 
-const MenuList = ({ dishes, selectedDish, setSelectedDish }: MenuListProps) => {
+const RecipeMenuList = ({ dishes, selectedDish, setSelectedDish }: RecipeMenuListProps) => {
   return (
     <div className="w-full">
       <div className="relative">
@@ -28,4 +28,4 @@ const MenuList = ({ dishes, selectedDish, setSelectedDish }: MenuListProps) => {
   );
 };
 
-export default MenuList;
+export default RecipeMenuList;

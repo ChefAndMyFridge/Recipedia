@@ -1,6 +1,6 @@
 import RecipeList from "@pages/recipeList/components/RecipeList";
 import Header from "@components/Layout/Header";
-import SelectedIngredients from "@pages/recipeList/components/SelectedIngredients";
+import SelectedIngredients from "@/pages/recipeList/components/RecipeListSelectedIngredients";
 
 const RecipeListPage = () => {
   //레시피 목록 api 호출 예정

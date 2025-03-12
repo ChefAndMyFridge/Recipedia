@@ -2,11 +2,11 @@ import { Video } from "@/types/recipeListTypes";
 import { useState } from "react";
 import RecipeCard from "./RecipeCard";
 
-interface CarouselProps {
+interface RecipeCarouselProps {
   videos: Video[];
 }
 
-const Carousel = ({ videos }: CarouselProps) => {
+const RecipeCarousel = ({ videos }: RecipeCarouselProps) => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   //이전으로
@@ -54,4 +54,4 @@ const Carousel = ({ videos }: CarouselProps) => {
   );
 };
 
-export default Carousel;
+export default RecipeCarousel;

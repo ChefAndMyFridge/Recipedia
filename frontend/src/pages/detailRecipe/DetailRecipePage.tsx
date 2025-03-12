@@ -23,6 +23,8 @@ const DetailRecipePage = () => {
   const navigate = useNavigate();
   const [isRecipeOpen, setIsRecipeOpen] = useState<boolean>(false);
 
+  //detailRecipe 페이지 진입 시, 해당 레시피 정보 get api 호출 예정
+
   return (
     <>
       <section className="w-full flex flex-col justify-center items-center gap-2 h-screen p-3">
