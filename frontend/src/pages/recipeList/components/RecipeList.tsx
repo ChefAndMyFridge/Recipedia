@@ -1,5 +1,5 @@
-import MenuList from "@pages/recipeList/components/MenuList";
-import Carousel from "@pages/recipeList/components/Carousel";
+import MenuList from "@/pages/recipeList/components/RecipeMenuList";
+import Carousel from "@/pages/recipeList/components/RecipeCarousel";
 import RECIPE_LIST from "@/data/RECIPE_LIST";
 import { useState } from "react";
 import { VideoList } from "@/types/recipeListTypes";

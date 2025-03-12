@@ -1,7 +1,7 @@
 import { INGREDIENTS } from "@/data/INGREDIENTS";
 import { Ingredients } from "@/types/ingredientsTypes";
 
-const SelectedIngredients = () => {
+const RecipeListSelectedIngredients = () => {
   //사용자 선택 재료 (추후 데이터 변경)
   const selectedIngredients: Ingredients[] = INGREDIENTS;
   return (
@@ -19,4 +19,4 @@ const SelectedIngredients = () => {
   );
 };
 
-export default SelectedIngredients;
+export default RecipeListSelectedIngredients;
