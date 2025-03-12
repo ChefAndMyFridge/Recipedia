@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import useModalStore from "@stores/modalStore";
 
@@ -10,10 +10,19 @@ import StoreConfirmModal from "@pages/storeIngredient/StoreConfirmModal";
 const StoreIngredientForm = () => {
   const [customAmountInput, setCustomAmountInput] = useState<boolean>(false);
   const [selectedAmount, setSelectedAmount] = useState<number>(1);
+  const [incomingDate, setIncomingDate] = useState<string>(new Date().toISOString().split("T")[0]);
+  const [expirationDate, setExpirationDate] = useState<string>(new Date().toISOString().split("T")[0]);
   const [storagePlace, setStoragePlace] = useState<string>("냉장실");
 
   const { openModal, closeModal } = useModalStore();
 
+  useEffect(() => {
+    // 입고일로부터 7일 후 만료일 설정
+    // 추후 재료별 유통기한 설정 필요
+    setExpirationDate(new Date(new Date(incomingDate).getTime() + 1000 * 60 * 60 * 24 * 7).toISOString().split("T")[0]);
+  }, [incomingDate]);
+
+  // 수량 선택
   function handleSelectedAmount(event: React.ChangeEvent<HTMLSelectElement>): void {
     if (Number(event.target.value) === 0) {
       setCustomAmountInput(true);
@@ -23,6 +32,7 @@ const StoreIngredientForm = () => {
     }
   }
 
+  // 저장 위치 변경
   function handleStoragePlace(place: string): void {
     setStoragePlace(place);
   }
@@ -42,6 +52,7 @@ const StoreIngredientForm = () => {
 
     const ingredient = {
       name: data.name,
+      imageUrl: "추후 설정 필요",
       amount,
       incomingDate: data.incomingDate,
       expirationDate: data.expirationDate,
@@ -75,6 +86,7 @@ const StoreIngredientForm = () => {
           </select>
         </div>
 
+        {/* 커스텀 수량 입력 */}
         {customAmountInput && (
           <div className="flex flex-col gap-2 w-full">
             <div className="flex justify-between">
@@ -87,17 +99,33 @@ const StoreIngredientForm = () => {
               min="1"
               max="100"
               value={selectedAmount}
-              onChange={(e) => setSelectedAmount(Number(e.target.value))}
+              onChange={(event) => setSelectedAmount(Number(event.target.value))}
               className="w-full h-2 my-4 bg-gray-200 rounded-lg appearance-none cursor-pointer"
             />
           </div>
         )}
 
+        {/* 입고, 만료일 입력 */}
         <div className="flex gap-4 justify-between items-center">
-          <Input label="입고일" name="incomingDate" type="date" placeHolder="수량을 입력해주세요" />
-          <Input label="만료일" name="expirationDate" type="date" placeHolder="수량을 입력해주세요" />
+          <Input
+            label="입고일"
+            name="incomingDate"
+            type="date"
+            placeHolder="수량을 입력해주세요"
+            value={incomingDate}
+            onChange={(event) => setIncomingDate(event.target.value)}
+          />
+          <Input
+            label="만료일"
+            name="expirationDate"
+            type="date"
+            placeHolder="수량을 입력해주세요"
+            value={expirationDate}
+            onChange={(event) => setExpirationDate(event.target.value)}
+          />
         </div>
 
+        {/* 저장 위치 선택 */}
         <div className="flex flex-col gap-2">
           <p className="font-preMedium text-[#333] text-xs font-semibold">위치</p>
           <div className="flex justify-start gap-2 items-center">
@@ -119,6 +147,7 @@ const StoreIngredientForm = () => {
         </div>
       </div>
 
+      {/* 조작 */}
       <div className="flex justify-end align-center px-4 py-4 gap-2">
         <Button type="button" design="cancel" content="취소" className="w-24 h-10" onAction={closeModal} />
         <Button type="submit" design="confirm" content="입고" className="w-24 h-10" />
