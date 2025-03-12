@@ -1,7 +1,6 @@
 # app/services/recipe_summary.py
 import time
 import logging
-
 import asyncio
 
 from youtube_transcript_api import YouTubeTranscriptApi, NoTranscriptFound, TranscriptsDisabled, VideoUnavailable
@@ -41,7 +40,7 @@ class RecipeSummary:
         try:
             return method(languages)
         except NoTranscriptFound:
-            logger.error(f"제공된 자막 없음")
+            logger.error(f"{languages} : 제공된 자막 없음")
             return None
         except TranscriptsDisabled:
             logger.error(f"자막 비활성화")
