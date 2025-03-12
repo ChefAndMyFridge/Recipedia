@@ -45,4 +45,12 @@ public class UserRecipe {
     this.favorite = favorite;
     this.createdAt = createdAt;
   }
+
+  public void updateRating(Integer rating) {
+    this.rating = rating;
+  }
+
+  public void updateFavorite(Boolean favorite) {
+    this.favorite = favorite;
+  }
 }
