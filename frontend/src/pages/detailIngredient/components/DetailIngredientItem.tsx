@@ -7,7 +7,7 @@ interface IngredientItemProps {
 
 const DetailIngredientItem = ({ ingredient, imgSrc }: IngredientItemProps) => {
   // 남은 만료일 계산
-  const calculateDaysRemaining = () => {
+  function calculateDaysRemaining() {
     const today = new Date();
     const expirationDate = new Date(ingredient.expirationDate);
 
@@ -25,15 +25,15 @@ const DetailIngredientItem = ({ ingredient, imgSrc }: IngredientItemProps) => {
     }
 
     return remaining;
-  };
+  }
 
   const daysRemaining = calculateDaysRemaining();
 
   return (
     <div className="flex flex-col w-1/5 h-fit p-1 justify-center items-center ">
-      <div className="relative w-full aspect-[1/1] rounded-3xl">
+      <div className="relative w-full p-1 aspect-[1/1] rounded-3xl">
         <img src={imgSrc} alt={imgSrc} className="w-full h-full object-cover rounded-3xl" />
-        <span className="absolute right-0 top-0 bg-error text-white text-sm px-2 py-1 rounded-3xl">
+        <span className="absolute right-0 top-0 bg-error text-white text-xs px-2 py-1 rounded-3xl">
           {daysRemaining}
         </span>
       </div>

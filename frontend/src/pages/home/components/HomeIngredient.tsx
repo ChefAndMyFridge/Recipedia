@@ -49,7 +49,7 @@ const HomeIngredient = ({ ingredient }: HomeIngredientProps) => {
     <div className="flex flex-col w-1/5 h-fit p-1 justify-center items-center ">
       {/* 아이콘 부분 */}
       <div
-        className="relative w-full aspect-[1/1] rounded-3xl"
+        className="relative w-full aspect-[1/1] rounded-3xl cursor-pointer"
         onClick={() => openModal(<DetailIngredientModal ingredient={ingredient} />)}
       >
         <img src={ingredient.imageUrl} alt={ingredient.imageUrl} className="w-full h-full object-cover rounded-3xl" />
