@@ -8,8 +8,8 @@ const TakeoutIngredient = ({ ingredient }: HomeIngredientProps) => {
   return (
     <div className="flex flex-col w-1/5 h-fit p-1 justify-center items-center ">
       {/* 아이콘 부분 */}
-      <div className="relative bg-content2 w-full aspect-[1/1] rounded-3xl">
-        {/* <img src={ingredient.imageUrl} /> */}
+      <div className="relative w-full aspect-[1/1] rounded-3xl">
+        <img src={ingredient.imageUrl} alt={ingredient.imageUrl} className="w-full h-full object-cover rounded-3xl" />
         <p className="absolute bottom-0.5 w-full font-preMedium text-xs text-center">{ingredient.name}</p>
       </div>
 

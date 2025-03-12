@@ -14,8 +14,12 @@ const HomeSelectedIngredients = () => {
       <div className="flex items-center justify-start w-4/5 h-full gap-2">
         {Object.values(selectedIngredients).map((ingredient) => (
           <div key={ingredient.ingredientInfoId} className="w-12 aspect-[1/1]">
-            <div className="relative bg-content2 aspect-[1/1] rounded-3xl">
-              {/* <img src={ingredient.imageUrl} /> */}
+            <div className="relative aspect-[1/1] rounded-3xl">
+              <img
+                src={ingredient.imageUrl}
+                alt={ingredient.imageUrl}
+                className="w-full h-full object-cover rounded-3xl"
+              />
               <p className="absolute bottom-0.5 w-full font-preMedium text-xs text-center">{ingredient.name}</p>
             </div>
           </div>
