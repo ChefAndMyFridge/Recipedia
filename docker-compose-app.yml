@@ -45,48 +45,6 @@ services:
       - app-network
     # restart: always
 
-  db:
-    image: mysql:8
-    container_name: my-mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-    # ports:
-    #   - "3306:3306"
-    volumes:
-      - /home/ubuntu/mysql_data:/var/lib/mysql
-    networks:
-      - app-network
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 5s
-      retries: 3
-      start_period: 10s
-
-  jenkins:
-    build:
-      context: ./jenkins  # Jenkins 코드가 있는 폴더
-      dockerfile: Dockerfile  # Jenkins용 Dockerfile
-    # image: jenkins/jenkins:lts  # 최신 LTS 버전 사용
-    container_name: my-jenkins
-    user: root  # 권한 문제 방지 (필수)
-    # network_mode: host
-    ports:
-      - "8081:8080"  # 웹 UI 접근 (기본 포트 8080)
-      - "50000:50000"  # 에이전트와 통신용 포트
-    volumes:
-      - /home/ubuntu/jenkins_data:/var/jenkins_home  # Jenkins 데이터 유지
-      - /var/run/docker.sock:/var/run/docker.sock  # Docker 컨테이너 제어를 위해 필요
-    # environment:
-    #   - JENKINS_OPTS="--prefix=/jenkins"  # URL Prefix 설정 (옵션)
-    networks:
-      - app-network
-
-
 networks:
   app-network:
-    driver: bridge  # 서비스들
-
-volumes:
-  mysql-data:
-  jenkins_home:
+    external: true
