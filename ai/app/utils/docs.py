@@ -12,118 +12,51 @@ class QueryDocs:
                     "application/json": {
                         "example": {
                             "dishes": [
-                                "소고기 볶음",
-                                "소고기 계란찜",
-                                "소고기 파전",
-                                "소고기 마늘구이",
-                                "소고기 양파 스튜",
-                                "소고기 계란 볶음밥"
+                                "불고기 (한식)",
+                                "소고기 볶음밥 (중식)",
+                                "페퍼 스테이크 (양식)"
                             ],
                             "videos": {
-                                "소고기 계란찜": [
+                                "불고기 (한식)": [
                                     {
-                                        "title": "세상 간단한 방법으로 [고기집 계란찜] 절대 실패 없이 맛있게...",
-                                        "url": "https://www.youtube.com/watch?v=U214WlL45jA",
-                                        "relevance_score": 0.5
-                                    },
-                                    {
-                                        "title": "왕초보도 실패하지 않는 폭탄계란찜 비법은 뚝배기 선택 | 포인트만 알면 정말 쉬운 폭탄 달걀찜",
-                                        "url": "https://www.youtube.com/watch?v=7UTF-yAGKUg",
-                                        "relevance_score": 0.5
-                                    },
-                                    {
-                                        "title": "20초 뚝배기 계란찜",
-                                        "url": "https://www.youtube.com/watch?v=iAKKSiTZhXI",
-                                        "relevance_score": 0.3
+                                        "title": "양념 4개면 '소불고기' 끝!",
+                                        "url": "https://www.youtube.com/watch?v=nVzwOOJLt24",
+                                        "description": "#백종원 #소불고기 #한식\n한식대표음식 중 하나인 '소불고기' 입니다.\n여러 방법이 있지만 오늘은 제일 간단한 방법으로 준비해봤습니다.\n오늘 저녁은 소불고기에 한쌈 어떠세요?\n\n==================\n\n소불고기 (4인분)\n\n[재료]\n\n* 양념장 재료\n황설탕 2와1/2큰술(30g)\n물엿 1큰술(12g)\n간 마늘 1큰술(20g)\n진간장 5큰술(50g)\n후춧가루 약간\n참기름 3큰술(21g)\n\n* 소불고기 재료\n소고기 불고기용 500g\n양파 3/5개(150g)\n표고버섯 2개(40g)\n대파 약1대(80g) \n홍고추 1개(10g)\n통깨 약간\n\n\n[만드는 법]          \n\n1. 깊은 볼에 한입 크기로 자른 소고기를 넣고 잘 풀어서 준비한다.\n2. 소고기에 황설탕, 물엿, 간 마늘을 넣고 골고루 버무려 약 10~20분 정도 재운다. \n  Tip: 설탕의 분자가 다른 양념류보다 크기 때문에 가장 먼저 넣어서 단맛을 배게 한다.\n3. 표고버섯은 기둥을 제거하고 두께 0.3cm 정도로 얇게 썬다. \n4. 대파, 홍고추는 두께 0.5cm 정도로 어슷썰어 준비한다.\n5. 양파는 꼭지를 제거하고 두께 0.5cm 정도로 채썰어 준비한다. \n6. 재워둔 소고기에 진간장을 넣고 고기가 부서지지 않도록 조심히 섞어준 후 양파, 대파, 홍고추, 표고버섯을 넣어 섞는다.\n7. 채소 위에 후춧가루, 참기름을 넣고 섞는다. \n  Tip: 다음날 사용한다면 대파만 넣어서 냉장 보관하여 사용 당일 나머지 채소를 넣어 조리한다. \n8. 팬을 강 불에 올려 예열하고 소불고기를 올려 재료를 집게나 젓가락으로 잘 풀어주면서 볶는다.\n  Tip: 기호에 따라 MSG 1/4큰술 정도를 넣어 볶는다.\n9. 완전히 익은 소불고기를 접시에 담고 통깨를 뿌려 완성한다.\n\n\n\nBeef bulgogi (4 servings)\n\n[Ingredients]\n\n* Sauce\n2 1/2 tbsp (30g) brown sugar\n1 tbsp (12g) starch syrup\n1 tbsp (20g) minced garlic\n5 tbsp (50g) thick soy sauce\nBlack pepper\n3 tbsp (21g) sesame oil\n\n* Beef bulgogi\n500g beef for bulgogi\n3/5 (150g) onion\n2 (40g) shiitake mushrooms\n1 stalk (80g) green onion\n1 (10g) red chili pepper\nSesame seeds\n\n\n[Directions] \n\n1. Cut the beef into bite sizes and place them in a large bowl. Gently untangle the meat to prepare.\n2. Add brown sugar, starch syrup, and minced garlic to the beef and evenly mix. Marinate for 10-20 minutes.\nTip: Because sugar particles are larger than other ingredients, add the sugar first to let the sweetness get into the meat.\n3. Remove the stem of shiitake mushroom and slice thinly at 0.3cm thickness. \n4. Slice the green onion and red chili pepper diagonally 0.5cm thick.\n5. Trim the tip of onion and slice at 0.5cm thickness.\n6. Add thick soy sauce to the marinated beef and mix gently not to break the meat. Add onion, green onion, red chili pepper, and shiitake mushroom. Mix well.\n7. Add black pepper and sesame oil on top of the vegetables and mix. \nTip: Add only the green onion and store it in the fridge if cooking the next day. Add the other vegetables on the day when you actually cook it. \n8. Pre-heat the pan on high heat and cook the beef bulgogi. Stir gently with tongs or chopsticks to untangle the meat.\nTip: Add 1/4 tbsp of MSG if desired.\n9. Once completely cooked, place the beef bulgogi on a plate and finish by sprinkling some sesame seeds.\n\n\n한식을 사랑하는 외국인분들을 위해 외국어 자막을 첨부하였습니다.\n본 영상의 자막은 통합 언어 플랫폼 ‘플리토’와 함께 합니다.\nSubtitles in foreign languages are provided for everyone who loves Korean food.\nAll subtitles are provided by an integrated language platform, Flitto.\nhttps://www.flitto.com/business/video-translation",
+                                        "channel_title": "백종원 PAIK JONG WON",
+                                        "published_at": "2020-10-27T09:06:36Z",
+                                        "duration": "11:39",
+                                        "view_count": 4630935,
+                                        "like_count": 47789,
+                                        "comment_count": 1139
                                     }
                                 ],
-                                "소고기 파전": [
+                                "소고기 볶음밥 (중식)": [
                                     {
-                                        "title": "부침가루에 그냥 물 넣지 마세요! 집에 있는 이걸 넣으면 2배 바삭바삭 전이 맛있어져요~! /파전, 파전 만들기, 파전 바삭하게 하는법, 부추전, 해물파전",
-                                        "url": "https://www.youtube.com/watch?v=Z2q-1zffE_8",
-                                        "relevance_score": 0.6
-                                    },
-                                    {
-                                        "title": "해물 파전 노하우 Korean pancake recipe",
-                                        "url": "https://www.youtube.com/watch?v=IlDUjNsdCC4",
-                                        "relevance_score": 0.3
-                                    },
-                                    {
-                                        "title": "바삭한 전 만들기 속성과외📚",
-                                        "url": "https://www.youtube.com/watch?v=LtSKLhV37Ws",
-                                        "relevance_score": 0.2
+                                        "title": "[이연복] 고기 볶음밥",
+                                        "url": "https://www.youtube.com/watch?v=Gp3AqI76Fyk",
+                                        "description": "《재료》\n돼지 고기 50g (부위 무관)\n계란\n당근, 파\n기름\n굴소스\n\n《레시피》\n(즉석밥 1개 200g 기준)\n1. 즉석밥의 뚜껑을 완전히 제거한 뒤, 전자 레인지에 2분간 돌려주세요. (밥솥 사용시, 수분이 최대한 적은 꼬들 밥이 좋습니다)\n\n*밥의 수분을 최대한 제거해 주시는게 좋습니다*\n\n2. 준비하신 돼지고기를 작게 깍둑썰기 해주세요.\n3. 당근과 파를 잘게 썰어주세요. (기호에 맞게 좋아하시는 야채 및 버섯 등을 추가하셔도 됩니다 :))\n4. 프라이팬에 기름을 충분히 두른 후, 고기를 먼저 볶은 뒤, 사용하신 기름은 그대로 두시고 고기만 따로 빼주세요.\n5. 프라이팬에 계란 1개를 넣은 후, 계란을 해쳐서 잘 익혀주세요.\n6. 계란이 적당히 익으면 즉석밥을 넣어주세요.\n7. 굴소스 한스푼, 파, 당근을 넣고 볶아주세요.\n8. 마지막으로 따로 빼두었던 고기를 넣고 볶아주세요.",
+                                        "channel_title": "이연복의 복주머니",
+                                        "published_at": "2021-07-14T09:00:06Z",
+                                        "duration": "8:27",
+                                        "view_count": 1209040,
+                                        "like_count": 20930,
+                                        "comment_count": 884
                                     }
                                 ],
-                                "소고기 계란 볶음밥": [
+                                "페퍼 스테이크 (양식)": [
                                     {
-                                        "title": "한국에서 제일 많이 본 달걀볶음밥 레시피",
-                                        "url": "https://www.youtube.com/watch?v=nmLO04GfA0k",
-                                        "relevance_score": 0.5
-                                    },
-                                    {
-                                        "title": "이렇게 쉽다고?? 계란 볶음밥 만들기",
-                                        "url": "https://www.youtube.com/watch?v=RUgH6TBDtsM",
-                                        "relevance_score": 0.5
-                                    },
-                                    {
-                                        "title": "[계란 볶음밥] 중국집 보다 맛있는 볶음밥 레시피",
-                                        "url": "https://www.youtube.com/watch?v=xv_z7XY4aZo",
-                                        "relevance_score": 0.3
-                                    }
-                                ],
-                                "소고기 양파 스튜": [
-                                    {
-                                        "title": "토마토 비프 스튜 만드는 법 소고기 토마토 스튜 레시피 레드 와인 소고기 등심 홀토마토 요리 스타우브 스튜 만들기 보양식 #토마토스튜 #비프스튜 #토마토비프스튜",
-                                        "url": "https://www.youtube.com/watch?v=BYH0hUPHJSE",
-                                        "relevance_score": 0.5
-                                    },
-                                    {
-                                        "title": "이탈리안보양식 토마토비프스튜 쉽게 만드는 방법",
-                                        "url": "https://www.youtube.com/watch?v=y-13uymxwLE",
-                                        "relevance_score": 0.3
-                                    },
-                                    {
-                                        "title": "카레보다 더 쉬운 소고기 토마토 스튜 만들기 다이어트 식단 홈파티 메뉴 굴라쉬 레시피",
-                                        "url": "https://www.youtube.com/watch?v=fs1ETa1FAtI",
-                                        "relevance_score": 0.2
-                                    }
-                                ],
-                                "소고기 볶음": [
-                                    {
-                                        "title": "지금 당장 소고기사서 만들어 보세요❗️ 밥도둑 소고기 볶음",
-                                        "url": "https://www.youtube.com/watch?v=_yl05thA1Dw",
-                                        "relevance_score": 1
-                                    },
-                                    {
-                                        "title": "미친 소고기 볶음 😋, 만드는데 20분 (몽골리안 비프)",
-                                        "url": "https://www.youtube.com/watch?v=8Dkp3rO2mqs",
-                                        "relevance_score": 0.8
-                                    },
-                                    {
-                                        "title": "소고기 볶음 요리 중 무조건 1등 #몽골리안비프",
-                                        "url": "https://www.youtube.com/watch?v=YY3dXcXT50Y",
-                                        "relevance_score": 0.8
-                                    }
-                                ],
-                                "소고기 마늘구이": [
-                                    {
-                                        "title": "(182번째 요리)  마늘소스소고기",
-                                        "url": "https://www.youtube.com/watch?v=PqVc9bLvcdk",
-                                        "relevance_score": 0.6
-                                    },
-                                    {
-                                        "title": "마늘폭탄소갈비와 전자레인지 사용 가능한 스텐용기까지👇🏻클릭해서 상세내용 확인해 주세요. #살림템 #주방용품 #소고기 #스텐316",
-                                        "url": "https://www.youtube.com/watch?v=ed2iN_n1iDI",
-                                        "relevance_score": 0.3
-                                    },
-                                    {
-                                        "title": "👍300만💕 수입산 소고기 맛있는 먹는 방법 #shorts",
-                                        "url": "https://www.youtube.com/watch?v=AnBOQjMqBLs",
-                                        "relevance_score": 0.2
+                                        "title": "소고기 볶음 레시피 ㅣ 베이킹 소다 연육 시리즈 - 저렴한 부위 30분만에 안심처럼 연하게 만드는 법",
+                                        "url": "https://www.youtube.com/watch?v=CWXPUpr_iHw",
+                                        "description": "소고기 볶음 레시피, 오늘은 블랙 페퍼 스테이크, 중국식 찹 스테이크 레시피를 공유합니다. 동네에 아주 좋아하는 중식당이 있는데 거기 갈때마다 시켜먹는 메뉴가 있는데 그걸 제 방식으로 만들어 봤습니다. 베이킹 소다 연육을 통해 저렴한 부위를 아주 부드러운 식감으로 바꿔주는 꿀팁과 함께 곁들여서 먹기 아주 최적인 블랙페퍼스테이크 레시피까지 함께 정리했습니다. 즐겁게 요리 하시고 맛있는 식사 하세요. \n\n재료\n소고기 (블레이드 로스트, 목심) 850g\n베이킹 소다 1 tsp\n생수 500 ml\n\n고기양념\n굴소스 2 Tbsp\n간장 2 tsp\n후추 1 Tbsp\n옥수수 전분 2 Tbsp\nMSG 2 tsp\n매실액 1 Tbsp\n샤오싱주 2 Tbsp\n물 3 Tbsp\n\n볶음 소스\n샤오싱주 3 Tbsp\n옥수수 전분 2 Tbsp\n물 2 Tbsp\n설탕 1 Tbsp\n간장 1 Tbsp\n노두 1 Tbsp\n굴소스 2 tsp\n우스터소스 1/2 tsp\n\n채소 \n피망 1 ea\n적양파 1 ea\n마늘 6 cloves\n양송이 (크레미니) 8 ea\n\n채널 구독과 좋아요는 영상제작에 많은 힘이 됩니다. 함께 즐겨주세요. 감사합니다.\n더 프로키친 채널을 구독하며 함께 요리하시려면 여기로:\nhttps://bit.ly/3dVMQiA\n\n인스타 계정:\n더 프로키친: https://www.instagram.com/the_prokitchen/\n에릭 오 셰프: https://www.instagram.com/fire_all_tables/\n\nProducts I Can Recommend (These are my affiliate links so I earn a tiny commission upon your purchase so thank you very much for your support=)\n\nWustof Boning Knife: https://amzn.to/2J6VVL7\n\nANOVA NANO Precision Sousvide Cooker: https://amzn.to/3hdz9fj\n\nGeryon Vacuum Sealer: https://amzn.to/2EZ3MZe\n\nMeater Bluetooth Probe Thermometer: https://amzn.to/3bzH1qx\n\nIwatani Portable Gas Burner: https://amzn.to/3263rfK\n\nVitamix 5200 Blender Professional Grade: https://amzn.to/3h9ddCn\n\nEverdure Charcoal Grill: https://amzn.to/3274JXQ\n\nStone Pestle and Mortar: https://amzn.to/2ZfVDq8\n\nPotato Ricer: https://amzn.to/3729e9e\n\nWebsite: https://www.theprokitchen.com\nAll business inquiries: eric@theprokitchen.com",
+                                        "channel_title": "더 프로키친 [The Prokitchen]",
+                                        "published_at": "2022-03-02T12:00:04Z",
+                                        "duration": "11:47",
+                                        "view_count": 45630,
+                                        "like_count": 981,
+                                        "comment_count": 127
                                     }
                                 ]
                             },
-                            "execution_time": 3.148292064666748
                         }
                     }
                 },
