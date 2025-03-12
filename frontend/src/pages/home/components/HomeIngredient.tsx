@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import useIngredientsStore from "@stores/ingredientsStore.ts";
 import useModalStore from "@stores/modalStore";
@@ -20,6 +20,10 @@ const HomeIngredient = ({ ingredient }: HomeIngredientProps) => {
 
   const selectedIngredient = selectedIngredients[ingredient.ingredientInfoId];
   const [count, setCount] = useState<number>(selectedIngredient?.selectedCount || 0);
+
+  useEffect(() => {
+    setCount(selectedIngredients[ingredient.ingredientInfoId]?.selectedCount || 0);
+  }, [selectedIngredients]);
 
   const handleIncrease = () => {
     if (count < ingredient.totalCount) {
