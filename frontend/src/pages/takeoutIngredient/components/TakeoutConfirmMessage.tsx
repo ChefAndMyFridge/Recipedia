@@ -12,10 +12,15 @@ const TakeoutConfirmMessage = () => {
   const { setClearSelectedIngredients } = useIngredientsStore();
 
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       handleCloseModal();
     }, 5000);
-  }, []);
+
+    // 컴포넌트가 언마운트 되었을 때 clearTimeout
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [handleCloseModal]);
 
   function handleCloseModal(): void {
     setClearSelectedIngredients();

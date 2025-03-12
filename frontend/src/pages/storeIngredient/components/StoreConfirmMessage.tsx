@@ -8,10 +8,15 @@ const StoreConfirmMessage = () => {
   const { closeModal } = useModalStore();
 
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       closeModal();
     }, 5000);
-  }, []);
+
+    // 컴포넌트가 언마운트 되었을 때 clearTimeout
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [closeModal]);
 
   return (
     <div className="px-4 pb-4">

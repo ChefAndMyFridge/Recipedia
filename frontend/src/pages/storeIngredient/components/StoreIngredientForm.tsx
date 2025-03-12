@@ -15,7 +15,7 @@ const StoreIngredientForm = () => {
   const { openModal, closeModal } = useModalStore();
 
   function handleSelectedAmount(event: React.ChangeEvent<HTMLSelectElement>): void {
-    if (Number(event.target.value) > 10) {
+    if (Number(event.target.value) === 0) {
       setCustomAmountInput(true);
     } else {
       setCustomAmountInput(false);
@@ -71,7 +71,7 @@ const StoreIngredientForm = () => {
                 {amount + 1}
               </option>
             ))}
-            <option value={11}>직접 입력</option>
+            <option value={0}>직접 입력</option>
           </select>
         </div>
 
@@ -97,6 +97,7 @@ const StoreIngredientForm = () => {
           <Input label="입고일" name="incomingDate" type="date" placeHolder="수량을 입력해주세요" />
           <Input label="만료일" name="expirationDate" type="date" placeHolder="수량을 입력해주세요" />
         </div>
+
         <div className="flex flex-col gap-2">
           <p className="font-preMedium text-[#333] text-xs font-semibold">위치</p>
           <div className="flex justify-start gap-2 items-center">
@@ -117,6 +118,7 @@ const StoreIngredientForm = () => {
           </div>
         </div>
       </div>
+
       <div className="flex justify-end align-center px-4 py-4 gap-2">
         <Button type="button" design="cancel" content="취소" className="w-24 h-10" onAction={closeModal} />
         <Button type="submit" design="confirm" content="입고" className="w-24 h-10" />
