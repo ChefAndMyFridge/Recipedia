@@ -4,11 +4,12 @@ import Button from "@components/common/button/Button.tsx";
 
 import StoreIngredientModal from "@pages/storeIngredient/StoreIngredientModal";
 
-import ProfileDad from "@assets/images/ProfileDad.png";
 import ProfileModal from "@components/profile/ProfileModal";
+import useUserStore from "@stores/userStore";
 
 const HomeHeaderButtons = () => {
   const { openModal } = useModalStore();
+  const { currentProfileImg } = useUserStore();
 
   return (
     <div className="flex h-fit justify-between items-center gap-2">
@@ -16,7 +17,7 @@ const HomeHeaderButtons = () => {
         className="flex flex-1 w-10 aspect-[1/1] bg-white rounded-full items-center justify-center"
         onClick={() => openModal(<ProfileModal />)}
       >
-        <img src={ProfileDad} alt="profile" />
+        <img src={`${currentProfileImg}`} alt="profile" />
       </button>
 
       <Button
