@@ -203,6 +203,57 @@ public class IngredientController {
     return ingredientService.releaseItems(ingredientId, deleteReq.quantity());
   }
 
+  @Operation(
+      summary = "특정 재료 영양정보 포함 정보 조회",
+      description = "FIGMA : 재료 상세 모달",
+      responses = {
+          @ApiResponse(responseCode = "200", description = "재료 정보 조회 성공",
+              content = @Content(schema = @Schema(implementation = IngredientInfoDto.class),
+                  examples = {
+                      @ExampleObject(
+                          name = "응답 데이터",
+                          value = """
+                              {
+                              "ingredientInfoId": 130,
+                              "name": "참외",
+                              "imageUrl": "https://image.com",
+                              "totalCount": 2,
+                              "ingredients": 
+                                [
+                                  {
+                                    "ingredientId": 1,
+                                    "storagePlace": "냉장고",
+                                    "expirationDate": "2025-03-08T11:00:00",
+                                    "incomingDate": "2025-03-01T12:00:00",
+                                    "releasingDate": "2025-03-05T12:00:00"
+                                  },
+                                  {
+                                    "ingredientId": 2,
+                                    "storagePlace": "냉장고",
+                                    "expirationDate": "2025-03-08T11:00:00",
+                                    "incomingDate": "2025-03-01T12:00:00",
+                                    "releasingDate": "2025-03-05T12:00:00"
+                                  },    
+                                ],
+                                "nutrients": {
+                                    "calories": 45,
+                                    "carbohydrate": 11.23,
+                                    "protein": 1.33,
+                                    "fat": 0.04,
+                                    "sodium": 3,
+                                    "sugars": 9.81,
+                                    "cholesterol": 0,
+                                    "saturatedFat": 0.01,
+                                    "unsaturatedFat": 0.03,
+                                    "transFat": 0,
+                                    "allergenInfo": "과일류"
+                                  }
+                              }
+                              """
+                      )
+                  }))
+      }
+  )
   @GetMapping("/nutrient/{id}")
   public IngredientInfoWithNutrientDto getIngredientInfoDetail(@PathVariable Long id) {
       return ingredientService.getIngredientInfoWithNutrients(id);
