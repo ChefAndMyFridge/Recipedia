@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import CloseCircle from "@assets/icons/CloseCircle";
-import Infomation from "@assets/icons/Infomation";
+import IconCloseCircle from "@assets/icons/IconCloseCircle";
+import IconInfomation from "@assets/icons/IconInfomation";
 
 const DetailIngredientImage = ({ imgSrc }: { imgSrc: string }) => {
   const [detailInfo, setDetailInfo] = useState<boolean>(false);
@@ -14,7 +14,7 @@ const DetailIngredientImage = ({ imgSrc }: { imgSrc: string }) => {
     <div className="relative h-[30vh] w-full overflow-hidden">
       <img src={imgSrc} alt={imgSrc} className="w-full h-full object-cover object-center" />
 
-      {/* 영양 정보 표시시 */}
+      {/* 영양 정보 표시 */}
       {detailInfo && (
         <div className="absolute top-0 left-0 flex justify-center items-center w-full h-full bg-black bg-opacity-50 text-white font-preRegular">
           <p>영양 정보</p>
@@ -27,7 +27,7 @@ const DetailIngredientImage = ({ imgSrc }: { imgSrc: string }) => {
           className="absolute bottom-3 right-3 flex justify-between items-center py-1 pl-2 pr-3  h-10 gap-2 rounded-3xl bg-white bg-opacity-75 font-preRegular text-sm"
           onClick={handleDetailInfo}
         >
-          <CloseCircle strokeColor="black" width={25} height={25} />
+          <IconCloseCircle strokeColor="black" width={25} height={25} />
           <p>닫기</p>
         </button>
       ) : (
@@ -35,7 +35,7 @@ const DetailIngredientImage = ({ imgSrc }: { imgSrc: string }) => {
           className="absolute bottom-3 right-3 flex justify-between items-center py-1 pl-2 pr-3 h-10 gap-2 rounded-3xl bg-white bg-opacity-75 font-preRegular text-sm"
           onClick={handleDetailInfo}
         >
-          <Infomation strokeColor="black" width={25} height={25} />
+          <IconInfomation strokeColor="black" width={25} height={25} />
           <p>영양 정보</p>
         </button>
       )}
