@@ -118,9 +118,6 @@ class QueryMaker:
         return {
             'dishes': self.dishes,
             'videos': self.all_videos,
-            'execution_time': self.execution_time,
-            'openai_time': self.openai_time,
-            'youtube_time': self.youtube_time
         }
 
     def print_results(self, include_ingredients=True, include_dishes=True,
