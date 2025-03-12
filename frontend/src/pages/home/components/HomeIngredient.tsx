@@ -7,8 +7,8 @@ import { Ingredients } from "@/types/ingredientsTypes";
 
 import DetailIngredientModal from "@pages/detailIngredient/DetailIngredientModal";
 
-import Decrease from "@assets/icons/Decrease.tsx";
-import Increase from "@assets/icons/Increase.tsx";
+import IconDecrease from "@assets/icons/IconDecrease";
+import IconIncrease from "@assets/icons/IconIncrease";
 
 interface HomeIngredientProps {
   ingredient: Ingredients;
@@ -67,7 +67,7 @@ const HomeIngredient = ({ ingredient }: HomeIngredientProps) => {
           onClick={handleDecrease}
           className="flex justify-center items-center w-3.5 aspect-[1/1] p-[2px] bg-subContent rounded-full"
         >
-          <Decrease strokeColor="black" />
+          <IconDecrease strokeColor="black" />
         </button>
         <span className="font-preSemiBold text-center">{count}</span>
         <button
@@ -75,7 +75,7 @@ const HomeIngredient = ({ ingredient }: HomeIngredientProps) => {
           onClick={handleIncrease}
           className="flex justify-center items-center w-3.5 aspect-[1/1] p-[2px] bg-subContent rounded-full"
         >
-          <Increase strokeColor="black" />
+          <IconIncrease strokeColor="black" />
         </button>
       </div>
     </div>

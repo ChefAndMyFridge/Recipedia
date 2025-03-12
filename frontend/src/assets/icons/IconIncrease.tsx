@@ -1,6 +1,6 @@
 import { IconProps } from "@/types/iconProps";
 
-const Increase = ({ width, height, strokeColor }: IconProps) => {
+const IconIncrease = ({ width, height, strokeColor }: IconProps) => {
   return (
     <svg width={width} height={height} viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
@@ -23,4 +23,4 @@ const Increase = ({ width, height, strokeColor }: IconProps) => {
   );
 };
 
-export default Increase;
+export default IconIncrease;

@@ -1,6 +1,6 @@
 import { IconProps } from "@/types/iconProps";
 
-const CloseCircle = ({ width, height, strokeColor }: IconProps) => {
+const IconCloseCircle = ({ width, height, strokeColor }: IconProps) => {
   return (
     <svg width={width} height={height} viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
@@ -28,4 +28,4 @@ const CloseCircle = ({ width, height, strokeColor }: IconProps) => {
   );
 };
 
-export default CloseCircle;
+export default IconCloseCircle;
