@@ -1,4 +1,4 @@
-# food_generator.py
+# app/services/LLM/food_generator.py
 import re
 import openai
 from app.utils.prompts.youtube_prompts import get_chef_prompt, CHEF_SYSTEM_MESSAGE
@@ -7,9 +7,17 @@ from app.core.config import settings
 # OpenAI API 키 설정
 openai.api_key = settings.OPENAI_API_KEY
 
+
 def _generate_from_prompt(system_message: str, user_prompt: str) -> str:
     """
-    프롬프트를 받아 OpenAI API를 통해 응답을 생성하는 함수
+    입력:
+        - system_message: OpenAI에 전달할 시스템 메시지
+        - user_prompt: OpenAI에 전달할 사용자 프롬프트
+    반환:
+        - str: OpenAI로부터 반환된 텍스트 응답
+    기능:
+        - system_message, user_prompt를 사용해 OpenAI API(chat.completions)를 호출하고,
+          생성된 메시지의 content를 문자열로 반환한다.
     """
     response = openai.chat.completions.create(
         model=settings.QUERY_OPENAI_MODEL,
@@ -24,10 +32,15 @@ def _generate_from_prompt(system_message: str, user_prompt: str) -> str:
     )
     return response.choices[0].message.content.strip()
 
+
 def _parse_dish_names(content: str) -> list:
     """
-    불릿 포인트로 구분된 리스트를 파싱하고,
-    '(양식)' 등 괄호 내용을 제거합니다.
+    입력:
+        - content: OpenAI로부터 반환된 문자열
+    반환:
+        - list: 추출된 음식 이름 리스트
+    기능:
+        - 불릿 포인트('- ') 및 괄호 내 문자 등을 제거한 뒤 줄 단위로 음식 이름을 수집한다.
     """
     items = []
     for line in content.split('\n'):
@@ -41,8 +54,19 @@ def _parse_dish_names(content: str) -> list:
             items.append(line)
     return items
 
+
 def generate_dish_names(ingredients=None, main_ingredient=None, num_dishes=None) -> list:
-    """여러 개의 요리 이름을 생성하는 함수"""
+    """
+    입력:
+        - ingredients: 재료 목록 (기본값 None)
+        - main_ingredient: 주재료 (기본값 None)
+        - num_dishes: 생성할 요리 이름 개수 (기본값 None)
+    반환:
+        - list: 생성된 요리 이름 문자열의 리스트
+    기능:
+        - 재료와 주재료 정보를 바탕으로 프롬프트를 생성하고,
+          OpenAI API에 전송해 받은 결과를 파싱해 음식 이름을 추출한다.
+    """
     # 기본값 설정
     ingredients = ingredients
     main_ingredient = main_ingredient
