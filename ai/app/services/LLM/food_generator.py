@@ -25,7 +25,9 @@ def generate_dish_names(ingredients=None, main_ingredient=None, num_dishes=None)
 
 
 if __name__ == "__main__":
-    dishes = generate_dish_names()
+    dishes = generate_dish_names(ingredients=[
+                                 "새우", "오징어", "양파", "마늘", "고추", "파", "식용유", "밀가루", "달걀", "소금"],
+                                 main_ingredient=["새우", "오징어"])
     print("생성된 음식 이름 목록:")
     for i, dish in enumerate(dishes, 1):
         print(f"{i}. {dish}")
