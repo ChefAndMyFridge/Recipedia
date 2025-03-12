@@ -5,6 +5,7 @@ import com.recipidia.ingredient.entity.IngredientNutrient;
 import com.recipidia.ingredient.repository.IngredientInfoRepository;
 import com.recipidia.ingredient.repository.IngredientNutrientRepository;
 import com.recipidia.ingredient.response.IngredientNutrientRes;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class NutrientUpdateScheduler {
 
@@ -54,7 +56,7 @@ public class NutrientUpdateScheduler {
                     nutrientRepository.save(nutrient);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error("Error updating nutrient for ingredient: {}", ingredient.getName(), e);
             }
         }
     }

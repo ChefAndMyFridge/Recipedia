@@ -49,7 +49,7 @@ public class IngredientNutrient {
         this.allergenInfo = allergenInfo;
     }
 
-    public void setIngredientInfo(IngredientInfo ingredientInfo) {
+    public void linkIngredientInfo(IngredientInfo ingredientInfo) {
         this.ingredientInfo = ingredientInfo;
     }
 }

@@ -63,7 +63,7 @@ public class IngredientDataLoader implements CommandLineRunner {
                             .allergenInfo(allergenInfo)
                             .build();
 
-                    ingredientInfo.setIngredientNutrients(nutrient);
+                    ingredientInfo.attachIngredientNutrients(nutrient);
                     ingredientInfoRepository.save(ingredientInfo);
                 }
             }
