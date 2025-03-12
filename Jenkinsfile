@@ -70,9 +70,10 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    cd /var/jenkins_home/workspace/recipedia
-                    docker-compose -f docker-compose-app.yml up -d --build // 새 컨테이너 빌드 & 실행
+                    cd $WORKSPACE
+                    docker-compose -f docker-compose-app.yml up -d --build
                     '''
+                    // cd /var/jenkins_home/workspace/recipedia
                 }
             }
         }

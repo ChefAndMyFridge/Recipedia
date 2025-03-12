@@ -10,8 +10,8 @@ services:
       - "80:80"        # ec2 url은 80번 포트만 열려있음음
     depends_on:
       - server
-    volumes:
-      - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf
+    # volumes:
+    #   - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf
     networks:
       - app-network
 
