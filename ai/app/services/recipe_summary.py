@@ -98,6 +98,7 @@ class RecipeSummary:
         user_input += SUMMARY_FEW_SHOT_DATA
 
         # 마지막 입력에 자막 스크립트 삽입
+        user_input.append({"role": "user", "content": ""})
         user_input[-1]["content"] = scripts
 
         try:
