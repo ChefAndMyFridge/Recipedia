@@ -1,7 +1,7 @@
-import MenuList from "@/pages/recipeList/components/RecipeMenuList";
-import Carousel from "@/pages/recipeList/components/RecipeCarousel";
-import RECIPE_LIST from "@/data/RECIPE_LIST";
 import { useState } from "react";
+import MenuList from "@pages/recipeList/components/RecipeMenuList";
+import Carousel from "@pages/recipeList/components/RecipeCarousel";
+import RECIPE_LIST from "@/data/RECIPE_LIST";
 import { VideoList } from "@/types/recipeListTypes";
 
 //임의 데이터

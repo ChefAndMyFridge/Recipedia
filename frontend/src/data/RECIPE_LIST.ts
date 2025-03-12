@@ -3,6 +3,7 @@ const RECIPE_LIST = {
   videos: {
     "소고기 파전": [
       {
+        recipeId: 1,
         title:
           "부침가루에 그냥 물 넣지 마세요! 집에 있는 이걸 넣으면 2배 바삭바삭 전이 맛있어져요~! /파전, 파전 만들기, 파전 바삭하게 하는법, 부추전, 해물파전",
         url: "https://www.youtube.com/watch?v=Z2q-1zffE_8",
@@ -19,6 +20,7 @@ const RECIPE_LIST = {
     ],
     "소고기 볶음밥": [
       {
+        recipeId: 2,
         title: "원팬 소고기 야채 볶음밥 | 소고기를 이용한 초간단 요리 !!!",
         url: "https://www.youtube.com/watch?v=OeJ8SVDTcp4",
         description:

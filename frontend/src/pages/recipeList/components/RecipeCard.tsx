@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import IconHeart from "@assets/icons/IconHeart";
 import { Video } from "@/types/recipeListTypes";
 import { getYoutubeThumbnailUrl } from "@utils/getYoutubeThumbnailUrl";
@@ -9,7 +10,9 @@ interface RecipeCardProps {
 }
 
 const RecipeCard = ({ video }: RecipeCardProps) => {
+  const navigate = useNavigate();
   const thumbnailUrl = getYoutubeThumbnailUrl(video.url);
+
   return (
     <div className={`flex justify-center`}>
       <div className="w-[80%] h-[60vh] min-h-[450px] p-3 flex flex-col justify-between bg-white rounded-2xl">
@@ -28,7 +31,13 @@ const RecipeCard = ({ video }: RecipeCardProps) => {
         </div>
         <VideoInfos video={video} />
         <div className="w-full flex justify-end items-center">
-          <Button type="button" design="confirm" content="요리하기" className="w-24 h-8" />
+          <Button
+            type="button"
+            design="confirm"
+            content="요리하기"
+            className="w-24 h-8"
+            onAction={() => navigate(`/detailRecipe/${video.recipeId}`)}
+          />
         </div>
       </div>
     </div>

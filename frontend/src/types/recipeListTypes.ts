@@ -1,4 +1,5 @@
 export interface Video {
+  recipeId: number;
   title: string;
   url: string;
   description: string;
@@ -21,6 +22,7 @@ export interface RecipeList {
 }
 
 export interface RecipeInfo {
+  recipeId: number;
   title: string;
   cooking_info: {
     cooking_time: string;

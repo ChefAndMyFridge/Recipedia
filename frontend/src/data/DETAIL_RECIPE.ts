@@ -1,6 +1,7 @@
 import { RecipeInfo } from "@/types/recipeListTypes";
 
 const DETAIL_RECIPE: RecipeInfo = {
+  recipeId: 1,
   title: "매콤 달콤 소고기 볶음",
   cooking_info: {
     cooking_time: "30",
