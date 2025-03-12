@@ -12,7 +12,7 @@ const Input = ({ label, name, type, placeHolder, value, onChange }: InputProps) 
         placeholder={placeHolder}
         value={value}
         onChange={onChange}
-        className="flex items-center self-stretch px-2 py-1 g-2 h-12 rounded-lg border border-subcontent bg-white font-preRegular placeholder:text-gray-400"
+        className="w-full px-3 py-1 g-2 h-12 rounded-lg border border-subcontent bg-white font-preRegular placeholder:text-gray-400"
       />
     </div>
   );
