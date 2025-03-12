@@ -79,7 +79,16 @@ class RecipeSummary:
 
         # 자막 데이터 가져오기
         try:
-            return transcript.fetch()
+            result = transcript.fetch()
+            # 1차 타입 검사 (스크립트 0차원 데이터) => list
+            assert isinstance(
+                result, list), f"Excepted return outter type of get_transcript is list[dict], but got {type(result)}"
+
+            # 2차 타입 검사 (스크립트 1차원 데이터) => dict
+            assert isinstance(
+                result[0], dict), f"Excepted return inner type of get_transcript is list[dict], but got {type(result[0])}"
+
+            return result
         except Exception as e:
             logger.error(f"자막 가져오는 중 에러 발생 : {e}")
             return None
@@ -123,6 +132,10 @@ class RecipeSummary:
                 time_dict = {"exec time cons": f"{end - start:.5f}"}
                 print(f"\n{end - start:.5f} sec")
                 summary = summary | time_dict
+
+            # 리턴 타입 검사
+            assert isinstance(
+                summary, dict), f"Excepted return type of summarize_recipe is dict, but got {type(summary)}"
 
             return summary
         except Exception as e:

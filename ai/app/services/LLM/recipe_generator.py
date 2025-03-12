@@ -30,8 +30,15 @@ class RequestGPT:
             r'```json\s*(\{.*\})\s*```', markdown_output, re.DOTALL)
         if match:
             json_str = match.group(1)
-            return json.loads(json_str)
+            json_data = json.loads(json_str)
+            # 리턴 타입 검사
+            assert isinstance(
+                json_data, dict), f"Excepted return type of extract_json is dict, but got {type(json_data)}"
+            return json_data
         else:
+            # 리턴 타입 검사
+            assert isinstance(
+                markdown_output, dict), f"Excepted return type of extract_json is dict, but got {type(markdown_output)}"
             return markdown_output
 
     async def run(self, system_input: SystemInput, user_input: UserInput) -> dict:
@@ -74,6 +81,10 @@ class RequestGPT:
             data = self.extract_json(ret_message)
             if type(data) is str:
                 data = json.loads(data)
+
+            # 리턴 타입 검사
+            assert isinstance(
+                data, dict), f"Excepted return type of RequestGPT.run is dict, but got {type(data)}"
             return data
 
 
