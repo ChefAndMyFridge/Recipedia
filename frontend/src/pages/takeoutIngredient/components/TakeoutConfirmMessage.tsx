@@ -23,7 +23,7 @@ const TakeoutConfirmMessage = () => {
   }
 
   function handleRecipeRecommendation(): void {
-    navigate("/recipeList");
+    navigate("/recipeList/ingredient");
     closeModal();
   }
 
