@@ -4,7 +4,7 @@ import logging
 
 import asyncio
 
-from youtube_transcript_api import YouTubeTranscriptApi, NoTranscriptFound
+from youtube_transcript_api import YouTubeTranscriptApi, NoTranscriptFound, TranscriptsDisabled, VideoUnavailable
 from app.services.LLM.openai_api import RequestGPT
 
 from fastapi import HTTPException
@@ -41,6 +41,16 @@ class RecipeSummary:
         try:
             return method(languages)
         except NoTranscriptFound:
+            logger.error(f"제공된 자막 없음")
+            return None
+        except TranscriptsDisabled:
+            logger.error(f"자막 비활성화")
+            return None
+        except VideoUnavailable:
+            logger.error(f"영상 사용 불가")
+            return None
+        except Exception as e:
+            logger.error(f"자막 추출 중 에러 발생 : {e}")
             return None
 
     async def get_transcript(self, video_id: str) -> list[dict]:
@@ -69,7 +79,11 @@ class RecipeSummary:
             return None
 
         # 자막 데이터 가져오기
-        return transcript.fetch()
+        try:
+            return transcript.fetch()
+        except Exception as e:
+            logger.error(f"자막 가져오는 중 에러 발생 : {e}")
+            return None
 
     async def summarize_recipe(self, video_id: str) -> str:
         """ 주어진 영상 ID를 기반으로 자막을 가져와 OpenAI API로 요약된 레시피를 반환합니다.
