@@ -4,7 +4,7 @@ import logging
 import asyncio
 
 from youtube_transcript_api import YouTubeTranscriptApi, NoTranscriptFound, TranscriptsDisabled, VideoUnavailable
-from app.services.LLM.openai_api import RequestGPT
+from app.services.LLM.recipe_generator import RequestGPT
 
 from fastapi import HTTPException
 from app.utils.prompts.few_shot import SUMMARY_FEW_SHOT_DATA

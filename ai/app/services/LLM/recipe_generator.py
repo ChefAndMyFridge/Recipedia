@@ -1,4 +1,4 @@
-# app/services/LLM/openai_api.py
+# app/services/LLM/recipe_generator.py
 import os
 import json
 import asyncio
