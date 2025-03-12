@@ -6,8 +6,14 @@ import ModalHeader from "@components/common/modal/ModalHeader";
 import useUserStore from "@stores/userStore";
 import useModalStore from "@stores/modalStore";
 
+interface ProfileInterface {
+  image: string;
+  alt: string;
+  label: string;
+}
+
 const ProfileChangeModal = () => {
-  const { setCurrentProfileImg } = useUserStore();
+  const { setCurrentProfileImg, setUserName } = useUserStore();
   const { closeModal } = useModalStore();
 
   const profiles = [
@@ -17,8 +23,9 @@ const ProfileChangeModal = () => {
     { image: ProfileGirl, alt: "girl", label: "딸" },
   ];
 
-  const handleProfileChange = (profile: string) => {
-    setCurrentProfileImg(profile);
+  const handleProfileChange = (profile: ProfileInterface) => {
+    setCurrentProfileImg(profile.image);
+    setUserName(profile.label);
     closeModal();
   };
 
@@ -31,7 +38,7 @@ const ProfileChangeModal = () => {
             <button
               key={profile.alt}
               className="flex flex-col items-center justify-center gap-4"
-              onClick={() => handleProfileChange(profile.image)}
+              onClick={() => handleProfileChange(profile)}
             >
               <img src={profile.image} alt={profile.alt} className="w-32" />
               <p className="font-preSemiBold text-lg">{profile.label}</p>

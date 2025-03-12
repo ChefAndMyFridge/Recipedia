@@ -1,6 +1,6 @@
 import { IconProps } from "@/types/iconProps";
 
-const IconHeart = ({ width, height, strokeColor }: IconProps) => {
+const IconHeart = ({ width, height, strokeColor = "#292D32" }: IconProps) => {
   return (
     <svg width={width} height={height} viewBox="0 0 30 31" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
