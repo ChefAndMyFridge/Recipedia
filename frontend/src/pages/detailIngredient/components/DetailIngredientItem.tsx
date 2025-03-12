@@ -15,7 +15,16 @@ const DetailIngredientItem = ({ ingredient, imgSrc }: IngredientItemProps) => {
 
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-    return diffDays;
+    let remaining = "";
+    if (diffDays < 0) {
+      remaining = "D+" + String(diffDays).slice(1);
+    } else if (diffDays === 0) {
+      remaining = "D-Day";
+    } else {
+      remaining = "D-" + String(diffDays);
+    }
+
+    return remaining;
   };
 
   const daysRemaining = calculateDaysRemaining();
@@ -24,7 +33,9 @@ const DetailIngredientItem = ({ ingredient, imgSrc }: IngredientItemProps) => {
     <div className="flex flex-col w-1/5 h-fit p-1 justify-center items-center ">
       <div className="relative w-full aspect-[1/1] rounded-3xl">
         <img src={imgSrc} alt={imgSrc} className="w-full h-full object-cover rounded-3xl" />
-        <span className="absolute right-0 top-0 bg-error px-1 py-0.5">D{daysRemaining}</span>
+        <span className="absolute right-0 top-0 bg-error text-white text-sm px-2 py-1 rounded-3xl">
+          {daysRemaining}
+        </span>
       </div>
     </div>
   );

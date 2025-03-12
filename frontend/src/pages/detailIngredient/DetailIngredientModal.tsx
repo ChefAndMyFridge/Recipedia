@@ -18,12 +18,12 @@ const DetailIngredientModal = ({ ingredient }: IngredientsProps) => {
     <div>
       <DetailIngredientImage imgSrc={ingredient.imageUrl} />
 
-      <div className="flex justify-between items-center w-full h-10 px-4 py-4">
-        <p>{ingredient.name}</p>
-        <p>{ingredient.totalCount}</p>
+      <div className="flex justify-between items-center w-full h-10 px-4 py-6 font-preMedium">
+        <h1 className="m-0 text-xl">{ingredient.name}</h1>
+        <h1 className="m-0 text-xl">{ingredient.totalCount}개</h1>
       </div>
 
-      <div className="flex h-[40vh] items-start content-start py-1 px-5 gap-y-5 shrink-0 flex-wrap font-preMedium bg-[#EEE] rounded-xl">
+      <div className="flex h-[35vh] items-start content-start py-2 px-4 gap-y-5 shrink-0 flex-wrap font-preMedium bg-[#EEE] rounded-xl">
         {ingredient.ingredients.map((item) => (
           <DetailIngredientItem key={item.ingredientId} ingredient={item} imgSrc={ingredient.imageUrl} />
         ))}
