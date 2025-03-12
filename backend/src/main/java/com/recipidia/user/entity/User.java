@@ -27,5 +27,7 @@ public class User {
     this.username = username;
   }
 
-  // 필요 시, 사용자 정보를 수정하는 전용 메서드를 추가할 수도 있습니다.
+  public void updateUsername(String newUsername) {
+    this.username = newUsername;
+  }
 }
