@@ -55,7 +55,6 @@ class NutrientMaker:
                 food_name_en = translation
                 allergen_info = "Unknown"  # 알레르기 정보가 없으면 기본값 설정
 
-            print(f"번역 결과 : {food_name} => {food_name_en}, 알레르기 정보: {allergen_info}")
             return food_name_en, allergen_info
 
         except Exception as e:
@@ -69,15 +68,20 @@ class NutrientMaker:
         search_url = f"{self.base_url}/foods/search?query={food_name}&api_key={self.usda_api_key}&pageSize=1"
 
         async with httpx.AsyncClient() as client:
-            response = await client.get(search_url)
+            try:
+                response = await client.get(search_url, timeout=5.0)  # ✅ 5초 타임아웃 추가
 
-            if response.status_code != 200:
-                logger.error(f"USDA API 요청 실패: {response.status_code}")
-                return None
+                if response.status_code != 200:
+                    logger.error(f"USDA API 요청 실패: {response.status_code}")
+                    return None
 
-            data = response.json()
-            if "foods" in data and len(data["foods"]) > 0:
-                return data["foods"][0]["fdcId"]
+                data = response.json()
+                if "foods" in data and len(data["foods"]) > 0:
+                    return data["foods"][0]["fdcId"]
+
+            except httpx.ReadTimeout:
+                logger.error(f"USDA API 요청 타임아웃: {food_name}")
+                return None  # USDA API 응답이 늦으면 None 반환
 
         return None
 
@@ -88,7 +92,7 @@ class NutrientMaker:
         nutrient_url = f"{self.base_url}/food/{fdc_id}?api_key={self.usda_api_key}"
 
         async with httpx.AsyncClient() as client:
-            response = await client.get(nutrient_url)
+            response = await client.get(nutrient_url, timeout=5.0)
 
             if response.status_code != 200:
                 logger.error(f"USDA API 요청 실패: {response.status_code}")
@@ -159,7 +163,7 @@ class NutrientMaker:
         fdc_id = await self.fetch_fdc_id(translated_name)
 
         if not fdc_id:
-            logger.error(f"음식 정보를 찾을 수 없음: {translated_name}")
-            return None
+            logger.error(f"USDA에서 데이터를 찾을 수 없음: {translated_name}")
+            return None # 서버 문제로 조회 불가능 한 경우 나중에 재 시도 하도록함
 
         return await self.fetch_nutrient_info(fdc_id, allergen_info)
