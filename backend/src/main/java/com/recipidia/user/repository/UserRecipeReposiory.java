@@ -1,0 +1,9 @@
+package com.recipidia.user.repository;
+
+import com.recipidia.user.entity.UserRecipe;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface UserRecipeReposiory extends JpaRepository<UserRecipe, Long> {
+}
