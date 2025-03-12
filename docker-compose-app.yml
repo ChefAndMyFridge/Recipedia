@@ -24,12 +24,11 @@ services:
       dockerfile: Dockerfile  # 서버용 Dockerfile 경로
     ports:
       - "8080:8080"        # 서버 포트 연결
-    depends_on:
-      db:
-        condition: service_healthy  # 🔥 MySQL이 "완전히 준비될 때까지" 대기
+    # depends_on:
+    #   db:
+    #     condition: service_healthy  # 🔥 MySQL이 "완전히 준비될 때까지" 대기
     networks:
       - app-network
-    # restart: always
   
   fastapi:  # FastAPI 서비스 추가! 🚀
     container_name: my-fastapi
@@ -43,7 +42,6 @@ services:
     #     condition: service_healthy  # MySQL이 완전히 실행된 후 시작
     networks:
       - app-network
-    # restart: always
 
 networks:
   app-network:
