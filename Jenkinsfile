@@ -54,9 +54,10 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    cd /var/jenkins_home/workspace/recipedia
+                    cd $WORKSPACE
                     docker-compose -f docker-compose-app.yml down
                     '''
+                    // cd /var/jenkins_home/workspace/recipedia
                     // withEnv(["APP_NAME=${env.APP_NAME}"]) {
                     // }
                     // sh 'cd $WORKSPACE && docker-compose -f docker-compose-app.yml down' // 기존 컨테이너 종료
