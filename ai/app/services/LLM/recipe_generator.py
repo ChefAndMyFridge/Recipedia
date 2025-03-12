@@ -37,9 +37,10 @@ class RequestGPT:
             return json_data
         else:
             # 리턴 타입 검사
+            json_markdown_output = json.loads(markdown_output)
             assert isinstance(
-                markdown_output, dict), f"Excepted return type of extract_json is dict, but got {type(markdown_output)}"
-            return markdown_output
+                json_markdown_output, dict), f"Excepted return type of extract_json is dict, but got {type(json_markdown_output)}"
+            return json_markdown_output
 
     async def run(self, system_input: SystemInput, user_input: UserInput) -> dict:
         """ 시스템 입력과 사용자 입력을 받아 OpenAI API를 호출합니다.
