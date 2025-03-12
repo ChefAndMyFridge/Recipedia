@@ -14,7 +14,7 @@ public class IngredientNutrient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "ingredient_info_id", nullable = false, unique = true)
     private IngredientInfo ingredientInfo;
 
