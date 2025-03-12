@@ -1,7 +1,7 @@
 # food_generator.py
 from app.utils.prompts.youtube_prompts import get_chef_prompt, CHEF_SYSTEM_MESSAGE
 from app.services.LLM.generator import generate_from_prompt
-from app.services.LLM.processor import parse_bullet_list
+from app.services.LLM.processor import parse_dish_names
 from app.core.config import settings
 
 
@@ -19,7 +19,7 @@ def generate_dish_names(ingredients=None, main_ingredient=None, num_dishes=None)
     content = generate_from_prompt(CHEF_SYSTEM_MESSAGE, user_prompt)
 
     # 파서를 사용하여 음식 이름 추출
-    dish_names = parse_bullet_list(content)
+    dish_names = parse_dish_names(content)
 
     return dish_names
 
