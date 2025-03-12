@@ -29,7 +29,7 @@ public class IngredientInfo {
     @JsonManagedReference // 어떤 역할을 하는 어노테이션일까요?
     private final List<Ingredient> ingredients = new ArrayList<>(); // 빈 리스트로 초기화해주는게 좋음 null 참조때문에
 
-    @OneToOne(mappedBy = "ingredientInfo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "ingredientInfo", cascade = CascadeType.ALL)
     private IngredientNutrient ingredientNutrients;
 
     public IngredientInfo(String name, String imageUrl) {
