@@ -1,4 +1,4 @@
-# app/utils/prompts/user_input_caution.py
+# app/utils/prompts/recipe_summary_prompts.py
 SUMMARY_USER_INPUT = [
     {
         "role": "user",
