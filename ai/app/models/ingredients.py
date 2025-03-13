@@ -5,5 +5,5 @@ from pydantic import BaseModel
 
 
 class Ingredients(BaseModel):
-    ingredients: List[str]
+    ingredients: List[str] = None
     main_ingredients: List[str] = None
