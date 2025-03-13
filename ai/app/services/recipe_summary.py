@@ -40,13 +40,13 @@ class RecipeSummary:
         try:
             return method(languages)
         except NoTranscriptFound:
-            logger.error(f"{languages} : 제공된 자막 없음")
+            logger.warning(f"{languages} : 제공된 자막 없음")
             return None
         except TranscriptsDisabled:
-            logger.error(f"자막 비활성화")
+            logger.warning(f"자막 비활성화")
             return None
         except VideoUnavailable:
-            logger.error(f"영상 사용 불가")
+            logger.warning(f"영상 사용 불가")
             return None
         except Exception as e:
             logger.error(f"자막 추출 중 에러 발생 : {e}")
