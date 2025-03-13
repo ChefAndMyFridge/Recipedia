@@ -1,17 +1,16 @@
 services:
   client:
     container_name: my-react
-    environment:
-      - APP_URL=${APP_URL}  # ec2 URL
+    # environment:
+    #   - APP_URL=${APP_URL}  # ec2 URL
     build:
       context: ./frontend   # client 폴더를 빌드 컨텍스트로 지정
       dockerfile: Dockerfile  # 클라이언트용 Dockerfile 경로 (디폴트는 'Dockerfile')
     ports:
-      - "80:80"        # ec2 url은 80번 포트만 열려있음음
+      - "80:80"        # ec2 url은 80번 포트만 열려있음
+      - "443:443"
     depends_on:
       - server
-    # volumes:
-    #   - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf
     networks:
       - app-network
 
@@ -24,9 +23,6 @@ services:
       dockerfile: Dockerfile  # 서버용 Dockerfile 경로
     ports:
       - "8080:8080"        # 서버 포트 연결
-    # depends_on:
-    #   db:
-    #     condition: service_healthy  # 🔥 MySQL이 "완전히 준비될 때까지" 대기
     networks:
       - app-network
   
@@ -37,9 +33,6 @@ services:
       dockerfile: Dockerfile  # FastAPI용 Dockerfile
     ports:
       - "8000:8000"  # FastAPI는 기본적으로 8000번 포트 사용
-    # depends_on:
-    #   db:
-    #     condition: service_healthy  # MySQL이 완전히 실행된 후 시작
     networks:
       - app-network
 

@@ -6,32 +6,9 @@ pipeline {
     }
 
     stages {
-        // stage('Load Environment Variables') {
-        //     steps {
-        //         script {
-        //             def envVars = readFile('.env').split("\n").findAll { it.trim() }
-        //             for (line in envVars) {
-        //                 def parts = line.split("=")
-        //                 if (parts.length == 2) {
-        //                     env[parts[0].trim()] = parts[1].trim()
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-
         stage('git repository pull, sourcecode update') {
             steps {
-                // script {
-                //     sh '''
-                //     if [ -d .git ]; then
-                //         git reset --hard  # 기존 변경사항 초기화
-                //         git pull origin deploy
-                //     else
-                //         git clone -b deploy https://lab.ssafy.com/s12-s-project/S12P21S003.git .
-                //     fi
-                //     '''
-                // }
+                cleanWs()  // Jenkins 작업 공간을 완전히 초기화
                 git branch: 'deploy', credentialsId: 'my-gitlab-token', url: 'https://lab.ssafy.com/s12-s-project/S12P21S003.git'
             }
         }
@@ -58,10 +35,6 @@ pipeline {
                     docker-compose -f docker-compose-app.yml down
                     '''
                     // cd /var/jenkins_home/workspace/recipedia
-                    // withEnv(["APP_NAME=${env.APP_NAME}"]) {
-                    // }
-                    // sh 'cd $WORKSPACE && docker-compose -f docker-compose-app.yml down' // 기존 컨테이너 종료
-                    // sh 'while [ $(docker-compose ps -q | wc -l) -ne 0 ]; do sleep 3; done' // 컨테이너 완전 종료될 때까지 대기
                 }
             }
         }
@@ -77,13 +50,5 @@ pipeline {
                 }
             }
         }
-
-        // stage('Check Running Containers') {
-        //     steps {
-        //         script {
-        //             sh 'cd $WORKSPACE && docker ps -a' // 실행 중인 컨테이너 확인
-        //         }
-        //     }
-        // }
     }
 }
