@@ -56,7 +56,7 @@ def _parse_dish_names(content: str) -> List[str]:
     return items
 
 
-def generate_dish_names(ingredients: Optional[List[str]] = None, main_ingredients: Optional[List[str]] = None, num_dishes: Optional[int] = None) -> List[str]:
+def generate_dish_names(ingredients: List[str] = None, main_ingredients: List[str] = None, num_dishes: Optional[int] = None) -> List[str]:
     """
     입력:
         - ingredients: 재료 목록 (기본값 None)
@@ -69,12 +69,9 @@ def generate_dish_names(ingredients: Optional[List[str]] = None, main_ingredient
           OpenAI API에 전송해 받은 결과를 파싱해 음식 이름을 추출한다.
     """
     # 타입 변환 및 기본값 설정
-    if ingredients is None:
-        ingredients = []
-    if main_ingredients is None:
-        main_ingredients = []
-
-    num_dishes = num_dishes or settings.NUM_DISHES_TO_GENERATE
+    ingredients: List[str] = ingredients or []
+    main_ingredients: List[str] = main_ingredients or []
+    num_dishes: Optional[int] = num_dishes or settings.NUM_DISHES_TO_GENERATE
 
     # 프롬프트 생성
     user_prompt = get_chef_prompt(ingredients, main_ingredients, num_dishes)

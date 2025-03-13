@@ -10,23 +10,16 @@ logger = logging.getLogger(__name__)
 
 
 class QueryMaker:
-    def __init__(self, ingredients: Optional[List[str]] = None, main_ingredients: Optional[Union[List[str], str]] = None) -> None:
+    def __init__(self, ingredients: List[str] = None, main_ingredients: List[str] = None) -> None:
         """
         QueryMaker 클래스 초기화
 
         Args:
             ingredients: 사용할 재료 목록
-            main_ingredients: 주재료 목록. 기본값은 None
+            main_ingredients: 주재료 목록
         """
         self.ingredients: List[str] = ingredients or []
-
-        # main_ingredients가 None이거나 빈 값이면 빈 리스트로, 문자열이면 단일 항목 리스트로 변환
-        if main_ingredients is None:
-            self.main_ingredients: List[str] = []
-        elif isinstance(main_ingredients, str):
-            self.main_ingredients = [main_ingredients]
-        else:
-            self.main_ingredients = main_ingredients
+        self.main_ingredients: List[str] = main_ingredients or []
 
         self.dishes: List[str] = []
         self.all_videos: Dict[str, List[Dict[str, Any]]] = {}
