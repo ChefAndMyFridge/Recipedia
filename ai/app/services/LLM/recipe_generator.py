@@ -1,4 +1,4 @@
-# app/services/LLM/openai_api.py
+# app/services/LLM/recipe_generator.py
 import os
 import json
 import asyncio
@@ -30,9 +30,17 @@ class RequestGPT:
             r'```json\s*(\{.*\})\s*```', markdown_output, re.DOTALL)
         if match:
             json_str = match.group(1)
-            return json.loads(json_str)
+            json_data = json.loads(json_str)
+            # 리턴 타입 검사
+            assert isinstance(
+                json_data, dict), f"Excepted return type of extract_json is dict, but got {type(json_data)}"
+            return json_data
         else:
-            return markdown_output
+            # 리턴 타입 검사
+            json_markdown_output = json.loads(markdown_output)
+            assert isinstance(
+                json_markdown_output, dict), f"Excepted return type of extract_json is dict, but got {type(json_markdown_output)}"
+            return json_markdown_output
 
     async def run(self, system_input: SystemInput, user_input: UserInput) -> dict:
         """ 시스템 입력과 사용자 입력을 받아 OpenAI API를 호출합니다.
@@ -74,6 +82,10 @@ class RequestGPT:
             data = self.extract_json(ret_message)
             if type(data) is str:
                 data = json.loads(data)
+
+            # 리턴 타입 검사
+            assert isinstance(
+                data, dict), f"Excepted return type of RequestGPT.run is dict, but got {type(data)}"
             return data
 
 
