@@ -11,7 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class VideoInfo {
+public class VideoInfoCustomResponse {
+  private long recipeId;
   private String title;
   private String url;
   private String channel_title;

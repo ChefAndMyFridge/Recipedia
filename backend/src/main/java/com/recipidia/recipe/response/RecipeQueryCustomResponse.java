@@ -12,8 +12,8 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RecipeQueryRes {
-
+public class RecipeQueryCustomResponse {
   private List<String> dishes;
-  private Map<String, List<VideoInfo>> videos;
+  // 각 dish 이름에 해당하는 비디오 리스트 (recipeId 포함)
+  private Map<String, List<VideoInfoCustomResponse>> videos;
 }

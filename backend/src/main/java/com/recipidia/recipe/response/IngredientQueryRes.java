@@ -5,15 +5,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-import java.util.Map;
-
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RecipeQueryRes {
-
-  private List<String> dishes;
-  private Map<String, List<VideoInfo>> videos;
+public class IngredientQueryRes {
+  private String name;
+  private String quantity;
 }

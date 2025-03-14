@@ -9,9 +9,7 @@ import com.recipidia.recipe.entity.RecipeIngredient;
 import com.recipidia.recipe.exception.NoRecipeException;
 import com.recipidia.recipe.repository.RecipeRepository;
 import com.recipidia.recipe.request.RecipeQueryReq;
-import com.recipidia.recipe.response.RecipeExtractRes;
-import com.recipidia.recipe.response.RecipeQueryRes;
-import com.recipidia.recipe.response.VideoInfo;
+import com.recipidia.recipe.response.*;
 import com.recipidia.recipe.service.RecipeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -94,13 +92,18 @@ public class RecipeServiceImpl implements RecipeService {
                         // dish 내의 모든 영상 정보를 반복 처리
                         for (VideoInfo videoInfo : videoInfos) {
                             String youtubeUrl = videoInfo.getUrl();
+                            // 이미 저장된 URL 인 경우 새로 등록 안하고 스킵
                             Optional<Recipe> existing = recipeRepository.findByYoutubeUrl(youtubeUrl);
                             if (existing.isEmpty()) {
-                                Recipe recipe = Recipe.builder()
-                                    .name(dish)
-                                    .title(videoInfo.getTitle())
-                                    .youtubeUrl(youtubeUrl)
-                                    .build();
+                              Recipe recipe = Recipe.builder()
+                                  .name(dish)
+                                  .title(videoInfo.getTitle())
+                                  .youtubeUrl(videoInfo.getUrl())
+                                  .channelTitle(videoInfo.getChannel_title())
+                                  .duration(videoInfo.getDuration())
+                                  .viewCount(videoInfo.getView_count())
+                                  .likeCount(videoInfo.getLike_count())
+                                  .build();
                                 Recipe savedRecipe = recipeRepository.save(recipe);
                             }
                         }
@@ -169,17 +172,51 @@ public class RecipeServiceImpl implements RecipeService {
                     recipe.modifyTextRecipe(extractRes);
                     // 기존 ingredients 업데이트 (필요 시)
                     recipe.getIngredients().clear();
-                    extractRes.getIngredients().forEach(ingredientName -> {
-                        RecipeIngredient ingredient = RecipeIngredient.builder()
-                                .recipe(recipe)
-                                .name(ingredientName)
-                                .quantity("1개") // 수량은 추후 업데이트
-                                .build();
-                        recipe.getIngredients().add(ingredient);
+                    extractRes.getIngredients().forEach(ingredient -> {
+                      RecipeIngredient ingredientEntity = RecipeIngredient.builder()
+                          .recipe(recipe)
+                          .name(ingredient.getName())
+                          .quantity(ingredient.getQuantity())
+                          .build();
+                      recipe.getIngredients().add(ingredientEntity);
                     });
                     return Mono.fromCallable(() -> recipeRepository.save(recipe))
                             .subscribeOn(Schedulers.boundedElastic())
                             .then();
                 });
     }
+
+  @Override
+  public Mono<RecipeQueryCustomResponse> mapQueryResponse(ResponseEntity<String> responseEntity) {
+    try {
+      // JSON 문자열을 파싱하여 커스텀 응답 객체로 변환
+      RecipeQueryCustomResponse customResponse =
+          objectMapper.readValue(responseEntity.getBody(), RecipeQueryCustomResponse.class);
+      // 각 비디오 항목에 대해 실제 recipeId를 채워 넣습니다.
+      customResponse.getVideos().forEach((dish, videoList) -> {
+        List<VideoInfoCustomResponse> updatedList = videoList.stream()
+            .map(video -> {
+              // URL을 기준으로 저장된 레시피를 조회
+              Optional<Recipe> savedRecipe = recipeRepository.findByYoutubeUrl(video.getUrl());
+              long recipeId = savedRecipe.map(Recipe::getId).orElse(0L);
+              // 필요 시 이후에 favorite, rating 등의 정보를 추가하여 반환합니다!
+              return VideoInfoCustomResponse.builder()
+                  .recipeId(recipeId)
+                  .title(video.getTitle())
+                  .url(video.getUrl())
+                  .channel_title(video.getChannel_title())
+                  .duration(video.getDuration())
+                  .view_count(video.getView_count())
+                  .like_count(video.getLike_count())
+                  .build();
+            })
+            .toList();
+        // 기존 Map의 값을 업데이트
+        customResponse.getVideos().put(dish, updatedList);
+      });
+      return Mono.just(customResponse);
+    } catch (Exception e) {
+      return Mono.error(new RuntimeException("Failed to map query response", e));
+    }
+  }
 }
