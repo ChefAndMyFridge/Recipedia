@@ -21,3 +21,15 @@ export interface ToggleProps {
   isToggle: boolean;
   onToggle: (isToggle: boolean) => void;
 }
+
+export interface KeypadProps {
+  label?: string;
+  value: string;
+  onChange: (value: string) => void;
+  onClose: () => void;
+}
+
+export interface KeypadElemProps {
+  value: string;
+  onChange: (val: string) => void;
+}
