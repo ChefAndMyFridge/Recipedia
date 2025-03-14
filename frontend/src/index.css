@@ -63,8 +63,7 @@
   }
 
   #root {
-    @apply bg-offWhite w-full h-auto min-h-screen relative mx-auto;
-    max-width: clamp(344px, 100vw, 576px);
+    @apply bg-offWhite w-full landscape:h-full portrait:h-auto portrait:min-h-screen portrait:relative portrait:mx-auto portrait:min-w-[344px] portrait:max-w-[576px];
   }
 }
 
@@ -99,6 +98,6 @@
 /* 노트북 & 이외 사이즈 */
 @media screen and (min-width: 1024px) {
   html {
-    @apply text-[20px];
+    @apply text-[30px];
   }
 }

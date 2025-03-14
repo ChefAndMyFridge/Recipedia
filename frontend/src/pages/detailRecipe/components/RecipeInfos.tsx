@@ -7,15 +7,15 @@ const RecipeInfos = () => {
   const [selectedIndex, setSelectedIndex] = useState<RecipeInfoKeys>("ingredients");
 
   return (
-    <section className="w-full flex flex-col items-center justify-center w-[90%]">
+    <section className="w-full flex flex-col items-center justify-center">
       <RecipeInfoIndexes
         selectedIndex={selectedIndex}
         setSelectedIndex={(index: RecipeInfoKeys) => setSelectedIndex(index)}
       />
       {/* 선택된 인덱스별 자세한 정보 표시
       추후 데이터 변경 필요 */}
-      <div className="w-full max-h-[210px] overflow-auto p-4 bg-white rounded-2xl shadow-md">
-        <div className="flex flex-wrap gap-2">
+      <div className="w-full portrait:max-h-[210px] landscape:h-[50vh] overflow-y-auto p-4 bg-white rounded-b-2xl shadow-md">
+        <div className="flex flex-wrap gap-2 h-fit">
           {DETAIL_RECIPE[selectedIndex].map((item: string) => (
             <div
               key={item}
