@@ -8,6 +8,14 @@ export interface ButtonProps {
   className?: string;
 }
 
+export interface FilterButtonProps {
+  isSelected: boolean;
+  content: string;
+  count: number;
+  className?: string;
+  onClick?: () => void;
+}
+
 export interface InputProps {
   label?: string;
   name?: string;

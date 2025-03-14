@@ -19,7 +19,7 @@ const useIngredientsStore = create<IngredientsState>((set) => ({
   ingredients: [...INGREDIENTS],
   selectedIngredients: {},
   filteredInfomations: {
-    type: [],
+    type: ["123"],
     preference: [],
     dislike: [],
   },
