@@ -1,0 +1,28 @@
+@keyframes slideDown {
+  from {
+    transform: translateY(-50vh);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50vh);
+  }
+}
+
+dialog[open] {
+  position: fixed !important;
+  top: 0 !important;
+  margin-top: 0 !important;
+  animation: slideDown 0.5s forwards;
+}
+
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.2);
+}
