@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/schedule")
 public class NutrientUpdateController {
 
     private final NutrientUpdateScheduler nutrientUpdateScheduler;
@@ -27,7 +27,7 @@ public class NutrientUpdateController {
                     @ApiResponse(responseCode = "500", description = "재료 정보 업데이트 실패"),
             }
     )
-    @GetMapping("/update_nutrients")
+    @GetMapping("/nutrient")
     public ResponseEntity<String> triggerNutrientUpdate() {
         try {
             // 스케줄러 작업을 즉시 실행
