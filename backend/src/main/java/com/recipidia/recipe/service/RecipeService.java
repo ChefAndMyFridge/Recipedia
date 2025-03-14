@@ -3,6 +3,7 @@ package com.recipidia.recipe.service;
 import com.recipidia.recipe.dto.RecipeDto;
 import com.recipidia.recipe.request.RecipeQueryReq;
 import com.recipidia.recipe.response.RecipeExtractRes;
+import com.recipidia.recipe.response.RecipeQueryCustomResponse;
 import org.springframework.http.ResponseEntity;
 import reactor.core.publisher.Mono;
 
@@ -14,4 +15,5 @@ public interface RecipeService {
     Mono<ResponseEntity<List<RecipeDto>>> getAllRecipes();
     Mono<RecipeExtractRes> extractRecipe(Long recipeId);
     Mono<Void> saveExtractResult(Long recipeId, RecipeExtractRes extractRes);
+    Mono<RecipeQueryCustomResponse> mapQueryResponse(ResponseEntity<String> responseEntity);
 }
