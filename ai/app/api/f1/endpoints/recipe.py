@@ -3,7 +3,6 @@
 from fastapi import APIRouter, Request, HTTPException
 from fastapi.responses import JSONResponse
 from app.utils.docs import RecipeDocs
-from app.services.recipe_summary.summary_test import RecipeSummary
 
 router = APIRouter()
 docs = RecipeDocs()
