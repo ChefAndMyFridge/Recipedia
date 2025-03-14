@@ -9,7 +9,7 @@ COPY . .
 
 # 3️⃣ 의존성 파일 복사 및 설치
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
 
 # 5️⃣ 컨테이너 실행 시 FastAPI 실행
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
