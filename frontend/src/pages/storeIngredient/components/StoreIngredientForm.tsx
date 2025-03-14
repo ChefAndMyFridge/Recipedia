@@ -4,7 +4,7 @@ import useModalStore from "@stores/modalStore";
 
 import Input from "@components/common/input/Input.tsx";
 import Button from "@components/common/button/Button.tsx";
-import Keypad from "@/components/common/keypad/Keypad";
+import Keypad from "@components/common/keypad/Keypad";
 
 import StoreConfirmModal from "@pages/storeIngredient/StoreConfirmModal";
 

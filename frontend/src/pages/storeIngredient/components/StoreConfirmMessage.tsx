@@ -13,6 +13,7 @@ const StoreConfirmMessage = () => {
       setCountdown((prev) => prev - 1);
     }, 1000);
 
+    // 컴포넌트가 언마운트 되었을 때 clear
     return () => clearInterval(intervalId);
   }, []);
 
