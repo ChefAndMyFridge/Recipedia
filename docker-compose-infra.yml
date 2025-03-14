@@ -4,6 +4,8 @@ services:
       context: ./jenkins  # Jenkins 코드가 있는 폴더
       dockerfile: Dockerfile  # Jenkins용 Dockerfile
     # image: jenkins/jenkins:lts  # 최신 LTS 버전 사용
+    environment:
+      - TZ=Asia/Seoul
     container_name: my-jenkins
     user: root  # 권한 문제 방지 (필수)
     ports:
@@ -18,18 +20,15 @@ services:
     image: mysql:8
     container_name: my-mysql
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      - TZ=Asia/Seoul
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
     volumes:
       - /home/ubuntu/mysql_data:/var/lib/mysql
     networks:
       - app-network
     restart: always
-    # healthcheck:
-    #   test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-    #   interval: 5s
-    #   retries: 3
-    #   start_period: 10s
+    
 
 networks:
   app-network:
