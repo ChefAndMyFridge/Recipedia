@@ -29,6 +29,18 @@ public class Recipe {
     @Column(unique = true)
     private String youtubeUrl;
 
+    @Column
+    private String channelTitle;   // VideoInfo의 channel_title
+
+    @Column
+    private String duration;       // VideoInfo의 duration
+
+    @Column
+    private Long viewCount;        // VideoInfo의 view_count
+
+    @Column
+    private Long likeCount;        // VideoInfo의 like_count
+
     // textRecipe를 RecipeExtractRes 타입으로 변경하고, JSON 직렬화를 위한 Converter 적용
     @Column(columnDefinition = "MEDIUMTEXT")
     @Convert(converter = RecipeExtractResConverter.class)
@@ -40,15 +52,27 @@ public class Recipe {
 
 
     @Builder
-    public Recipe(String name, String title, String youtubeUrl) {
+    public Recipe(String name, String youtubeUrl, String title,
+                  String channelTitle, String duration, Long viewCount, Long likeCount) {
         this.name = name;
-        this.title = title;
         this.youtubeUrl = youtubeUrl;
+        this.title = title;
+        this.channelTitle = channelTitle;
+        this.duration = duration;
+        this.viewCount = viewCount;
+        this.likeCount = likeCount;
     }
-
     // 외부에서 이 메소드를 통해서만 textRecipe를 변경하도록 함
     public void modifyTextRecipe(RecipeExtractRes extractRes) {
         this.textRecipe = extractRes;
+    }
+
+    // VideoInfo 부분 업데이트 필요 시 활용하기 (조회 수, 좋아요 수 등 수정)
+    public void updateVideoInfo(String channelTitle, String duration, Long viewCount, Long likeCount) {
+        this.channelTitle = channelTitle;
+        this.duration = duration;
+        this.viewCount = viewCount;
+        this.likeCount = likeCount;
     }
 
 }

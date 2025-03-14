@@ -3,6 +3,7 @@ package com.recipidia.recipe.controller;
 import com.recipidia.recipe.dto.RecipeDto;
 import com.recipidia.recipe.request.RecipeQueryReq;
 import com.recipidia.recipe.response.RecipeExtractRes;
+import com.recipidia.recipe.response.RecipeQueryCustomResponse;
 import com.recipidia.recipe.service.RecipeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -102,12 +103,14 @@ public class RecipeController {
       }
   )
   @PostMapping
-  public Mono<ResponseEntity<String>> queryRecipe(@RequestBody RecipeQueryReq request) {
+  public Mono<ResponseEntity<RecipeQueryCustomResponse>> queryRecipe(@RequestBody RecipeQueryReq request) {
     return recipeService.handleRecipeQuery(request)
-        .flatMap(response ->
-            recipeService.saveRecipeResult(response)
-                .thenReturn(response)
-        );
+        .flatMap(responseEntity ->
+            recipeService.saveRecipeResult(responseEntity)
+                .thenReturn(responseEntity)
+        )
+        .flatMap(recipeService::mapQueryResponse)
+        .map(ResponseEntity::ok);
   }
 
   @Operation(
