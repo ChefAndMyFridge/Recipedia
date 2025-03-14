@@ -1,12 +1,13 @@
-# app/services/recipe_summary/summary_test.py
+# app/services/recipe_summary.py
 import time
 import logging
 
 from youtube_transcript_api import YouTubeTranscriptApi, NoTranscriptFound, TranscriptsDisabled
+from app.services.LLM.openai_api import RequestGPT
 
 from fastapi import HTTPException
-from app.utils.prompt.few_shot.recipe_summary import *
-from app.utils.prompt.user_input_caution.extra_input import *
+from app.utils.prompts.few_shot import SUMMARY_FEW_SHOT_DATA, SUMMARY_FEW_SHOT_DATA_DICT
+from app.utils.prompts.user_input_caution import SUMMARY_EXTRA_INPUT
 from app.core.config import settings
 
 logger = logging.getLogger(__name__)
@@ -108,7 +109,7 @@ class RecipeSummary:
 
         try:
             # OpenAI API 호출 (RequestGPT.run이 비동기 함수라고 가정)
-            summary = await self.request_gpt.run(system_input, user_input, False)
+            summary = await self.request_gpt.run(system_input, user_input)
             end = time.time()
             print(f"\n{end - start:.5f} sec")
             return summary

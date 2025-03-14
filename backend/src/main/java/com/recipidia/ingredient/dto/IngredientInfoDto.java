@@ -5,20 +5,29 @@ import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.Value;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * DTO for {@link com.recipidia.ingredient.entity.IngredientInfo}
  */
-@Value
+@Getter
+@NoArgsConstructor
 public class IngredientInfoDto implements Serializable {
 
   @NotNull
-  Long id;
+  private Long ingredientInfoId;
   @NotNull
-  String name;
-  String imageUrl;
-  List<IngredientDto> ingredients = new ArrayList<>();
+  private String name;
+  private String imageUrl;
+  private int totalCount;
+  private final List<IngredientDto> ingredients = new ArrayList<>();
+
+  public IngredientInfoDto(Long id, String name, String imageUrl) {
+    this.ingredientInfoId = id;
+    this.name = name;
+    this.imageUrl = imageUrl;
+  }
 
   public static IngredientInfoDto fromEntity(IngredientInfo ingredientInfo) {
     IngredientInfoDto ingredientInfoDto = new IngredientInfoDto(
@@ -27,6 +36,7 @@ public class IngredientInfoDto implements Serializable {
         ingredientInfo.getImageUrl()
     );
     ingredientInfoDto.ingredients.addAll(IngredientDto.fromEntity(ingredientInfo.getIngredients()));
+    ingredientInfoDto.totalCount = ingredientInfoDto.ingredients.size();
     return ingredientInfoDto;
   }
 }
