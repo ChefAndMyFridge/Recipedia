@@ -60,9 +60,7 @@ def _sync_search_youtube_recipe(dish: str, max_results) -> list:
         video_data = {
             "title": item["snippet"]["title"],
             "url": f"https://www.youtube.com/watch?v={video_id}",
-            "description": item["snippet"]["description"],
             "channel_title": item["snippet"]["channelTitle"],
-            "published_at": item["snippet"]["publishedAt"]
         }
 
         # 동영상 길이 처리 (ISO 8601 형식을 사람이 읽기 쉬운 형식으로 변환)
@@ -77,8 +75,6 @@ def _sync_search_youtube_recipe(dish: str, max_results) -> list:
             video_data["view_count"] = int(stats.get("viewCount", 0))
             video_data["like_count"] = int(
                 stats.get("likeCount", 0)) if "likeCount" in stats else 0
-            video_data["comment_count"] = int(
-                stats.get("commentCount", 0)) if "commentCount" in stats else 0
 
         results.append(video_data)
 
