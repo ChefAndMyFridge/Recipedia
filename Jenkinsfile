@@ -9,7 +9,8 @@ pipeline {
         stage('git repository pull, sourcecode update') {
             steps {
                 cleanWs()  // Jenkins 작업 공간을 완전히 초기화
-                git branch: 'deploy', credentialsId: 'my-gitlab-token', url: 'https://lab.ssafy.com/s12-s-project/S12P21S003.git'
+                // git branch: 'deploy', credentialsId: 'my-gitlab-token', url: 'https://lab.ssafy.com/s12-s-project/S12P21S003.git'
+                git branch: 'release', credentialsId: 'my-gitlab-token', url: 'https://lab.ssafy.com/s12-s-project/S12P21S003.git'
             }
         }
 
