@@ -11,7 +11,9 @@ import java.util.stream.Collectors;
  * DTO for {@link Recipe}
  */
 public record RecipeDto(Long recipeId, String name, String title, String youtubeUrl,
-                        boolean hasTextRecipe, List<RecipeIngredientDto> ingredients) implements
+                        boolean hasTextRecipe, List<RecipeIngredientDto> ingredients,
+                        String channelTitle, String duration, long viewCount,
+                        long likeCount) implements
         Serializable {
 
     public static RecipeDto fromEntity(Recipe recipe) {
@@ -24,7 +26,11 @@ public record RecipeDto(Long recipeId, String name, String title, String youtube
             recipe.getTitle(),
             recipe.getYoutubeUrl(),
             recipe.getTextRecipe() != null,
-            ingredientDtos
+            ingredientDtos,
+            recipe.getChannelTitle(),
+            recipe.getDuration(),
+            recipe.getViewCount() != null ? recipe.getViewCount() : 0L,
+            recipe.getLikeCount() != null ? recipe.getLikeCount() : 0L
         );
     }
 

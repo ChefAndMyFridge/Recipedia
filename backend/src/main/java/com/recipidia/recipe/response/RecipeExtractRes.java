@@ -12,7 +12,7 @@ import java.util.Map;
 public class RecipeExtractRes {
   private String title;
   private CookingInfo cooking_info;
-  private List<IngredientQRes> ingredients;
+  private List<IngredientQueryRes> ingredients;
   // private List<String> cooking_tools;
   private List<String> cooking_tips;
   private Map<String, List<String>> cooking_sequence;

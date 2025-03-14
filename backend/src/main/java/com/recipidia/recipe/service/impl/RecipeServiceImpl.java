@@ -94,13 +94,18 @@ public class RecipeServiceImpl implements RecipeService {
                         // dish 내의 모든 영상 정보를 반복 처리
                         for (VideoInfo videoInfo : videoInfos) {
                             String youtubeUrl = videoInfo.getUrl();
+                            // 이미 저장된 URL 인 경우 새로 등록 안하고 스킵
                             Optional<Recipe> existing = recipeRepository.findByYoutubeUrl(youtubeUrl);
                             if (existing.isEmpty()) {
-                                Recipe recipe = Recipe.builder()
-                                    .name(dish)
-                                    .title(videoInfo.getTitle())
-                                    .youtubeUrl(youtubeUrl)
-                                    .build();
+                              Recipe recipe = Recipe.builder()
+                                  .name(dish)
+                                  .title(videoInfo.getTitle())
+                                  .youtubeUrl(videoInfo.getUrl())
+                                  .channelTitle(videoInfo.getChannel_title())
+                                  .duration(videoInfo.getDuration())
+                                  .viewCount(videoInfo.getView_count())
+                                  .likeCount(videoInfo.getLike_count())
+                                  .build();
                                 Recipe savedRecipe = recipeRepository.save(recipe);
                             }
                         }

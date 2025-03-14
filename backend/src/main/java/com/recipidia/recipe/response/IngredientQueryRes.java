@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class IngredientQRes {
+public class IngredientQueryRes {
   private String name;
   private String quantity;
 }
