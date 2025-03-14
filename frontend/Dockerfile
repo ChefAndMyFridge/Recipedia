@@ -10,6 +10,10 @@ RUN yarn build
 
 # 서빙 단계
 FROM nginx:stable-alpine
+# root 권한으로 실행
+USER root
+# Nginx 관련 디렉토리 강제 생성
+RUN mkdir -p /usr/share/nginx/html /etc/nginx/conf.d
 COPY --from=builder /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
