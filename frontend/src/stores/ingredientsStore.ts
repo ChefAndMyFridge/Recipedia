@@ -8,18 +8,25 @@ interface IngredientsState {
   // ingredients: 조회된 재료 목록, selectedIngredients: 선택된 재료 목록
   ingredients: Ingredients[];
   selectedIngredients: Record<number, SelectedIngredients>; // { ingredientInfoId: selectedCount }
+  filteringInfomationKeys: filteredInfomations;
   filteredInfomations: filteredInfomations;
   setIngredients: (ingredients: Ingredients[]) => void;
   setSelectedCount: (ingredientInfoId: number, ingredientInfo: SelectedIngredients) => void;
   setClearSelectedIngredients: () => void;
   setFilteredInfomations: (filterKey: keyof filteredInfomations, filterValue: string) => void;
+  setClearFilteredInfomations: (filterKey: keyof filteredInfomations) => void;
 }
 
 const useIngredientsStore = create<IngredientsState>((set) => ({
   ingredients: [...INGREDIENTS],
   selectedIngredients: {},
+  filteringInfomationKeys: {
+    type: ["한식", "중식", "일식", "양식"],
+    preference: ["고단백식", "고열량식", "저염식", "저당식", "저지방식", "저열량식", "비건식", "무가공식", "육식"],
+    dislike: ["고단백식", "고열량식", "저염식", "저당식", "저지방식", "저열량식", "비건식", "무가공식", "육식"],
+  },
   filteredInfomations: {
-    type: ["123"],
+    type: [],
     preference: [],
     dislike: [],
   },
@@ -52,6 +59,10 @@ const useIngredientsStore = create<IngredientsState>((set) => ({
       return { filteredInfomations: newSelected };
     });
   },
+  setClearFilteredInfomations: (filterKey) =>
+    set((state) => {
+      return { filteredInfomations: { ...state.filteredInfomations, [filterKey]: [] } };
+    }),
 }));
 
 export default useIngredientsStore;

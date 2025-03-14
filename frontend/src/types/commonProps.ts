@@ -11,9 +11,9 @@ export interface ButtonProps {
 export interface FilterButtonProps {
   isSelected: boolean;
   content: string;
-  count: number;
+  count?: number;
   className?: string;
-  onClick?: () => void;
+  onAction?: () => void;
 }
 
 export interface InputProps {
