@@ -13,6 +13,7 @@ services:
       - "50000:50000"  # 에이전트와 통신용 포트
     volumes:
       - /home/ubuntu/jenkins_data:/var/jenkins_home  # Jenkins 데이터 유지
+      - /home/ubuntu/jenkins_ssh:/root/.ssh  # Jenkins 데이터 유지
       - /var/run/docker.sock:/var/run/docker.sock  # Docker 컨테이너 제어를 위해 필요
     restart: always
 
