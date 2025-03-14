@@ -4,6 +4,7 @@ import RecipeListPage from "@pages/recipeList/RecipeListPage";
 import DetailRecipePage from "@pages/detailRecipe/DetailRecipePage";
 import SettingPage from "@pages/setting/SettingPage";
 import MyRecipePage from "@pages/myRecipe/MyRecipePage";
+import PreferencePage from "@pages/preference/PreferencePage";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Route path="/detailRecipe/:recipeId" element={<DetailRecipePage />} />
       <Route path="/setting" element={<SettingPage />} />
       <Route path="/setting/:myRecipeType" element={<MyRecipePage />} />
+      <Route path="/setting/preference" element={<PreferencePage />} />
     </Routes>
   );
 }

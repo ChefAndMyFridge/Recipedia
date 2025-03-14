@@ -1,6 +1,6 @@
 import { IconProps } from "@/types/iconProps";
 
-const ArrowLeft = ({ width, height, strokeColor, onClick }: IconProps) => {
+const ArrowRight = ({ width, height, strokeColor, onClick }: IconProps) => {
   return (
     <svg
       width={width}
@@ -11,7 +11,7 @@ const ArrowLeft = ({ width, height, strokeColor, onClick }: IconProps) => {
       onClick={onClick}
     >
       <path
-        d="M18.75 24.9L10.6 16.75C9.63755 15.7875 9.63755 14.2125 10.6 13.25L18.75 5.09998"
+        d="M11.1377 24.9L19.2877 16.75C20.2502 15.7875 20.2502 14.2125 19.2877 13.25L11.1377 5.09998"
         stroke={strokeColor}
         strokeWidth="1.5"
         strokeMiterlimit="10"
@@ -22,4 +22,4 @@ const ArrowLeft = ({ width, height, strokeColor, onClick }: IconProps) => {
   );
 };
 
-export default ArrowLeft;
+export default ArrowRight;
