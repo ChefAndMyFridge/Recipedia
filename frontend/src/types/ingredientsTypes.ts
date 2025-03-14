@@ -20,3 +20,9 @@ export interface SelectedIngredients {
   imageUrl: string;
   selectedCount: number;
 }
+
+export interface filteredInfomations {
+  type: string[];
+  preference: string[];
+  dislike: string[];
+}
