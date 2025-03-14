@@ -4,4 +4,5 @@ export interface IconProps {
   fillColor?: string;
   strokeColor?: string;
   className?: string;
+  onClick?: () => void;
 }

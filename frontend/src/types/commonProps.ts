@@ -15,6 +15,7 @@ export interface InputProps {
   placeHolder?: string;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  labelTextSize?: string;
 }
 
 export interface ToggleProps {
