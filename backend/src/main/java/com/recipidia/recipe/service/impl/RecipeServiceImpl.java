@@ -169,13 +169,13 @@ public class RecipeServiceImpl implements RecipeService {
                     recipe.modifyTextRecipe(extractRes);
                     // 기존 ingredients 업데이트 (필요 시)
                     recipe.getIngredients().clear();
-                    extractRes.getIngredients().forEach(ingredientName -> {
-                        RecipeIngredient ingredient = RecipeIngredient.builder()
-                                .recipe(recipe)
-                                .name(ingredientName)
-                                .quantity("1개") // 수량은 추후 업데이트
-                                .build();
-                        recipe.getIngredients().add(ingredient);
+                    extractRes.getIngredients().forEach(ingredient -> {
+                      RecipeIngredient ingredientEntity = RecipeIngredient.builder()
+                          .recipe(recipe)
+                          .name(ingredient.getName())
+                          .quantity(ingredient.getQuantity())
+                          .build();
+                      recipe.getIngredients().add(ingredientEntity);
                     });
                     return Mono.fromCallable(() -> recipeRepository.save(recipe))
                             .subscribeOn(Schedulers.boundedElastic())

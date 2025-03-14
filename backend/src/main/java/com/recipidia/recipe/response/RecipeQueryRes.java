@@ -16,5 +16,4 @@ public class RecipeQueryRes {
 
   private List<String> dishes;
   private Map<String, List<VideoInfo>> videos;
-  private double execution_time; // 선택 사항
 }
