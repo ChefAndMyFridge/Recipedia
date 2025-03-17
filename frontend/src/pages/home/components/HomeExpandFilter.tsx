@@ -20,11 +20,14 @@ const HomeExpandFilter = ({
       <div>
         <div>
           <div className="flex justify-between items-center h-8 mb-2 border-content">
-            <span className="font-preBold text-sm">필터</span>
+            {filterType === "type" && <span className="font-preBold text-sm">음식 장르</span>}
+            {filterType === "preference" && <span className="font-preBold text-sm">선호 식단</span>}
+            {filterType === "dislike" && <span className="font-preBold text-sm">비선호 식단</span>}
             <button className="font-preBold text-sm text-primary" onClick={() => handleClear(filterType)}>
               초기화
             </button>
           </div>
+
           <div className="flex flex-wrap gap-2">
             {filteringElems.map((elem, index) => (
               <FilterButton
