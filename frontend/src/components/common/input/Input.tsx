@@ -5,7 +5,7 @@ import { InputProps } from "@/types/commonProps.ts";
 const Input = ({ label, name, type, placeHolder, value, onChange, labelTextSize }: InputProps) => {
   return (
     <div className="flex flex-col w-full items-start justify-between gap-2">
-      {label && <label className={`font-preMedium text-[#333] ${labelTextSize} font-semibold`}>{label}</label>}
+      {label && <label className={`font-preMedium text-[#333] ${labelTextSize} font-semibold text-xs`}>{label}</label>}
       <input
         name={name}
         type={type}
