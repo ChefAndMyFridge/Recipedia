@@ -69,6 +69,10 @@ SUMMARY_SYSTEM_INPUT = [
     },
     {
         "role": "system",
+        "content": "조리 순서에 대한 부분은 스크립트 내 시간에 유의해서 작성해줘."
+    },
+    {
+        "role": "system",
         "content": "내가 원하는 정보들을 key : value 형태로 제공해줘"
     },
 ]
