@@ -26,6 +26,7 @@ services:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
     volumes:
       - /home/ubuntu/mysql_data:/var/lib/mysql
+      - ./database/my.cnf:/etc/mysql/conf.d/custom.cnf
     networks:
       - app-network
     restart: always

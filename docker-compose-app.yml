@@ -1,8 +1,8 @@
 services:
   client:
     container_name: my-react
-    # environment:
-    #   - APP_URL=${APP_URL}  # ec2 URL
+    environment:
+      - VITE_API_URL=${VITE_API_URL}  # ec2 URL
     build:
       context: ./frontend   # client 폴더를 빌드 컨텍스트로 지정
       dockerfile: Dockerfile  # 클라이언트용 Dockerfile 경로 (디폴트는 'Dockerfile')
@@ -30,6 +30,10 @@ services:
   
   fastapi:  # FastAPI 서비스 추가! 🚀
     container_name: my-fastapi
+    environment:
+      - YOUTUBE_API_KEY=${YOUTUBE_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - USDA_API_KEY=${USDA_API_KEY}
     build:
       context: ./ai  # FastAPI 코드가 있는 폴더
       dockerfile: Dockerfile  # FastAPI용 Dockerfile
