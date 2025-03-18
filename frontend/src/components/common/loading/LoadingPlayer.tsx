@@ -6,11 +6,12 @@ import egg from "@assets/images/loading/egg.gif";
 import fritada from "@assets/images/loading/fritada.gif";
 import pot from "@assets/images/loading/pot.gif";
 import ricebowl from "@assets/images/loading/ricebowl.gif";
+import seasoning from "@assets/images/loading/seasoning.gif";
 
-const loadingImageList = [book, cutting, egg, fritada, pot, ricebowl];
+const LOADING_IMAGE_LIST = [book, cutting, egg, fritada, pot, ricebowl, seasoning];
 
 const LoadingPlayer = () => {
-  const [currentImage, setCurrentImage] = useState(loadingImageList[0]);
+  const [currentImage, setCurrentImage] = useState(LOADING_IMAGE_LIST[0]);
   const [fade, setFade] = useState(true);
 
   // useMemo를 사용해 이미지 변경 시에만 새로운 좌표 생성
@@ -24,7 +25,7 @@ const LoadingPlayer = () => {
       setTimeout(() => {
         let newImage;
         do {
-          newImage = loadingImageList[Math.floor(Math.random() * loadingImageList.length)];
+          newImage = LOADING_IMAGE_LIST[Math.floor(Math.random() * LOADING_IMAGE_LIST.length)];
         } while (newImage === currentImage);
 
         setCurrentImage(newImage);
