@@ -17,7 +17,15 @@ export interface Ingredients {
 export interface StoreIngredient {
   name: string;
   imageUrl: string;
-  amount: string;
+  amount: number;
+  storagePlace: string;
+  expirationDate: string;
+  incomingDate: string;
+}
+
+export interface StoreResponseIngredient {
+  name: string;
+  amount: number;
   storagePlace: string;
   expirationDate: string;
   incomingDate: string;

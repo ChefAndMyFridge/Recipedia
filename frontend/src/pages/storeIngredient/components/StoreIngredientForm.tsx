@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import { StoreIngredient } from "@/types/ingredientsTypes";
+import { useStoreIngredient } from "@hooks/useIngredientsHooks";
 
 import useModalStore from "@stores/modalStore";
 
@@ -11,13 +12,15 @@ import Keypad from "@components/common/keypad/Keypad";
 import StoreConfirmModal from "@pages/storeIngredient/StoreConfirmModal";
 
 const StoreIngredientForm = () => {
+  const { openModal, closeModal } = useModalStore();
+
+  const { mutate: storeIngredientRequest } = useStoreIngredient();
+
   const [customAmountInput, setCustomAmountInput] = useState<boolean>(false);
   const [keypadValue, setKeypadValue] = useState("");
   const [incomingDate, setIncomingDate] = useState<string>(new Date().toISOString().split("T")[0]);
   const [expirationDate, setExpirationDate] = useState<string>(new Date().toISOString().split("T")[0]);
   const [storagePlace, setStoragePlace] = useState<string>("냉장실");
-
-  const { openModal, closeModal } = useModalStore();
 
   useEffect(() => {
     // 입고일로부터 7일 후 만료일 설정
@@ -42,20 +45,23 @@ const StoreIngredientForm = () => {
     }
 
     const ingredient: StoreIngredient = {
-      name: data.name.toString(),
-      imageUrl: "추후 설정 필요",
-      amount: data.amount.toString(),
-      incomingDate: data.incomingDate.toString(),
-      expirationDate: data.expirationDate.toString(),
-      storagePlace,
+      name: data.name as string,
+      imageUrl: "https://image.com",
+      amount: Number(data.amount),
+      incomingDate: `${data.incomingDate as string}T00:00:00`,
+      expirationDate: `${data.expirationDate as string}T23:59:59`,
+      storagePlace: storagePlace === "냉장실" ? "냉장고" : "냉동고",
     };
 
     console.log(ingredient);
 
     // API 호출
-
-    // 모달 이동
-    openModal(<StoreConfirmModal />);
+    storeIngredientRequest(
+      ingredient, // 저장할 재료 정보
+      {
+        onSuccess: () => openModal(<StoreConfirmModal />),
+      }
+    );
   }
 
   return (
