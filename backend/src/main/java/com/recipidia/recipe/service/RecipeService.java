@@ -16,5 +16,5 @@ public interface RecipeService {
     Mono<ResponseEntity<List<RecipeDto>>> getAllRecipes();
     Mono<RecipeExtractRes> extractRecipe(Long recipeId);
     Mono<Void> saveExtractResult(Long recipeId, RecipeExtractRes extractRes);
-    Mono<RecipeQueryCustomResponse> mapQueryResponse(ResponseEntity<RecipeQueryRes> responseEntity);
+    Mono<RecipeQueryCustomResponse> mapQueryResponse(ResponseEntity<RecipeQueryRes> responseEntity, Long userId);
 }

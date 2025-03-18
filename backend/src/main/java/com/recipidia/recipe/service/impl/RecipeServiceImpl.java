@@ -12,6 +12,7 @@ import com.recipidia.recipe.repository.RecipeRepository;
 import com.recipidia.recipe.request.RecipeQueryReq;
 import com.recipidia.recipe.response.*;
 import com.recipidia.recipe.service.RecipeService;
+import com.recipidia.user.repository.UserRecipeRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -38,13 +39,15 @@ public class RecipeServiceImpl implements RecipeService {
   private final WebClient webClient;
   private final RecipeRepository recipeRepository;
   private final RecipeQueryResConverter queryResConverter = new RecipeQueryResConverter();
+  private final UserRecipeRepository userRecipeRepository;
 
   public RecipeServiceImpl(IngredientService ingredientService, WebClient.Builder webClientBuilder,
-                           RecipeRepository recipeRepository) {
+                           RecipeRepository recipeRepository, UserRecipeRepository userRecipeRepository) {
     this.ingredientService = ingredientService;
     // FastAPI 컨테이너의 서비스명을 사용
     this.webClient = webClientBuilder.baseUrl("http://my-fastapi:8000").build();
     this.recipeRepository = recipeRepository;
+    this.userRecipeRepository = userRecipeRepository;
   }
 
   @Override
@@ -120,7 +123,7 @@ public class RecipeServiceImpl implements RecipeService {
   }
 
   @Override
-  public Mono<RecipeQueryCustomResponse> mapQueryResponse(ResponseEntity<RecipeQueryRes> responseEntity) {
+  public Mono<RecipeQueryCustomResponse> mapQueryResponse(ResponseEntity<RecipeQueryRes> responseEntity, Long userId) {
     RecipeQueryRes queryRes = responseEntity.getBody();
     if (queryRes == null) {
       return Mono.error(new RuntimeException("Response body is null"));
@@ -131,7 +134,7 @@ public class RecipeServiceImpl implements RecipeService {
           String dish = entry.getKey();
           List<VideoInfo> videoList = entry.getValue();
           return Flux.fromIterable(videoList)
-              .flatMap(this::convertVideoInfo)
+              .flatMap(video -> convertVideoInfo(video, userId))
               .collectList()
               .map(videoInfoList -> Tuples.of(dish, videoInfoList));
         })
@@ -142,18 +145,32 @@ public class RecipeServiceImpl implements RecipeService {
             .build());
   }
 
-  private Mono<VideoInfoCustomResponse> convertVideoInfo(VideoInfo video) {
+  private Mono<VideoInfoCustomResponse> convertVideoInfo(VideoInfo video, Long userId) {
     return Mono.fromCallable(() -> recipeRepository.findIdByYoutubeUrl(video.getUrl()))
         .subscribeOn(Schedulers.boundedElastic())
-        .map(recipeId -> VideoInfoCustomResponse.builder()
-            .recipeId(recipeId)
-            .title(video.getTitle())
-            .url(video.getUrl())
-            .channel_title(video.getChannel_title())
-            .duration(video.getDuration())
-            .view_count(video.getView_count())
-            .like_count(video.getLike_count())
-            .build());
+        .flatMap(recipeId ->
+            Mono.fromCallable(() -> userRecipeRepository.findByUserIdAndRecipeId(userId, recipeId))
+                .subscribeOn(Schedulers.boundedElastic())
+                .map(optionalUserRecipe -> {
+                  boolean favorite = false;
+                  double rating = 0.0;
+                  if (optionalUserRecipe.isPresent()) {
+                    favorite = optionalUserRecipe.get().getFavorite();
+                    rating = optionalUserRecipe.get().getRating();
+                  }
+                  return VideoInfoCustomResponse.builder()
+                      .recipeId(recipeId)
+                      .title(video.getTitle())
+                      .url(video.getUrl())
+                      .channel_title(video.getChannel_title())
+                      .duration(video.getDuration())
+                      .view_count(video.getView_count())
+                      .like_count(video.getLike_count())
+                      .favorite(favorite)
+                      .rating(rating)
+                      .build();
+                })
+        );
   }
 
   @Override

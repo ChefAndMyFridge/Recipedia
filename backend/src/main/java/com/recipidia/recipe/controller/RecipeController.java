@@ -36,6 +36,7 @@ public class RecipeController {
                       name = "요청 데이터",
                       value = """
                           {
+                              "user_id" : 1,
                               "ingredients": ["돼지고기", "대파"]
                           }
                           """
@@ -59,32 +60,41 @@ public class RecipeController {
                                 "videos": {
                                   "불고기": [
                                     {
+                                      "recipeId" : 1,
                                       "title": "양념 4개면 '소불고기' 끝!",
                                       "url": "https://www.youtube.com/watch?v=nVzwOOJLt24",
                                       "channel_title": "백종원 PAIK JONG WON",
                                       "duration": "11:39",
                                       "view_count": 4637323,
-                                      "like_count": 47830
+                                      "like_count": 47830,
+                                      "favorite": false,
+                                      "rating": 3.8
                                     }
                                   ],
                                   "소고기 볶음밥": [
                                     {
+                                      "recipeId" : 2,
                                       "title": "[이연복] 고기 볶음밥",
                                       "url": "https://www.youtube.com/watch?v=Gp3AqI76Fyk",
                                       "channel_title": "이연복의 복주머니",
                                       "duration": "8:27",
                                       "view_count": 1210887,
-                                      "like_count": 20958
+                                      "like_count": 20958,
+                                      "favorite": false,
+                                      "rating": 2.6
                                     }
                                   ],
                                   "페퍼 스테이크": [
                                     {
+                                      "recipeId" : 3,
                                       "title": "소고기 볶음 레시피 ㅣ 베이킹 소다 연육 시리즈 - 저렴한 부위 30분만에 안심처럼 연하게 만드는 법",
                                       "url": "https://www.youtube.com/watch?v=CWXPUpr_iHw",
                                       "channel_title": "더 프로키친 [The Prokitchen]",
                                       "duration": "11:47",
                                       "view_count": 45840,
-                                      "like_count": 984
+                                      "like_count": 984,
+                                      "favorite": true,
+                                      "rating": 4.2
                                     }
                                   ]
                                 }
@@ -101,7 +111,7 @@ public class RecipeController {
             recipeService.saveRecipeResult(responseEntity)
                 .thenReturn(responseEntity)
         )
-        .flatMap(recipeService::mapQueryResponse)
+        .flatMap(responseEntity -> recipeService.mapQueryResponse(responseEntity, request.getUserId()))
         .map(ResponseEntity::ok);
   }
 

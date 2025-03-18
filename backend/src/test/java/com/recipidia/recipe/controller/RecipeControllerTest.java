@@ -45,7 +45,8 @@ public class RecipeControllerTest {
 
   @Test
   public void testQueryRecipe() {
-    RecipeQueryReq request = new RecipeQueryReq(List.of("돼지고기", "대파"));
+    // 변경된 RecipeQueryReq: 첫번째 인자는 userId, 두번째 인자는 ingredients 목록
+    RecipeQueryReq request = new RecipeQueryReq(1L, List.of("돼지고기", "대파"));
 
     // 더미 RecipeQueryRes 생성: handleRecipeQuery의 반환 타입에 맞춤
     RecipeQueryRes dummyQueryRes = RecipeQueryRes.builder()
@@ -64,7 +65,8 @@ public class RecipeControllerTest {
         .thenReturn(Mono.just(dummyResponseEntity));
     when(recipeService.saveRecipeResult(dummyResponseEntity))
         .thenReturn(Mono.empty());
-    when(recipeService.mapQueryResponse(dummyResponseEntity))
+    // userId를 두 번째 인자로 전달
+    when(recipeService.mapQueryResponse(dummyResponseEntity, 1L))
         .thenReturn(Mono.just(dummyCustomResponse));
 
     webTestClient.post()
