@@ -1,4 +1,4 @@
-package com.recipidia.recipe.response;
+package com.recipidia.recipe.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;

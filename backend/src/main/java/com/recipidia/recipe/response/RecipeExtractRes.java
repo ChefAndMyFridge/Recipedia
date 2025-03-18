@@ -1,5 +1,7 @@
 package com.recipidia.recipe.response;
 
+import com.recipidia.recipe.dto.CookingInfo;
+import com.recipidia.recipe.dto.CookingStep;
 import lombok.*;
 
 import java.util.List;
@@ -15,5 +17,5 @@ public class RecipeExtractRes {
   private List<IngredientQueryRes> ingredients;
   // private List<String> cooking_tools;
   private List<String> cooking_tips;
-  private Map<String, List<String>> cooking_sequence;
+  private Map<String, CookingStep> cooking_sequence;
 }

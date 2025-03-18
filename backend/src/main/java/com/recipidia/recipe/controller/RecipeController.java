@@ -51,51 +51,43 @@ public class RecipeController {
                           name = "응답 데이터",
                           value = """
                               {
-                                "dishes":[
-                                   "감자 샐러드",
-                                   "고구마 구이",
-                                   "두부 스테이크",
-                                   "양배추 쌈",
-                                   "비지찌개"
+                                "dishes": [
+                                  "불고기",
+                                  "소고기 볶음밥",
+                                  "페퍼 스테이크"
                                 ],
-                                "videos":{
-                                   "감자 샐러드":[
-                                      {
-                                         "title":"감자가 있다면 꼭 이렇게 만들어 보세요!! 맛있고 영양가 높은 아침 식사가 해결돼요~ 전문점보다 더 맛있는 감자 샐러드 만들기",
-                                         "url":"https://www.youtube.com/watch?v=IQeOvKCt9FE",
-                                         "relevance_score":1.0
-                                      }
-                                   ],
-                                   "고구마 구이":[
-                                      {
-                                         "title":"이렇게 구워야 꿀고구마가 됩니다 #shorts #고구마 #에어프라이어",
-                                         "url":"https://www.youtube.com/watch?v=NVkJqs9SXtA",
-                                         "relevance_score":0.8
-                                      }
-                                   ],
-                                   "두부 스테이크":[
-                                      {
-                                         "title":"2천원으로 스테이크 만들기",
-                                         "url":"https://www.youtube.com/watch?v=kGIGdhLGAc4",
-                                         "relevance_score":0.2
-                                      }
-                                   ],
-                                   "양배추 쌈":[
-                                      {
-                                         "title":"이 방법으로 양배추 쌈 먹고 폭풍 감량 꼬고!!🔥 #양배추 #양배추요리 #양배추쌈 #양배추찜 #양배추레시피 #풍자쌈장 #다이어트식단 #다이어트레시피 #다이어터식단 #다이어터",
-                                         "url":"https://www.youtube.com/watch?v=r--8cLCyeJI",
-                                         "relevance_score":1.0
-                                      }
-                                   ],
-                                   "비지찌개":[
-                                      {
-                                         "title":"비지찌개! 이렇게 고소하면 반칙인데요?",
-                                         "url":"https://www.youtube.com/watch?v=lDr6lNjUZ8w",
-                                         "relevance_score":1.0
-                                      }
-                                   ]
-                                },
-                                "execution_time":3.302408218383789
+                                "videos": {
+                                  "불고기": [
+                                    {
+                                      "title": "양념 4개면 '소불고기' 끝!",
+                                      "url": "https://www.youtube.com/watch?v=nVzwOOJLt24",
+                                      "channel_title": "백종원 PAIK JONG WON",
+                                      "duration": "11:39",
+                                      "view_count": 4637323,
+                                      "like_count": 47830
+                                    }
+                                  ],
+                                  "소고기 볶음밥": [
+                                    {
+                                      "title": "[이연복] 고기 볶음밥",
+                                      "url": "https://www.youtube.com/watch?v=Gp3AqI76Fyk",
+                                      "channel_title": "이연복의 복주머니",
+                                      "duration": "8:27",
+                                      "view_count": 1210887,
+                                      "like_count": 20958
+                                    }
+                                  ],
+                                  "페퍼 스테이크": [
+                                    {
+                                      "title": "소고기 볶음 레시피 ㅣ 베이킹 소다 연육 시리즈 - 저렴한 부위 30분만에 안심처럼 연하게 만드는 법",
+                                      "url": "https://www.youtube.com/watch?v=CWXPUpr_iHw",
+                                      "channel_title": "더 프로키친 [The Prokitchen]",
+                                      "duration": "11:47",
+                                      "view_count": 45840,
+                                      "like_count": 984
+                                    }
+                                  ]
+                                }
                               }
                               """
                       )
@@ -184,7 +176,10 @@ public class RecipeController {
                                   cooking_tools: string[],
                                   cooking_tips: string[],
                                   cooking_sequence: {
-                                      [step: string]: string[]
+                                      [step: string]: {
+                                          sequence : string[]
+                                          timestamp : number
+                                      }
                                   }
                               }
                               """

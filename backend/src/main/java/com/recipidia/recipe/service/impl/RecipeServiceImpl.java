@@ -2,7 +2,9 @@ package com.recipidia.recipe.service.impl;
 
 import com.recipidia.ingredient.dto.IngredientInfoDto;
 import com.recipidia.ingredient.service.IngredientService;
+import com.recipidia.recipe.converter.RecipeQueryResConverter;
 import com.recipidia.recipe.dto.RecipeDto;
+import com.recipidia.recipe.dto.VideoInfo;
 import com.recipidia.recipe.entity.Recipe;
 import com.recipidia.recipe.entity.RecipeIngredient;
 import com.recipidia.recipe.exception.NoRecipeException;
@@ -16,8 +18,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
+import reactor.util.function.Tuple2;
+import reactor.util.function.Tuples;
 
 import java.util.HashMap;
 import java.util.List;
@@ -83,6 +88,10 @@ public class RecipeServiceImpl implements RecipeService {
   public Mono<Void> saveRecipeResult(ResponseEntity<RecipeQueryRes> responseEntity) {
     return Mono.fromCallable(() -> {
           RecipeQueryRes recipeQueryRes = responseEntity.getBody();
+          if (recipeQueryRes == null || recipeQueryRes.getDishes() == null) {
+            // 응답이 비어있으면 비어있는 응답 반환. 필요 시 나중에 검색 결과가 없습니다 처리
+            return Mono.empty();
+          }
           // 각 dish(레시피 이름)에 대해 반복
           for (String dish : recipeQueryRes.getDishes()) {
             List<VideoInfo> videoInfos = recipeQueryRes.getVideos().get(dish);
@@ -117,31 +126,34 @@ public class RecipeServiceImpl implements RecipeService {
       return Mono.error(new RuntimeException("Response body is null"));
     }
 
-    RecipeQueryCustomResponse customResponse = RecipeQueryCustomResponse.builder()
-        .dishes(queryRes.getDishes())
-        .videos(queryRes.getVideos().entrySet().stream()
-            .collect(Collectors.toMap(
-                Map.Entry::getKey,
-                entry -> entry.getValue().stream()
-                    .map(this::convertVideoInfo)
-                    .collect(Collectors.toList())
-            )))
-        .build();
-
-    return Mono.just(customResponse);
+    return Flux.fromIterable(queryRes.getVideos().entrySet())
+        .flatMap(entry -> {
+          String dish = entry.getKey();
+          List<VideoInfo> videoList = entry.getValue();
+          return Flux.fromIterable(videoList)
+              .flatMap(this::convertVideoInfo)
+              .collectList()
+              .map(videoInfoList -> Tuples.of(dish, videoInfoList));
+        })
+        .collectMap(Tuple2::getT1, Tuple2::getT2)
+        .map(videosMap -> RecipeQueryCustomResponse.builder()
+            .dishes(queryRes.getDishes())
+            .videos(videosMap)
+            .build());
   }
 
-  private VideoInfoCustomResponse convertVideoInfo(VideoInfo video) {
-    long recipeId = recipeRepository.findIdByYoutubeUrl(video.getUrl());
-    return VideoInfoCustomResponse.builder()
-        .recipeId(recipeId)
-        .title(video.getTitle())
-        .url(video.getUrl())
-        .channel_title(video.getChannel_title())
-        .duration(video.getDuration())
-        .view_count(video.getView_count())
-        .like_count(video.getLike_count())
-        .build();
+  private Mono<VideoInfoCustomResponse> convertVideoInfo(VideoInfo video) {
+    return Mono.fromCallable(() -> recipeRepository.findIdByYoutubeUrl(video.getUrl()))
+        .subscribeOn(Schedulers.boundedElastic())
+        .map(recipeId -> VideoInfoCustomResponse.builder()
+            .recipeId(recipeId)
+            .title(video.getTitle())
+            .url(video.getUrl())
+            .channel_title(video.getChannel_title())
+            .duration(video.getDuration())
+            .view_count(video.getView_count())
+            .like_count(video.getLike_count())
+            .build());
   }
 
   @Override
@@ -161,18 +173,13 @@ public class RecipeServiceImpl implements RecipeService {
   @Override
   @Transactional
   public Mono<RecipeExtractRes> extractRecipe(Long recipeId) {
-    return Mono.fromCallable(() -> recipeRepository.findById(recipeId))
+    return Mono.justOrEmpty(recipeRepository.findById(recipeId))
+        .switchIfEmpty(Mono.error(new NoRecipeException("Recipe not found")))
         .subscribeOn(Schedulers.boundedElastic())
-        .flatMap(optionalRecipe -> {
-          if (optionalRecipe.isEmpty()) {
-            return Mono.error(new NoRecipeException("Recipe not found"));
-          }
-          Recipe recipe = optionalRecipe.get();
-          // 이미 추출된 결과가 있으면 재추출하지 않고 반환
+        .flatMap(recipe -> {
           if (recipe.getTextRecipe() != null) {
             return Mono.just(recipe.getTextRecipe());
           }
-          // 없으면 웹 클라이언트를 통해 추출 수행
           Map<String, String> payload = new HashMap<>();
           payload.put("youtube_url", recipe.getYoutubeUrl());
           return webClient.post()
@@ -181,12 +188,11 @@ public class RecipeServiceImpl implements RecipeService {
               .bodyValue(payload)
               .retrieve()
               .bodyToMono(RecipeExtractRes.class)
-              // 추출 후 DB에 저장하는 로직 추가
               .flatMap(extractRes -> saveExtractResult(recipeId, extractRes)
-                  .thenReturn(extractRes)
-              );
+                  .thenReturn(extractRes));
         });
   }
+
 
   @Override
   @Transactional

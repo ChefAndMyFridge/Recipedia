@@ -1,7 +1,8 @@
-package com.recipidia.recipe.response;
+package com.recipidia.recipe.converter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.recipidia.recipe.response.RecipeQueryRes;
 
 public class RecipeQueryResConverter {
 
