@@ -2,6 +2,7 @@
 import { http, HttpResponse } from "msw";
 import { INGREDIENTS } from "@/data/INGREDIENTS";
 import RECIPE_LIST from "@/data/RECIPE_LIST";
+import DETAIL_RECIPE from "@/data/DETAIL_RECIPE";
 const { VITE_API_URL } = import.meta.env;
 
 const handlers = [
@@ -17,7 +18,7 @@ const handlers = [
 
   //레시피 추출
   http.get(VITE_API_URL + "/v1/recipe/:recipeId", () => {
-    return HttpResponse.json(RECIPE_LIST);
+    return HttpResponse.json(DETAIL_RECIPE);
   }),
 ];
 

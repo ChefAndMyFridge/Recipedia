@@ -1,14 +1,13 @@
 import { RecipeInfo } from "@/types/recipeListTypes";
 
 const DETAIL_RECIPE: RecipeInfo = {
-  recipeId: 1,
   title: "매콤 달콤 소고기 볶음",
   cooking_info: {
     cooking_time: "30",
     kcal: 600,
   },
   ingredients: [
-    "소고기 500g",
+    "소고기 600g",
     "후추 약간",
     "소금 약간",
     "콜라 적당량",
