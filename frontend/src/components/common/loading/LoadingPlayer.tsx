@@ -5,10 +5,9 @@ import cutting from "@assets/images/loading/cutting.gif";
 import egg from "@assets/images/loading/egg.gif";
 import fritada from "@assets/images/loading/fritada.gif";
 import pot from "@assets/images/loading/pot.gif";
-import ricebowl from "@assets/images/loading/ricebowl.gif";
 import seasoning from "@assets/images/loading/seasoning.gif";
 
-const LOADING_IMAGE_LIST = [book, cutting, egg, fritada, pot, ricebowl, seasoning];
+const LOADING_IMAGE_LIST = [book, cutting, egg, fritada, pot, seasoning];
 
 const LoadingPlayer = () => {
   const [currentImage, setCurrentImage] = useState(LOADING_IMAGE_LIST[0]);
