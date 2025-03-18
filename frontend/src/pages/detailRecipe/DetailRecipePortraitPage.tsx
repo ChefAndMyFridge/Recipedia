@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ReactPlayer from "react-player";
 import useModalStore from "@stores/modalStore";
 import VideoInfos from "@components/common/videoInfo/VideoInfos";
@@ -7,16 +7,11 @@ import Header from "@components/Layout/Header";
 import Button from "@components/common/button/Button";
 import RecipeRatingModal from "@components/recipeRating/RecipeRatingModal";
 import Modal from "@components/common/modal/Modal";
+import ErrorPage from "@components/common/error/ErrorPage";
 import RecipeInfos from "@pages/detailRecipe/components/RecipeInfos";
 import RecipeTitle from "@pages/detailRecipe/components/RecipeTitle";
 import RecipeTexts from "@pages/detailRecipe/components/RecipeTexts";
-import { Video } from "@/types/recipeListTypes";
-import RECIPE_LIST from "@/data/RECIPE_LIST";
-import DETAIL_RECIPE from "@/data/DETAIL_RECIPE";
-
-//임의 데이터
-const video: Video = RECIPE_LIST.videos["불고기"][0];
-const DetailRecipeText = DETAIL_RECIPE.cooking_sequence;
+import recipeStore from "@stores/recipeStore";
 
 //세로모드 레이아웃
 const DetailRecipePortraitPage = () => {
@@ -24,7 +19,14 @@ const DetailRecipePortraitPage = () => {
   const navigate = useNavigate();
   const [isRecipeOpen, setIsRecipeOpen] = useState<boolean>(false);
 
-  //detailRecipe 페이지 진입 시, 해당 레시피 정보 get api 호출 예정
+  const { recipeList, detailRecipe, findRecipeVideo } = recipeStore();
+  const { recipeId } = useParams();
+
+  if (Object.keys(recipeList.videos).length === 0 || detailRecipe.title === "") {
+    return <ErrorPage />;
+  }
+
+  const video = findRecipeVideo(recipeList, Number(recipeId));
 
   return (
     <>
@@ -42,7 +44,7 @@ const DetailRecipePortraitPage = () => {
         />
         <RecipeTitle video={video} isRecipeOpen={isRecipeOpen} setIsRecipeOpen={setIsRecipeOpen} />
         {isRecipeOpen ? (
-          <RecipeTexts recipe={DetailRecipeText} />
+          <RecipeTexts recipe={detailRecipe.cooking_sequence} />
         ) : (
           <div className="flex-1 flex flex-col gap-4 items-center overflow-auto relative">
             <VideoInfos video={video} />
