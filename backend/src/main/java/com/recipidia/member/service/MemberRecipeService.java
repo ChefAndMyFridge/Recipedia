@@ -9,5 +9,5 @@ import java.util.List;
 public interface MemberRecipeService {
   MemberRecipeDto rateRecipe(RatingReq request);
   MemberRecipeDto favoriteRecipe(FavoriteReq request);
-  List<MemberRecipeDto> getUserRecipes(Long userId);
+  List<MemberRecipeDto> getMemberRecipes(Long memberId);
 }

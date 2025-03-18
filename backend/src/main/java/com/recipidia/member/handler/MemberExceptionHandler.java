@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 public class MemberExceptionHandler {
 
   @ExceptionHandler(MemberNotFoundException.class)
-  public ResponseEntity<String> handleUserNotFound(MemberNotFoundException ex) {
+  public ResponseEntity<String> handleMemberNotFound(MemberNotFoundException ex) {
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
   }
 

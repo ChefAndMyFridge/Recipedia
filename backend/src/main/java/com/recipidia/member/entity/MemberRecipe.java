@@ -17,7 +17,7 @@ public class MemberRecipe {
 
   // 사용자와의 연관관계 (ManyToOne)
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_id", nullable = false)
+  @JoinColumn(name = "member_id", nullable = false)
   private Member member;
 
   // 레시피와의 연관관계 (ManyToOne)

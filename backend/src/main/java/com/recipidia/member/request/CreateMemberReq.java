@@ -1,3 +1,3 @@
 package com.recipidia.member.request;
 
-public record CreateMemberReq(String username) { }
+public record CreateMemberReq(String membername) { }

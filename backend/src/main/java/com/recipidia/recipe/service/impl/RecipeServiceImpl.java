@@ -123,7 +123,7 @@ public class RecipeServiceImpl implements RecipeService {
   }
 
   @Override
-  public Mono<RecipeQueryCustomResponse> mapQueryResponse(ResponseEntity<RecipeQueryRes> responseEntity, Long userId) {
+  public Mono<RecipeQueryCustomResponse> mapQueryResponse(ResponseEntity<RecipeQueryRes> responseEntity, Long memberId) {
     RecipeQueryRes queryRes = responseEntity.getBody();
     if (queryRes == null) {
       return Mono.error(new RuntimeException("Response body is null"));
@@ -134,7 +134,7 @@ public class RecipeServiceImpl implements RecipeService {
           String dish = entry.getKey();
           List<VideoInfo> videoList = entry.getValue();
           return Flux.fromIterable(videoList)
-              .flatMap(video -> convertVideoInfo(video, userId))
+              .flatMap(video -> convertVideoInfo(video, memberId))
               .collectList()
               .map(videoInfoList -> Tuples.of(dish, videoInfoList));
         })
@@ -145,18 +145,18 @@ public class RecipeServiceImpl implements RecipeService {
             .build());
   }
 
-  private Mono<VideoInfoCustomResponse> convertVideoInfo(VideoInfo video, Long userId) {
+  private Mono<VideoInfoCustomResponse> convertVideoInfo(VideoInfo video, Long memberId) {
     return Mono.fromCallable(() -> recipeRepository.findIdByYoutubeUrl(video.getUrl()))
         .subscribeOn(Schedulers.boundedElastic())
         .flatMap(recipeId ->
-            Mono.fromCallable(() -> memberRecipeRepository.findByUserIdAndRecipeId(userId, recipeId))
+            Mono.fromCallable(() -> memberRecipeRepository.findByMemberIdAndRecipeId(memberId, recipeId))
                 .subscribeOn(Schedulers.boundedElastic())
-                .map(optionalUserRecipe -> {
+                .map(optionalMemberRecipe -> {
                   boolean favorite = false;
                   double rating = 0.0;
-                  if (optionalUserRecipe.isPresent()) {
-                    favorite = optionalUserRecipe.get().getFavorite();
-                    rating = optionalUserRecipe.get().getRating();
+                  if (optionalMemberRecipe.isPresent()) {
+                    favorite = optionalMemberRecipe.get().getFavorite();
+                    rating = optionalMemberRecipe.get().getRating();
                   }
                   return VideoInfoCustomResponse.builder()
                       .recipeId(recipeId)

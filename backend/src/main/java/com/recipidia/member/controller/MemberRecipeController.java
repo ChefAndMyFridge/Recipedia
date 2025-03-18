@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/user/recipe")
+@RequestMapping("/api/v1/member/recipe")
 @RequiredArgsConstructor
 public class MemberRecipeController {
   private final MemberRecipeService memberRecipeService;
@@ -92,16 +92,16 @@ public class MemberRecipeController {
                   examples = @ExampleObject(value = """
                     [
                       {
-                        "userRecipeId": 1,
-                        "userId": 10,
+                        "memberRecipeId": 1,
+                        "memberId": 10,
                         "recipeId": 100,
                         "rating": 5,
                         "favorite": true,
                         "createdAt": "2025-03-18T13:45:00"
                       },
                       {
-                        "userRecipeId": 2,
-                        "userId": 10,
+                        "memberRecipeId": 2,
+                        "memberId": 10,
                         "recipeId": 101,
                         "rating": 4,
                         "favorite": false,
@@ -116,14 +116,14 @@ public class MemberRecipeController {
               description = "사용자를 찾을 수 없음",
               content = @Content(
                   mediaType = "application/json",
-                  examples = @ExampleObject(value = "{\"message\": \"User not found with id: 10\"}")
+                  examples = @ExampleObject(value = "{\"message\": \"Member not found with id: 10\"}")
               )
           )
       }
   )
-  @GetMapping("/{userId}")
-  public ResponseEntity<List<MemberRecipeDto>> getUserRecipes(@PathVariable Long userId) {
-    List<MemberRecipeDto> userRecipes = memberRecipeService.getUserRecipes(userId);
-    return ResponseEntity.ok(userRecipes);
+  @GetMapping("/{memberId}")
+  public ResponseEntity<List<MemberRecipeDto>> getMemberRecipes(@PathVariable Long memberId) {
+    List<MemberRecipeDto> memberRecipes = memberRecipeService.getMemberRecipes(memberId);
+    return ResponseEntity.ok(memberRecipes);
   }
 }

@@ -33,17 +33,17 @@ public class MemberRecipeServiceImpl implements MemberRecipeService {
   @Override
   public MemberRecipeDto rateRecipe(RatingReq request) {
     // 사용자와 레시피 엔티티 조회
-    Member member = memberRepository.findById(request.userId())
-        .orElseThrow(() -> new MemberNotFoundException(request.userId()));
+    Member member = memberRepository.findById(request.memberId())
+        .orElseThrow(() -> new MemberNotFoundException(request.memberId()));
     Recipe recipe = recipeRepository.findById(request.recipeId())
         .orElseThrow(() -> new RecipeNotFoundException(request.recipeId()));
 
-    // 해당 사용자와 레시피의 UserRecipe 레코드가 존재하는지 확인
-    Optional<MemberRecipe> optionalUserRecipe = memberRecipeRepository.findByUserIdAndRecipeId(member.getId(), recipe.getId());
+    // 해당 사용자와 레시피의 MemberRecipe 레코드가 존재하는지 확인
+    Optional<MemberRecipe> optionalMemberRecipe = memberRecipeRepository.findByMemberIdAndRecipeId(member.getId(), recipe.getId());
     MemberRecipe memberRecipe;
-    if (optionalUserRecipe.isPresent()) {
+    if (optionalMemberRecipe.isPresent()) {
       // 기존 레코드가 있다면 별점만 업데이트
-      memberRecipe = optionalUserRecipe.get();
+      memberRecipe = optionalMemberRecipe.get();
       memberRecipe.updateRating(request.rating());
     } else {
       // 없으면 새로 생성 (즐겨찾기는 기본 false로 설정)
@@ -62,17 +62,17 @@ public class MemberRecipeServiceImpl implements MemberRecipeService {
   @Override
   public MemberRecipeDto favoriteRecipe(FavoriteReq request) {
     // 사용자와 레시피 엔티티 조회
-    Member member = memberRepository.findById(request.userId())
-        .orElseThrow(() -> new MemberNotFoundException(request.userId()));
+    Member member = memberRepository.findById(request.memberId())
+        .orElseThrow(() -> new MemberNotFoundException(request.memberId()));
     Recipe recipe = recipeRepository.findById(request.recipeId())
         .orElseThrow(() -> new RecipeNotFoundException(request.recipeId()));
 
-    // 해당 사용자와 레시피의 UserRecipe 레코드가 존재하는지 확인
-    Optional<MemberRecipe> optionalUserRecipe = memberRecipeRepository.findByUserIdAndRecipeId(member.getId(), recipe.getId());
+    // 해당 사용자와 레시피의 MemberRecipe 레코드가 존재하는지 확인
+    Optional<MemberRecipe> optionalMemberRecipe = memberRecipeRepository.findByMemberIdAndRecipeId(member.getId(), recipe.getId());
     MemberRecipe memberRecipe;
-    if (optionalUserRecipe.isPresent()) {
+    if (optionalMemberRecipe.isPresent()) {
       // 기존 레코드가 있다면 즐겨찾기 값만 업데이트
-      memberRecipe = optionalUserRecipe.get();
+      memberRecipe = optionalMemberRecipe.get();
       memberRecipe.updateFavorite(request.favorite());
     } else {
       // 없으면 새로 생성 (별점은 null로 설정)
@@ -90,11 +90,11 @@ public class MemberRecipeServiceImpl implements MemberRecipeService {
 
   @Override
   @Transactional(readOnly = true)
-  public List<MemberRecipeDto> getUserRecipes(Long userId) {
-    Member member = memberRepository.findById(userId)
-        .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+  public List<MemberRecipeDto> getMemberRecipes(Long memberId) {
+    Member member = memberRepository.findById(memberId)
+        .orElseThrow(() -> new IllegalArgumentException("Member not found with id: " + memberId));
 
-    return memberRecipeRepository.findAllByUser(member)
+    return memberRecipeRepository.findAllByMember(member)
         .stream()
         .map(MemberRecipeDto::fromEntity)
         .collect(Collectors.toList());

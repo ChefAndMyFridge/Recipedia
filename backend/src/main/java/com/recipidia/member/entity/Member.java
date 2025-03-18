@@ -16,18 +16,18 @@ public class Member {
   private Long id;
 
   @Column(nullable = false, unique = true)
-  private String username;
+  private String membername;
 
   // 추가된 부분 (양방향 관계 설정)
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<MemberRecipe> memberRecipes = new ArrayList<>();
 
   @Builder
-  public Member(String username) {
-    this.username = username;
+  public Member(String membername) {
+    this.membername = membername;
   }
 
-  public void updateUsername(String newUsername) {
-    this.username = newUsername;
+  public void updateMembername(String newMembername) {
+    this.membername = newMembername;
   }
 }

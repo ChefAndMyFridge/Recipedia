@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 /**
  * DTO for {@link MemberRecipe}
  */
-public record MemberRecipeDto(Long userRecipeId, Long userId, Long recipeId,
+public record MemberRecipeDto(Long memberRecipeId, Long memberId, Long recipeId,
                               Integer rating, Boolean favorite, LocalDateTime createdAt)
     implements Serializable {
 

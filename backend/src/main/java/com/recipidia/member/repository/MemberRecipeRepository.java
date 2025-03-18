@@ -10,6 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface MemberRecipeRepository extends JpaRepository<MemberRecipe, Long> {
-  Optional<MemberRecipe> findByUserIdAndRecipeId(Long userId, Long recipeId);
-  List<MemberRecipe> findAllByUser(Member member);
+  Optional<MemberRecipe> findByMemberIdAndRecipeId(Long memberId, Long recipeId);
+  List<MemberRecipe> findAllByMember(Member member);
 }

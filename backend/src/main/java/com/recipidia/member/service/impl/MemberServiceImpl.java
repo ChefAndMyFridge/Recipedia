@@ -20,10 +20,10 @@ public class MemberServiceImpl implements MemberService {
 
   @Override
   @Transactional
-  public MemberDto createUser(String username) {
+  public MemberDto createMember(String membername) {
     // 필요에 따라 중복 체크 등 로직 추가
     Member member = Member.builder()
-        .username(username)
+        .membername(membername)
         .build();
     member = memberRepository.save(member);
     return MemberDto.fromEntity(member);
@@ -31,22 +31,22 @@ public class MemberServiceImpl implements MemberService {
 
   @Override
   @Transactional
-  public MemberDto updateUsername(Long userId, String newUsername) {
-    Member member = memberRepository.findById(userId)
-        .orElseThrow(() -> new RuntimeException("User not found"));
-    // User 엔티티에 updateUsername 메서드가 있다고 가정
-    member.updateUsername(newUsername);
+  public MemberDto updateMembername(Long memberId, String newMembername) {
+    Member member = memberRepository.findById(memberId)
+        .orElseThrow(() -> new RuntimeException("Member not found"));
+    // Member 엔티티에 updateMembername 메서드가 있다고 가정
+    member.updateMembername(newMembername);
     return MemberDto.fromEntity(member);
   }
 
   @Override
   @Transactional
-  public void deleteUser(Long userId) {
-    memberRepository.deleteById(userId);
+  public void deleteMember(Long memberId) {
+    memberRepository.deleteById(memberId);
   }
 
   @Override
-  public List<MemberDto> getAllUsers() {
+  public List<MemberDto> getAllMembers() {
     return memberRepository.findAll().stream()
         .map(MemberDto::fromEntity)
         .collect(Collectors.toList());
