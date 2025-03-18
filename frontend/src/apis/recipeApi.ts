@@ -13,7 +13,7 @@ export const makeRecipeApi = async (ingredients: string[]): Promise<RecipeList> 
   }
 };
 
-export const getRecipeDetailApi = async (recipeId: string) => {
+export const getRecipeDetailApi = async (recipeId: number) => {
   try {
     const response = await instance.get(`/v1/recipe/${recipeId}`);
     return response.data;

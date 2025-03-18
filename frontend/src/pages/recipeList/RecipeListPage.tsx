@@ -4,6 +4,7 @@ import RecipeList from "@pages/recipeList/components/RecipeList";
 import SelectedIngredients from "@pages/recipeList/components/RecipeListSelectedIngredients";
 import Header from "@components/Layout/Header";
 import Error from "@components/common/error/ErrorPage";
+import LoadingPlayer from "@components/common/loading/LoadingPlayer";
 import useIngredientsStore from "@stores/ingredientsStore";
 import { usePostRecipeList } from "@hooks/useRecipeHooks";
 
@@ -15,7 +16,9 @@ const RecipeListPage = () => {
   const selectedIngredientsNames = Object.values(selectedIngredients).map((ingredient) => ingredient.name);
 
   //선택된 재료 기반 레시피 조회 Hook 호출
-  usePostRecipeList(selectedIngredientsNames);
+  const { isLoading } = usePostRecipeList(selectedIngredientsNames);
+
+  if (isLoading) return <LoadingPlayer />;
 
   return (
     <section className="flex flex-col h-screen p-3">

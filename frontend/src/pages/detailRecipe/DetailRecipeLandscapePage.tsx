@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ReactPlayer from "react-player";
 import useModalStore from "@stores/modalStore";
 import VideoInfos from "@components/common/videoInfo/VideoInfos";
@@ -10,13 +10,7 @@ import Modal from "@components/common/modal/Modal";
 import RecipeInfos from "@pages/detailRecipe/components/RecipeInfos";
 import RecipeTitle from "@pages/detailRecipe/components/RecipeTitle";
 import RecipeTexts from "@pages/detailRecipe/components/RecipeTexts";
-import { Video } from "@/types/recipeListTypes";
-import RECIPE_LIST from "@/data/RECIPE_LIST";
-import DETAIL_RECIPE from "@/data/DETAIL_RECIPE";
-
-//임의 데이터
-const video: Video = RECIPE_LIST.videos["불고기"][0];
-const DetailRecipeText = DETAIL_RECIPE.cooking_sequence;
+import recipeStore from "@stores/recipeStore";
 
 //가로모드 레이아웃
 const DetailRecipeLandscapePage = () => {
@@ -24,8 +18,11 @@ const DetailRecipeLandscapePage = () => {
   const navigate = useNavigate();
   const [isRecipeOpen, setIsRecipeOpen] = useState<boolean>(false);
 
-  //detailRecipe 페이지 진입 시, 해당 레시피 정보 get api 호출 예정
+  const { recipeList, detailRecipe, findRecipeVideo } = recipeStore();
+  const { recipeId } = useParams();
 
+  //recipeId를 통해 레시피 영상 정보 조회
+  const video = findRecipeVideo(recipeList, Number(recipeId));
   return (
     <>
       <section className={`w-full h-full flex flex-col justify-start items-center gap-2 p-3`}>
@@ -47,7 +44,9 @@ const DetailRecipeLandscapePage = () => {
           </div>
 
           <div className="w-[35%] h-full flex flex-col justify-between">
-            <div className="h-[70%]">{isRecipeOpen ? <RecipeTexts recipe={DetailRecipeText} /> : <RecipeInfos />}</div>
+            <div className="h-[70%]">
+              {isRecipeOpen ? <RecipeTexts recipe={detailRecipe.cooking_sequence} /> : <RecipeInfos />}
+            </div>
 
             {/* 버튼 컨테이너 */}
             <div className="w-full flex justify-end items-center gap-2">
