@@ -10,7 +10,7 @@ const HomeSelectedIngredients = () => {
   const { openModal } = useModalStore();
 
   return (
-    <div className="flex justify-between items-center w-full h-full p-2 bg-white rounded-xl">
+    <div className="flex justify-between items-center w-full h-full px-2 bg-white rounded-xl">
       <div className="flex items-center justify-start w-4/5 h-full gap-2">
         {Object.values(selectedIngredients).map((ingredient) => (
           <div key={ingredient.ingredientInfoId} className="w-12 aspect-[1/1]">
