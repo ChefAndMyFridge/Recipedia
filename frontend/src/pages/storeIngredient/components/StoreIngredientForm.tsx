@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import { StoreIngredient } from "@/types/ingredientsTypes";
+
 import useModalStore from "@stores/modalStore";
 
 import Input from "@components/common/input/Input.tsx";
@@ -39,12 +41,12 @@ const StoreIngredientForm = () => {
       return;
     }
 
-    const ingredient = {
-      name: data.name,
+    const ingredient: StoreIngredient = {
+      name: data.name.toString(),
       imageUrl: "추후 설정 필요",
-      amount: Number(data.amount),
-      incomingDate: data.incomingDate,
-      expirationDate: data.expirationDate,
+      amount: data.amount.toString(),
+      incomingDate: data.incomingDate.toString(),
+      expirationDate: data.expirationDate.toString(),
       storagePlace,
     };
 

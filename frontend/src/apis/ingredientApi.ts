@@ -1,9 +1,12 @@
+import { Ingredients } from "@/types/ingredientsTypes";
+
 import instance from "./instance";
 
-const getIngredients = async () => {
-  const response = await instance.get("/v1/ingredient");
-  console.log("재료 조회", response.data);
-  return response.data;
+export const getIngredients = async (): Promise<Ingredients[]> => {
+  try {
+    const response = await instance.get("v1/ingredient");
+    return response.data;
+  } catch (error: unknown) {
+    throw new Error(error as string);
+  }
 };
-
-export { getIngredients };

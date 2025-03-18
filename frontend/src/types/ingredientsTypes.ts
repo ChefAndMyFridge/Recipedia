@@ -14,6 +14,15 @@ export interface Ingredients {
   ingredients: Ingredient[];
 }
 
+export interface StoreIngredient {
+  name: string;
+  imageUrl: string;
+  amount: string;
+  storagePlace: string;
+  expirationDate: string;
+  incomingDate: string;
+}
+
 export interface SelectedIngredients {
   ingredientInfoId: number;
   name: string;
