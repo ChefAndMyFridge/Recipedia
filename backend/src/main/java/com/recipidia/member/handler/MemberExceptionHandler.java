@@ -1,16 +1,16 @@
-package com.recipidia.user.handler;
+package com.recipidia.member.handler;
 
-import com.recipidia.user.exception.RecipeNotFoundException;
-import com.recipidia.user.exception.UserNotFoundException;
+import com.recipidia.member.exception.RecipeNotFoundException;
+import com.recipidia.member.exception.MemberNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @ControllerAdvice
-public class UserExceptionHandler {
+public class MemberExceptionHandler {
 
-  @ExceptionHandler(UserNotFoundException.class)
-  public ResponseEntity<String> handleUserNotFound(UserNotFoundException ex) {
+  @ExceptionHandler(MemberNotFoundException.class)
+  public ResponseEntity<String> handleUserNotFound(MemberNotFoundException ex) {
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
   }
 

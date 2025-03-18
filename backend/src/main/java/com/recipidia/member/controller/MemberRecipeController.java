@@ -1,9 +1,9 @@
-package com.recipidia.user.controller;
+package com.recipidia.member.controller;
 
-import com.recipidia.user.dto.UserRecipeDto;
-import com.recipidia.user.request.FavoriteReq;
-import com.recipidia.user.request.RatingReq;
-import com.recipidia.user.service.UserRecipeService;
+import com.recipidia.member.dto.MemberRecipeDto;
+import com.recipidia.member.request.FavoriteReq;
+import com.recipidia.member.request.RatingReq;
+import com.recipidia.member.service.MemberRecipeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -18,8 +18,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/user/recipe")
 @RequiredArgsConstructor
-public class UserRecipeController {
-  private final UserRecipeService userRecipeService;
+public class MemberRecipeController {
+  private final MemberRecipeService memberRecipeService;
 
   // 1. 사용자가 레시피에 별점을 줄 때 호출되는 API
   @Operation(
@@ -39,14 +39,14 @@ public class UserRecipeController {
               description = "레시피 별점 평가 성공",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = UserRecipeDto.class)
+                  schema = @Schema(implementation = MemberRecipeDto.class)
               )
           )
       }
   )
   @PostMapping("/rating")
-  public ResponseEntity<UserRecipeDto> rateRecipe(@RequestBody RatingReq ratingRequest) {
-    UserRecipeDto result = userRecipeService.rateRecipe(ratingRequest);
+  public ResponseEntity<MemberRecipeDto> rateRecipe(@RequestBody RatingReq ratingRequest) {
+    MemberRecipeDto result = memberRecipeService.rateRecipe(ratingRequest);
     return ResponseEntity.ok(result);
   }
 
@@ -68,14 +68,14 @@ public class UserRecipeController {
               description = "레시피 즐겨찾기 등록 성공",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = UserRecipeDto.class)
+                  schema = @Schema(implementation = MemberRecipeDto.class)
               )
           )
       }
   )
   @PostMapping("/favorite")
-  public ResponseEntity<UserRecipeDto> favoriteRecipe(@RequestBody FavoriteReq favoriteRequest) {
-    UserRecipeDto result = userRecipeService.favoriteRecipe(favoriteRequest);
+  public ResponseEntity<MemberRecipeDto> favoriteRecipe(@RequestBody FavoriteReq favoriteRequest) {
+    MemberRecipeDto result = memberRecipeService.favoriteRecipe(favoriteRequest);
     return ResponseEntity.ok(result);
   }
 
@@ -88,7 +88,7 @@ public class UserRecipeController {
               description = "사용자 레시피 목록 조회 성공",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = UserRecipeDto.class),
+                  schema = @Schema(implementation = MemberRecipeDto.class),
                   examples = @ExampleObject(value = """
                     [
                       {
@@ -122,8 +122,8 @@ public class UserRecipeController {
       }
   )
   @GetMapping("/{userId}")
-  public ResponseEntity<List<UserRecipeDto>> getUserRecipes(@PathVariable Long userId) {
-    List<UserRecipeDto> userRecipes = userRecipeService.getUserRecipes(userId);
+  public ResponseEntity<List<MemberRecipeDto>> getUserRecipes(@PathVariable Long userId) {
+    List<MemberRecipeDto> userRecipes = memberRecipeService.getUserRecipes(userId);
     return ResponseEntity.ok(userRecipes);
   }
 }

@@ -1,4 +1,4 @@
-package com.recipidia.user.entity;
+package com.recipidia.member.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,8 +9,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "\"user\"") // H2 database 사용을 위한 "" 처리
-public class User {
+public class Member {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,10 +20,10 @@ public class User {
 
   // 추가된 부분 (양방향 관계 설정)
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<UserRecipe> userRecipes = new ArrayList<>();
+  private List<MemberRecipe> memberRecipes = new ArrayList<>();
 
   @Builder
-  public User(String username) {
+  public Member(String username) {
     this.username = username;
   }
 

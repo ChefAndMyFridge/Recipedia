@@ -12,7 +12,7 @@ import com.recipidia.recipe.repository.RecipeRepository;
 import com.recipidia.recipe.request.RecipeQueryReq;
 import com.recipidia.recipe.response.*;
 import com.recipidia.recipe.service.RecipeService;
-import com.recipidia.user.repository.UserRecipeRepository;
+import com.recipidia.member.repository.MemberRecipeRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -39,15 +39,15 @@ public class RecipeServiceImpl implements RecipeService {
   private final WebClient webClient;
   private final RecipeRepository recipeRepository;
   private final RecipeQueryResConverter queryResConverter = new RecipeQueryResConverter();
-  private final UserRecipeRepository userRecipeRepository;
+  private final MemberRecipeRepository memberRecipeRepository;
 
   public RecipeServiceImpl(IngredientService ingredientService, WebClient.Builder webClientBuilder,
-                           RecipeRepository recipeRepository, UserRecipeRepository userRecipeRepository) {
+                           RecipeRepository recipeRepository, MemberRecipeRepository memberRecipeRepository) {
     this.ingredientService = ingredientService;
     // FastAPI 컨테이너의 서비스명을 사용
     this.webClient = webClientBuilder.baseUrl("http://my-fastapi:8000").build();
     this.recipeRepository = recipeRepository;
-    this.userRecipeRepository = userRecipeRepository;
+    this.memberRecipeRepository = memberRecipeRepository;
   }
 
   @Override
@@ -149,7 +149,7 @@ public class RecipeServiceImpl implements RecipeService {
     return Mono.fromCallable(() -> recipeRepository.findIdByYoutubeUrl(video.getUrl()))
         .subscribeOn(Schedulers.boundedElastic())
         .flatMap(recipeId ->
-            Mono.fromCallable(() -> userRecipeRepository.findByUserIdAndRecipeId(userId, recipeId))
+            Mono.fromCallable(() -> memberRecipeRepository.findByUserIdAndRecipeId(userId, recipeId))
                 .subscribeOn(Schedulers.boundedElastic())
                 .map(optionalUserRecipe -> {
                   boolean favorite = false;

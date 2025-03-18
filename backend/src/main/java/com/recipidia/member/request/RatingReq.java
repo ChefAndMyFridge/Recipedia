@@ -1,4 +1,4 @@
-package com.recipidia.user.request;
+package com.recipidia.member.request;
 
 import java.io.Serializable;
 
