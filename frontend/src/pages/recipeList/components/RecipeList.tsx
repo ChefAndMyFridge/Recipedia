@@ -2,6 +2,7 @@ import { useState } from "react";
 import MenuList from "@pages/recipeList/components/RecipeMenuList";
 import Carousel from "@pages/recipeList/components/RecipeCarousel";
 import recipeStore from "@/stores/recipeStore";
+import ErrorPage from "@/components/common/error/ErrorPage";
 
 const RecipeList = () => {
   const { recipeList } = recipeStore();
@@ -14,7 +15,7 @@ const RecipeList = () => {
   return (
     <section className="h-full flex flex-col">
       <MenuList dishes={DISHES} selectedDish={selectedDish} setSelectedDish={setSelectedDish} />
-      <Carousel videos={VIDEOS[selectedDish]} />
+      {VIDEOS && VIDEOS[selectedDish].length > 0 ? <Carousel videos={VIDEOS[selectedDish]} /> : <ErrorPage />}
     </section>
   );
 };

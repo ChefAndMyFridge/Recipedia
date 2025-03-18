@@ -10,10 +10,10 @@ const handlers = [
     return HttpResponse.json(INGREDIENTS);
   }),
 
-  // //레시피 목록 조회
-  // http.post(VITE_API_URL + "/v1/recipe", () => {
-  //   return HttpResponse.json(RECIPE_LIST);
-  // }),
+  //레시피 목록 조회
+  http.post(VITE_API_URL + "/v1/recipe", () => {
+    return HttpResponse.json(RECIPE_LIST);
+  }),
 
   //레시피 추출
   http.get(VITE_API_URL + "/v1/recipe/:recipeId", () => {

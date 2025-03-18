@@ -3,7 +3,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import RecipeList from "@pages/recipeList/components/RecipeList";
 import SelectedIngredients from "@pages/recipeList/components/RecipeListSelectedIngredients";
 import Header from "@components/Layout/Header";
-import Error from "@components/common/error/Error";
+import Error from "@/components/common/error/ErrorPage";
 import useIngredientsStore from "@stores/ingredientsStore";
 import { usePostRecipeList } from "@hooks/useRecipeHooks";
 

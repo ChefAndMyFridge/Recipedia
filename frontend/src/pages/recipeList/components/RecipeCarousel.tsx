@@ -1,6 +1,6 @@
-import { Video } from "@/types/recipeListTypes";
 import { useState } from "react";
-import RecipeCard from "./RecipeCard";
+import { Video } from "@/types/recipeListTypes";
+import RecipeCard from "@pages/recipeList/components/RecipeCard";
 
 interface RecipeCarouselProps {
   videos: Video[];
