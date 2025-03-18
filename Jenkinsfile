@@ -8,6 +8,7 @@ pipeline {
         YOUTUBE_API_KEY = credentials('YOUTUBE_API_KEY')
         OPENAI_API_KEY = credentials('OPENAI_API_KEY')
         USDA_API_KEY = credentials('USDA_API_KEY')
+        ALLOWED_ORIGINS = credentials('ALLOWED_ORIGINS')
     }
 
     stages {
@@ -17,6 +18,24 @@ pipeline {
                 script {
                     echo "Checking out branch: ${env.BRANCH_NAME}"
                     git branch: env.BRANCH_NAME, credentialsId: 'my-gitlab-token', url: 'https://lab.ssafy.com/s12-s-project/S12P21S003.git'
+                }
+            }
+        }
+
+        stage('Check Environment Variables') {
+            steps {
+                script {
+                    sh """
+                    echo "====================[CHECK ENVIRONMENT VARIABLES]===================="
+                    echo "MYSQL_ROOT_PASSWORD: ${env.MYSQL_ROOT_PASSWORD}"
+                    echo "MYSQL_DATABASE: ${env.MYSQL_DATABASE}"
+                    echo "VITE_API_URL: ${env.VITE_API_URL}"
+                    echo "YOUTUBE_API_KEY: ${env.YOUTUBE_API_KEY}"
+                    echo "OPENAI_API_KEY: ${env.OPENAI_API_KEY}"
+                    echo "USDA_API_KEY: ${env.USDA_API_KEY}"
+                    echo "ALLOWED_ORIGINS: ${env.ALLOWED_ORIGINS}"
+                    echo "========================================================================"
+                    """
                 }
             }
         }
