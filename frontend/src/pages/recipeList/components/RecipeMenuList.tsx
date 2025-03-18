@@ -2,7 +2,7 @@ import { VideoList } from "@/types/recipeListTypes";
 
 interface RecipeMenuListProps {
   dishes: string[];
-  selectedDish: keyof VideoList;
+  selectedDish: keyof VideoList | string;
   setSelectedDish: (dish: keyof VideoList) => void;
 }
 

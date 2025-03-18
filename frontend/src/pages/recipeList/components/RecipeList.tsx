@@ -6,16 +6,19 @@ import ErrorPage from "@/components/common/error/ErrorPage";
 
 const RecipeList = () => {
   const { recipeList } = recipeStore();
-  const DISHES = recipeList.dishes;
+  const DISHES = recipeList.dishes.length > 0 ? recipeList.dishes : ["레시피가 없습니다"];
   const VIDEOS = recipeList.videos;
 
-  console.log(recipeList);
-  const [selectedDish, setSelectedDish] = useState<keyof typeof VIDEOS>(DISHES[0]);
+  const [selectedDish, setSelectedDish] = useState<keyof typeof VIDEOS | string>(DISHES[0]);
 
   return (
     <section className="h-full flex flex-col">
       <MenuList dishes={DISHES} selectedDish={selectedDish} setSelectedDish={setSelectedDish} />
-      {VIDEOS && VIDEOS[selectedDish].length > 0 ? <Carousel videos={VIDEOS[selectedDish]} /> : <ErrorPage />}
+      {VIDEOS && VIDEOS[selectedDish] && VIDEOS[selectedDish].length > 0 ? (
+        <Carousel videos={VIDEOS[selectedDish]} />
+      ) : (
+        <ErrorPage />
+      )}
     </section>
   );
 };
