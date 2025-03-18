@@ -1,6 +1,6 @@
+import { useParams } from "react-router-dom";
 import { INGREDIENTS } from "@/data/INGREDIENTS";
 import { Ingredients } from "@/types/ingredientsTypes";
-import { useParams } from "react-router-dom";
 
 const RecipeListSelectedIngredients = () => {
   //사용자 선택 재료 (추후 데이터 변경)

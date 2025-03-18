@@ -15,7 +15,7 @@ import RECIPE_LIST from "@/data/RECIPE_LIST";
 import DETAIL_RECIPE from "@/data/DETAIL_RECIPE";
 
 //임의 데이터
-const video: Video = RECIPE_LIST.videos["소고기 파전"][0];
+const video: Video = RECIPE_LIST.videos["불고기"][0];
 const DetailRecipeText = DETAIL_RECIPE.cooking_sequence;
 
 //가로모드 레이아웃
