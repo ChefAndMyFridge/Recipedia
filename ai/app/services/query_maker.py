@@ -2,7 +2,7 @@ import time
 import asyncio
 from typing import List, Dict, Optional, Any, Union
 from app.services.LLM.food_generator import generate_dish_names
-from app.services.external_api.youtube_api import get_youtube_videos
+from app.services.external_api.youtube_lib import get_youtube_videos
 from app.core.config import settings
 import logging
 
@@ -173,6 +173,9 @@ class QueryMaker:
 
                     if 'channel_title' in first_video:
                         print(f"   채널: {first_video['channel_title']}")
+                    
+                    if 'duration' in first_video:
+                        print(f"   길이: {first_video['duration']}")
 
                     if 'view_count' in first_video:
                         print(f"   조회수: {first_video['view_count']}")
