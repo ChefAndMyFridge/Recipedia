@@ -27,7 +27,8 @@ def get_error_log_file_path():
 
 class CustomTimedRotatingFileHandler(TimedRotatingFileHandler):
     def __init__(self, filename, when, interval, backupCount, encoding):
-        self.baseFilenameFunc = filename  # 동적으로 파일명을 설정할 함수 저장
+        # 동적으로 파일명을 설정할 함수 저장
+        self.baseFilenameFunc = filename
         super().__init__(filename(), when=when, interval=interval,
                          backupCount=backupCount, encoding=encoding)
 
@@ -35,7 +36,8 @@ class CustomTimedRotatingFileHandler(TimedRotatingFileHandler):
         """
         날짜가 변경되었을 때 새로운 파일 이름을 설정하여 자동 회전.
         """
-        self.baseFilename = self.baseFilenameFunc()  # 새로운 날짜의 파일 경로로 업데이트
+        # 새로운 날짜의 파일 경로로 업데이트
+        self.baseFilename = self.baseFilenameFunc()
         super().doRollover()  # 기본 회전 실행
 
     def shouldRollover(self, record):
@@ -44,9 +46,11 @@ class CustomTimedRotatingFileHandler(TimedRotatingFileHandler):
         """
         current_date = datetime.now().strftime("%Y-%m-%d")
 
+        # 파일 이름은 ~_{date}.log 형태임.
         log_file_date = os.path.basename(
             self.baseFilename).split("_")[-1].split(".")[0]
-        return current_date != log_file_date  # 날짜가 다르면 회전 필요
+        # 날짜가 다르면 회전 필요
+        return current_date != log_file_date
 
 
 # 일반 로그 핸들러 (날짜 변경 시 자동 회전)
@@ -92,4 +96,5 @@ def close_log_handlers():
         logger.removeHandler(handler)
 
 
-atexit.register(close_log_handlers)  # 프로그램 종료 시 자동 실행
+# 프로그램 종료 시 자동 실행
+atexit.register(close_log_handlers)
