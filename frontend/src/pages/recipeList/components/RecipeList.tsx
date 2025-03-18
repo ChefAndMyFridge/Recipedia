@@ -8,6 +8,7 @@ const RecipeList = () => {
   const DISHES = recipeList.dishes;
   const VIDEOS = recipeList.videos;
 
+  console.log(recipeList);
   const [selectedDish, setSelectedDish] = useState<keyof typeof VIDEOS>(DISHES[0]);
 
   return (

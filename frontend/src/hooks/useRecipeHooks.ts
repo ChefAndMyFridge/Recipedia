@@ -8,8 +8,9 @@ export const usePostRecipeList = (ingredients: string[]) => {
   const { setRecipeList } = recipeStore();
 
   const query = useQuery<RecipeList>({
-    queryKey: ["recipeList"],
+    queryKey: ["recipeList", ingredients],
     queryFn: () => makeRecipeApi(ingredients),
+    staleTime: 1000 * 60 * 5, //5분
     throwOnError: true,
   });
 

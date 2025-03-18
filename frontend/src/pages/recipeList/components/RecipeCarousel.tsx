@@ -26,11 +26,12 @@ const RecipeCarousel = ({ videos }: RecipeCarouselProps) => {
           className="flex transition-transform duration-500"
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         >
-          {videos.map((video) => (
-            <div key={video.title} className="w-full flex-shrink-0">
-              <RecipeCard video={video} />
-            </div>
-          ))}
+          {videos &&
+            videos.map((video) => (
+              <div key={video.title} className="w-full flex-shrink-0">
+                <RecipeCard video={video} />
+              </div>
+            ))}
         </div>
       </div>
 
@@ -43,12 +44,13 @@ const RecipeCarousel = ({ videos }: RecipeCarouselProps) => {
       </button>
 
       <div className="flex gap-2">
-        {videos.map((video, index) => (
-          <div
-            key={video.title}
-            className={`w-2 h-2 rounded-full ${index === currentIndex ? "bg-primary" : "bg-subContent"}`}
-          ></div>
-        ))}
+        {videos &&
+          videos.map((video, index) => (
+            <div
+              key={video.title}
+              className={`w-2 h-2 rounded-full ${index === currentIndex ? "bg-primary" : "bg-subContent"}`}
+            ></div>
+          ))}
       </div>
     </div>
   );
