@@ -1,14 +1,13 @@
 import { useState } from "react";
 import MenuList from "@pages/recipeList/components/RecipeMenuList";
 import Carousel from "@pages/recipeList/components/RecipeCarousel";
-import RECIPE_LIST from "@/data/RECIPE_LIST";
-import { VideoList } from "@/types/recipeListTypes";
-
-//임의 데이터
-const DISHES: string[] = RECIPE_LIST.dishes;
-const VIDEOS: VideoList = RECIPE_LIST.videos;
+import recipeStore from "@/stores/recipeStore";
 
 const RecipeList = () => {
+  const { recipeList } = recipeStore();
+  const DISHES = recipeList.dishes;
+  const VIDEOS = recipeList.videos;
+
   const [selectedDish, setSelectedDish] = useState<keyof typeof VIDEOS>(DISHES[0]);
 
   return (
