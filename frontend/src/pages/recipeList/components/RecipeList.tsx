@@ -1,8 +1,8 @@
 import { useState } from "react";
 import MenuList from "@pages/recipeList/components/RecipeMenuList";
 import Carousel from "@pages/recipeList/components/RecipeCarousel";
-import recipeStore from "@/stores/recipeStore";
-import ErrorPage from "@/components/common/error/ErrorPage";
+import recipeStore from "@stores/recipeStore";
+import ErrorPage from "@components/common/error/ErrorPage";
 
 const RecipeList = () => {
   const { recipeList } = recipeStore();
