@@ -18,7 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -84,5 +86,17 @@ public class UserRecipeServiceImpl implements UserRecipeService {
     }
     userRecipeRepository.save(userRecipe);
     return UserRecipeDto.fromEntity(userRecipe);
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public List<UserRecipeDto> getUserRecipes(Long userId) {
+    User user = userRepository.findById(userId)
+        .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+
+    return userRecipeRepository.findAllByUser(user)
+        .stream()
+        .map(UserRecipeDto::fromEntity)
+        .collect(Collectors.toList());
   }
 }

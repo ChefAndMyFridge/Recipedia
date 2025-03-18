@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/user/recipe")
 @RequiredArgsConstructor
@@ -75,5 +77,53 @@ public class UserRecipeController {
   public ResponseEntity<UserRecipeDto> favoriteRecipe(@RequestBody FavoriteReq favoriteRequest) {
     UserRecipeDto result = userRecipeService.favoriteRecipe(favoriteRequest);
     return ResponseEntity.ok(result);
+  }
+
+  @Operation(
+      summary = "사용자의 즐겨찾기 레시피 목록 조회",
+      description = "특정 사용자가 평가하거나 즐겨찾기한 모든 레시피 목록을 조회합니다.",
+      responses = {
+          @ApiResponse(
+              responseCode = "200",
+              description = "사용자 레시피 목록 조회 성공",
+              content = @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = UserRecipeDto.class),
+                  examples = @ExampleObject(value = """
+                    [
+                      {
+                        "userRecipeId": 1,
+                        "userId": 10,
+                        "recipeId": 100,
+                        "rating": 5,
+                        "favorite": true,
+                        "createdAt": "2025-03-18T13:45:00"
+                      },
+                      {
+                        "userRecipeId": 2,
+                        "userId": 10,
+                        "recipeId": 101,
+                        "rating": 4,
+                        "favorite": false,
+                        "createdAt": "2025-03-17T11:30:00"
+                      }
+                    ]
+                """)
+              )
+          ),
+          @ApiResponse(
+              responseCode = "404",
+              description = "사용자를 찾을 수 없음",
+              content = @Content(
+                  mediaType = "application/json",
+                  examples = @ExampleObject(value = "{\"message\": \"User not found with id: 10\"}")
+              )
+          )
+      }
+  )
+  @GetMapping("/{userId}")
+  public ResponseEntity<List<UserRecipeDto>> getUserRecipes(@PathVariable Long userId) {
+    List<UserRecipeDto> userRecipes = userRecipeService.getUserRecipes(userId);
+    return ResponseEntity.ok(userRecipes);
   }
 }

@@ -3,9 +3,13 @@ package com.recipidia.user.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor
+@Table(name = "\"user\"") // H2 database 사용을 위한 "" 처리
 public class User {
 
   @Id
@@ -15,12 +19,9 @@ public class User {
   @Column(nullable = false, unique = true)
   private String username;
 
-  // 만약 추가 기능(예: PIN, 잠금 상태 등)이 필요하다면 아래처럼 필드를 추가할 수 있습니다.
-  // @Column
-  // private String pin;
-  //
-  // @Column
-  // private boolean isLocked;
+  // 추가된 부분 (양방향 관계 설정)
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<UserRecipe> userRecipes = new ArrayList<>();
 
   @Builder
   public User(String username) {
