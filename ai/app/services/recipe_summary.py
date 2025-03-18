@@ -110,7 +110,7 @@ class RecipeSummary:
             raise HTTPException(status_code=404, detail="자막을 가져올 수 없습니다.")
 
         # 자막 텍스트를 모두 결합
-        scripts = " ".join([item["text"].replace(
+        scripts = " ".join([f"[{(int)(item['start'])}]" + item["text"].replace(
             "\n", "").replace("\r", "") for item in transcription])
 
         # OpenAI 요청을 위한 메시지 구성
