@@ -9,7 +9,7 @@ const HomeFooter = () => {
   const { selectedIngredients } = useIngredientsStore();
 
   return (
-    <div className="flex items-center justify-center w-full h-24 px-4 py-2">
+    <div className="flex items-center justify-center w-full h-24 px-4">
       {selectedIngredients && Object.keys(selectedIngredients).length === 0 ? (
         <Link className="flex items-center justify-center w-full h-full" to="/recipeList/AI">
           <Button type="button" design="confirm" content="AI에게 레시피 추천받기" className="w-full h-10" />
