@@ -44,21 +44,21 @@ export const INGREDIENTS = [
     ingredients: [
       {
         ingredientId: 9007199254740990,
-        storagePlace: "실온",
+        storagePlace: "냉동고",
         expirationDate: "2025-03-15T05:08:48.903Z",
         incomingDate: "2025-03-15T05:08:48.903Z",
         releasingDate: "2025-03-15T05:08:48.903Z",
       },
       {
         ingredientId: 9007199254740920,
-        storagePlace: "실온",
+        storagePlace: "냉동고",
         expirationDate: "2025-03-18T05:08:48.903Z",
         incomingDate: "2025-03-18T05:08:48.903Z",
         releasingDate: "2025-03-18T05:08:48.903Z",
       },
       {
         ingredientId: 9007199254740930,
-        storagePlace: "실온",
+        storagePlace: "냉동고",
         expirationDate: "2025-03-20T05:08:48.903Z",
         incomingDate: "2025-03-20T05:08:48.903Z",
         releasingDate: "2025-03-20T05:08:48.903Z",
@@ -88,14 +88,14 @@ export const INGREDIENTS = [
     ingredients: [
       {
         ingredientId: 9007199254640925,
-        storagePlace: "실온",
+        storagePlace: "냉동고",
         expirationDate: "2025-03-25T05:08:48.903Z",
         incomingDate: "2025-03-25T05:08:48.903Z",
         releasingDate: "2025-03-25T05:08:48.903Z",
       },
       {
         ingredientId: 9007199254710915,
-        storagePlace: "실온",
+        storagePlace: "냉동고",
         expirationDate: "2025-03-28T05:08:48.903Z",
         incomingDate: "2025-03-28T05:08:48.903Z",
         releasingDate: "2025-03-28T05:08:48.903Z",
@@ -177,7 +177,460 @@ export const INGREDIENTS = [
     ingredients: [
       {
         ingredientId: 9007143254740999,
-        storagePlace: "실온",
+        storagePlace: "냉동고",
+        expirationDate: "2025-04-15T05:08:48.903Z",
+        incomingDate: "2025-04-15T05:08:48.903Z",
+        releasingDate: "2025-04-15T05:08:48.903Z",
+      },
+    ],
+  },
+  {
+    ingredientInfoId: 8012199254740991,
+    name: "도토리",
+    imageUrl:
+      "https://media.istockphoto.com/photos/one-acorn-picture-id187333325?k=6&m=187333325&s=612x612&w=0&h=erzhZENyxgwPPKDiegjV6lNwDJFmP6iZUNNLDvmD1DI=",
+    totalCount: 1,
+    ingredients: [
+      {
+        ingredientId: 8013199254740991,
+        storagePlace: "냉장고",
+        expirationDate: "2025-03-05T05:08:48.903Z",
+        incomingDate: "2025-03-05T05:08:48.903Z",
+        releasingDate: "2025-03-05T05:08:48.903Z",
+      },
+    ],
+  },
+  {
+    ingredientInfoId: 8207199254740992,
+    name: "소고기",
+    imageUrl:
+      "https://i.namu.wiki/i/XNIoYoEhSxNaURniAp8AcRrb4pbli_mmxtYBbbZXa4GqHuim2BYql5YTW1p7hjdcIq1kMzM7xZBW3u2sL_BFGw.webp",
+    totalCount: 2,
+    ingredients: [
+      {
+        ingredientId: 8107199254740392,
+        storagePlace: "냉장고",
+        expirationDate: "2025-03-10T05:08:48.903Z",
+        incomingDate: "2025-03-10T05:08:48.903Z",
+        releasingDate: "2025-03-10T05:08:48.903Z",
+      },
+      {
+        ingredientId: 8117199254740192,
+        storagePlace: "냉장고",
+        expirationDate: "2025-03-12T05:08:48.903Z",
+        incomingDate: "2025-03-12T05:08:48.903Z",
+        releasingDate: "2025-03-12T05:08:48.903Z",
+      },
+    ],
+  },
+  {
+    ingredientInfoId: 8127199254740990,
+    name: "삼겹살",
+    imageUrl:
+      "https://www.shinsegaegroupnewsroom.com/wp-content/uploads/2019/12/%EC%A3%BC%EB%A7%90%EC%9D%84-%EC%9E%A1%EC%95%84%EB%9D%BC-%EC%9D%B4%EB%A7%88%ED%8A%B8-%EC%82%BC%EA%B2%B9%EC%82%B4-990%EC%9B%90.jpg",
+    totalCount: 3,
+    ingredients: [
+      {
+        ingredientId: 8027199254740990,
+        storagePlace: "냉동고",
+        expirationDate: "2025-03-15T05:08:48.903Z",
+        incomingDate: "2025-03-15T05:08:48.903Z",
+        releasingDate: "2025-03-15T05:08:48.903Z",
+      },
+      {
+        ingredientId: 8017199254740920,
+        storagePlace: "냉동고",
+        expirationDate: "2025-03-18T05:08:48.903Z",
+        incomingDate: "2025-03-18T05:08:48.903Z",
+        releasingDate: "2025-03-18T05:08:48.903Z",
+      },
+      {
+        ingredientId: 8007199254740930,
+        storagePlace: "냉동고",
+        expirationDate: "2025-03-20T05:08:48.903Z",
+        incomingDate: "2025-03-20T05:08:48.903Z",
+        releasingDate: "2025-03-20T05:08:48.903Z",
+      },
+    ],
+  },
+  {
+    ingredientInfoId: 8054199254240994,
+    name: "고구마",
+    imageUrl: "https://health.chosun.com/site/data/img_dir/2024/09/27/2024092701953_0.jpg",
+    totalCount: 1,
+    ingredients: [
+      {
+        ingredientId: 8055199254710994,
+        storagePlace: "냉장고",
+        expirationDate: "2025-03-22T05:08:48.903Z",
+        incomingDate: "2025-03-22T05:08:48.903Z",
+        releasingDate: "2025-03-22T05:08:48.903Z",
+      },
+    ],
+  },
+  {
+    ingredientInfoId: 8056199254730925,
+    name: "귤",
+    imageUrl: "https://www.wj1news.com/data/photos/20211251/art_1639967065167_51940c.jpg",
+    totalCount: 2,
+    ingredients: [
+      {
+        ingredientId: 8057199254640925,
+        storagePlace: "냉동고",
+        expirationDate: "2025-03-25T05:08:48.903Z",
+        incomingDate: "2025-03-25T05:08:48.903Z",
+        releasingDate: "2025-03-25T05:08:48.903Z",
+      },
+      {
+        ingredientId: 8058199254710915,
+        storagePlace: "냉동고",
+        expirationDate: "2025-03-28T05:08:48.903Z",
+        incomingDate: "2025-03-28T05:08:48.903Z",
+        releasingDate: "2025-03-28T05:08:48.903Z",
+      },
+    ],
+  },
+  {
+    ingredientInfoId: 8099199252740996,
+    name: "키위",
+    imageUrl: "https://www.dailysecu.com/news/photo/201906/53502_45794_3555.jpg",
+    totalCount: 1,
+    ingredients: [
+      {
+        ingredientId: 8095199154740996,
+        storagePlace: "냉장고",
+        expirationDate: "2025-03-30T05:08:48.903Z",
+        incomingDate: "2025-03-30T05:08:48.903Z",
+        releasingDate: "2025-03-30T05:08:48.903Z",
+      },
+    ],
+  },
+  {
+    ingredientInfoId: 8098129254740997,
+    name: "딸기",
+    imageUrl: "https://blog.kakaocdn.net/dn/bcbFmi/btsATf1UD0S/lPusCeLyhjmVZEoBScKsk1/img.jpg",
+    totalCount: 3,
+    ingredients: [
+      {
+        ingredientId: 8097099254740997,
+        storagePlace: "냉장고",
+        expirationDate: "2025-04-02T05:08:48.903Z",
+        incomingDate: "2025-04-02T05:08:48.903Z",
+        releasingDate: "2025-04-02T05:08:48.903Z",
+      },
+      {
+        ingredientId: 8096099254740997,
+        storagePlace: "냉장고",
+        expirationDate: "2025-04-05T05:08:48.903Z",
+        incomingDate: "2025-04-05T05:08:48.903Z",
+        releasingDate: "2025-04-05T05:08:48.903Z",
+      },
+      {
+        ingredientId: 8095199254740997,
+        storagePlace: "냉장고",
+        expirationDate: "2025-04-07T05:08:48.903Z",
+        incomingDate: "2025-04-07T05:08:48.903Z",
+        releasingDate: "2025-04-07T05:08:48.903Z",
+      },
+    ],
+  },
+  {
+    ingredientInfoId: 8094199254740998,
+    name: "피망",
+    imageUrl: "https://img.freepik.com/premium-photo/green-pepper_253984-420.jpg",
+    totalCount: 2,
+    ingredients: [
+      {
+        ingredientId: 8093199254740998,
+        storagePlace: "냉장고",
+        expirationDate: "2025-04-10T05:08:48.903Z",
+        incomingDate: "2025-04-10T05:08:48.903Z",
+        releasingDate: "2025-04-10T05:08:48.903Z",
+      },
+      {
+        ingredientId: 8092199254740998,
+        storagePlace: "냉장고",
+        expirationDate: "2025-04-12T05:08:48.903Z",
+        incomingDate: "2025-04-12T05:08:48.903Z",
+        releasingDate: "2025-04-12T05:08:48.903Z",
+      },
+    ],
+  },
+  {
+    ingredientInfoId: 8091299254740999,
+    name: "올리브",
+    imageUrl:
+      "https://lh3.googleusercontent.com/proxy/Q-FiCQdRy8AQCB5ULcgar6AB5fl4A27Txcdbfgpl_BR8dhOUPoRu1sc2eJHjC9exYyL--RXsXgUHiBO_ipusV2x2YjntDPFzQdKSNueqMPA5jrQp8EujOdRVPZSqRiUAeuooeYyuS0TrvdyNorg",
+    totalCount: 1,
+    ingredients: [
+      {
+        ingredientId: 8090143254740999,
+        storagePlace: "냉동고",
+        expirationDate: "2025-04-15T05:08:48.903Z",
+        incomingDate: "2025-04-15T05:08:48.903Z",
+        releasingDate: "2025-04-15T05:08:48.903Z",
+      },
+    ],
+  },
+  {
+    ingredientInfoId: 6012199254740991,
+    name: "소시지",
+    imageUrl: "https://img.dongwonmall.com/dwmall/static_root/model_img/main/758/75813_1_a.jpg",
+    totalCount: 1,
+    ingredients: [
+      {
+        ingredientId: 6013199254740991,
+        storagePlace: "냉장고",
+        expirationDate: "2025-03-05T05:08:48.903Z",
+        incomingDate: "2025-03-05T05:08:48.903Z",
+        releasingDate: "2025-03-05T05:08:48.903Z",
+      },
+    ],
+  },
+  {
+    ingredientInfoId: 6207199254740992,
+    name: "햄",
+    imageUrl:
+      "https://media.istockphoto.com/id/488330599/ko/%EC%82%AC%EC%A7%84/%EC%8B%A0%EC%84%A0%ED%95%9C-%ED%96%84.jpg?s=612x612&w=0&k=20&c=_7Ym0feAjmelzF9roOxwrtP9vsdsybNbTHI3VATT3fE=",
+    totalCount: 2,
+    ingredients: [
+      {
+        ingredientId: 6107199254740392,
+        storagePlace: "냉장고",
+        expirationDate: "2025-03-10T05:08:48.903Z",
+        incomingDate: "2025-03-10T05:08:48.903Z",
+        releasingDate: "2025-03-10T05:08:48.903Z",
+      },
+      {
+        ingredientId: 6117199254740192,
+        storagePlace: "냉장고",
+        expirationDate: "2025-03-12T05:08:48.903Z",
+        incomingDate: "2025-03-12T05:08:48.903Z",
+        releasingDate: "2025-03-12T05:08:48.903Z",
+      },
+    ],
+  },
+  {
+    ingredientInfoId: 6127199254740990,
+    name: "우동면",
+    imageUrl:
+      "https://img-cf.kurly.com/hdims/resize/%3E720x/quality/90/src/shop/data/goodsview/20240912/gv00001558699_1.jpg",
+    totalCount: 3,
+    ingredients: [
+      {
+        ingredientId: 6027199254740990,
+        storagePlace: "냉동고",
+        expirationDate: "2025-03-15T05:08:48.903Z",
+        incomingDate: "2025-03-15T05:08:48.903Z",
+        releasingDate: "2025-03-15T05:08:48.903Z",
+      },
+      {
+        ingredientId: 6017199254740920,
+        storagePlace: "냉동고",
+        expirationDate: "2025-03-18T05:08:48.903Z",
+        incomingDate: "2025-03-18T05:08:48.903Z",
+        releasingDate: "2025-03-18T05:08:48.903Z",
+      },
+      {
+        ingredientId: 6007199254740930,
+        storagePlace: "냉동고",
+        expirationDate: "2025-03-20T05:08:48.903Z",
+        incomingDate: "2025-03-20T05:08:48.903Z",
+        releasingDate: "2025-03-20T05:08:48.903Z",
+      },
+    ],
+  },
+  {
+    ingredientInfoId: 6054199254240994,
+    name: "양상추",
+    imageUrl: "https://oasisprodproduct.edge.naverncp.com/83247/detail/0_d1e7ad35-9913-4848-9a80-c53347b1fbb3.jpg",
+    totalCount: 1,
+    ingredients: [
+      {
+        ingredientId: 6055199254710994,
+        storagePlace: "냉장고",
+        expirationDate: "2025-03-22T05:08:48.903Z",
+        incomingDate: "2025-03-22T05:08:48.903Z",
+        releasingDate: "2025-03-22T05:08:48.903Z",
+      },
+    ],
+  },
+  {
+    ingredientInfoId: 7056199254730925,
+    name: "파프리카",
+    imageUrl:
+      "https://cafe24.poxo.com/ec01/chjamjh/HOvhRhvOk+Cp2KY4JuusAqLWFKcrO8MTAgeRXXHTUgWxHDbAm26lBDYLAAlDNw+QcYAst9dBqLWiBitDvhDOkQ==/_/web/product/big/201707/1222_shop1_931883.jpg",
+    totalCount: 2,
+    ingredients: [
+      {
+        ingredientId: 7057199254640925,
+        storagePlace: "냉동고",
+        expirationDate: "2025-03-25T05:08:48.903Z",
+        incomingDate: "2025-03-25T05:08:48.903Z",
+        releasingDate: "2025-03-25T05:08:48.903Z",
+      },
+      {
+        ingredientId: 7058199254710915,
+        storagePlace: "냉동고",
+        expirationDate: "2025-03-28T05:08:48.903Z",
+        incomingDate: "2025-03-28T05:08:48.903Z",
+        releasingDate: "2025-03-28T05:08:48.903Z",
+      },
+    ],
+  },
+  {
+    ingredientInfoId: 7099199252740996,
+    name: "양송이버섯",
+    imageUrl: "https://qi-o.qoo10cdn.com/goods_image_big/3/6/7/9/6536413679_l.jpg",
+    totalCount: 1,
+    ingredients: [
+      {
+        ingredientId: 7095199154740996,
+        storagePlace: "냉장고",
+        expirationDate: "2025-03-30T05:08:48.903Z",
+        incomingDate: "2025-03-30T05:08:48.903Z",
+        releasingDate: "2025-03-30T05:08:48.903Z",
+      },
+    ],
+  },
+  {
+    ingredientInfoId: 7098129254740997,
+    name: "완두콩",
+    imageUrl:
+      "https://lh3.googleusercontent.com/proxy/dEXamxGEG8fNO3bINGFqhplKyoc5AyiQYG6ykKOU78e1IK7Hqi5xsFe6vBmjdCHbWG5hx3zWcvZQOlCrG5HqbfoazFGc0p4OUc-jZ-WSF0ubCyoxzXnE8ZJI",
+    totalCount: 3,
+    ingredients: [
+      {
+        ingredientId: 7097099254740997,
+        storagePlace: "냉장고",
+        expirationDate: "2025-04-02T05:08:48.903Z",
+        incomingDate: "2025-04-02T05:08:48.903Z",
+        releasingDate: "2025-04-02T05:08:48.903Z",
+      },
+      {
+        ingredientId: 7096099254740997,
+        storagePlace: "냉장고",
+        expirationDate: "2025-04-05T05:08:48.903Z",
+        incomingDate: "2025-04-05T05:08:48.903Z",
+        releasingDate: "2025-04-05T05:08:48.903Z",
+      },
+      {
+        ingredientId: 7095199254740997,
+        storagePlace: "냉장고",
+        expirationDate: "2025-04-07T05:08:48.903Z",
+        incomingDate: "2025-04-07T05:08:48.903Z",
+        releasingDate: "2025-04-07T05:08:48.903Z",
+      },
+    ],
+  },
+  {
+    ingredientInfoId: 7094199254740998,
+    name: "두부",
+    imageUrl: "https://product-image.kurly.com/product/image/a52d7de3-80a0-44c7-a658-3c5cf1a021f8.jpg",
+    totalCount: 2,
+    ingredients: [
+      {
+        ingredientId: 7093199254740998,
+        storagePlace: "냉장고",
+        expirationDate: "2025-04-10T05:08:48.903Z",
+        incomingDate: "2025-04-10T05:08:48.903Z",
+        releasingDate: "2025-04-10T05:08:48.903Z",
+      },
+      {
+        ingredientId: 7092199254740998,
+        storagePlace: "냉장고",
+        expirationDate: "2025-04-12T05:08:48.903Z",
+        incomingDate: "2025-04-12T05:08:48.903Z",
+        releasingDate: "2025-04-12T05:08:48.903Z",
+      },
+    ],
+  },
+  {
+    ingredientInfoId: 7091299254740999,
+    name: "연근",
+    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMjg_HDWWZeeEm9AjRKKde_QjxH-i8U2ihXA&s",
+    totalCount: 1,
+    ingredients: [
+      {
+        ingredientId: 7090143254740999,
+        storagePlace: "냉동고",
+        expirationDate: "2025-04-15T05:08:48.903Z",
+        incomingDate: "2025-04-15T05:08:48.903Z",
+        releasingDate: "2025-04-15T05:08:48.903Z",
+      },
+    ],
+  },
+  {
+    ingredientInfoId: 4094199254740998,
+    name: "김치",
+    imageUrl:
+      "https://cgeimage.commutil.kr/phpwas/restmb_allidxmake.php?pp=002&idx=3&simg=202102161140070021797kpm_00.jpg&nmt=48",
+    totalCount: 2,
+    ingredients: [
+      {
+        ingredientId: 4093199254740998,
+        storagePlace: "냉장고",
+        expirationDate: "2025-04-10T05:08:48.903Z",
+        incomingDate: "2025-04-10T05:08:48.903Z",
+        releasingDate: "2025-04-10T05:08:48.903Z",
+      },
+      {
+        ingredientId: 4092199254740998,
+        storagePlace: "냉장고",
+        expirationDate: "2025-04-12T05:08:48.903Z",
+        incomingDate: "2025-04-12T05:08:48.903Z",
+        releasingDate: "2025-04-12T05:08:48.903Z",
+      },
+    ],
+  },
+  {
+    ingredientInfoId: 4091299254742999,
+    name: "고등어",
+    imageUrl:
+      "https://s3.ap-northeast-2.amazonaws.com/img.kormedi.com/news/article/__icsFiles/artimage/2016/06/04/c_km601/520442_540.jpg",
+    totalCount: 1,
+    ingredients: [
+      {
+        ingredientId: 4090143254740999,
+        storagePlace: "냉동고",
+        expirationDate: "2025-04-15T05:08:48.903Z",
+        incomingDate: "2025-04-15T05:08:48.903Z",
+        releasingDate: "2025-04-15T05:08:48.903Z",
+      },
+    ],
+  },
+  {
+    ingredientInfoId: 4094199252740998,
+    name: "새송이버섯",
+    imageUrl:
+      "https://mblogthumb-phinf.pstatic.net/MjAxNzEwMTBfMjkz/MDAxNTA3NjI4MTkyOTc0.T3Hp-N2bGSV5YDxtIrtHpPwdtbADp5u73s7CovZ4fAsg.46VqX7X8WNwWSEHmzQ0Z8ud7Xws-JHYcdGY5hd57bnMg.PNG.nhicblog/1011-08.png?type=w800",
+    totalCount: 2,
+    ingredients: [
+      {
+        ingredientId: 4093199254740998,
+        storagePlace: "냉장고",
+        expirationDate: "2025-04-10T05:08:48.903Z",
+        incomingDate: "2025-04-10T05:08:48.903Z",
+        releasingDate: "2025-04-10T05:08:48.903Z",
+      },
+      {
+        ingredientId: 4092199254740998,
+        storagePlace: "냉장고",
+        expirationDate: "2025-04-12T05:08:48.903Z",
+        incomingDate: "2025-04-12T05:08:48.903Z",
+        releasingDate: "2025-04-12T05:08:48.903Z",
+      },
+    ],
+  },
+  {
+    ingredientInfoId: 4091299254740999,
+    name: "대추",
+    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyQWz7MHtUYHmWSxfEKAWgXjDjm-HbO-Am5w&s",
+    totalCount: 1,
+    ingredients: [
+      {
+        ingredientId: 4090143254740999,
+        storagePlace: "냉동고",
         expirationDate: "2025-04-15T05:08:48.903Z",
         incomingDate: "2025-04-15T05:08:48.903Z",
         releasingDate: "2025-04-15T05:08:48.903Z",
