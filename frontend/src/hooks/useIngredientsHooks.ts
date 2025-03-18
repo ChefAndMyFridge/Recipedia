@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { Ingredients, StoreIngredient, StoreResponseIngredient } from "@/types/ingredientsTypes";
+import { Ingredients, StoreIngredient, StoreResponseIngredient, IngredientNutrition } from "@/types/ingredientsTypes";
 
-import { getIngredientsApi, storeIngredientApi } from "@apis/ingredientApi";
+import { getIngredientsApi, storeIngredientApi, getIngredientNutritionApi } from "@apis/ingredientApi";
 
 import useIngredientsStore from "@stores/ingredientsStore";
 
@@ -45,4 +45,15 @@ export const useStoreIngredient = () => {
   });
 
   return mutation;
+};
+
+// 영양 정보 조회
+export const useGetIngredientNutrition = (ingredientId: number) => {
+  const query = useQuery<IngredientNutrition>({
+    queryKey: ["ingredientNutrition", ingredientId],
+    queryFn: () => getIngredientNutritionApi(ingredientId),
+    throwOnError: true,
+  });
+
+  return query;
 };

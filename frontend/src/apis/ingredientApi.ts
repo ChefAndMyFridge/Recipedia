@@ -1,4 +1,4 @@
-import { Ingredients, StoreIngredient } from "@/types/ingredientsTypes";
+import { Ingredients, StoreIngredient, StoreResponseIngredient, IngredientNutrition } from "@/types/ingredientsTypes";
 
 import instance from "./instance";
 
@@ -11,9 +11,18 @@ export const getIngredientsApi = async (): Promise<Ingredients[]> => {
   }
 };
 
-export const storeIngredientApi = async (ingredient: StoreIngredient) => {
+export const storeIngredientApi = async (ingredient: StoreIngredient): Promise<StoreResponseIngredient> => {
   try {
     const response = await instance.post("v1/ingredient", ingredient);
+    return response.data;
+  } catch (error: unknown) {
+    throw new Error(error as string);
+  }
+};
+
+export const getIngredientNutritionApi = async (ingredientId: number): Promise<IngredientNutrition> => {
+  try {
+    const response = await instance.get(`v1/ingredient/nutrient/${ingredientId}`);
     return response.data;
   } catch (error: unknown) {
     throw new Error(error as string);
