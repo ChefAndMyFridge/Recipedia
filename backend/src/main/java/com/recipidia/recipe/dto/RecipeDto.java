@@ -29,8 +29,8 @@ public record RecipeDto(Long recipeId, String name, String title, String youtube
             ingredientDtos,
             recipe.getChannelTitle(),
             recipe.getDuration(),
-            recipe.getViewCount() != null ? recipe.getViewCount() : 0L,
-            recipe.getLikeCount() != null ? recipe.getLikeCount() : 0L
+            recipe.getViewCount(),
+            recipe.getLikeCount()
         );
     }
 

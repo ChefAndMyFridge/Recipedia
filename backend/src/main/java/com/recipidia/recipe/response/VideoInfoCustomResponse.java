@@ -19,4 +19,6 @@ public class VideoInfoCustomResponse {
   private String duration;
   private long view_count;
   private long like_count;
+  private boolean favorite;
+  private double rating;
 }

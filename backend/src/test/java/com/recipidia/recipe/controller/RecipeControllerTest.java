@@ -2,7 +2,8 @@ package com.recipidia.recipe.controller;
 
 import com.recipidia.recipe.dto.RecipeDto;
 import com.recipidia.recipe.request.RecipeQueryReq;
-import com.recipidia.recipe.response.IngredientQueryRes;
+import com.recipidia.recipe.response.RecipeQueryCustomResponse;
+import com.recipidia.recipe.response.RecipeQueryRes;
 import com.recipidia.recipe.response.RecipeExtractRes;
 import com.recipidia.recipe.service.RecipeService;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -34,7 +36,7 @@ public class RecipeControllerTest {
     }
   }
 
-  // 필드 주입으로 의존성 주입 (생성자 주입 대신 @Autowired 사용)
+  // 필드 주입 (Autowired)
   @org.springframework.beans.factory.annotation.Autowired
   private RecipeService recipeService;
 
@@ -43,13 +45,29 @@ public class RecipeControllerTest {
 
   @Test
   public void testQueryRecipe() {
-    RecipeQueryReq request = new RecipeQueryReq(List.of("돼지고기", "대파"));
+    // 변경된 RecipeQueryReq: 첫번째 인자는 userId, 두번째 인자는 ingredients 목록
+    RecipeQueryReq request = new RecipeQueryReq(1L, List.of("돼지고기", "대파"));
 
-    ResponseEntity<String> dummyResponse = ResponseEntity.ok("Dummy Query Response");
+    // 더미 RecipeQueryRes 생성: handleRecipeQuery의 반환 타입에 맞춤
+    RecipeQueryRes dummyQueryRes = RecipeQueryRes.builder()
+        .dishes(List.of("Dummy Dish"))
+        .videos(Map.of("Dummy Dish", List.of()))
+        .build();
+    ResponseEntity<RecipeQueryRes> dummyResponseEntity = ResponseEntity.ok(dummyQueryRes);
+
+    // 최종 mapQueryResponse의 결과로 반환할 RecipeQueryCustomResponse
+    RecipeQueryCustomResponse dummyCustomResponse = RecipeQueryCustomResponse.builder()
+        .dishes(List.of("Dummy Dish"))
+        .videos(Map.of("Dummy Dish", List.of()))
+        .build();
+
     when(recipeService.handleRecipeQuery(any(RecipeQueryReq.class)))
-        .thenReturn(Mono.just(dummyResponse));
-    when(recipeService.saveRecipeResult(dummyResponse))
+        .thenReturn(Mono.just(dummyResponseEntity));
+    when(recipeService.saveRecipeResult(dummyResponseEntity))
         .thenReturn(Mono.empty());
+    // userId를 두 번째 인자로 전달
+    when(recipeService.mapQueryResponse(dummyResponseEntity, 1L))
+        .thenReturn(Mono.just(dummyCustomResponse));
 
     webTestClient.post()
         .uri("/api/v1/recipe")
@@ -57,13 +75,15 @@ public class RecipeControllerTest {
         .bodyValue(request)
         .exchange()
         .expectStatus().isOk()
-        .expectBody(String.class)
-        .value(response -> assertThat(response).isEqualTo("Dummy Query Response"));
+        .expectBody(RecipeQueryCustomResponse.class)
+        .value(response -> {
+          assertThat(response.getDishes()).containsExactly("Dummy Dish");
+          assertThat(response.getVideos()).hasSize(1);
+        });
   }
 
   @Test
   public void testGetAllRecipes() {
-    // RecipeDto에 추가된 필드 channelTitle, duration, viewCount, likeCount를 함께 설정합니다.
     RecipeDto recipeDto = new RecipeDto(
         1L,
         "Test Recipe",
@@ -89,7 +109,6 @@ public class RecipeControllerTest {
         .hasSize(1)
         .value(list -> {
           RecipeDto dto = list.get(0);
-          // RecipeDto는 record이므로 accessor는 필드명() 형태로 호출
           assertThat(dto.recipeId()).isEqualTo(1L);
           assertThat(dto.name()).isEqualTo("Test Recipe");
           assertThat(dto.title()).isEqualTo("Test Title");
@@ -104,13 +123,11 @@ public class RecipeControllerTest {
 
   @Test
   public void testExtractAndSaveRecipe() {
-    // RecipeExtractRes를 빌더로 생성합니다.
-    // ingredients는 List<IngredientQueryRes>로 구성됨
     RecipeExtractRes extractRes = RecipeExtractRes.builder()
         .title("Extracted Recipe Title")
         .ingredients(List.of(
-            new IngredientQueryRes("마늘", "2개(65g)"),
-            new IngredientQueryRes("양파", "1개(40g)")
+            new com.recipidia.recipe.response.IngredientQueryRes("마늘", "2개(65g)"),
+            new com.recipidia.recipe.response.IngredientQueryRes("양파", "1개(40g)")
         ))
         .cooking_info(null)
         .cooking_tips(null)
@@ -128,10 +145,8 @@ public class RecipeControllerTest {
         .expectBody(RecipeExtractRes.class)
         .value(response -> {
           assertThat(response.getTitle()).isEqualTo("Extracted Recipe Title");
-          // ingredients는 이제 IngredientQueryRes 객체의 리스트이므로,
-          // 각 객체의 getName() 메서드를 사용하여 검증합니다.
           List<String> ingredientNames = response.getIngredients().stream()
-              .map(IngredientQueryRes::getName)
+              .map(com.recipidia.recipe.response.IngredientQueryRes::getName)
               .toList();
           assertThat(ingredientNames).containsExactly("마늘", "양파");
         });
