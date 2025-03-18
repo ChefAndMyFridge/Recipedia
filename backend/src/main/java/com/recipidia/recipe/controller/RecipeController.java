@@ -36,7 +36,7 @@ public class RecipeController {
                       name = "요청 데이터",
                       value = """
                           {
-                              "user_id" : 1,
+                              "member_id" : 1,
                               "ingredients": ["돼지고기", "대파"]
                           }
                           """
@@ -111,7 +111,7 @@ public class RecipeController {
             recipeService.saveRecipeResult(responseEntity)
                 .thenReturn(responseEntity)
         )
-        .flatMap(responseEntity -> recipeService.mapQueryResponse(responseEntity, request.getUserId()))
+        .flatMap(responseEntity -> recipeService.mapQueryResponse(responseEntity, request.getMemberId()))
         .map(ResponseEntity::ok);
   }
 

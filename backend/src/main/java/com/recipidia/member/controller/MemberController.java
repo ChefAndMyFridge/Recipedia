@@ -1,9 +1,9 @@
-package com.recipidia.user.controller;
+package com.recipidia.member.controller;
 
-import com.recipidia.user.dto.UserDto;
-import com.recipidia.user.request.CreateUserReq;
-import com.recipidia.user.request.UpdateUsernameReq;
-import com.recipidia.user.service.UserService;
+import com.recipidia.member.dto.MemberDto;
+import com.recipidia.member.request.CreateMemberReq;
+import com.recipidia.member.request.UpdateMembernameReq;
+import com.recipidia.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/member")
 @RequiredArgsConstructor
-public class UserController {
+public class MemberController {
 
-  private final UserService userService;
+  private final MemberService memberService;
 
-  // 사용자 등록: username을 받아 새로운 User 생성
+  // 사용자 등록: membername을 받아 새로운 Member 생성
   @Operation(
       summary = "사용자 등록",
       description = "새로운 사용자를 등록합니다.",
@@ -31,7 +31,7 @@ public class UserController {
           required = true,
           content = @Content(
               mediaType = "application/json",
-              schema = @Schema(implementation = CreateUserReq.class)
+              schema = @Schema(implementation = CreateMemberReq.class)
           )
       ),
       responses = {
@@ -40,18 +40,18 @@ public class UserController {
               description = "사용자 등록 성공",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = UserDto.class)
+                  schema = @Schema(implementation = MemberDto.class)
               )
           )
       }
   )
   @PostMapping
-  public ResponseEntity<UserDto> createUser(@RequestBody CreateUserReq request) {
-    UserDto userDto = userService.createUser(request.username());
-    return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
+  public ResponseEntity<MemberDto> createMember(@RequestBody CreateMemberReq request) {
+    MemberDto memberDto = memberService.createMember(request.membername());
+    return ResponseEntity.status(HttpStatus.CREATED).body(memberDto);
   }
 
-  // 사용자 이름 수정: userId 경로 변수와 새 이름을 받아서 업데이트
+  // 사용자 이름 수정: memberId 경로 변수와 새 이름을 받아서 업데이트
   @Operation(
       summary = "사용자 이름 수정",
       description = "사용자의 이름을 업데이트합니다.",
@@ -60,7 +60,7 @@ public class UserController {
           required = true,
           content = @Content(
               mediaType = "application/json",
-              schema = @Schema(implementation = UpdateUsernameReq.class)
+              schema = @Schema(implementation = UpdateMembernameReq.class)
           )
       ),
       responses = {
@@ -69,19 +69,19 @@ public class UserController {
               description = "사용자 이름 수정 성공",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = UserDto.class)
+                  schema = @Schema(implementation = MemberDto.class)
               )
           )
       }
   )
-  @PutMapping("/{userId}")
-  public ResponseEntity<UserDto> updateUsername(@PathVariable Long userId,
-                                                @RequestBody UpdateUsernameReq request) {
-    UserDto userDto = userService.updateUsername(userId, request.newUsername());
-    return ResponseEntity.ok(userDto);
+  @PutMapping("/{memberId}")
+  public ResponseEntity<MemberDto> updateMembername(@PathVariable Long memberId,
+                                                  @RequestBody UpdateMembernameReq request) {
+    MemberDto memberDto = memberService.updateMembername(memberId, request.newMembername());
+    return ResponseEntity.ok(memberDto);
   }
 
-  // 사용자 삭제: userId를 받아서 삭제
+  // 사용자 삭제: memberId를 받아서 삭제
   @Operation(
       summary = "사용자 삭제",
       description = "지정한 사용자를 삭제합니다.",
@@ -92,9 +92,9 @@ public class UserController {
           )
       }
   )
-  @DeleteMapping("/{userId}")
-  public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
-    userService.deleteUser(userId);
+  @DeleteMapping("/{memberId}")
+  public ResponseEntity<Void> deleteMember(@PathVariable Long memberId) {
+    memberService.deleteMember(memberId);
     return ResponseEntity.noContent().build();
   }
 
@@ -108,14 +108,14 @@ public class UserController {
               description = "전체 사용자 조회 성공",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = UserDto.class)
+                  schema = @Schema(implementation = MemberDto.class)
               )
           )
       }
   )
   @GetMapping
-  public ResponseEntity<List<UserDto>> getAllUsers() {
-    List<UserDto> users = userService.getAllUsers();
-    return ResponseEntity.ok(users);
+  public ResponseEntity<List<MemberDto>> getAllMembers() {
+    List<MemberDto> members = memberService.getAllMembers();
+    return ResponseEntity.ok(members);
   }
 }

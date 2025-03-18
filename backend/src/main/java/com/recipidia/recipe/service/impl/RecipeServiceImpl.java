@@ -12,7 +12,7 @@ import com.recipidia.recipe.repository.RecipeRepository;
 import com.recipidia.recipe.request.RecipeQueryReq;
 import com.recipidia.recipe.response.*;
 import com.recipidia.recipe.service.RecipeService;
-import com.recipidia.user.repository.UserRecipeRepository;
+import com.recipidia.member.repository.MemberRecipeRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -39,15 +39,15 @@ public class RecipeServiceImpl implements RecipeService {
   private final WebClient webClient;
   private final RecipeRepository recipeRepository;
   private final RecipeQueryResConverter queryResConverter = new RecipeQueryResConverter();
-  private final UserRecipeRepository userRecipeRepository;
+  private final MemberRecipeRepository memberRecipeRepository;
 
   public RecipeServiceImpl(IngredientService ingredientService, WebClient.Builder webClientBuilder,
-                           RecipeRepository recipeRepository, UserRecipeRepository userRecipeRepository) {
+                           RecipeRepository recipeRepository, MemberRecipeRepository memberRecipeRepository) {
     this.ingredientService = ingredientService;
     // FastAPI 컨테이너의 서비스명을 사용
     this.webClient = webClientBuilder.baseUrl("http://my-fastapi:8000").build();
     this.recipeRepository = recipeRepository;
-    this.userRecipeRepository = userRecipeRepository;
+    this.memberRecipeRepository = memberRecipeRepository;
   }
 
   @Override
@@ -123,7 +123,7 @@ public class RecipeServiceImpl implements RecipeService {
   }
 
   @Override
-  public Mono<RecipeQueryCustomResponse> mapQueryResponse(ResponseEntity<RecipeQueryRes> responseEntity, Long userId) {
+  public Mono<RecipeQueryCustomResponse> mapQueryResponse(ResponseEntity<RecipeQueryRes> responseEntity, Long memberId) {
     RecipeQueryRes queryRes = responseEntity.getBody();
     if (queryRes == null) {
       return Mono.error(new RuntimeException("Response body is null"));
@@ -134,7 +134,7 @@ public class RecipeServiceImpl implements RecipeService {
           String dish = entry.getKey();
           List<VideoInfo> videoList = entry.getValue();
           return Flux.fromIterable(videoList)
-              .flatMap(video -> convertVideoInfo(video, userId))
+              .flatMap(video -> convertVideoInfo(video, memberId))
               .collectList()
               .map(videoInfoList -> Tuples.of(dish, videoInfoList));
         })
@@ -145,18 +145,18 @@ public class RecipeServiceImpl implements RecipeService {
             .build());
   }
 
-  private Mono<VideoInfoCustomResponse> convertVideoInfo(VideoInfo video, Long userId) {
+  private Mono<VideoInfoCustomResponse> convertVideoInfo(VideoInfo video, Long memberId) {
     return Mono.fromCallable(() -> recipeRepository.findIdByYoutubeUrl(video.getUrl()))
         .subscribeOn(Schedulers.boundedElastic())
         .flatMap(recipeId ->
-            Mono.fromCallable(() -> userRecipeRepository.findByUserIdAndRecipeId(userId, recipeId))
+            Mono.fromCallable(() -> memberRecipeRepository.findByMemberIdAndRecipeId(memberId, recipeId))
                 .subscribeOn(Schedulers.boundedElastic())
-                .map(optionalUserRecipe -> {
+                .map(optionalMemberRecipe -> {
                   boolean favorite = false;
                   double rating = 0.0;
-                  if (optionalUserRecipe.isPresent()) {
-                    favorite = optionalUserRecipe.get().getFavorite();
-                    rating = optionalUserRecipe.get().getRating();
+                  if (optionalMemberRecipe.isPresent()) {
+                    favorite = optionalMemberRecipe.get().getFavorite();
+                    rating = optionalMemberRecipe.get().getRating();
                   }
                   return VideoInfoCustomResponse.builder()
                       .recipeId(recipeId)

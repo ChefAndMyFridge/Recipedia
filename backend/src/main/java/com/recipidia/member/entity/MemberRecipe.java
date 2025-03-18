@@ -1,4 +1,4 @@
-package com.recipidia.user.entity;
+package com.recipidia.member.entity;
 
 import com.recipidia.recipe.entity.Recipe;
 import jakarta.persistence.*;
@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor
-public class UserRecipe {
+public class MemberRecipe {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,8 +17,8 @@ public class UserRecipe {
 
   // 사용자와의 연관관계 (ManyToOne)
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_id", nullable = false)
-  private User user;
+  @JoinColumn(name = "member_id", nullable = false)
+  private Member member;
 
   // 레시피와의 연관관계 (ManyToOne)
   @ManyToOne(fetch = FetchType.LAZY)
@@ -38,8 +38,8 @@ public class UserRecipe {
   private LocalDateTime createdAt;
 
   @Builder
-  public UserRecipe(User user, Recipe recipe, Integer rating, Boolean favorite, LocalDateTime createdAt) {
-    this.user = user;
+  public MemberRecipe(Member member, Recipe recipe, Integer rating, Boolean favorite, LocalDateTime createdAt) {
+    this.member = member;
     this.recipe = recipe;
     this.rating = rating;
     this.favorite = favorite;

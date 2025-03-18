@@ -11,6 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RecipeQueryReq {
-    private Long userId;
+    private Long memberId;
     private List<String> ingredients; // 프론트엔드에서 전달받은 main ingredients 목록
 }
