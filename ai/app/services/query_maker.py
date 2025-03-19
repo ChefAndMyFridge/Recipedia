@@ -156,9 +156,6 @@ class QueryMaker:
             for i, dish in enumerate(self.dishes, 1):
                 print(f"{i}. {dish}")
 
-            if hasattr(self, 'openai_time'):
-                print(f"\n🕒 음식 이름 생성 시간 (OpenAI API): {self.openai_time:.2f}초")
-
         # 3. 검색된 레시피 정보 출력
         if include_recipes and hasattr(self, 'all_videos'):
             print("\n각 요리별 추천 레시피 동영상:")
@@ -193,14 +190,7 @@ class QueryMaker:
                 f"\n총 {len(self.dishes)}개 요리에 대해 {total_videos}개의 레시피 동영상을 찾았습니다.")
             print("각 요리별로 첫 번째 동영상만 표시되었습니다.")
 
-            if hasattr(self, 'youtube_time'):
-                print(f"\n🕒 레시피 검색 시간 (YouTube API): {self.youtube_time:.2f}초")
-
-        # 4. 실행 시간 출력
-        if include_time and hasattr(self, 'execution_time'):
-            print(f"\n실행 시간: {self.execution_time:.2f}초")
-
-        # 5. API 시간 비교 출력
+        # 4. API 시간 비교 출력
         if include_api_times and hasattr(self, 'execution_time'):
             print("\n===== API 호출 시간 비교 =====")
             print(
