@@ -59,6 +59,14 @@ const HomeIngredients = () => {
     }
   }
 
+  if (ingredients.length === 0) {
+    return (
+      <div className="flex justify-center items-center w-full h-full">
+        <p className="text-lg text-content">등록된 재료가 없습니다.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col justify-between items-center w-full h-full px-4 py-2 overflow-hidden">
       {/* 터치 이동이 가능한 슬라이드 영역 */}
@@ -76,9 +84,10 @@ const HomeIngredients = () => {
           const endIdx = startIdx + ITEM_PER_PAGE;
           return (
             <div key={idx} className="w-full flex-shrink-0 grid grid-cols-5 gap-2">
-              {ingredients.slice(startIdx, endIdx).map((ingredient) => (
-                <HomeIngredient key={ingredient.ingredientInfoId} ingredient={ingredient} />
-              ))}
+              {ingredients.length > 0 &&
+                ingredients
+                  .slice(startIdx, endIdx)
+                  .map((ingredient) => <HomeIngredient key={ingredient.ingredientInfoId} ingredient={ingredient} />)}
             </div>
           );
         })}
