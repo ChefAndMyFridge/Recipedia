@@ -3,6 +3,7 @@ import os
 import atexit
 from datetime import datetime
 from logging.handlers import TimedRotatingFileHandler
+from typing import Callable
 
 # logs 디렉토리 자동 생성
 LOG_DIR = os.path.join(os.path.dirname(
@@ -26,9 +27,10 @@ def get_error_log_file_path():
 
 
 class CustomTimedRotatingFileHandler(TimedRotatingFileHandler):
-    def __init__(self, filename, when, interval, backupCount, encoding):
+    def __init__(self, filename: Callable[[], str], when: str, interval: int, backupCount: int, encoding: str):
         # 동적으로 파일명을 설정할 함수 저장
-        self.baseFilenameFunc = filename
+
+        self.baseFilenameFunc: Callable[[], str] = filename
         super().__init__(filename(), when=when, interval=interval,
                          backupCount=backupCount, encoding=encoding)
 
