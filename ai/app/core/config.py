@@ -1,14 +1,23 @@
 # app/core/config.py
 from typing import List, Optional
 from pydantic_settings import BaseSettings
+from pydantic import validator
 
 
 class Settings(BaseSettings):
     APP_NAME: str = "FastAPI Server"
     DEBUG: bool = False
     ALLOWED_ORIGINS: List[str]
-    YOUTUBE_API_KEY: str
+    YOUTUBE_API_KEY: str = None
     OPENAI_API_KEY: str
+
+    YOUTUBE_API_KEYS: List[str]
+
+    @validator("YOUTUBE_API_KEY", pre=True, always=True)
+    def set_default_youtube_api_key(cls, v, values):
+        if v is None and "YOUTUBE_API_KEYS" in values and values["YOUTUBE_API_KEYS"]:
+            return values["YOUTUBE_API_KEYS"][0]
+        return v
 
     # 할루시네이션 줄이기 위한 파라미터 최적화
     # Query OpenAI 설정

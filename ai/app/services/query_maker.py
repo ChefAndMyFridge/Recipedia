@@ -4,6 +4,7 @@ from typing import List, Dict, Optional, Any, Union
 from app.services.LLM.food_generator import generate_dish_names
 from app.services.external_api.youtube_lib import get_youtube_videos
 from app.core.config import settings
+from app.utils.youtube_change_key import rotate_youtube_api_key
 import logging
 
 logger = logging.getLogger(__name__)
@@ -119,6 +120,9 @@ class QueryMaker:
 
         # 통합된 출력 함수 호출
         self.print_results()
+
+        # youtube api 키 라운드 로빈
+        await rotate_youtube_api_key()
 
         return {
             'dishes': self.dishes,
