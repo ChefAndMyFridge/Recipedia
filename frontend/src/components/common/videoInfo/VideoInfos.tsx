@@ -12,8 +12,8 @@ const VideoInfos = ({ video }: VideoInfosProps) => {
   return (
     <div className="w-full flex justify-around items-center">
       <VideoInfo IconName={IconClock} InfoData={video.duration} InfoType="TIME" />
-      <VideoInfo IconName={IconLike} InfoData={video.like_count.toLocaleString()} InfoType="LIKE" />
-      <VideoInfo IconName={IconView} InfoData={video.view_count.toLocaleString()} InfoType="VIEW" />
+      <VideoInfo IconName={IconLike} InfoData={video.like_count.toString()} InfoType="LIKE" />
+      <VideoInfo IconName={IconView} InfoData={video.view_count.toString()} InfoType="VIEW" />
     </div>
   );
 };

@@ -1,20 +1,28 @@
 import { useState } from "react";
 import MenuList from "@pages/recipeList/components/RecipeMenuList";
 import Carousel from "@pages/recipeList/components/RecipeCarousel";
-import RECIPE_LIST from "@/data/RECIPE_LIST";
-import { VideoList } from "@/types/recipeListTypes";
-
-//임의 데이터
-const DISHES: string[] = RECIPE_LIST.dishes;
-const VIDEOS: VideoList = RECIPE_LIST.videos;
+import recipeStore from "@stores/recipeStore";
 
 const RecipeList = () => {
-  const [selectedDish, setSelectedDish] = useState<keyof typeof VIDEOS>(DISHES[0]);
+  const { recipeList } = recipeStore();
+  const DISHES = recipeList.dishes.length > 0 ? recipeList.dishes : [];
+  const VIDEOS = recipeList.videos;
+
+  const [selectedDish, setSelectedDish] = useState<keyof typeof VIDEOS | string>(DISHES.length > 0 ? DISHES[0] : "");
 
   return (
     <section className="h-full flex flex-col">
       <MenuList dishes={DISHES} selectedDish={selectedDish} setSelectedDish={setSelectedDish} />
-      <Carousel videos={VIDEOS[selectedDish]} />
+
+      {
+        //메뉴 리스트는 있는데 selectedDish가 없을 때
+        DISHES.length > 0 && !selectedDish && (
+          <div className="text-xl font-preBold flex items-center justify-center h-full">
+            원하는 레시피를 선택해주세요
+          </div>
+        )
+      }
+      {VIDEOS[selectedDish] && VIDEOS[selectedDish].length > 0 && <Carousel videos={VIDEOS[selectedDish]} />}
     </section>
   );
 };

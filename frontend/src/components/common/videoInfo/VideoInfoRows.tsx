@@ -11,10 +11,10 @@ interface VideoInfoRowsProps {
 const VideoInfoRows = ({ video }: VideoInfoRowsProps) => {
   return (
     <div>
-      <div className="w-full flex justify-around items-center gap-3">
+      <div className="w-full flex justify-around items-center gap-3 text-sm">
         <VideoInfoRow IconName={IconClock} InfoData={video.duration} InfoType="TIME" />
-        <VideoInfoRow IconName={IconLike} InfoData={video.like_count.toLocaleString()} InfoType="LIKE" />
-        <VideoInfoRow IconName={IconView} InfoData={video.view_count.toLocaleString()} InfoType="VIEW" />
+        <VideoInfoRow IconName={IconLike} InfoData={video.like_count.toString()} InfoType="LIKE" />
+        <VideoInfoRow IconName={IconView} InfoData={video.view_count.toString()} InfoType="VIEW" />
       </div>
     </div>
   );

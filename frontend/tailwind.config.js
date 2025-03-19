@@ -11,6 +11,8 @@ export default {
       md: "480px", // 스마트폰 모바일(가로) & 태블릿 세로
       lg: "768px", // 태블릿 가로
       xl: "1024px", // 노트북 & 이외 사이즈
+      portrait: { raw: "(orientation: portrait)" }, // 세로 화면
+      landscape: { raw: "(orientation: landscape)" }, // 가로 화면
     },
     fontFamily: {
       preLight: ["Pretendard-Light"],

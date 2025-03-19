@@ -16,7 +16,7 @@ const DetailIngredientModal = ({ ingredient }: IngredientsProps) => {
 
   return (
     <div>
-      <DetailIngredientImage imgSrc={ingredient.imageUrl} />
+      <DetailIngredientImage imgSrc={ingredient.imageUrl} ingredientId={ingredient.ingredientInfoId} />
 
       {/* 선택된 식재료 현황 */}
       <div className="flex justify-between items-center w-full h-10 px-6 py-8 font-preSemiBold">
