@@ -42,21 +42,15 @@ export const useGetIngredientsList = () => {
 };
 
 // 전체 재료 목록 조회 (아직 릴리즈되지 않은 API)
-export const useGetIngredientsInfoList = () => {
-  const { setIngredientsInfo } = useIngredientsStore();
-
+export const useGetIngredientsInfoList = (options?: { enabled?: boolean }) => {
   const query = useQuery<IngredientsInfo[]>({
     queryKey: ["ingredientsInfo"],
     queryFn: getIngredientsInfoApi,
-    staleTime: 1000 * 60 * 60 * 148, // 7일
     throwOnError: true,
+    enabled: options?.enabled ?? true, // enabled가 false이면 처음에는 API 호출을 하지 않음 (기본값: true)
   });
 
-  useEffect(() => {
-    if (query.data) {
-      setIngredientsInfo(query.data);
-    }
-  }, [query.data, setIngredientsInfo]);
+  return query;
 };
 
 // 재료 입고

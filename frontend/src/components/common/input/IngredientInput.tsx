@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-import useIngredientsStore from "@stores/ingredientsStore";
 import { useGetIngredientsInfoList } from "@hooks/useIngredientsHooks";
 
 import { InputProps } from "@/types/commonProps.ts";
@@ -30,11 +29,21 @@ const Suggestion = ({
 const IngredientInput = ({ label, name, type, placeHolder, labelTextSize }: InputProps) => {
   const [inputValue, setInputValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
+  const [ingredientsInfo, setIngredientsInfo] = useState<IngredientsInfo[] | []>([]);
 
-  const { ingredientsInfo } = useIngredientsStore();
+  // API 호출을 초기에는 비활성화한 상태에서 쿼리 객체를 가져옴
+  const { data, refetch } = useGetIngredientsInfoList({ enabled: false });
 
-  // 자동 완성에 사용할 전체 재료 목록 조회 (7일)
-  useGetIngredientsInfoList();
+  useEffect(() => {
+    refetch(); // 컴포넌트가 마운트될 때 강제로 API를 호출
+  }, []);
+
+  // 자동완성 데이터 저장
+  useEffect(() => {
+    if (data) {
+      setIngredientsInfo(data);
+    }
+  }, [data]);
 
   // ver1. 입력한 단어가 포함된 재료명 필터링
   const filteredSuggestions = ingredientsInfo?.filter((ingredient) =>
