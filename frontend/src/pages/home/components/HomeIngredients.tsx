@@ -23,7 +23,7 @@ const HomeIngredients = () => {
     setPageIndex(0);
   }, [ingredients]);
 
-  const totalPages = ingredients.length > 0 ? Math.ceil(ingredients.length / ITEM_PER_PAGE) : 1;
+  const totalPages = ingredients && ingredients.length > 0 ? Math.ceil(ingredients.length / ITEM_PER_PAGE) : 1;
   const pagination = Array.from({ length: totalPages });
 
   // 페이지 이동
