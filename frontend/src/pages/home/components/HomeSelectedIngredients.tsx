@@ -20,7 +20,15 @@ const HomeSelectedIngredients = () => {
                 alt={ingredient.imageUrl}
                 className="w-full h-full object-cover rounded-3xl"
               />
-              <p className="absolute bottom-0.5 w-full font-preMedium text-xs text-center">{ingredient.name}</p>
+              <span className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/50 to-transparent rounded-b-3xl" />
+              <p
+                className="absolute bottom-0.5 w-full font-preMedium text-xs text-center text-white"
+                style={{
+                  textShadow: "0.5px 0 black, 0 0.5px black, -0.5px 0 black, 0 -0.5px black",
+                }}
+              >
+                {ingredient.name}
+              </p>
             </div>
           </div>
         ))}
