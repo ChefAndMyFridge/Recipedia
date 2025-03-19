@@ -86,6 +86,7 @@ const HomeIngredients = () => {
             return (
               <div key={idx} className="w-full flex-shrink-0 grid grid-cols-5 gap-2">
                 {ingredients &&
+                  ingredients.length > 0 &&
                   ingredients
                     .slice(startIdx, endIdx)
                     .map((ingredient) => <HomeIngredient key={ingredient.ingredientInfoId} ingredient={ingredient} />)}
