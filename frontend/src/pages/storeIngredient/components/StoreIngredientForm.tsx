@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 
-import { StoreIngredient } from "@/types/ingredientsTypes";
-import { useStoreIngredient } from "@hooks/useIngredientsHooks";
-
 import useModalStore from "@stores/modalStore";
 
+import { StoreIngredient } from "@/types/ingredientsTypes";
+import { useGetIngredientsInfoList, useStoreIngredient } from "@hooks/useIngredientsHooks";
+
+import IngredientInput from "@pages/storeIngredient/components/IngredientInput.tsx";
 import Input from "@components/common/input/Input.tsx";
 import Button from "@components/common/button/Button.tsx";
 import Keypad from "@components/common/keypad/Keypad";
@@ -27,6 +28,9 @@ const StoreIngredientForm = () => {
     // 추후 재료별 유통기한 설정 필요
     setExpirationDate(new Date(new Date(incomingDate).getTime() + 1000 * 60 * 60 * 24 * 7).toISOString().split("T")[0]);
   }, [incomingDate]);
+
+  // 자동 완성에 사용할 전체 재료 목록 조회 (7일)
+  useGetIngredientsInfoList();
 
   // 저장 위치 변경
   function handleStoragePlace(place: string): void {
@@ -68,7 +72,7 @@ const StoreIngredientForm = () => {
     <form className="px-2" onSubmit={handleSubmit}>
       <div className="flex flex-col gap-4 px-6 py-4 bg-[#EEE] rounded-xl">
         <div className="relative flex gap-4 justify-between items-center">
-          <Input label="재료명" name="name" type="text" placeHolder="재료명을 입력해주세요" />
+          <IngredientInput label="재료명" name="name" type="text" placeHolder="재료명을 입력해주세요" />
           <div className="flex flex-col gap-2 w-2/5">
             <p className="font-preMedium text-[#333] text-xs font-semibold">수량</p>
             <input
