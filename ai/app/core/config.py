@@ -13,7 +13,7 @@ class Settings(BaseSettings):
 
     # 할루시네이션 줄이기 위한 파라미터 최적화
     # Query OpenAI 설정
-    QUERY_OPENAI_MODEL: str = "gpt-4o"
+    QUERY_OPENAI_MODEL: str = "gpt-4o-mini"
     QUERY_OPENAI_MAX_TOKENS: int = 100  # 간결한 응답을 위한 적절한 값
     QUERY_OPENAI_TEMPERATURE: float = 0.2  # 재료 목록에 더 충실하도록 낮은 값 설정
     QUERY_OPENAI_TOP_P: float = 0.85      # 상위 확률 토큰 제한
@@ -28,10 +28,10 @@ class Settings(BaseSettings):
     SUMMARY_OPENAI_STREAM: bool = False  # 스트리밍 사용 여부
 
     # YouTube 설정
-    YOUTUBE_MAX_RESULTS: int = 1
+    YOUTUBE_MAX_RESULTS: int = 5
 
     # 생성할 음식 이름 개수
-    NUM_DISHES_TO_GENERATE: int = 5
+    NUM_DISHES_TO_GENERATE: int = 3
 
     class Config:
         env_file = ".env"

@@ -2,7 +2,7 @@ import time
 import asyncio
 from typing import List, Dict, Optional, Any, Union
 from app.services.LLM.food_generator import generate_dish_names
-from app.services.external_api.youtube_api import get_youtube_videos
+from app.services.external_api.youtube_lib import get_youtube_videos
 from app.core.config import settings
 import logging
 
@@ -173,6 +173,9 @@ class QueryMaker:
 
                     if 'channel_title' in first_video:
                         print(f"   채널: {first_video['channel_title']}")
+                    
+                    if 'duration' in first_video:
+                        print(f"   길이: {first_video['duration']}")
 
                     if 'view_count' in first_video:
                         print(f"   조회수: {first_video['view_count']}")
@@ -261,14 +264,14 @@ if __name__ == "__main__":
             [["새우", "오징어", "양파", "마늘", "고추", "파", "식용유", "밀가루", "달걀", "소금"],
              ["새우", "오징어"], "테스트 케이스 3: 해산물 요리 (주재료: 새우, 오징어)"],
 
-            [["닭고기", "코코넛밀크", "레몬그라스", "생강", "칠리", "바질", "카피르라임잎", "피시소스", "쌀", "콩나물"],
-             ["닭고기"], "테스트 케이스 4: 아시안 요리 (주재료: 닭고기)"],
+            # [["닭고기", "코코넛밀크", "레몬그라스", "생강", "칠리", "바질", "카피르라임잎", "피시소스", "쌀", "콩나물"],
+            #  ["닭고기"], "테스트 케이스 4: 아시안 요리 (주재료: 닭고기)"],
 
-            [["닭고기", "감자", "당근", "양파", "간장"],
-             ["닭고기", "감자"], "테스트 케이스 5: 기존 테스트 케이스"],
+            # [["닭고기", "감자", "당근", "양파", "간장"],
+            #  ["닭고기", "감자"], "테스트 케이스 5: 기존 테스트 케이스"],
 
-            [["돼지뼈", "감자", "당근", "양파", "고추장", "마늘", "대파"],
-             ["돼지뼈", "감자"], "테스트 케이스 6: 돼지뼈와 감자 조합"]
+            # [["돼지뼈", "감자", "당근", "양파", "고추장", "마늘", "대파"],
+            #  ["돼지뼈", "감자"], "테스트 케이스 6: 돼지뼈와 감자 조합"]
         ]
 
         if FULL_TEST_MODE:
