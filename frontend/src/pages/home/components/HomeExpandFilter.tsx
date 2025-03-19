@@ -29,14 +29,15 @@ const HomeExpandFilter = ({
           </div>
 
           <div className="flex flex-wrap gap-2">
-            {filteringElems.map((elem, index) => (
-              <FilterButton
-                key={index}
-                isSelected={filteredElems.includes(elem)}
-                content={elem}
-                onAction={() => handleFilter(filterType, elem)}
-              />
-            ))}
+            {filteringElems &&
+              filteringElems.map((elem, index) => (
+                <FilterButton
+                  key={index}
+                  isSelected={filteredElems.includes(elem)}
+                  content={elem}
+                  onAction={() => handleFilter(filterType, elem)}
+                />
+              ))}
           </div>
         </div>
       </div>

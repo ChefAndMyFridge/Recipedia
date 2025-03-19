@@ -59,7 +59,7 @@ const HomeIngredients = () => {
     }
   }
 
-  if (ingredients.length === 0) {
+  if (ingredients && ingredients.length === 0) {
     return (
       <div className="flex justify-center items-center w-full h-full">
         <p className="text-lg text-content">등록된 재료가 없습니다.</p>
@@ -79,29 +79,31 @@ const HomeIngredients = () => {
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        {pagination.map((_, idx) => {
-          const startIdx = idx * ITEM_PER_PAGE;
-          const endIdx = startIdx + ITEM_PER_PAGE;
-          return (
-            <div key={idx} className="w-full flex-shrink-0 grid grid-cols-5 gap-2">
-              {ingredients.length > 0 &&
-                ingredients
-                  .slice(startIdx, endIdx)
-                  .map((ingredient) => <HomeIngredient key={ingredient.ingredientInfoId} ingredient={ingredient} />)}
-            </div>
-          );
-        })}
+        {pagination &&
+          pagination.map((_, idx) => {
+            const startIdx = idx * ITEM_PER_PAGE;
+            const endIdx = startIdx + ITEM_PER_PAGE;
+            return (
+              <div key={idx} className="w-full flex-shrink-0 grid grid-cols-5 gap-2">
+                {ingredients &&
+                  ingredients
+                    .slice(startIdx, endIdx)
+                    .map((ingredient) => <HomeIngredient key={ingredient.ingredientInfoId} ingredient={ingredient} />)}
+              </div>
+            );
+          })}
       </div>
 
       {/* 페이지네이션 */}
       <div className="flex justify-center items-end gap-1.5 h-[5%]">
-        {pagination.map((_, idx) => (
-          <span
-            key={idx}
-            className={`rounded-full transition-all ${idx === pageIndex ? "w-2 h-2 bg-primary" : "w-1.5 h-1.5  bg-content"}`}
-            onClick={() => setPageIndex(idx)}
-          />
-        ))}
+        {pagination &&
+          pagination.map((_, idx) => (
+            <span
+              key={idx}
+              className={`rounded-full transition-all ${idx === pageIndex ? "w-2 h-2 bg-primary" : "w-1.5 h-1.5  bg-content"}`}
+              onClick={() => setPageIndex(idx)}
+            />
+          ))}
       </div>
     </div>
   );

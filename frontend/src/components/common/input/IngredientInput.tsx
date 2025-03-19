@@ -81,13 +81,14 @@ const IngredientInput = ({ label, name, type, placeHolder, labelTextSize }: Inpu
       {/* 자동 완성 */}
       {isFocused && filteredSuggestions.length > 0 && (
         <ul className="absolute top-full left-0 mt-1 w-full max-h-60 z-10 bg-white border border-gray-300 rounded-lg shadow-md overflow-y-auto">
-          {filteredSuggestions.map((suggestion) => (
-            <Suggestion
-              key={suggestion.ingredientInfoId}
-              suggestion={suggestion}
-              onSelectSuggestion={handleSelectSuggestion}
-            />
-          ))}
+          {filteredSuggestions &&
+            filteredSuggestions.map((suggestion) => (
+              <Suggestion
+                key={suggestion.ingredientInfoId}
+                suggestion={suggestion}
+                onSelectSuggestion={handleSelectSuggestion}
+              />
+            ))}
         </ul>
       )}
     </div>

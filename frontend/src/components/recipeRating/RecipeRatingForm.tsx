@@ -30,17 +30,18 @@ const RecipeRatingForm = () => {
   return (
     <div className="py-6 flex flex-col items-center gap-10">
       <div className="flex gap-3 py-10">
-        {rating.map((el, index) =>
-          el ? (
-            <button onClick={() => starRating(index)} key={index}>
-              <IconStarFill key={index} width={45} height={45} />
-            </button>
-          ) : (
-            <button onClick={() => starRating(index)} key={index}>
-              <IconStarBlank width={45} height={45} />
-            </button>
-          )
-        )}
+        {rating &&
+          rating.map((el, index) =>
+            el ? (
+              <button onClick={() => starRating(index)} key={index}>
+                <IconStarFill key={index} width={45} height={45} />
+              </button>
+            ) : (
+              <button onClick={() => starRating(index)} key={index}>
+                <IconStarBlank width={45} height={45} />
+              </button>
+            )
+          )}
       </div>
       <div className="flex gap-2">
         <Button type="button" design="cancel" content="취소하기" className="w-24 h-10" onAction={closeModal} />
