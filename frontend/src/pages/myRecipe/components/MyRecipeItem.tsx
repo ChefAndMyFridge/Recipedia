@@ -12,7 +12,7 @@ const MyRecipeItem = ({ recipe }: { recipe: Video }) => {
       className="w-[90%] h-24 bg-white rounded-xl shadow-md flex flex-col items-start p-4 gap-4"
     >
       <div className="flex justify-between items-center w-full">
-        <p className="w-[60%] font-preBold text-xl overflow-hidden text-ellipsis whitespace-nowrap">{recipe.title}</p>
+        <p className="w-[60%] font-preBold text-md overflow-hidden text-ellipsis whitespace-nowrap">{recipe.title}</p>
         <Button
           type="button"
           design="confirm"
