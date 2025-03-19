@@ -28,8 +28,19 @@ def get_error_log_file_path():
 
 class CustomTimedRotatingFileHandler(TimedRotatingFileHandler):
     def __init__(self, filename: Callable[[], str], when: str, interval: int, backupCount: int, encoding: str):
-        # 동적으로 파일명을 설정할 함수 저장
+        """
+        동적으로 파일명을 설정할 함수 저장
+        * 회전이란 새로운 로그 파일에 데이터를 저장할 수 있도록 전환하는 행위를 뜻함
 
+        Args:
+            filename(function): 파일 이름을 업데이트 하는 함수
+            when(str): 회전 주기 단위(시, 분, 초 등등)
+            interval(int): 회전 주기
+            backupCount(int): 최대 백업 파일 갯수
+            encoding(str): 로그 데이터 저장 인코딩 방식
+
+
+        """
         self.baseFilenameFunc: Callable[[], str] = filename
         super().__init__(filename(), when=when, interval=interval,
                          backupCount=backupCount, encoding=encoding)
@@ -40,7 +51,8 @@ class CustomTimedRotatingFileHandler(TimedRotatingFileHandler):
         """
         # 새로운 날짜의 파일 경로로 업데이트
         self.baseFilename = self.baseFilenameFunc()
-        super().doRollover()  # 기본 회전 실행
+        # 기본 회전 실행
+        super().doRollover()
 
     def shouldRollover(self, record):
         """
