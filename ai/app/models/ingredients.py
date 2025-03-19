@@ -1,8 +1,9 @@
 # app/models/ingredients.py
 
-from typing import List, Optional
+from typing import List
 from pydantic import BaseModel
 
+
 class Ingredients(BaseModel):
-    ingredients: List[str]
-    main_ingredient: Optional[str] = None
+    ingredients: List[str] = None
+    main_ingredients: List[str] = None

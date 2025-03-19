@@ -10,7 +10,7 @@ public class Webconfig implements WebMvcConfigurer {
   @Override
   public void addCorsMappings(CorsRegistry registry) {
     registry.addMapping("/api/**")
-        .allowedOrigins("http://localhost:5173")
+        .allowedOrigins("http://localhost:5173", "https://j12s003.p.ssafy.io")
         .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
         .allowedHeaders("*")
         .maxAge(3600 * 24);
