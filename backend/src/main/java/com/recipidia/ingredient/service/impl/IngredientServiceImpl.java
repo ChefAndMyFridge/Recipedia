@@ -8,11 +8,13 @@ import com.recipidia.ingredient.exception.IngredientDeleteException;
 import com.recipidia.ingredient.repository.IngredientInfoRepository;
 import com.recipidia.ingredient.repository.IngredientRepository;
 import com.recipidia.ingredient.request.IngredientIncomingReq;
+import com.recipidia.ingredient.request.IngredientMultipleDeleteReq;
 import com.recipidia.ingredient.request.IngredientUpdateReq;
 import com.recipidia.ingredient.response.IngredientIncomingRes;
 import com.recipidia.ingredient.response.IngredientUpdateRes;
 import com.recipidia.ingredient.service.IngredientService;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +35,16 @@ public class IngredientServiceImpl implements IngredientService {
     List<IngredientInfo> ingredientInfos = ingredientInfoRepository.findAllWithIngredients();
     return ingredientInfos.stream()
         .map(IngredientInfoDto::fromEntity)
+        .toList();
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public List<IngredientInfoDto> getAllExistingIngredients() {
+    List<IngredientInfo> ingredientInfos = ingredientInfoRepository.findAllWithIngredients();
+    return ingredientInfos.stream()
+        .map(IngredientInfoDto::fromEntity)
+        .filter(dto -> dto.getTotalCount() >= 1)
         .toList();
   }
 
@@ -128,5 +140,22 @@ public class IngredientServiceImpl implements IngredientService {
   public IngredientInfoWithNutrientDto getIngredientInfoWithNutrients(Long id) {
     IngredientInfo ingredientInfo = ingredientInfoRepository.findWithIngredientsAndNutrients(id);
     return IngredientInfoWithNutrientDto.fromEntity(ingredientInfo);
+  }
+
+  @Override
+  @Transactional
+  public Map<String, Integer> releaseMultipleItems(List<IngredientMultipleDeleteReq> requests) {
+    Map<String, Integer> remainCounts = new HashMap<>();
+
+    for (IngredientMultipleDeleteReq req : requests) {
+      // 이름으로 재료 조회
+      IngredientInfo ingredientInfo = ingredientInfoRepository.findByName(req.name())
+          .orElseThrow(() -> new IngredientDeleteException("재료 " + req.name() + " 가 존재하지 않습니다."));
+
+      // 기존 단일 출고 메서드 재활용
+      Map<String, Integer> result = releaseItems(ingredientInfo.getId(), req.quantity());
+      remainCounts.put(req.name(), result.get("remainCount"));
+    }
+    return remainCounts;
   }
 }
