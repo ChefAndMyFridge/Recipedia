@@ -1,6 +1,5 @@
 # app/services/recipe_summary.py
 import time
-import logging
 import asyncio
 
 from youtube_transcript_api import YouTubeTranscriptApi, NoTranscriptFound, TranscriptsDisabled, VideoUnavailable
@@ -10,15 +9,15 @@ from fastapi import HTTPException
 from app.utils.prompts.few_shot import SUMMARY_FEW_SHOT_DATA
 from app.utils.prompts.recipe_summary_prompts import SUMMARY_SYSTEM_INPUT, SUMMARY_USER_INPUT
 from app.core.config import settings
-
-logger = logging.getLogger(__name__)
+from app.core.logging_config import logger
 
 
 class RecipeSummary:
     def __init__(self):
         self.api_key: str = settings.OPENAI_API_KEY
         if not self.api_key:
-            logger.error("OPENAI_API_KEY가 설정되지 않았습니다.")
+            logger.error(
+                f"{settings.LOG_SUMMARY_PREFIX}_OPENAI_API_KEY가 설정되지 않았습니다.")
             raise HTTPException(
                 status_code=500, detail="OPENAI_API_KEY가 설정되지 않았습니다.")
         # OpenAI 클라이언트 (비동기) 생성 – YoutubeQuery와 유사하게 생성자에서 한 번만 초기화
@@ -40,16 +39,17 @@ class RecipeSummary:
         try:
             return method(languages)
         except NoTranscriptFound:
-            logger.warning(f"{languages} : 제공된 자막 없음")
+            logger.warning(
+                f"{settings.LOG_SUMMARY_PREFIX}_{languages} : 제공된 자막 없음")
             return None
         except TranscriptsDisabled:
-            logger.warning(f"자막 비활성화")
+            logger.warning(f"{settings.LOG_SUMMARY_PREFIX}_자막 비활성화")
             return None
         except VideoUnavailable:
-            logger.warning(f"영상 사용 불가")
+            logger.warning(f"{settings.LOG_SUMMARY_PREFIX}_영상 사용 불가")
             return None
         except Exception as e:
-            logger.error(f"자막 추출 중 에러 발생 : {e}")
+            logger.error(f"{settings.LOG_SUMMARY_PREFIX}_자막 추출 중 에러 발생 : {e}")
             return None
 
     async def get_transcript(self, video_id: str) -> list[dict]:
@@ -74,7 +74,7 @@ class RecipeSummary:
         )
 
         if transcript is None:
-            logger.error("사용 가능한 자막이 없습니다.")
+            logger.error("{settings.LOG_SUMMARY_PREFIX}_사용 가능한 자막이 없습니다.")
             return None
 
         # 자막 데이터 가져오기
@@ -90,7 +90,8 @@ class RecipeSummary:
 
             return result
         except Exception as e:
-            logger.error(f"자막 가져오는 중 에러 발생 : {e}")
+            logger.error(
+                f"{settings.LOG_SUMMARY_PREFIX}_자막 가져오는 중 에러 발생 : {e}")
             return None
 
     async def summarize_recipe(self, video_id: str) -> str:
@@ -139,7 +140,7 @@ class RecipeSummary:
 
             return summary
         except Exception as e:
-            logger.error(f"요약 API 호출 오류: {e}")
+            logger.error(f"{settings.LOG_SUMMARY_PREFIX}_요약 API 호출 오류: {e}")
             raise HTTPException(status_code=500, detail="요약 처리 중 오류가 발생했습니다.")
 
 
