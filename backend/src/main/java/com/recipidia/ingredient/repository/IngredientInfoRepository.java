@@ -13,7 +13,9 @@ public interface IngredientInfoRepository extends JpaRepository<IngredientInfo, 
 
     Optional<IngredientInfo> findByName(String name);
 
-    @Query("select if from IngredientInfo if left join fetch if.ingredients")
+    @Query("SELECT distinct i FROM IngredientInfo i "
+        + "JOIN FETCH i.ingredients ing "
+        + "WHERE ing.isReleased = false")
     List<IngredientInfo> findAllWithIngredients();
 
     @Query("select if from IngredientInfo if left join fetch if.ingredients where if.id = :ingredientId")

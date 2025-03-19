@@ -2,6 +2,7 @@ package com.recipidia.ingredient.service.impl;
 
 import com.recipidia.ingredient.dto.IngredientInfoDto;
 import com.recipidia.ingredient.dto.IngredientInfoWithNutrientDto;
+import com.recipidia.ingredient.dto.IngredientSimpleInfoDto;
 import com.recipidia.ingredient.entity.Ingredient;
 import com.recipidia.ingredient.entity.IngredientInfo;
 import com.recipidia.ingredient.exception.IngredientDeleteException;
@@ -31,10 +32,10 @@ public class IngredientServiceImpl implements IngredientService {
   private final IngredientRepository ingredientRepository;
 
   @Override
-  public List<IngredientInfoDto> getAllIngredients() {
-    List<IngredientInfo> ingredientInfos = ingredientInfoRepository.findAllWithIngredients();
+  public List<IngredientSimpleInfoDto> getAllIngredientInfo() {
+    List<IngredientInfo> ingredientInfos = ingredientInfoRepository.findAll();
     return ingredientInfos.stream()
-        .map(IngredientInfoDto::fromEntity)
+        .map(IngredientSimpleInfoDto::fromEntity)
         .toList();
   }
 
@@ -44,7 +45,6 @@ public class IngredientServiceImpl implements IngredientService {
     List<IngredientInfo> ingredientInfos = ingredientInfoRepository.findAllWithIngredients();
     return ingredientInfos.stream()
         .map(IngredientInfoDto::fromEntity)
-        .filter(dto -> dto.getTotalCount() >= 1)
         .toList();
   }
 

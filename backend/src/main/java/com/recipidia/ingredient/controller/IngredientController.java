@@ -2,6 +2,7 @@ package com.recipidia.ingredient.controller;
 
 import com.recipidia.ingredient.dto.IngredientInfoDto;
 import com.recipidia.ingredient.dto.IngredientInfoWithNutrientDto;
+import com.recipidia.ingredient.dto.IngredientSimpleInfoDto;
 import com.recipidia.ingredient.request.IngredientDeleteReq;
 import com.recipidia.ingredient.request.IngredientIncomingReq;
 import com.recipidia.ingredient.request.IngredientMultipleDeleteReq;
@@ -31,6 +32,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/ingredient")
 @RequiredArgsConstructor
 public class IngredientController {
+
+  private final IngredientService ingredientService;
 
   // 단일 재료 정보 조회
   @Operation(
@@ -77,7 +80,6 @@ public class IngredientController {
     return ingredientService.getIngredient(ingredientId);
   }
 
-  private final IngredientService ingredientService;
 
   // 재료 입고: 재료가 존재하면 해당 재료에 item 추가, 없으면 새로 생성 후 item 추가
   @Operation(
@@ -120,27 +122,10 @@ public class IngredientController {
                           name = "응답 데이터",
                           value = """
                               {
-                              "ingredientInfoId": 1,
-                              "name": "대파",
-                              "imageUrl": "https://image.com",
-                              "totalCount": 2,
-                              "ingredients":
-                                [
-                                  {
-                                    "ingredientId": 1,
-                                    "storagePlace": "냉장고",
-                                    "expirationDate": "2025-03-08T11:00:00",
-                                    "incomingDate": "2025-03-01T12:00:00",
-                                    "releasingDate": "2025-03-05T12:00:00"
-                                  },
-                                  {
-                                    "ingredientId": 2,
-                                    "storagePlace": "냉장고",
-                                    "expirationDate": "2025-03-08T11:00:00",
-                                    "incomingDate": "2025-03-01T12:00:00",
-                                    "releasingDate": "2025-03-05T12:00:00"
-                                  },
-                                ]
+                                "ingredientInfoId": 1,
+                                "name": "대파",
+                                "imageUrl": "https://image.com",
+                                "totalCount": 2
                               }
                               """
                       )
@@ -149,8 +134,8 @@ public class IngredientController {
   )
   // 전체 재료 및 해당 item 목록 조회
   @GetMapping("/info")
-  public List<IngredientInfoDto> getAllIngredients() {
-    return ingredientService.getAllIngredients();
+  public List<IngredientSimpleInfoDto> getAllIngredientInfo() {
+    return ingredientService.getAllIngredientInfo();
   }
 
   // 전체 실제 재료 조회
