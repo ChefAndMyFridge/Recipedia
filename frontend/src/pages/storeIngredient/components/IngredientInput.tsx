@@ -3,13 +3,13 @@ import React, { useState } from "react";
 import useIngredientsStore from "@stores/ingredientsStore";
 
 import { InputProps } from "@/types/commonProps.ts";
-import { Ingredients } from "@/types/ingredientsTypes.ts";
+import { IngredientsInfo } from "@/types/ingredientsTypes.ts";
 
 const Suggestion = ({
   suggestion,
   onSelectSuggestion,
 }: {
-  suggestion: Ingredients;
+  suggestion: IngredientsInfo;
   onSelectSuggestion: (suggestion: string) => void;
 }) => {
   return (

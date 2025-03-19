@@ -2,16 +2,16 @@ import { create } from "zustand";
 
 import { INGREDIENTS } from "@/data/INGREDIENTS.ts";
 
-import { Ingredients, SelectedIngredients, filteredInfomations } from "@/types/ingredientsTypes.ts";
+import { Ingredients, IngredientsInfo, SelectedIngredients, filteredInfomations } from "@/types/ingredientsTypes.ts";
 
 interface IngredientsState {
   ingredients: Ingredients[]; // 고내에 저장된 재료 목록
-  ingredientsInfo: Ingredients[]; // 전체 재료 목록 (검색 시 자동 완성에 사용)
+  ingredientsInfo: IngredientsInfo[]; // 전체 재료 목록 (검색 시 자동 완성에 사용)
   selectedIngredients: Record<number, SelectedIngredients>; // { ingredientInfoId: selectedCount } 선택된 재료 목록
   filteringInfomationKeys: filteredInfomations;
   filteredInfomations: filteredInfomations;
   setIngredients: (ingredients: Ingredients[]) => void;
-  setIngredientsInfo: (ingredientsInfo: Ingredients[]) => void;
+  setIngredientsInfo: (ingredientsInfo: IngredientsInfo[]) => void;
   setSelectedCount: (ingredientInfoId: number, ingredientInfo: SelectedIngredients) => void;
   setClearSelectedIngredients: () => void;
   setFilteredInfomations: (filterKey: keyof filteredInfomations, filterValue: string) => void;

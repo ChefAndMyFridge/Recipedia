@@ -14,6 +14,13 @@ export interface Ingredients {
   ingredients: Ingredient[];
 }
 
+export interface IngredientsInfo {
+  ingredientInfoId: number;
+  name: string;
+  imageUrl: string;
+  totalCount: number;
+}
+
 export interface Nutritions {
   calories: number;
   carbohydrate: number;

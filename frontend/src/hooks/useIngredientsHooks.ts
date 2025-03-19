@@ -1,7 +1,13 @@
 import { useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { Ingredients, StoreIngredient, StoreResponseIngredient, IngredientNutrition } from "@/types/ingredientsTypes";
+import {
+  Ingredients,
+  IngredientsInfo,
+  StoreIngredient,
+  StoreResponseIngredient,
+  IngredientNutrition,
+} from "@/types/ingredientsTypes";
 
 import {
   getIngredientsApi,
@@ -36,7 +42,7 @@ export const useGetIngredientsList = () => {
 export const useGetIngredientsInfoList = () => {
   const { setIngredientsInfo } = useIngredientsStore();
 
-  const query = useQuery<Ingredients[]>({
+  const query = useQuery<IngredientsInfo[]>({
     queryKey: ["ingredientsInfo"],
     queryFn: getIngredientsInfoApi,
     staleTime: 1000 * 60 * 60 * 148, // 7일

@@ -1,4 +1,10 @@
-import { Ingredients, StoreIngredient, StoreResponseIngredient, IngredientNutrition } from "@/types/ingredientsTypes";
+import {
+  Ingredients,
+  IngredientsInfo,
+  StoreIngredient,
+  StoreResponseIngredient,
+  IngredientNutrition,
+} from "@/types/ingredientsTypes";
 
 import instance from "./instance";
 
@@ -13,7 +19,7 @@ export const getIngredientsApi = async (): Promise<Ingredients[]> => {
 };
 
 // 전체 재료 목록 조회 (아직 릴리즈되지 않은 API)
-export const getIngredientsInfoApi = async (): Promise<Ingredients[]> => {
+export const getIngredientsInfoApi = async (): Promise<IngredientsInfo[]> => {
   try {
     const response = await instance.get("v1/ingredient/info");
     return response.data;

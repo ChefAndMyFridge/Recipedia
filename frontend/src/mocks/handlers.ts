@@ -1,6 +1,6 @@
 //mocks/handlers.ts
 import { http, HttpResponse } from "msw";
-import { INGREDIENTS } from "@/data/INGREDIENTS";
+import { INGREDIENTS, INGREDIENTS_INFO } from "@/data/INGREDIENTS";
 import { INGREDIENT_WITH_NUTRITIONS } from "@/data/NUTRITIONS";
 import RECIPE_LIST from "@/data/RECIPE_LIST";
 import DETAIL_RECIPE from "@/data/DETAIL_RECIPE";
@@ -15,7 +15,7 @@ const handlers = [
 
   // 전체 재료 목록 조회 (아직 릴리즈되지 않은 API)
   http.get(VITE_API_URL + "/v1/ingredient/info", () => {
-    return HttpResponse.json(INGREDIENTS);
+    return HttpResponse.json(INGREDIENTS_INFO);
   }),
 
   // 재료 입고
