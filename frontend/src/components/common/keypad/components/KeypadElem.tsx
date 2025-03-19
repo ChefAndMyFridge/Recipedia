@@ -4,7 +4,10 @@ import { KeypadElemProps } from "@/types/commonProps";
 
 const KeypadElem = ({ value, onChange }: KeypadElemProps) => {
   const handleInput = (val: string) => onChange(value + val);
-  const handleDelete = () => onChange(value.slice(0, -1));
+  const handleDelete = () => {
+    if (!value) return;
+    onChange(value.slice(0, -1));
+  };
   const handleClear = () => onChange("");
 
   const NUMBER_KEYS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "DEL", "0", "C"];

@@ -34,16 +34,17 @@ const ProfileChangeModal = () => {
       <ModalHeader title="프로필 전환" />
       <div className="pb-10 flex flex-col items-center justify-center gap-4">
         <div className="grid grid-cols-2 gap-8">
-          {profiles.map((profile) => (
-            <button
-              key={profile.alt}
-              className="flex flex-col items-center justify-center gap-4"
-              onClick={() => handleProfileChange(profile)}
-            >
-              <img src={profile.image} alt={profile.alt} className="w-32" />
-              <p className="font-preSemiBold text-lg">{profile.label}</p>
-            </button>
-          ))}
+          {profiles &&
+            profiles.map((profile) => (
+              <button
+                key={profile.alt}
+                className="flex flex-col items-center justify-center gap-4"
+                onClick={() => handleProfileChange(profile)}
+              >
+                <img src={profile.image} alt={profile.alt} className="w-32" />
+                <p className="font-preSemiBold text-lg">{profile.label}</p>
+              </button>
+            ))}
         </div>
       </div>
     </>

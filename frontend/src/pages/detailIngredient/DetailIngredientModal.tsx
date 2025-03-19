@@ -27,7 +27,7 @@ const DetailIngredientModal = ({ ingredient }: IngredientsProps) => {
       {/* 선택된 식재료 상세 목록  */}
       <div className="w-full h-fit px-2">
         <div className="flex h-[35vh] items-start content-start py-2 px-4 gap-y-5 shrink-0 flex-wrap font-preMedium bg-[#EEE] rounded-xl">
-          {ingredient.ingredients.length > 0 &&
+          {ingredient.ingredients &&
             ingredient.ingredients.map((item) => (
               <DetailIngredientItem key={item.ingredientId} ingredient={item} imgSrc={ingredient.imageUrl} />
             ))}
