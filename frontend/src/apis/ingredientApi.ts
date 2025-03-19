@@ -1,4 +1,12 @@
-import { Ingredients, StoreIngredient, StoreResponseIngredient, IngredientNutrition } from "@/types/ingredientsTypes";
+import {
+  Ingredients,
+  IngredientsInfo,
+  StoreIngredient,
+  StoreResponseIngredient,
+  IngredientNutrition,
+  DeleteIngredient,
+  DeleteIngredientResponse,
+} from "@/types/ingredientsTypes";
 
 import instance from "./instance";
 
@@ -13,7 +21,7 @@ export const getIngredientsApi = async (): Promise<Ingredients[]> => {
 };
 
 // 전체 재료 목록 조회 (아직 릴리즈되지 않은 API)
-export const getIngredientsInfoApi = async (): Promise<Ingredients[]> => {
+export const getIngredientsInfoApi = async (): Promise<IngredientsInfo[]> => {
   try {
     const response = await instance.get("v1/ingredient/info");
     return response.data;
@@ -36,6 +44,17 @@ export const storeIngredientApi = async (ingredient: StoreIngredient): Promise<S
 export const getIngredientNutritionApi = async (ingredientId: number): Promise<IngredientNutrition> => {
   try {
     const response = await instance.get(`v1/ingredient/nutrient/${ingredientId}`);
+    return response.data;
+  } catch (error: unknown) {
+    throw new Error(error as string);
+  }
+};
+
+// 재료 삭제
+export const deleteIngredientApi = async (ingredients: DeleteIngredient[]): Promise<DeleteIngredientResponse> => {
+  try {
+    const response = await instance.delete("v1/ingredient/release", { data: ingredients });
+    console.log("api", response);
     return response.data;
   } catch (error: unknown) {
     throw new Error(error as string);

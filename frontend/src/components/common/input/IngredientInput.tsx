@@ -1,15 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-import useIngredientsStore from "@stores/ingredientsStore";
+import { useGetIngredientsInfoList } from "@hooks/useIngredientsHooks";
 
 import { InputProps } from "@/types/commonProps.ts";
-import { Ingredients } from "@/types/ingredientsTypes.ts";
+import { IngredientsInfo } from "@/types/ingredientsTypes.ts";
 
 const Suggestion = ({
   suggestion,
   onSelectSuggestion,
 }: {
-  suggestion: Ingredients;
+  suggestion: IngredientsInfo;
   onSelectSuggestion: (suggestion: string) => void;
 }) => {
   return (
@@ -26,11 +26,24 @@ const Suggestion = ({
   );
 };
 
-const IngredientInput = ({ label, name, type, placeHolder }: InputProps) => {
+const IngredientInput = ({ label, name, type, placeHolder, labelTextSize }: InputProps) => {
   const [inputValue, setInputValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
+  const [ingredientsInfo, setIngredientsInfo] = useState<IngredientsInfo[] | []>([]);
 
-  const { ingredientsInfo } = useIngredientsStore();
+  // API 호출을 초기에는 비활성화한 상태에서 쿼리 객체를 가져옴
+  const { data, refetch } = useGetIngredientsInfoList({ enabled: false });
+
+  useEffect(() => {
+    refetch(); // 컴포넌트가 마운트될 때 강제로 API를 호출
+  }, []);
+
+  // 자동완성 데이터 저장
+  useEffect(() => {
+    if (data) {
+      setIngredientsInfo(data);
+    }
+  }, [data]);
 
   // ver1. 입력한 단어가 포함된 재료명 필터링
   const filteredSuggestions = ingredientsInfo?.filter((ingredient) =>
@@ -52,7 +65,7 @@ const IngredientInput = ({ label, name, type, placeHolder }: InputProps) => {
 
   return (
     <div className="relative flex flex-col w-full items-start justify-between gap-2">
-      <label className={`font-preMedium text-[#333] font-semibold text-xs`}>{label}</label>
+      {label && <label className={`font-preMedium text-[#333] ${labelTextSize} font-semibold text-xs`}>{label}</label>}
       <input
         name={name}
         type={type}

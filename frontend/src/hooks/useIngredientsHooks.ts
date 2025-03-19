@@ -1,13 +1,22 @@
 import { useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { Ingredients, StoreIngredient, StoreResponseIngredient, IngredientNutrition } from "@/types/ingredientsTypes";
+import {
+  Ingredients,
+  IngredientsInfo,
+  StoreIngredient,
+  StoreResponseIngredient,
+  IngredientNutrition,
+  DeleteIngredient,
+  DeleteIngredientResponse,
+} from "@/types/ingredientsTypes";
 
 import {
   getIngredientsApi,
   getIngredientsInfoApi,
   storeIngredientApi,
   getIngredientNutritionApi,
+  deleteIngredientApi,
 } from "@apis/ingredientApi";
 
 import useIngredientsStore from "@stores/ingredientsStore";
@@ -33,21 +42,15 @@ export const useGetIngredientsList = () => {
 };
 
 // 전체 재료 목록 조회 (아직 릴리즈되지 않은 API)
-export const useGetIngredientsInfoList = () => {
-  const { setIngredientsInfo } = useIngredientsStore();
-
-  const query = useQuery<Ingredients[]>({
+export const useGetIngredientsInfoList = (options?: { enabled?: boolean }) => {
+  const query = useQuery<IngredientsInfo[]>({
     queryKey: ["ingredientsInfo"],
     queryFn: getIngredientsInfoApi,
-    staleTime: 1000 * 60 * 60 * 148, // 7일
     throwOnError: true,
+    enabled: options?.enabled ?? true, // enabled가 false이면 처음에는 API 호출을 하지 않음 (기본값: true)
   });
 
-  useEffect(() => {
-    if (query.data) {
-      setIngredientsInfo(query.data);
-    }
-  }, [query.data, setIngredientsInfo]);
+  return query;
 };
 
 // 재료 입고
@@ -79,4 +82,24 @@ export const useGetIngredientNutrition = (ingredientId: number) => {
   });
 
   return query;
+};
+
+// 재료 삭제
+export const useDeleteIngredient = () => {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation<DeleteIngredientResponse, Error, DeleteIngredient[]>({
+    mutationFn: deleteIngredientApi, // 재료 삭제 API 호출
+    onSuccess: () => {
+      console.log("재료 삭제 성공!");
+
+      // 삭제 성공 시, 기존 재료 목록을 무효화하여 자동으로 다시 가져옴
+      queryClient.invalidateQueries({ queryKey: ["ingredients"] });
+    },
+    onError: (error) => {
+      console.error("재료 삭제 실패:", error);
+    },
+  });
+
+  return mutation;
 };

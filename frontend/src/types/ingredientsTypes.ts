@@ -14,6 +14,13 @@ export interface Ingredients {
   ingredients: Ingredient[];
 }
 
+export interface IngredientsInfo {
+  ingredientInfoId: number;
+  name: string;
+  imageUrl: string;
+  totalCount: number;
+}
+
 export interface Nutritions {
   calories: number;
   carbohydrate: number;
@@ -59,6 +66,15 @@ export interface SelectedIngredients {
   name: string;
   imageUrl: string;
   selectedCount: number;
+}
+
+export interface DeleteIngredient {
+  name: string;
+  quantity: number;
+}
+
+export interface DeleteIngredientResponse {
+  [key: string]: number;
 }
 
 export interface filteredInfomations {
