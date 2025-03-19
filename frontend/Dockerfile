@@ -6,6 +6,9 @@ WORKDIR /app
 COPY package*.json yarn.lock ./
 RUN yarn install --frozen-lockfile
 COPY . .
+ARG VITE_API_URL
+ENV VITE_API_URL=$VITE_API_URL
+RUN echo "VITE_API_URL=${VITE_API_URL}" > .env
 RUN yarn build
 
 # 서빙 단계
