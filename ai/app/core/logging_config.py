@@ -1,6 +1,7 @@
 import logging
 import os
 import atexit
+from app.core.config import settings
 from datetime import datetime
 from logging.handlers import TimedRotatingFileHandler
 from typing import Callable
@@ -67,7 +68,11 @@ class CustomTimedRotatingFileHandler(TimedRotatingFileHandler):
 
 # 일반 로그 핸들러 (날짜 변경 시 자동 회전)
 file_handler = CustomTimedRotatingFileHandler(
-    get_log_file_path, when="midnight", interval=1, backupCount=7, encoding="utf-8"
+    get_log_file_path,
+    when=settings.LOG_INTERVAL_UNIT,
+    interval=settings.LOG_INTERVAL,
+    backupCount=settings.LOG_FILE_BACKUP_COUNT,
+    encoding=settings.LOG_ENCODING_METHOD,
 )
 
 file_handler.setFormatter(logging.Formatter(
@@ -75,7 +80,11 @@ file_handler.setFormatter(logging.Formatter(
 
 # ERROR 로그 핸들러 (날짜 변경 시 자동 회전)
 error_handler = CustomTimedRotatingFileHandler(
-    get_error_log_file_path, when="midnight", interval=1, backupCount=7, encoding="utf-8"
+    get_error_log_file_path,
+    when=settings.LOG_INTERVAL_UNIT,
+    interval=settings.LOG_INTERVAL,
+    backupCount=settings.LOG_FILE_BACKUP_COUNT,
+    encoding=settings.LOG_ENCODING_METHOD,
 )
 error_handler.setFormatter(logging.Formatter(
     "%(asctime)s - %(levelname)s - %(message)s"))

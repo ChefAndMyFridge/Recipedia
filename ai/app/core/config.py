@@ -32,6 +32,12 @@ class Settings(BaseSettings):
     # 생성할 음식 이름 개수
     NUM_DISHES_TO_GENERATE: int = 5
 
+    # 로그 파일 관련 설정
+    LOG_INTERVAL_UNIT: str = "midnight"
+    LOG_INTERVAL: int = 1
+    LOG_FILE_BACKUP_COUNT: int = 7
+    LOG_ENCODING_METHOD: str = "utf-8"
+
     class Config:
         env_file = ".env"
 
