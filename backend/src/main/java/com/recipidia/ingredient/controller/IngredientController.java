@@ -48,7 +48,7 @@ public class IngredientController {
                               "name": "대파",
                               "imageUrl": "https://image.com",
                               "totalCount": 2,
-                              "ingredients": 
+                              "ingredients":
                                 [
                                   {
                                     "ingredientId": 1,
@@ -63,7 +63,7 @@ public class IngredientController {
                                     "expirationDate": "2025-03-08T11:00:00",
                                     "incomingDate": "2025-03-01T12:00:00",
                                     "releasingDate": "2025-03-05T12:00:00"
-                                  },    
+                                  },
                                 ]
                               }
                               """
@@ -124,7 +124,7 @@ public class IngredientController {
                               "name": "대파",
                               "imageUrl": "https://image.com",
                               "totalCount": 2,
-                              "ingredients": 
+                              "ingredients":
                                 [
                                   {
                                     "ingredientId": 1,
@@ -139,7 +139,7 @@ public class IngredientController {
                                     "expirationDate": "2025-03-08T11:00:00",
                                     "incomingDate": "2025-03-01T12:00:00",
                                     "releasingDate": "2025-03-05T12:00:00"
-                                  },    
+                                  },
                                 ]
                               }
                               """
@@ -299,7 +299,7 @@ public class IngredientController {
                               "name": "참외",
                               "imageUrl": "https://image.com",
                               "totalCount": 2,
-                              "ingredients": 
+                              "ingredients":
                                 [
                                   {
                                     "ingredientId": 1,
@@ -314,7 +314,7 @@ public class IngredientController {
                                     "expirationDate": "2025-03-08T11:00:00",
                                     "incomingDate": "2025-03-01T12:00:00",
                                     "releasingDate": "2025-03-05T12:00:00"
-                                  },    
+                                  },
                                 ],
                                 "nutrients": {
                                     "calories": 45,
