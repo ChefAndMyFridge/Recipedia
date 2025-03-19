@@ -3,9 +3,9 @@ import React, { useState, useEffect } from "react";
 import useModalStore from "@stores/modalStore";
 
 import { StoreIngredient } from "@/types/ingredientsTypes";
-import { useGetIngredientsInfoList, useStoreIngredient } from "@hooks/useIngredientsHooks";
+import { useStoreIngredient } from "@hooks/useIngredientsHooks";
 
-import IngredientInput from "@pages/storeIngredient/components/IngredientInput.tsx";
+import IngredientInput from "@components/common/input/IngredientInput";
 import Input from "@components/common/input/Input.tsx";
 import Button from "@components/common/button/Button.tsx";
 import Keypad from "@components/common/keypad/Keypad";
@@ -28,9 +28,6 @@ const StoreIngredientForm = () => {
     // 추후 재료별 유통기한 설정 필요
     setExpirationDate(new Date(new Date(incomingDate).getTime() + 1000 * 60 * 60 * 24 * 7).toISOString().split("T")[0]);
   }, [incomingDate]);
-
-  // 자동 완성에 사용할 전체 재료 목록 조회 (7일)
-  useGetIngredientsInfoList();
 
   // 저장 위치 변경
   function handleStoragePlace(place: string): void {

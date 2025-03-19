@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import useIngredientsStore from "@stores/ingredientsStore";
+import { useGetIngredientsInfoList } from "@hooks/useIngredientsHooks";
 
 import { InputProps } from "@/types/commonProps.ts";
 import { IngredientsInfo } from "@/types/ingredientsTypes.ts";
@@ -26,11 +27,14 @@ const Suggestion = ({
   );
 };
 
-const IngredientInput = ({ label, name, type, placeHolder }: InputProps) => {
+const IngredientInput = ({ label, name, type, placeHolder, labelTextSize }: InputProps) => {
   const [inputValue, setInputValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
 
   const { ingredientsInfo } = useIngredientsStore();
+
+  // 자동 완성에 사용할 전체 재료 목록 조회 (7일)
+  useGetIngredientsInfoList();
 
   // ver1. 입력한 단어가 포함된 재료명 필터링
   const filteredSuggestions = ingredientsInfo?.filter((ingredient) =>
@@ -52,7 +56,7 @@ const IngredientInput = ({ label, name, type, placeHolder }: InputProps) => {
 
   return (
     <div className="relative flex flex-col w-full items-start justify-between gap-2">
-      <label className={`font-preMedium text-[#333] font-semibold text-xs`}>{label}</label>
+      {label && <label className={`font-preMedium text-[#333] ${labelTextSize} font-semibold text-xs`}>{label}</label>}
       <input
         name={name}
         type={type}
