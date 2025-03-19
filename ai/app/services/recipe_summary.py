@@ -1,6 +1,5 @@
 # app/services/recipe_summary.py
 import time
-import logging
 import asyncio
 
 from youtube_transcript_api import YouTubeTranscriptApi, NoTranscriptFound, TranscriptsDisabled, VideoUnavailable
@@ -11,8 +10,6 @@ from app.utils.prompts.few_shot import SUMMARY_FEW_SHOT_DATA
 from app.utils.prompts.recipe_summary_prompts import SUMMARY_SYSTEM_INPUT, SUMMARY_USER_INPUT
 from app.core.config import settings
 from app.core.logging_config import logger
-
-# logger = logging.getLogger(__name__)
 
 
 class RecipeSummary:
