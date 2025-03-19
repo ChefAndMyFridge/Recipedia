@@ -3,6 +3,7 @@ package com.recipidia.ingredient.service;
 
 import com.recipidia.ingredient.dto.IngredientInfoDto;
 import com.recipidia.ingredient.dto.IngredientInfoWithNutrientDto;
+import com.recipidia.ingredient.dto.IngredientSimpleInfoDto;
 import com.recipidia.ingredient.request.IngredientIncomingReq;
 import com.recipidia.ingredient.request.IngredientMultipleDeleteReq;
 import com.recipidia.ingredient.request.IngredientUpdateReq;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface IngredientService {
-    List<IngredientInfoDto> getAllIngredients();
+    List<IngredientSimpleInfoDto> getAllIngredientInfo();
     List<IngredientInfoDto> getAllExistingIngredients();
     IngredientInfoDto getIngredient(Long ingredientId);
     IngredientIncomingRes stockItem(IngredientIncomingReq request);

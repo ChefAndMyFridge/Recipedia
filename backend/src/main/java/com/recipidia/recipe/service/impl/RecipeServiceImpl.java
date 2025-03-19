@@ -1,6 +1,7 @@
 package com.recipidia.recipe.service.impl;
 
 import com.recipidia.ingredient.dto.IngredientInfoDto;
+import com.recipidia.ingredient.dto.IngredientSimpleInfoDto;
 import com.recipidia.ingredient.service.IngredientService;
 import com.recipidia.recipe.converter.RecipeQueryResConverter;
 import com.recipidia.recipe.dto.RecipeDto;
@@ -54,10 +55,10 @@ public class RecipeServiceImpl implements RecipeService {
   @Transactional
   public Mono<ResponseEntity<RecipeQueryRes>> handleRecipeQuery(RecipeQueryReq request) {
     // 1. 전체 재료 목록 조회 단계 (DB 호출)
-    Mono<List<String>> fullIngredientsMono = Mono.fromCallable(ingredientService::getAllIngredients)
+    Mono<List<String>> fullIngredientsMono = Mono.fromCallable(ingredientService::getAllIngredientInfo)
         .subscribeOn(Schedulers.boundedElastic())
         .map(list -> list.stream()
-            .map(IngredientInfoDto::getName)
+            .map(IngredientSimpleInfoDto::getName)
             .collect(Collectors.toList())
         );
 
