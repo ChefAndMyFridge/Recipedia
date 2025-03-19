@@ -55,10 +55,10 @@ public class RecipeServiceImpl implements RecipeService {
   @Transactional
   public Mono<ResponseEntity<RecipeQueryRes>> handleRecipeQuery(RecipeQueryReq request) {
     // 1. 전체 재료 목록 조회 단계 (DB 호출)
-    Mono<List<String>> fullIngredientsMono = Mono.fromCallable(ingredientService::getAllIngredientInfo)
+    Mono<List<String>> fullIngredientsMono = Mono.fromCallable(ingredientService::getAllExistingIngredients)
         .subscribeOn(Schedulers.boundedElastic())
         .map(list -> list.stream()
-            .map(IngredientSimpleInfoDto::getName)
+            .map(IngredientInfoDto::getName)
             .collect(Collectors.toList())
         );
 

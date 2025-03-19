@@ -33,7 +33,7 @@ public class IngredientServiceImpl implements IngredientService {
 
   @Override
   public List<IngredientSimpleInfoDto> getAllIngredientInfo() {
-    List<IngredientInfo> ingredientInfos = ingredientInfoRepository.findAllWithIngredients();
+    List<IngredientInfo> ingredientInfos = ingredientInfoRepository.findAll();
     return ingredientInfos.stream()
         .map(IngredientSimpleInfoDto::fromEntity)
         .toList();
@@ -45,7 +45,6 @@ public class IngredientServiceImpl implements IngredientService {
     List<IngredientInfo> ingredientInfos = ingredientInfoRepository.findAllWithIngredients();
     return ingredientInfos.stream()
         .map(IngredientInfoDto::fromEntity)
-        .filter(dto -> dto.getTotalCount() >= 1)
         .toList();
   }
 
