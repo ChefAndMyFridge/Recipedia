@@ -1,11 +1,12 @@
 # 1️⃣ 공식 FastAPI 기반 Python 이미지 사용
 FROM python:3.11-slim
 
-# 2️⃣ 작업 디렉토리 설정
-# WORKDIR /app
-
 # 4️⃣ FastAPI 앱 코드 복사
 COPY . .
+
+ENV TZ=Asia/Seoul
+RUN ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
+RUN echo "Asia/Seoul" > /etc/timezone
 
 # 3️⃣ 의존성 파일 복사 및 설치
 COPY requirements.txt .

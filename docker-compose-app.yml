@@ -2,6 +2,7 @@ services:
   client:
     container_name: my-react
     environment:
+      - TZ=Asia/Seoul
       - VITE_API_URL=${VITE_API_URL}  # ec2 URL
     build:
       context: ./frontend   # client 폴더를 빌드 컨텍스트로 지정
@@ -19,6 +20,7 @@ services:
   server:
     container_name: my-springboot
     environment:
+      - TZ=Asia/Seoul
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}  # .env에서 가져옴
     build:
       context: ./backend   # server 폴더를 빌드 컨텍스트로 지정
@@ -31,6 +33,7 @@ services:
   fastapi:  # FastAPI 서비스 추가! 🚀
     container_name: my-fastapi
     environment:
+      - TZ=Asia/Seoul
       - YOUTUBE_API_KEY=${YOUTUBE_API_KEY}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - USDA_API_KEY=${USDA_API_KEY}
