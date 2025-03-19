@@ -34,7 +34,11 @@ export const useGetIngredientsList = () => {
 
   useEffect(() => {
     if (query.data) {
-      setIngredients(query.data);
+      if (query.data.length > 0) {
+        setIngredients(query.data);
+      } else {
+        setIngredients([]);
+      }
     }
   }, [query.data, setIngredients]);
 
