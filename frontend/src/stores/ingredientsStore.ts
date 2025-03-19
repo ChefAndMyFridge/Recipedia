@@ -5,13 +5,13 @@ import { INGREDIENTS } from "@/data/INGREDIENTS.ts";
 import { Ingredients, SelectedIngredients, filteredInfomations } from "@/types/ingredientsTypes.ts";
 
 interface IngredientsState {
-  allIngredients: Ingredients[]; // 전체 재료 목록 (검색 시 자동 완성에 사용)
   ingredients: Ingredients[]; // 고내에 저장된 재료 목록
+  ingredientsInfo: Ingredients[]; // 전체 재료 목록 (검색 시 자동 완성에 사용)
   selectedIngredients: Record<number, SelectedIngredients>; // { ingredientInfoId: selectedCount } 선택된 재료 목록
   filteringInfomationKeys: filteredInfomations;
   filteredInfomations: filteredInfomations;
-  setAllIngredients: (allIngredients: Ingredients[]) => void;
   setIngredients: (ingredients: Ingredients[]) => void;
+  setIngredientsInfo: (ingredientsInfo: Ingredients[]) => void;
   setSelectedCount: (ingredientInfoId: number, ingredientInfo: SelectedIngredients) => void;
   setClearSelectedIngredients: () => void;
   setFilteredInfomations: (filterKey: keyof filteredInfomations, filterValue: string) => void;
@@ -19,8 +19,8 @@ interface IngredientsState {
 }
 
 const useIngredientsStore = create<IngredientsState>((set) => ({
-  allIngredients: [...INGREDIENTS],
   ingredients: [],
+  ingredientsInfo: [...INGREDIENTS],
   selectedIngredients: {}, //
   filteringInfomationKeys: {
     type: ["한식", "중식", "일식", "양식"],
@@ -32,8 +32,8 @@ const useIngredientsStore = create<IngredientsState>((set) => ({
     preference: [],
     dislike: [],
   },
-  setAllIngredients: (allIngredients) => set({ allIngredients }),
   setIngredients: (ingredients) => set({ ingredients }),
+  setIngredientsInfo: (ingredientsInfo) => set({ ingredientsInfo }),
   setSelectedCount: (ingredientInfoId, ingredientInfo) => {
     set((state) => {
       const newSelected = { ...state.selectedIngredients };

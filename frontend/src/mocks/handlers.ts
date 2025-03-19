@@ -8,8 +8,13 @@ import DETAIL_RECIPE from "@/data/DETAIL_RECIPE";
 const { VITE_API_URL } = import.meta.env;
 
 const handlers = [
-  //전체 재료 목록 조회
+  // 고내에 저장된 재료 목록 조회
   http.get(VITE_API_URL + "/v1/ingredient", () => {
+    return HttpResponse.json(INGREDIENTS);
+  }),
+
+  // 전체 재료 목록 조회 (아직 릴리즈되지 않은 API)
+  http.get(VITE_API_URL + "/v1/ingredient/info", () => {
     return HttpResponse.json(INGREDIENTS);
   }),
 

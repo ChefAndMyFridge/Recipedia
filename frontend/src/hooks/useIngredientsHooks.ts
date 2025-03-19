@@ -3,18 +3,23 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { Ingredients, StoreIngredient, StoreResponseIngredient, IngredientNutrition } from "@/types/ingredientsTypes";
 
-import { getIngredientsApi, storeIngredientApi, getIngredientNutritionApi } from "@apis/ingredientApi";
+import {
+  getIngredientsApi,
+  getIngredientsInfoApi,
+  storeIngredientApi,
+  getIngredientNutritionApi,
+} from "@apis/ingredientApi";
 
 import useIngredientsStore from "@stores/ingredientsStore";
 
-// 전체 재료 목록 조회
+// 고내에 저장된 재료 목록 조회
 export const useGetIngredientsList = () => {
   const { setIngredients } = useIngredientsStore();
 
   const query = useQuery<Ingredients[]>({
     queryKey: ["ingredients"],
     queryFn: getIngredientsApi,
-    staleTime: 1000 * 60 * 60 * 24, // 1일
+    staleTime: 1000 * 60 * 60 * 24, // 1일 (추후 줄일 예정: 8시간 이하 정도?)
     throwOnError: true,
   });
 
@@ -25,6 +30,24 @@ export const useGetIngredientsList = () => {
   }, [query.data, setIngredients]);
 
   return query;
+};
+
+// 전체 재료 목록 조회 (아직 릴리즈되지 않은 API)
+export const useGetIngredientsInfoList = () => {
+  const { setIngredientsInfo } = useIngredientsStore();
+
+  const query = useQuery<Ingredients[]>({
+    queryKey: ["ingredientsInfo"],
+    queryFn: getIngredientsInfoApi,
+    staleTime: 1000 * 60 * 60 * 148, // 7일
+    throwOnError: true,
+  });
+
+  useEffect(() => {
+    if (query.data) {
+      setIngredientsInfo(query.data);
+    }
+  }, [query.data, setIngredientsInfo]);
 };
 
 // 재료 입고
