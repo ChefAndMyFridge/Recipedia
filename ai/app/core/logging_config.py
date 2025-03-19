@@ -38,8 +38,6 @@ class CustomTimedRotatingFileHandler(TimedRotatingFileHandler):
             interval(int): 회전 주기
             backupCount(int): 최대 백업 파일 갯수
             encoding(str): 로그 데이터 저장 인코딩 방식
-
-
         """
         self.baseFilenameFunc: Callable[[], str] = filename
         super().__init__(filename(), when=when, interval=interval,
