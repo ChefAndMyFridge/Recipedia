@@ -1,6 +1,6 @@
 import {
   Ingredients,
-  IngredientsInfo,
+  // IngredientsInfo,
   StoreIngredient,
   StoreResponseIngredient,
   IngredientNutrition,
@@ -22,9 +22,10 @@ export const getIngredientsApi = async (): Promise<Ingredients[]> => {
 };
 
 // 전체 재료 목록 조회 (아직 릴리즈되지 않은 API)
-export const getIngredientsInfoApi = async (): Promise<IngredientsInfo[]> => {
+export const getIngredientsInfoApi = async (): Promise<Ingredients[]> => {
   try {
-    const response = await instance.get("v1/ingredient/info");
+    // -----> 임시로 (릴리즈 되지 않아서 ㅜ /info 붙여야됨, 타입도 ingredientsInfo로 바꿔야됨)
+    const response = await instance.get("v1/ingredient");
     console.log("v1/ingredient/info", response.data);
     return response.data;
   } catch (error: unknown) {

@@ -60,9 +60,7 @@ const HomeIngredients = () => {
     }
   }
 
-  console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!", ingredients);
-
-  if (Array.isArray(ingredients) && ingredients.length === 0) {
+  if (ingredients && ingredients.length === 0) {
     return (
       <div className="flex justify-center items-center w-full h-full">
         <p className="text-lg text-content">등록된 재료가 없습니다.</p>
@@ -88,8 +86,7 @@ const HomeIngredients = () => {
             const endIdx = startIdx + ITEM_PER_PAGE;
             return (
               <div key={idx} className="w-full flex-shrink-0 grid grid-cols-5 gap-2">
-                {Array.isArray(ingredients) &&
-                  ingredients.length > 0 &&
+                {ingredients &&
                   ingredients
                     .slice(startIdx, endIdx)
                     .map((ingredient) => <HomeIngredient key={ingredient.ingredientInfoId} ingredient={ingredient} />)}
