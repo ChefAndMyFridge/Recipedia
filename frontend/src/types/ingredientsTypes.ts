@@ -68,6 +68,15 @@ export interface SelectedIngredients {
   selectedCount: number;
 }
 
+export interface DeleteIngredient {
+  name: string;
+  quantity: number;
+}
+
+export interface DeleteIngredientResponse {
+  [key: string]: number;
+}
+
 export interface filteredInfomations {
   type: string[];
   preference: string[];

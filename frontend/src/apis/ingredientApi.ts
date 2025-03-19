@@ -4,6 +4,8 @@ import {
   StoreIngredient,
   StoreResponseIngredient,
   IngredientNutrition,
+  DeleteIngredient,
+  DeleteIngredientResponse,
 } from "@/types/ingredientsTypes";
 
 import instance from "./instance";
@@ -42,6 +44,17 @@ export const storeIngredientApi = async (ingredient: StoreIngredient): Promise<S
 export const getIngredientNutritionApi = async (ingredientId: number): Promise<IngredientNutrition> => {
   try {
     const response = await instance.get(`v1/ingredient/nutrient/${ingredientId}`);
+    return response.data;
+  } catch (error: unknown) {
+    throw new Error(error as string);
+  }
+};
+
+// 재료 삭제
+export const deleteIngredientApi = async (ingredients: DeleteIngredient[]): Promise<DeleteIngredientResponse> => {
+  try {
+    const response = await instance.delete("v1/ingredient/release", { data: ingredients });
+    console.log("api", response);
     return response.data;
   } catch (error: unknown) {
     throw new Error(error as string);

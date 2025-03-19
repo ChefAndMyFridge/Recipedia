@@ -7,6 +7,8 @@ import {
   StoreIngredient,
   StoreResponseIngredient,
   IngredientNutrition,
+  DeleteIngredient,
+  DeleteIngredientResponse,
 } from "@/types/ingredientsTypes";
 
 import {
@@ -14,6 +16,7 @@ import {
   getIngredientsInfoApi,
   storeIngredientApi,
   getIngredientNutritionApi,
+  deleteIngredientApi,
 } from "@apis/ingredientApi";
 
 import useIngredientsStore from "@stores/ingredientsStore";
@@ -85,4 +88,24 @@ export const useGetIngredientNutrition = (ingredientId: number) => {
   });
 
   return query;
+};
+
+// 재료 삭제
+export const useDeleteIngredient = () => {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation<DeleteIngredientResponse, Error, DeleteIngredient[]>({
+    mutationFn: deleteIngredientApi, // 재료 삭제 API 호출
+    onSuccess: () => {
+      console.log("재료 삭제 성공!");
+
+      // 삭제 성공 시, 기존 재료 목록을 무효화하여 자동으로 다시 가져옴
+      queryClient.invalidateQueries({ queryKey: ["ingredients"] });
+    },
+    onError: (error) => {
+      console.error("재료 삭제 실패:", error);
+    },
+  });
+
+  return mutation;
 };

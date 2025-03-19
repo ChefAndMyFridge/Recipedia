@@ -28,6 +28,14 @@ const handlers = [
     return HttpResponse.json(INGREDIENT_WITH_NUTRITIONS);
   }),
 
+  // 재료 삭제
+  http.delete(VITE_API_URL + "/v1/ingredient/release", () => {
+    return HttpResponse.json({
+      사과: 1,
+      대파: 1,
+    });
+  }),
+
   //레시피 목록 조회
   http.post(VITE_API_URL + "/v1/recipe", () => {
     return HttpResponse.json(RECIPE_LIST);
