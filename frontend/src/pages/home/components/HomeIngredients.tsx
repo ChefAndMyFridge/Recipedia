@@ -23,7 +23,8 @@ const HomeIngredients = () => {
     setPageIndex(0);
   }, [ingredients]);
 
-  const totalPages = ingredients && ingredients.length > 0 ? Math.ceil(ingredients.length / ITEM_PER_PAGE) : 1;
+  const totalPages =
+    Array.isArray(ingredients) && ingredients.length > 0 ? Math.ceil(ingredients.length / ITEM_PER_PAGE) : 1;
   const pagination = Array.from({ length: totalPages });
 
   // 페이지 이동
@@ -59,7 +60,9 @@ const HomeIngredients = () => {
     }
   }
 
-  if (ingredients && ingredients.length === 0) {
+  console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!", ingredients);
+
+  if (Array.isArray(ingredients) && ingredients.length === 0) {
     return (
       <div className="flex justify-center items-center w-full h-full">
         <p className="text-lg text-content">등록된 재료가 없습니다.</p>
@@ -85,7 +88,7 @@ const HomeIngredients = () => {
             const endIdx = startIdx + ITEM_PER_PAGE;
             return (
               <div key={idx} className="w-full flex-shrink-0 grid grid-cols-5 gap-2">
-                {ingredients &&
+                {Array.isArray(ingredients) &&
                   ingredients.length > 0 &&
                   ingredients
                     .slice(startIdx, endIdx)
