@@ -100,6 +100,9 @@ class QueryMaker:
         start_time = time.time()
         logger.info("QueryMaker 실행 시작")
 
+        # youtube api 키 라운드 로빈
+        await rotate_youtube_api_key()
+
         # 1단계: 음식 이름 생성
         openai_start = time.time()
         await self.generate_dishes()
@@ -120,9 +123,6 @@ class QueryMaker:
 
         # 통합된 출력 함수 호출
         self.print_results()
-
-        # youtube api 키 라운드 로빈
-        await rotate_youtube_api_key()
 
         return {
             'dishes': self.dishes,
@@ -177,7 +177,7 @@ class QueryMaker:
 
                     if 'channel_title' in first_video:
                         print(f"   채널: {first_video['channel_title']}")
-                    
+
                     if 'duration' in first_video:
                         print(f"   길이: {first_video['duration']}")
 

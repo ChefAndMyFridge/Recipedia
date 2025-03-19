@@ -8,14 +8,14 @@ class Settings(BaseSettings):
     APP_NAME: str = "FastAPI Server"
     DEBUG: bool = False
     ALLOWED_ORIGINS: List[str]
-    YOUTUBE_API_KEY: str = None
+    YOUTUBE_API_KEY: str = ""
     OPENAI_API_KEY: str
 
     YOUTUBE_API_KEYS: List[str]
 
     @validator("YOUTUBE_API_KEY", pre=True, always=True)
     def set_default_youtube_api_key(cls, v, values):
-        if v is None and "YOUTUBE_API_KEYS" in values and values["YOUTUBE_API_KEYS"]:
+        if v is "" and "YOUTUBE_API_KEYS" in values and values["YOUTUBE_API_KEYS"]:
             return values["YOUTUBE_API_KEYS"][0]
         return v
 
