@@ -11,10 +11,10 @@ const HomeSelectedIngredients = () => {
 
   return (
     <div className="flex justify-between items-center w-full h-full px-2 bg-white rounded-xl">
-      <div className="flex items-center justify-start w-4/5 h-full gap-2">
+      <div className="grid grid-flow-col auto-cols-max w-4/5 h-fit gap-2 overflow-x-auto">
         {Object.values(selectedIngredients).map((ingredient) => (
           <div key={ingredient.ingredientInfoId} className="w-12 aspect-[1/1]">
-            <div className="relative aspect-[1/1] rounded-3xl">
+            <div className="relative w-full aspect-[1/1] rounded-3xl">
               <img
                 src={ingredient.imageUrl}
                 alt={ingredient.imageUrl}
