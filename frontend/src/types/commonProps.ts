@@ -8,6 +8,14 @@ export interface ButtonProps {
   className?: string;
 }
 
+export interface FilterButtonProps {
+  isSelected: boolean;
+  content: string;
+  count?: number;
+  className?: string;
+  onAction?: () => void;
+}
+
 export interface InputProps {
   label?: string;
   name?: string;
@@ -21,4 +29,16 @@ export interface InputProps {
 export interface ToggleProps {
   isToggle: boolean;
   onToggle: (isToggle: boolean) => void;
+}
+
+export interface KeypadProps {
+  label?: string;
+  value: string;
+  onChange: (value: string) => void;
+  onClose: () => void;
+}
+
+export interface KeypadElemProps {
+  value: string;
+  onChange: (val: string) => void;
 }

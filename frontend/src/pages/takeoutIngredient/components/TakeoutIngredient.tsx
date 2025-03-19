@@ -10,7 +10,15 @@ const TakeoutIngredient = ({ ingredient }: HomeIngredientProps) => {
       {/* 아이콘 부분 */}
       <div className="relative w-full aspect-[1/1] rounded-3xl">
         <img src={ingredient.imageUrl} alt={ingredient.imageUrl} className="w-full h-full object-cover rounded-3xl" />
-        <p className="absolute bottom-0.5 w-full font-preMedium text-xs text-center">{ingredient.name}</p>
+        <span className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/50 to-transparent rounded-b-3xl" />
+        <p
+          className="absolute bottom-0.5 w-full font-preMedium text-xs text-center text-white"
+          style={{
+            textShadow: "0.5px 0 black, 0 0.5px black, -0.5px 0 black, 0 -0.5px black",
+          }}
+        >
+          {ingredient.name}
+        </p>
       </div>
 
       {/* 개수 출력 */}

@@ -2,14 +2,10 @@ export interface Video {
   recipeId: number;
   title: string;
   url: string;
-  description: string;
   channel_title: string;
-  published_at: string;
   duration: string;
   view_count: number;
   like_count: number;
-  comment_count: number;
-  relevance_score: number;
 }
 
 export interface VideoList {
@@ -22,7 +18,7 @@ export interface RecipeList {
 }
 
 export interface RecipeInfo {
-  recipeId: number;
+  // recipeId: number; //추후 api 구조 변경 시 사용
   title: string;
   cooking_info: {
     cooking_time: string;
@@ -32,7 +28,7 @@ export interface RecipeInfo {
   cooking_tools: string[];
   cooking_tips: string[];
   cooking_sequence: {
-    [key: string]: string[];
+    [step: string]: string[];
   };
 }
 

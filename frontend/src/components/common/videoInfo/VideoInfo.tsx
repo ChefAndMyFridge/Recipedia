@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 interface VideoInfoProps {
   IconName: React.ElementType;
@@ -7,11 +7,20 @@ interface VideoInfoProps {
 }
 
 const VideoInfo = ({ IconName, InfoData, InfoType }: VideoInfoProps) => {
+  const [renderInfoData, setRenderInfoData] = useState(InfoData);
+
+  useEffect(() => {
+    //1만 이상 값 렌더링용 데이터
+    if (Number(InfoData) >= 10000) {
+      setRenderInfoData(`${(Number(InfoData) / 10000).toFixed(0)}만`);
+    }
+  }, [InfoData]);
+
   return (
     <div className="flex flex-col gap-1 justify-center items-center text-sm">
       <IconName width={35} height={35} strokeColor="black" />
-      <p className="font-preBold">{InfoData}</p>
-      <p className="font-preRegular text-xs">{InfoType}</p>
+      <p className="text-sm font-preBold">{renderInfoData}</p>
+      <p className="text-xs font-preRegular">{InfoType}</p>
     </div>
   );
 };

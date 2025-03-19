@@ -10,17 +10,19 @@ const HomeSelectedIngredients = () => {
   const { openModal } = useModalStore();
 
   return (
-    <div className="flex justify-between items-center w-full h-full p-2 bg-white rounded-xl">
-      <div className="flex items-center justify-start w-4/5 h-full gap-2">
+    <div className="flex justify-between items-center w-full h-full px-2 bg-white rounded-xl">
+      <div className="grid grid-flow-col auto-cols-max w-4/5 h-fit gap-2 overflow-x-auto">
         {Object.values(selectedIngredients).map((ingredient) => (
           <div key={ingredient.ingredientInfoId} className="w-12 aspect-[1/1]">
-            <div className="relative aspect-[1/1] rounded-3xl">
+            <div className="relative w-full aspect-[1/1] rounded-3xl">
               <img
                 src={ingredient.imageUrl}
                 alt={ingredient.imageUrl}
                 className="w-full h-full object-cover rounded-3xl"
               />
-              <p className="absolute bottom-0.5 w-full font-preMedium text-xs text-center">{ingredient.name}</p>
+              <span className="absolute flex justify-center items-center right-0 top-0 bg-orange-500 w-5 h-5 rounded-3xl">
+                <p className="font-preRegular text-white text-xs ">{ingredient.selectedCount}</p>
+              </span>
             </div>
           </div>
         ))}
