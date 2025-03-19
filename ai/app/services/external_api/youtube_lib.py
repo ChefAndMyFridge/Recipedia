@@ -2,7 +2,10 @@ import asyncio
 import re
 from youtubesearchpython import CustomSearch
 from app.core.config import settings
+from googleapiclient.discovery import build
+import logging
 
+logger = logging.getLogger(__name__)
 
 async def search_youtube_recipe(dish: str, max_results=None) -> list:
     """
@@ -34,40 +37,55 @@ def _sync_search_youtube_recipe(dish: str, max_results) -> list:
     if not search_response or 'result' not in search_response:
         return []
 
-    results = []
+    # 비디오 ID 추출
+    video_ids = []
+    video_info = {}
+    
     for item in search_response['result']:
-        video_data = {
+        # URL에서 비디오 ID 추출
+        video_url = item["link"]
+        video_id = video_url.split("v=")[-1].split("&")[0]
+        video_ids.append(video_id)
+        
+        # 기본 정보 저장 - 검색에서 얻을 수 있는 정보만 저장
+        video_info[video_id] = {
             "title": item["title"],
             "url": item["link"],
             "channel_title": item["channel"]["name"],
+            "duration": item.get("duration", "")
         }
+    
+    ########################################################################
+    # YouTube Data API를 사용하여 상세 통계 정보(조회수, 좋아요 수) 가져오기
+    youtube = build("youtube", "v3", developerKey=settings.YOUTUBE_API_KEY)
 
-        # 동영상 길이 처리
-        duration = item.get("duration", "")
-        video_data["duration"] = duration
-        
-        # 통계 정보 추가
-        view_count_text = item.get('viewCount', {}).get('text', '0').replace(',', '').replace(' views', '')
-        
-        try:
-            # 조회수 추출 ('123K views'에서 숫자 부분만 추출)
-            view_count = view_count_text
-            if 'K' in view_count:
-                view_count = float(view_count.replace('K', '')) * 1000
-            elif 'M' in view_count:
-                view_count = float(view_count.replace('M', '')) * 1000000
-            else:
-                view_count = float(view_count) if view_count else 0
-                
-            video_data["view_count"] = int(view_count)
-        except:
-            video_data["view_count"] = 0
-        
-        # 좋아요 수는 기본 API에서 제공되지 않음
-        video_data["like_count"] = 0
+    # 모든 비디오에 기본 통계값 설정
+    for video_id in video_ids:
+        if video_id in video_info:
+            video_info[video_id]["view_count"] = 0  # 기본값
+            video_info[video_id]["like_count"] = 0  # 기본값
 
-        results.append(video_data)
-
+    # API를 통한 통계 정보 추가 시도
+    try:
+        if video_ids:
+            videos_request = youtube.videos().list(
+                part="statistics",
+                id=",".join(video_ids)
+            )
+            videos_response = videos_request.execute()
+            
+            # 통계 정보 업데이트
+            for item in videos_response.get("items", []):
+                video_id = item["id"]
+                if video_id in video_info and "statistics" in item:
+                    stats = item["statistics"]
+                    video_info[video_id]["view_count"] = int(stats.get("viewCount", 0))
+                    video_info[video_id]["like_count"] = int(stats.get("likeCount", 0))
+    except Exception as e:
+        print(f"⚠️ YouTube API 호출 중 오류 발생: {e}")
+        
+    # 최종 결과 구성
+    results = [video_info[video_id] for video_id in video_ids if video_id in video_info]
     return results
 
 
