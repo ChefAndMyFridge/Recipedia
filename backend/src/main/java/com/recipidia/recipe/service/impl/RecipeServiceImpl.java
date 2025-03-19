@@ -1,7 +1,6 @@
 package com.recipidia.recipe.service.impl;
 
 import com.recipidia.ingredient.dto.IngredientInfoDto;
-import com.recipidia.ingredient.dto.IngredientSimpleInfoDto;
 import com.recipidia.ingredient.service.IngredientService;
 import com.recipidia.recipe.converter.RecipeQueryResConverter;
 import com.recipidia.recipe.dto.RecipeDto;
@@ -14,6 +13,7 @@ import com.recipidia.recipe.request.RecipeQueryReq;
 import com.recipidia.recipe.response.*;
 import com.recipidia.recipe.service.RecipeService;
 import com.recipidia.member.repository.MemberRecipeRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 public class RecipeServiceImpl implements RecipeService {
@@ -175,14 +176,17 @@ public class RecipeServiceImpl implements RecipeService {
   }
 
   @Override
-  @Transactional
+  @Transactional(readOnly = true)
   public Mono<ResponseEntity<List<RecipeDto>>> getAllRecipes() {
     return Mono.fromCallable(recipeRepository::findAllWithIngredients)
         .subscribeOn(Schedulers.boundedElastic())
-        .map(recipes -> recipes.stream()
+        .publishOn(Schedulers.parallel())
+        .map(list -> list.stream()
             .map(RecipeDto::fromEntity)
             .collect(Collectors.toList()))
         .map(ResponseEntity::ok)
+        .doOnNext(resp -> log.info("getAllRecipes result size={}", resp.getBody().size()))
+        .doOnError(e -> log.error("getAllRecipes failed", e))
         .onErrorResume(e ->
             Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build())
         );
