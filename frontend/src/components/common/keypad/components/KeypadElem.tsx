@@ -2,6 +2,8 @@ import Button from "@components/common/button/Button.tsx";
 
 import { KeypadElemProps } from "@/types/commonProps";
 
+const NUMBER_KEYS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "DEL", "0", "C"];
+
 const KeypadElem = ({ value, onChange }: KeypadElemProps) => {
   const handleInput = (val: string) => onChange(value + val);
   const handleDelete = () => {
@@ -9,8 +11,6 @@ const KeypadElem = ({ value, onChange }: KeypadElemProps) => {
     onChange(value.slice(0, -1));
   };
   const handleClear = () => onChange("");
-
-  const NUMBER_KEYS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "DEL", "0", "C"];
 
   return (
     <div className="flex flex-col items-center justify-center w-fit h-fit bg-white">

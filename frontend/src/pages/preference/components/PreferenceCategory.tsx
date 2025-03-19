@@ -2,8 +2,9 @@ import { useState } from "react";
 import ArrowLeft from "@assets/icons/ArrowLeft";
 import ArrowRight from "@assets/icons/ArrowRight";
 
+const CATEGORY = ["한식", "중식", "일식", "양식"];
+
 const PreferenceCategory = () => {
-  const CATEGORY = ["한식", "중식", "일식", "양식"];
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   //이전으로
   function goToPrevious() {
