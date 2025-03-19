@@ -14,6 +14,7 @@ import instance from "./instance";
 export const getIngredientsApi = async (): Promise<Ingredients[]> => {
   try {
     const response = await instance.get("v1/ingredient");
+    console.log("v1/ingredient", response.data);
     return response.data;
   } catch (error: unknown) {
     throw new Error(error as string);
@@ -24,6 +25,7 @@ export const getIngredientsApi = async (): Promise<Ingredients[]> => {
 export const getIngredientsInfoApi = async (): Promise<IngredientsInfo[]> => {
   try {
     const response = await instance.get("v1/ingredient/info");
+    console.log("v1/ingredient/info", response.data);
     return response.data;
   } catch (error: unknown) {
     throw new Error(error as string);
@@ -34,6 +36,7 @@ export const getIngredientsInfoApi = async (): Promise<IngredientsInfo[]> => {
 export const storeIngredientApi = async (ingredient: StoreIngredient): Promise<StoreResponseIngredient> => {
   try {
     const response = await instance.post("v1/ingredient", ingredient);
+    console.log("v1/ingredient (post)", response.data);
     return response.data;
   } catch (error: unknown) {
     throw new Error(error as string);
@@ -44,6 +47,7 @@ export const storeIngredientApi = async (ingredient: StoreIngredient): Promise<S
 export const getIngredientNutritionApi = async (ingredientId: number): Promise<IngredientNutrition> => {
   try {
     const response = await instance.get(`v1/ingredient/nutrient/${ingredientId}`);
+    console.log("v1/ingredient/nutrient", response.data);
     return response.data;
   } catch (error: unknown) {
     throw new Error(error as string);
@@ -54,7 +58,7 @@ export const getIngredientNutritionApi = async (ingredientId: number): Promise<I
 export const deleteIngredientApi = async (ingredients: DeleteIngredient[]): Promise<DeleteIngredientResponse> => {
   try {
     const response = await instance.delete("v1/ingredient/release", { data: ingredients });
-    console.log("api", response);
+    console.log("v1/ingredient/release", response.data);
     return response.data;
   } catch (error: unknown) {
     throw new Error(error as string);
