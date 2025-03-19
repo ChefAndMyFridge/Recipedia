@@ -13,11 +13,12 @@ const RecipeListSelectedIngredients = () => {
       <p>{IngredientTitle}</p>
       <hr className="border-content" />
       <div className="flex gap-2 overflow-x-auto whitespace-nowrap scrollbar-hide">
-        {Object.values(selectedIngredients).map((ingredient) => (
-          <div key={ingredient.ingredientInfoId} className="flex-shrink-0">
-            <img src={ingredient.imageUrl} alt={ingredient.name} className="w-12 h-12 rounded-full" />
-          </div>
-        ))}
+        {selectedIngredients &&
+          Object.values(selectedIngredients).map((ingredient) => (
+            <div key={ingredient.ingredientInfoId} className="flex-shrink-0">
+              <img src={ingredient.imageUrl} alt={ingredient.name} className="w-12 h-12 rounded-full" />
+            </div>
+          ))}
       </div>
     </div>
   );

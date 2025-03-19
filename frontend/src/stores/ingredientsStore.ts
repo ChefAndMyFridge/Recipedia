@@ -3,7 +3,7 @@ import { create } from "zustand";
 import { Ingredients, SelectedIngredients, filteredInfomations } from "@/types/ingredientsTypes.ts";
 
 interface IngredientsState {
-  ingredients: Ingredients[]; // 고내에 저장된 재료 목록
+  ingredients: Ingredients[] | []; // 고내에 저장된 재료 목록
   selectedIngredients: Record<number, SelectedIngredients>; // { ingredientInfoId: selectedCount } 선택된 재료 목록
   filteringInfomationKeys: filteredInfomations;
   filteredInfomations: filteredInfomations;

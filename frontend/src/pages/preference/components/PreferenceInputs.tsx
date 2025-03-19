@@ -61,9 +61,10 @@ const PreferenceInputs = ({ type }: PreferenceInputsProps) => {
       </div>
 
       <div className="w-full flex gap-2">
-        {selectedList.map((item) => (
-          <PreferenceSelectedItem key={item} value={item} onDelete={() => handleDeleteItem(item)} />
-        ))}
+        {selectedList &&
+          selectedList.map((item) => (
+            <PreferenceSelectedItem key={item} value={item} onDelete={() => handleDeleteItem(item)} />
+          ))}
       </div>
     </div>
   );

@@ -23,7 +23,8 @@ const HomeIngredients = () => {
     setPageIndex(0);
   }, [ingredients]);
 
-  const totalPages = Math.ceil(ingredients.length / ITEM_PER_PAGE);
+  const totalPages =
+    Array.isArray(ingredients) && ingredients.length > 0 ? Math.ceil(ingredients.length / ITEM_PER_PAGE) : 1;
   const pagination = Array.from({ length: totalPages });
 
   // 페이지 이동
@@ -59,6 +60,16 @@ const HomeIngredients = () => {
     }
   }
 
+  console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!", ingredients);
+
+  if (Array.isArray(ingredients) && ingredients.length === 0) {
+    return (
+      <div className="flex justify-center items-center w-full h-full">
+        <p className="text-lg text-content">등록된 재료가 없습니다.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col justify-between items-center w-full h-full px-4 py-2 overflow-hidden">
       {/* 터치 이동이 가능한 슬라이드 영역 */}
@@ -71,28 +82,32 @@ const HomeIngredients = () => {
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        {pagination.map((_, idx) => {
-          const startIdx = idx * ITEM_PER_PAGE;
-          const endIdx = startIdx + ITEM_PER_PAGE;
-          return (
-            <div key={idx} className="w-full flex-shrink-0 grid grid-cols-5 gap-2">
-              {ingredients.slice(startIdx, endIdx).map((ingredient) => (
-                <HomeIngredient key={ingredient.ingredientInfoId} ingredient={ingredient} />
-              ))}
-            </div>
-          );
-        })}
+        {pagination &&
+          pagination.map((_, idx) => {
+            const startIdx = idx * ITEM_PER_PAGE;
+            const endIdx = startIdx + ITEM_PER_PAGE;
+            return (
+              <div key={idx} className="w-full flex-shrink-0 grid grid-cols-5 gap-2">
+                {Array.isArray(ingredients) &&
+                  ingredients.length > 0 &&
+                  ingredients
+                    .slice(startIdx, endIdx)
+                    .map((ingredient) => <HomeIngredient key={ingredient.ingredientInfoId} ingredient={ingredient} />)}
+              </div>
+            );
+          })}
       </div>
 
       {/* 페이지네이션 */}
       <div className="flex justify-center items-end gap-1.5 h-[5%]">
-        {pagination.map((_, idx) => (
-          <span
-            key={idx}
-            className={`rounded-full transition-all ${idx === pageIndex ? "w-2 h-2 bg-primary" : "w-1.5 h-1.5  bg-content"}`}
-            onClick={() => setPageIndex(idx)}
-          />
-        ))}
+        {pagination &&
+          pagination.map((_, idx) => (
+            <span
+              key={idx}
+              className={`rounded-full transition-all ${idx === pageIndex ? "w-2 h-2 bg-primary" : "w-1.5 h-1.5  bg-content"}`}
+              onClick={() => setPageIndex(idx)}
+            />
+          ))}
       </div>
     </div>
   );
