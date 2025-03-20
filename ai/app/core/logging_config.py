@@ -12,10 +12,9 @@ LOG_DIR = os.path.join(os.path.dirname(
 if not os.path.exists(LOG_DIR):
     os.makedirs(LOG_DIR)
 
-# 날짜별 로그 파일 경로 설정 함수 (파일 이름을 최신 날짜로 유지)
-
 
 def get_log_file_path():
+    # 날짜별 로그 파일 경로 설정 함수 (파일 이름을 최신 날짜로 유지)
     today_date = datetime.now().strftime("%Y-%m-%d")
     return os.path.join(LOG_DIR, f"app_{today_date}.log")
 
@@ -24,10 +23,9 @@ def get_error_log_file_path():
     today_date = datetime.now().strftime("%Y-%m-%d")
     return os.path.join(LOG_DIR, f"error_{today_date}.log")
 
-# CustomTimedRotatingFileHandler (자동 회전 시 날짜 업데이트)
-
 
 class CustomTimedRotatingFileHandler(TimedRotatingFileHandler):
+    # CustomTimedRotatingFileHandler (자동 회전 시 날짜 업데이트)
     def __init__(self, filename: Callable[[], str], when: str, interval: int, backupCount: int, encoding: str):
         """
         동적으로 파일명을 설정할 함수 저장
