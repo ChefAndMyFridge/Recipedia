@@ -3,19 +3,20 @@ package com.recipidia.filter.dto;
 import com.recipidia.filter.entity.MemberFilter;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * DTO for {@link MemberFilter}
  */
-public record MemberFilterDto(Long id, Long memberId, List<String> genres, List<String> dietaries, List<String> ingredients) implements Serializable {
-  public static MemberFilterDto fromEntity(MemberFilter filter) {
+public record MemberFilterDto(
+    Long id,
+    Long memberId,
+    MemberFilterData filterData
+) implements Serializable {
+  public static MemberFilterDto fromEntity(MemberFilter entity) {
     return new MemberFilterDto(
-        filter.getId(),
-        filter.getMember().getId(),
-        filter.getGenres(),
-        filter.getDietaries(),
-        filter.getIngredients()
+        entity.getId(),
+        entity.getMember().getId(),
+        entity.getFilterData()
     );
   }
 }
