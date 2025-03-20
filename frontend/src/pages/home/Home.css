@@ -1,4 +1,4 @@
-@import "src/styles/animations.css";
+@import url("../../styles/animations.css");
 
 .shake {
   animation: shake 0.3s ease-in-out;
