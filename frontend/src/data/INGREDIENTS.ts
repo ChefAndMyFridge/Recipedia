@@ -2,7 +2,7 @@ export const INGREDIENTS = [
   {
     ingredientInfoId: 9007199254740991,
     name: "당근",
-    imageUrl: "https://static.megamart.com/product/image/0658/06588939/06588939_1_960.jpg",
+    imageUrl: "",
     totalCount: 1,
     ingredients: [
       {

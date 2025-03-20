@@ -7,6 +7,8 @@ import DetailIngredientItem from "@pages/detailIngredient/components/DetailIngre
 
 import Button from "@components/common/button/Button";
 
+import noImg from "@assets/images/noIngredient/carrot.png";
+
 interface IngredientsProps {
   ingredient: Ingredients;
 }
@@ -16,7 +18,10 @@ const DetailIngredientModal = ({ ingredient }: IngredientsProps) => {
 
   return (
     <div>
-      <DetailIngredientImage imgSrc={ingredient.imageUrl} ingredientId={ingredient.ingredientInfoId} />
+      <DetailIngredientImage
+        imgSrc={ingredient.imageUrl ? ingredient.imageUrl : noImg}
+        ingredientId={ingredient.ingredientInfoId}
+      />
 
       {/* 선택된 식재료 현황 */}
       <div className="flex justify-between items-center w-full h-10 px-6 py-8 font-preSemiBold">
@@ -29,7 +34,11 @@ const DetailIngredientModal = ({ ingredient }: IngredientsProps) => {
         <div className="flex h-[35vh] items-start content-start py-2 px-4 gap-y-5 shrink-0 flex-wrap font-preMedium bg-[#EEE] rounded-xl">
           {ingredient.ingredients &&
             ingredient.ingredients.map((item) => (
-              <DetailIngredientItem key={item.ingredientId} ingredient={item} imgSrc={ingredient.imageUrl} />
+              <DetailIngredientItem
+                key={item.ingredientId}
+                ingredient={item}
+                imgSrc={ingredient.imageUrl ? ingredient.imageUrl : noImg}
+              />
             ))}
         </div>
       </div>

@@ -10,6 +10,8 @@ import DetailIngredientModal from "@pages/detailIngredient/DetailIngredientModal
 import IconDecrease from "@assets/icons/IconDecrease";
 import IconIncrease from "@assets/icons/IconIncrease";
 
+import noImg from "@assets/images/noIngredient/carrot.png";
+
 interface HomeIngredientProps {
   ingredient: Ingredients;
 }
@@ -56,7 +58,11 @@ const HomeIngredient = ({ ingredient }: HomeIngredientProps) => {
         className="relative w-full aspect-[1/1] rounded-3xl cursor-pointer bg-subContent"
         onClick={() => openModal(<DetailIngredientModal ingredient={ingredient} />)}
       >
-        <img src={ingredient.imageUrl} alt="no image" className="w-full h-full object-cover rounded-3xl" />
+        <img
+          src={ingredient.imageUrl ? ingredient.imageUrl : noImg}
+          alt="no image"
+          className="w-full h-full object-cover rounded-3xl"
+        />
         <span className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/50 to-transparent rounded-b-3xl" />
         <p
           className="absolute bottom-0.5 w-full font-preMedium text-xs text-center text-white"
