@@ -11,16 +11,21 @@ logger = logging.getLogger(__name__)
 
 
 class QueryMaker:
-    def __init__(self, ingredients: List[str] = None, main_ingredients: List[str] = None) -> None:
+    def __init__(self, ingredients: List[str] = None, main_ingredients: List[str] = None, 
+                 preferred_ingredients: List[str] = None, disliked_ingredients: List[str] = None) -> None:
         """
         QueryMaker 클래스 초기화
 
         Args:
             ingredients: 사용할 재료 목록
             main_ingredients: 주재료 목록
+            preferred_ingredients: 선호하는 재료 목록
+            disliked_ingredients: 비선호하는 재료 목록
         """
         self.ingredients: List[str] = ingredients or []
         self.main_ingredients: List[str] = main_ingredients or []
+        self.preferred_ingredients: List[str] = preferred_ingredients or []
+        self.disliked_ingredients: List[str] = disliked_ingredients or []
 
         self.dishes: List[str] = []
         self.all_videos: Dict[str, List[Dict[str, Any]]] = {}
@@ -38,7 +43,12 @@ class QueryMaker:
         loop = asyncio.get_running_loop()
         logger.info("요리 이름 생성 시작")
         self.dishes = await loop.run_in_executor(None,
-                                                 lambda: generate_dish_names(self.ingredients, self.main_ingredients))
+                                                 lambda: generate_dish_names(
+                                                     self.ingredients, 
+                                                     self.main_ingredients,
+                                                     self.preferred_ingredients,
+                                                     self.disliked_ingredients
+                                                 ))
         logger.info(f"요리 이름 생성 완료: {len(self.dishes)}개 생성됨")
         return self.dishes
 
@@ -129,8 +139,8 @@ class QueryMaker:
             'videos': self.all_videos,
         }
 
-    def print_results(self, include_ingredients=True, include_dishes=True,
-                      include_recipes=True, include_time=True, include_api_times=True) -> None:
+    def print_results(self, include_ingredients=False, include_dishes=True,
+                      include_recipes=False, include_time=False, include_api_times=False) -> None:
         """
         결과를 통합적으로 출력하는 함수
 
@@ -149,6 +159,12 @@ class QueryMaker:
                 print(f"주재료: {', '.join(self.main_ingredients)}")
             else:
                 print("주재료: 지정되지 않음")
+                
+            if self.preferred_ingredients:
+                print(f"선호재료: {', '.join(self.preferred_ingredients)}")
+                
+            if self.disliked_ingredients:
+                print(f"비선호재료: {', '.join(self.disliked_ingredients)}")
 
         # 2. 생성된 음식 목록 출력
         if include_dishes:
@@ -210,15 +226,23 @@ if __name__ == "__main__":
     # 테스트 모드 설정: False - 음식 이름 생성만, True - 전체 과정(이름 생성 + 유튜브 검색)
     FULL_TEST_MODE = True  # 테스트 모드 변경을 위한 플래그
 
-    async def test_dish_generation(ingredients: List[str], main_ingredients: Optional[List[str]] = None, title: str = "") -> List[str]:
+    async def test_dish_generation(ingredients: List[str], main_ingredients: Optional[List[str]] = None, 
+                                  preferred_ingredients: Optional[List[str]] = None, 
+                                  disliked_ingredients: Optional[List[str]] = None, 
+                                  title: str = "") -> List[str]:
         """음식 이름 생성만 테스트하는 간소화된 함수"""
         print(f"\n===== {title} =====")
         print(f"냉장고 재료: {', '.join(ingredients)}")
-        print(
-            f"주재료: {', '.join(main_ingredients) if main_ingredients else '지정되지 않음'}")
+        print(f"주재료: {', '.join(main_ingredients) if main_ingredients else '지정되지 않음'}")
+        
+        if preferred_ingredients:
+            print(f"선호재료: {', '.join(preferred_ingredients)}")
+            
+        if disliked_ingredients:
+            print(f"비선호재료: {', '.join(disliked_ingredients)}")
 
         # QueryMaker 생성
-        qm = QueryMaker(ingredients, main_ingredients)
+        qm = QueryMaker(ingredients, main_ingredients, preferred_ingredients, disliked_ingredients)
 
         # 음식 이름 생성 시간 측정
         start_time = time.time()
@@ -235,12 +259,23 @@ if __name__ == "__main__":
 
         return qm.dishes
 
-    async def test_full_process(ingredients: List[str], main_ingredients: Optional[List[str]] = None, title: str = "") -> None:
+    async def test_full_process(ingredients: List[str], main_ingredients: Optional[List[str]] = None,
+                               preferred_ingredients: Optional[List[str]] = None,
+                               disliked_ingredients: Optional[List[str]] = None,
+                               title: str = "") -> None:
         """전체 과정(음식 이름 생성 + 유튜브 검색)을 테스트하는 함수"""
         print(f"\n===== {title} (전체 과정) =====")
+        print(f"냉장고 재료: {', '.join(ingredients)}")
+        print(f"주재료: {', '.join(main_ingredients) if main_ingredients else '지정되지 않음'}")
+        
+        if preferred_ingredients:
+            print(f"선호재료: {', '.join(preferred_ingredients)}")
+            
+        if disliked_ingredients:
+            print(f"비선호재료: {', '.join(disliked_ingredients)}")
 
         # QueryMaker 생성
-        qm = QueryMaker(ingredients, main_ingredients)
+        qm = QueryMaker(ingredients, main_ingredients, preferred_ingredients, disliked_ingredients)
 
         # 전체 과정 실행
         await qm.run()
@@ -248,33 +283,52 @@ if __name__ == "__main__":
 
     async def main():
         test_cases = [
-            # [재료 리스트, 주재료 리스트, 케이스 제목]
+            # [재료 리스트, 주재료 리스트, 선호재료 리스트, 비선호재료 리스트, 케이스 제목]
             [["김치", "두부", "대파", "쌀", "고추장", "된장", "간장", "마늘", "양파", "참기름"],
-             [], "테스트 케이스 1: 한식 재료 (주재료 없음)"],
+             [], None, None, "테스트 케이스 1: 한식 재료 (주재료 없음)"],
 
             [["소고기", "감자", "양파", "당근", "토마토", "버터", "올리브오일", "로즈마리", "버섯", "화이트와인"],
-             ["소고기"], "테스트 케이스 2: 양식 재료 (주재료: 소고기)"],
+             ["소고기"], None, None, "테스트 케이스 2: 양식 재료 (주재료: 소고기)"],
 
             [["새우", "오징어", "양파", "마늘", "고추", "파", "식용유", "밀가루", "달걀", "소금"],
-             ["새우", "오징어"], "테스트 케이스 3: 해산물 요리 (주재료: 새우, 오징어)"],
+             ["새우", "오징어"], None, None, "테스트 케이스 3: 해산물 요리 (주재료: 새우, 오징어)"],
 
-            # [["닭고기", "코코넛밀크", "레몬그라스", "생강", "칠리", "바질", "카피르라임잎", "피시소스", "쌀", "콩나물"],
-            #  ["닭고기"], "테스트 케이스 4: 아시안 요리 (주재료: 닭고기)"],
+            [["닭고기", "코코넛밀크", "레몬그라스", "생강", "칠리", "바질", "카피르라임잎", "피시소스", "쌀", "콩나물"],
+             ["닭고기"], ["코코넛밀크", "레몬그라스"], ["칠리"], "테스트 케이스 4: 아시안 요리 (주재료: 닭고기, 선호: 코코넛밀크/레몬그라스, 비선호: 칠리)"],
 
-            # [["닭고기", "감자", "당근", "양파", "간장"],
-            #  ["닭고기", "감자"], "테스트 케이스 5: 기존 테스트 케이스"],
+            [["닭고기", "감자", "당근", "양파", "간장"],
+             ["닭고기", "감자"], ["간장"], ["당근"], "테스트 케이스 5: 기존 테스트 + 당근 비선호"],
 
-            # [["돼지뼈", "감자", "당근", "양파", "고추장", "마늘", "대파"],
-            #  ["돼지뼈", "감자"], "테스트 케이스 6: 돼지뼈와 감자 조합"]
+            [["돼지뼈", "감자", "당근", "양파", "고추장", "마늘", "대파"],
+             ["돼지뼈", "감자"], ["마늘", "대파"], ["고추장"], "테스트 케이스 6: 돼지뼈/감자 + 매운맛 비선호"]
         ]
+
+        # 선호/비선호 테스트 케이스 추가
+        test_cases.extend([
+            [["소고기", "양파", "당근", "감자", "토마토", "버섯", "파슬리", "바질", "치즈"],
+             ["소고기"], ["치즈", "버섯"], ["토마토"], "테스트 케이스 7: 소고기 요리 (치즈/버섯 선호, 토마토 비선호)"],
+             
+            [["돼지고기", "김치", "쌀", "달걀", "당근", "양파", "마늘", "생강", "고추", "간장"],
+             ["돼지고기", "김치"], ["마늘"], ["생강", "고추"], "테스트 케이스 8: 돼지고기/김치 요리 (매운맛/생강 비선호)"]
+        ])
 
         if FULL_TEST_MODE:
             # 전체 과정 테스트 (이름 생성 + 유튜브 검색)
-            for ingredients, main_ingredients, title in test_cases:
-                await test_full_process(ingredients, main_ingredients, title)
+            for test_case in test_cases:
+                if len(test_case) == 5:  # 선호/비선호 재료 포함된 케이스
+                    ingredients, main_ingredients, preferred_ingredients, disliked_ingredients, title = test_case
+                    await test_full_process(ingredients, main_ingredients, preferred_ingredients, disliked_ingredients, title)
+                else:  # 이전 형식의 케이스 (하위 호환성 유지)
+                    ingredients, main_ingredients, title = test_case
+                    await test_full_process(ingredients, main_ingredients, None, None, title)
         else:
             # 음식 이름 생성만 테스트
-            for ingredients, main_ingredients, title in test_cases:
-                await test_dish_generation(ingredients, main_ingredients, title)
+            for test_case in test_cases:
+                if len(test_case) == 5:  # 선호/비선호 재료 포함된 케이스
+                    ingredients, main_ingredients, preferred_ingredients, disliked_ingredients, title = test_case
+                    await test_dish_generation(ingredients, main_ingredients, preferred_ingredients, disliked_ingredients, title)
+                else:  # 이전 형식의 케이스 (하위 호환성 유지)
+                    ingredients, main_ingredients, title = test_case
+                    await test_dish_generation(ingredients, main_ingredients, None, None, title)
 
     asyncio.run(main())
