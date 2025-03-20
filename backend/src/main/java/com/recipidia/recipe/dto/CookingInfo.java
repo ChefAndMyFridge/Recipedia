@@ -1,4 +1,4 @@
-package com.recipidia.recipe.response;
+package com.recipidia.recipe.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

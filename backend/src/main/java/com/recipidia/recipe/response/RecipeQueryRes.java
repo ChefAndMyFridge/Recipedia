@@ -1,5 +1,6 @@
 package com.recipidia.recipe.response;
 
+import com.recipidia.recipe.dto.VideoInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

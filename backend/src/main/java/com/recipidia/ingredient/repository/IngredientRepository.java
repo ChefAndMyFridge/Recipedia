@@ -15,4 +15,5 @@ public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
   @Query("update Ingredient i set i.isReleased = true, i.releasingDate = :releaseDate where i.id in :ingredientIds")
   void markReleasedByIds(List<Long> ingredientIds, LocalDateTime releaseDate);
 
+  List<Ingredient> findByReleasingDateBeforeAndIsReleasedTrue(LocalDateTime date);
 }

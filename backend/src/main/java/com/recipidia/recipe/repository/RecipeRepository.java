@@ -18,4 +18,8 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
   @Query("select r from Recipe r left join fetch r.ingredients where r.id = :id")
   Optional<Recipe> findByIdWithIngredients(@Param("id") Long id);
+
+  @Query("select r.id from Recipe r where r.youtubeUrl = :url")
+  Long findIdByYoutubeUrl(@Param("url")String youtubeUrl);
+
 }
