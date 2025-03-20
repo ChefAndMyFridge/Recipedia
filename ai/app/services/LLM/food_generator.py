@@ -49,32 +49,49 @@ def _parse_dish_names(content: str) -> List[str]:
         # 불릿('- ') 제거
         if line.startswith('- '):
             line = line[2:]
-        # 괄호 내용 제거
-        line = re.sub(r'\(.*?\)', '', line).strip()
+        # 괄호 내용 제거 및 주석 제거 (예: "- 당근 제외 가능" 제거)
+        line = re.sub(r'\s*\(.*?\)', '', line).strip()
+        line = re.sub(r'\s*-.*$', '', line).strip()  # 하이픈 이후 주석 제거
         if line:
             items.append(line)
     return items
 
 
-def generate_dish_names(ingredients: List[str] = None, main_ingredients: List[str] = None, num_dishes: Optional[int] = None) -> List[str]:
+def generate_dish_names(
+    ingredients: List[str] = None, 
+    main_ingredients: List[str] = None, 
+    preferred_ingredients: List[str] = None, 
+    disliked_ingredients: List[str] = None,
+    num_dishes: Optional[int] = None
+) -> List[str]:
     """
     입력:
         - ingredients: 재료 목록 (기본값 None)
         - main_ingredients: 주재료 (기본값 None)
+        - preferred_ingredients: 선호하는 재료 목록 (기본값 None)
+        - disliked_ingredients: 비선호하는 재료 목록 (기본값 None)
         - num_dishes: 생성할 요리 이름 개수 (기본값 None)
     반환:
         - list: 생성된 요리 이름 문자열의 리스트
     기능:
-        - 재료와 주재료 정보를 바탕으로 프롬프트를 생성하고,
+        - 재료, 주재료, 선호/비선호 재료 정보를 바탕으로 프롬프트를 생성하고,
           OpenAI API에 전송해 받은 결과를 파싱해 음식 이름을 추출한다.
     """
     # 타입 변환 및 기본값 설정
     ingredients: List[str] = ingredients or []
     main_ingredients: List[str] = main_ingredients or []
+    preferred_ingredients: List[str] = preferred_ingredients or []
+    disliked_ingredients: List[str] = disliked_ingredients or []
     num_dishes: Optional[int] = num_dishes or settings.NUM_DISHES_TO_GENERATE
 
     # 프롬프트 생성
-    user_prompt = get_chef_prompt(ingredients, main_ingredients, num_dishes)
+    user_prompt = get_chef_prompt(
+        ingredients_list=ingredients, 
+        main_ingredients=main_ingredients,
+        preferred_ingredients=preferred_ingredients,
+        disliked_ingredients=disliked_ingredients, 
+        num_dishes=num_dishes
+    )
 
     # 생성 API 호출
     content = _generate_from_prompt(CHEF_SYSTEM_MESSAGE, user_prompt)
@@ -89,7 +106,9 @@ if __name__ == "__main__":
     # 테스트 코드
     test_dishes = generate_dish_names(
         ingredients=["새우", "오징어", "양파", "마늘", "고추", "파", "식용유"],
-        main_ingredients=["새우", "오징어"]
+        main_ingredients=["새우", "오징어"],
+        preferred_ingredients=["마늘"],
+        disliked_ingredients=["고추"]
     )
     print("생성된 음식 이름 목록:")
     for i, dish in enumerate(test_dishes, 1):
