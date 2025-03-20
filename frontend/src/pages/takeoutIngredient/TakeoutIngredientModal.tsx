@@ -26,9 +26,8 @@ const TakeoutIngredientModal = () => {
     console.log(ingredients);
 
     deleteIngredientRequest(ingredients, {
-      onSuccess: (data) => {
-        console.log(data);
-        openModal(<TakeoutConfirmModal deleteIngredients={data} />);
+      onSuccess: () => {
+        openModal(<TakeoutConfirmModal />);
       },
       onError: (error) => {
         console.error(error);
