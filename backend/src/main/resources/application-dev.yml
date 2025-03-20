@@ -5,6 +5,8 @@ spring:
   config:
     activate:
       on-profile: dev
+  elasticsearch:
+    uris: http://localhost:9200  # Docker Compose에서 설정한 컨테이너 이름 사용
   datasource:
     url: jdbc:h2:tcp://localhost/~/recipidia
     username: sa

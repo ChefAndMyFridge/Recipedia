@@ -1,0 +1,41 @@
+package com.recipidia.ingredient.service.impl;
+
+import com.recipidia.ingredient.document.IngredientDocument;
+import com.recipidia.ingredient.repository.IngredientDocumentRepository;
+import com.recipidia.ingredient.service.IngredientDocumentService;
+import jakarta.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class IngredientDocumentServiceImpl implements IngredientDocumentService {
+
+  private final IngredientDocumentRepository ingredientDocumentRepository;
+  private final JdbcTemplate jdbcTemplate;
+
+  @PostConstruct
+  public void indexIngredients() {
+    List<IngredientDocument> ingredientDocuments = jdbcTemplate.query(
+        "select id, name from ingredient_info",
+        (rs, rowNum) -> {
+          IngredientDocument ingredientDocument = new IngredientDocument();
+          ingredientDocument.setId(rs.getLong("id"));
+          ingredientDocument.setName(rs.getString("name"));
+          return ingredientDocument;
+        }
+    );
+    ingredientDocumentRepository.saveAll(ingredientDocuments);
+  }
+
+  @Override
+  public List<IngredientDocument> findAll() {
+    Iterable<IngredientDocument> all = ingredientDocumentRepository.findAll();
+    List<IngredientDocument> ingredientDocuments = new ArrayList<>();
+    all.iterator().forEachRemaining(ingredientDocuments::add);
+    return ingredientDocuments;
+  }
+}
