@@ -1,19 +1,9 @@
-@keyframes shake {
-  0%,
-  100% {
-    transform: translateX(0) translateY(3px) rotate(0deg);
-  }
-  25% {
-    transform: translateX(-3px) translateY(-3px) rotate(-8deg);
-  }
-  50% {
-    transform: translateX(3px) translateY(0px) rotate(0deg);
-  }
-  75% {
-    transform: translateX(-3px) translateY(3px) rotate(8deg);
-  }
-}
+@import "src/styles/animations.css";
 
 .shake {
   animation: shake 0.3s ease-in-out;
+}
+
+.pinch-in {
+  animation: pinchIn 0.4s ease-in-out;
 }
