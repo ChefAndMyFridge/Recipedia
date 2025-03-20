@@ -4,6 +4,8 @@ server:
 spring:
   elasticsearch:
     uris: http://my-elasticSearch:9200  # Docker Compose에서 설정한 컨테이너 이름 사용
+    username: elastic
+    password: ${ELASTIC_PASSWORD}
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://my-mysql:3306/recipidia?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul
