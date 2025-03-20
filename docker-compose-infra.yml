@@ -31,32 +31,6 @@ services:
       - app-network
     restart: always
   
-  elasticsearch:
-    container_name: my-elasticSearch
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.3
-    environment:
-      - discovery.type=single-node
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"  # 메모리 설정
-    ports:
-      - "9200:9200"  # ✅ 외부에서 접근 가능 (localhost:9200)
-      - "9300:9300"
-    networks:
-      - app-network
-    restart: always
-
-  kibana:
-    container_name: my-kibana
-    image: docker.elastic.co/kibana/kibana:7.17.3
-    environment:
-      - ELASTICSEARCH_HOSTS=http://my-elasticSearch:9200
-    ports:
-      - "5601:5601"  # ✅ Kibana 웹 UI 접근 (localhost:5601)
-    depends_on:
-      - elasticsearch
-    networks:
-      - app-network
-    restart: always
-
 networks:
   app-network:
     name: app-network  # ✅ 공통 네트워크 설정
