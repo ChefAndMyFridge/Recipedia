@@ -1,8 +1,8 @@
 package com.recipidia.filter.entity;
 
-import com.recipidia.member.entity.Member;
 import com.recipidia.filter.converter.MemberFilterDataConverter;
 import com.recipidia.filter.dto.MemberFilterData;
+import com.recipidia.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,5 +31,10 @@ public class MemberFilter {
   public MemberFilter(Member member, MemberFilterData filterData) {
     this.member = member;
     this.filterData = filterData;
+  }
+
+  // Filter 정보 갱신 메소드
+  public void updateFilterData(MemberFilterData newData) {
+    this.filterData = newData;
   }
 }

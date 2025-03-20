@@ -7,6 +7,7 @@ import com.recipidia.filter.dto.MemberFilterData;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 import java.io.IOException;
+import java.util.List;
 
 @Converter
 public class MemberFilterDataConverter implements AttributeConverter<MemberFilterData, String> {
@@ -27,7 +28,14 @@ public class MemberFilterDataConverter implements AttributeConverter<MemberFilte
   @Override
   public MemberFilterData convertToEntityAttribute(String dbData) {
     if (dbData == null || dbData.isEmpty()) {
-      return MemberFilterData.builder().build();
+      return MemberFilterData.builder()
+          .preferredGenres(List.of())
+          .dislikedGenres(List.of())
+          .preferredDietaries(List.of())
+          .dislikedDietaries(List.of())
+          .preferredIngredients(List.of())
+          .dislikedIngredients(List.of())
+          .build();
     }
     try {
       return objectMapper.readValue(dbData, new TypeReference<MemberFilterData>() {});
