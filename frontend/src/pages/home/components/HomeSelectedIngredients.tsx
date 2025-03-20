@@ -5,10 +5,11 @@ import Button from "@components/common/button/Button.tsx";
 
 import TakeoutIngredientModal from "@pages/takeoutIngredient/TakeoutIngredientModal";
 
+import IconTrash from "@assets/icons/IconTrash";
 import noImg from "@assets/images/noIngredient/carrot.png";
 
 const HomeSelectedIngredients = () => {
-  const { selectedIngredients } = useIngredientsStore();
+  const { selectedIngredients, setRemoveSelectedIngredients } = useIngredientsStore();
   const { openModal } = useModalStore();
 
   return (
@@ -23,8 +24,11 @@ const HomeSelectedIngredients = () => {
                   alt={ingredient.imageUrl}
                   className="w-full h-full object-cover rounded-3xl"
                 />
-                <span className="absolute flex justify-center items-center right-0 top-0 bg-orange-500 w-5 h-5 rounded-3xl">
-                  <p className="font-preRegular text-white text-xs ">{ingredient.selectedCount}</p>
+                <span
+                  className="absolute flex justify-center items-center right-0 top-0 bg-error p-1 rounded-3xl cursor-pointer"
+                  onClick={() => setRemoveSelectedIngredients(ingredient.ingredientInfoId)}
+                >
+                  <IconTrash width={12} height={12} strokeColor="white" className="cursor-pointer" />
                 </span>
               </div>
             </div>
