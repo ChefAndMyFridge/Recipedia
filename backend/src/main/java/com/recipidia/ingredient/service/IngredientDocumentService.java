@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface IngredientDocumentService {
 
-  List<IngredientDocument> findAll();
+  List<IngredientDocument> findByMorpheme(String morpheme); // morpheme은 형태소
 }

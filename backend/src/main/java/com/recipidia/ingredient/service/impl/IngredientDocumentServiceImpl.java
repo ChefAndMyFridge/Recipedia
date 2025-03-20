@@ -4,7 +4,6 @@ import com.recipidia.ingredient.document.IngredientDocument;
 import com.recipidia.ingredient.repository.IngredientDocumentRepository;
 import com.recipidia.ingredient.service.IngredientDocumentService;
 import jakarta.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -32,10 +31,7 @@ public class IngredientDocumentServiceImpl implements IngredientDocumentService 
   }
 
   @Override
-  public List<IngredientDocument> findAll() {
-    Iterable<IngredientDocument> all = ingredientDocumentRepository.findAll();
-    List<IngredientDocument> ingredientDocuments = new ArrayList<>();
-    all.iterator().forEachRemaining(ingredientDocuments::add);
-    return ingredientDocuments;
+  public List<IngredientDocument> findByMorpheme(String morpheme) {
+    return ingredientDocumentRepository.findByTermUsingWildCard(morpheme);
   }
 }
