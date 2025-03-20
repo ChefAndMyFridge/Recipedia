@@ -40,14 +40,15 @@ const StoreIngredientForm = () => {
     const fd = new FormData(event.currentTarget);
     const data = Object.fromEntries(fd.entries());
 
-    if (!data.name || !data.incomingDate || !data.expirationDate) {
+    if (!data.name || !data.amount || !data.incomingDate || !data.expirationDate) {
       alert("모든 항목을 입력해주세요.");
       return;
     }
 
+    // 추후 시간에 대한 고려 필요
     const ingredient: StoreIngredient = {
       name: data.name as string,
-      imageUrl: "https://image.com",
+      imageUrl: "",
       amount: Number(data.amount),
       incomingDate: `${data.incomingDate as string}T00:00:00`,
       expirationDate: `${data.expirationDate as string}T23:59:59`,
