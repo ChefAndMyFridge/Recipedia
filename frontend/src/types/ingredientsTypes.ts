@@ -41,7 +41,7 @@ export interface IngredientNutrition {
   imageUrl: string;
   totalCount: number;
   ingredients: Ingredient[];
-  nutrients: Nutritions;
+  nutrients: Nutritions | null;
 }
 
 export interface StoreIngredient {

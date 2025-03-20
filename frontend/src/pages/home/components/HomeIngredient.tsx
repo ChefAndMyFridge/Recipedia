@@ -1,3 +1,5 @@
+import "@pages/home/Home.css";
+
 import { useState, useEffect } from "react";
 
 import useIngredientsStore from "@stores/ingredientsStore.ts";
@@ -21,13 +23,15 @@ const HomeIngredient = ({ ingredient }: HomeIngredientProps) => {
   const { openModal } = useModalStore();
 
   const selectedIngredient = selectedIngredients[ingredient.ingredientInfoId];
+
   const [count, setCount] = useState<number>(selectedIngredient?.selectedCount || 0);
+  const [isShaking, setIsShaking] = useState<boolean>(false);
 
   useEffect(() => {
     setCount(selectedIngredients[ingredient.ingredientInfoId]?.selectedCount || 0);
   }, [selectedIngredients]);
 
-  const handleIncrease = () => {
+  function handleIncrease() {
     if (count < ingredient.totalCount) {
       setCount(count + 1);
       setSelectedCount(ingredient.ingredientInfoId, {
@@ -37,9 +41,9 @@ const HomeIngredient = ({ ingredient }: HomeIngredientProps) => {
         selectedCount: count + 1,
       });
     }
-  };
+  }
 
-  const handleDecrease = () => {
+  function handleDecrease() {
     if (count > 0) {
       setCount(count - 1);
       setSelectedCount(ingredient.ingredientInfoId, {
@@ -49,13 +53,18 @@ const HomeIngredient = ({ ingredient }: HomeIngredientProps) => {
         selectedCount: count - 1,
       });
     }
-  };
+  }
+
+  function triggerShake() {
+    setIsShaking(true);
+    setTimeout(() => setIsShaking(false), 300);
+  }
 
   return (
     <div className="flex flex-col w-full h-fit p-1 justify-center items-center ">
       {/* 아이콘 부분 */}
       <div
-        className="relative w-full aspect-[1/1] rounded-3xl cursor-pointer bg-subContent"
+        className={`relative w-full aspect-[1/1] rounded-3xl cursor-pointer bg-subContent ${isShaking ? "shake" : ""}`}
         onClick={() => openModal(<DetailIngredientModal ingredient={ingredient} />)}
       >
         <img
@@ -72,21 +81,24 @@ const HomeIngredient = ({ ingredient }: HomeIngredientProps) => {
         >
           {ingredient.name}
         </p>
+        {count > 0 && (
+          <span className="absolute flex justify-center items-center right-0 top-0 bg-orange-500 w-6 h-6 rounded-full cursor-pointer">
+            <p className="font-preSemiBold text-white text-sm">{count}</p>
+          </span>
+        )}
       </div>
 
       {/* 재료 조작 관련 부분 */}
       <div className="flex w-full justify-between items-center p-1">
         <button
-          disabled={count <= 0}
-          onClick={handleDecrease}
+          onClick={count <= 0 ? triggerShake : handleDecrease}
           className="flex justify-center items-center w-3.5 aspect-[1/1] p-[2px] bg-subContent rounded-full"
         >
           <IconDecrease strokeColor="black" />
         </button>
-        <span className="font-preSemiBold text-center">{count}</span>
+        <span className="font-preRegular text-center">{ingredient.totalCount - count}</span>
         <button
-          disabled={count >= ingredient.totalCount}
-          onClick={handleIncrease}
+          onClick={count >= ingredient.totalCount ? triggerShake : handleIncrease}
           className="flex justify-center items-center w-3.5 aspect-[1/1] p-[2px] bg-subContent rounded-full"
         >
           <IconIncrease strokeColor="black" />
