@@ -42,10 +42,13 @@ pipeline {
                 script {
                     sh """
                     cd ${env.WORKSPACE}
+                    MYSQL_ROOT_PASSWORD=${env.MYSQL_ROOT_PASSWORD} \
+                    MYSQL_DATABASE=${env.MYSQL_DATABASE} \
                     VITE_API_URL=${env.VITE_API_URL} \
                     YOUTUBE_API_KEY=${env.YOUTUBE_API_KEY} \
                     OPENAI_API_KEY=${env.OPENAI_API_KEY} \
                     USDA_API_KEY=${env.USDA_API_KEY} \
+                    ELASTIC_PASSWORD=${env.ELASTIC_PASSWORD} \
                     docker-compose -f docker-compose-app.yml up -d --build
                     """
                 }
