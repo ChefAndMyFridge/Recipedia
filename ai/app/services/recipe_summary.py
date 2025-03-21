@@ -2,11 +2,11 @@
 import time
 import asyncio
 
-from youtubesearchpython import Transcript
+from youtubesearchpython import Transcript, Video
 from app.services.LLM.recipe_generator import RequestGPT
 from fastapi import HTTPException
 from app.utils.prompts.few_shot import SUMMARY_FEW_SHOT_DATA
-from app.utils.prompts.recipe_summary_prompts import SUMMARY_SYSTEM_INPUT, SUMMARY_USER_INPUT
+from app.utils.prompts.recipe_summary_prompts import SUMMARY_SYSTEM_INPUT, SUMMARY_USER_INPUT, SUMMARY_DESCRIPTION_INPUT
 from app.core.config import settings
 from app.core.logging_config import logger
 
@@ -92,6 +92,13 @@ class RecipeSummary:
 
         # OpenAI 요청을 위한 메시지 구성
         system_input, user_input = SUMMARY_SYSTEM_INPUT, SUMMARY_USER_INPUT
+
+        # 비디오 설명이 있다면, 이를 프롬프트에 추가
+        video_info = Video.getInfo(video_id)
+        if 'description' in video_info:
+            user_input += SUMMARY_DESCRIPTION_INPUT
+            user_input.append(
+                {"role": "user", "content": video_info['description']})
 
         # Few shot 데이터 적용
         user_input += SUMMARY_FEW_SHOT_DATA
