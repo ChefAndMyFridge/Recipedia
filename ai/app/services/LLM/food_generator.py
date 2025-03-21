@@ -43,6 +43,20 @@ def _parse_dish_names(content: str) -> List[str]:
     기능:
         - 불릿 포인트('- ') 및 괄호 내 문자 등을 제거한 뒤 줄 단위로 음식 이름을 수집한다.
     """
+
+    # 예외 처리 추가가
+    if "NO_VALID_DISHES" in content:
+        return []
+    
+    non_valid_patterns = [
+        "죄송합니다", "죄송하지만", "존재하지 않습니다", "추천할 수 없습니다", 
+        "추천할 수 있는 요리가 없습니다", "실존하는 요리는 존재하지 않습니다"
+    ]
+
+    for pattern in non_valid_patterns:
+        if pattern in content:
+            return []
+
     items: List[str] = []
     for line in content.split('\n'):
         line = line.strip()
