@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 import {
   Ingredients,
-  IngredientsInfo,
+  IngredientsSearchInfo,
   StoreIngredient,
   StoreResponseIngredient,
   IngredientNutrition,
@@ -13,7 +13,7 @@ import {
 
 import {
   getIngredientsApi,
-  getIngredientsInfoApi,
+  searchIngredientsApi,
   storeIngredientApi,
   getIngredientNutritionApi,
   deleteIngredientApi,
@@ -41,13 +41,12 @@ export const useGetIngredientsList = () => {
   return query;
 };
 
-// 전체 재료 목록 조회
-export const useGetIngredientsInfoList = (options?: { enabled?: boolean }) => {
-  const query = useQuery<IngredientsInfo[]>({
-    queryKey: ["ingredientsInfo"],
-    queryFn: getIngredientsInfoApi,
+// 재료 자동완성 검색
+export const useSearchIngredientsInfo = (inputValue: string) => {
+  const query = useQuery<IngredientsSearchInfo[]>({
+    queryKey: ["ingredientsSearch"],
+    queryFn: () => searchIngredientsApi(inputValue),
     throwOnError: true,
-    enabled: options?.enabled ?? true, // enabled가 false이면 처음에는 API 호출을 하지 않음 (기본값: true)
   });
 
   return query;

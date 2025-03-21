@@ -1,6 +1,6 @@
 //mocks/handlers.ts
 import { http, HttpResponse } from "msw";
-import { INGREDIENTS, INGREDIENTS_INFO } from "@/data/INGREDIENTS";
+import { INGREDIENTS, SEARCH_INGREDIENTS_INFO } from "@/data/INGREDIENTS";
 import { INGREDIENT_WITH_NUTRITIONS } from "@/data/NUTRITIONS";
 import RECIPE_LIST from "@/data/RECIPE_LIST";
 import DETAIL_RECIPE from "@/data/DETAIL_RECIPE";
@@ -13,14 +13,14 @@ const handlers = [
     return HttpResponse.json(INGREDIENTS);
   }),
 
-  // 전체 재료 목록 조회
-  http.get(VITE_API_URL + "/v1/ingredient/info", () => {
-    return HttpResponse.json(INGREDIENTS_INFO);
-  }),
-
   // 재료 입고
   http.post(VITE_API_URL + "/v1/ingredient", () => {
     return HttpResponse.json({ message: "재료가 성공적으로 입고되었습니다." });
+  }),
+
+  // 재료 자동완성 검색 (안 변하는 게 정상입니다)
+  http.get(VITE_API_URL + "/v1/ingredient/search?req=:inputValue", () => {
+    return HttpResponse.json(SEARCH_INGREDIENTS_INFO);
   }),
 
   // 재료 상세 조회
