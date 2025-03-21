@@ -5,6 +5,8 @@ import { useGetIngredientsInfoList } from "@hooks/useIngredientsHooks";
 import { InputProps } from "@/types/commonProps.ts";
 import { IngredientsInfo } from "@/types/ingredientsTypes.ts";
 
+import noImg from "@assets/images/noIngredient/carrot.png";
+
 const Suggestion = ({
   suggestion,
   onSelectSuggestion,
@@ -19,7 +21,11 @@ const Suggestion = ({
       onMouseDown={() => onSelectSuggestion(suggestion.name)}
     >
       <span className="h-full aspect-[1/1] rounded-xl">
-        <img src={suggestion.imageUrl} alt="no image" className="w-full h-full object-cover rounded-3xl" />
+        <img
+          src={suggestion.imageUrl ? suggestion.imageUrl : noImg}
+          alt="no image"
+          className="w-full h-full object-cover rounded-3xl"
+        />
       </span>
       <span className="font-preRegular">{suggestion.name}</span>
     </li>

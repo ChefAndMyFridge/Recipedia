@@ -4,6 +4,7 @@ pipeline {
     environment {
         MYSQL_ROOT_PASSWORD = credentials('MYSQL_ROOT_PASSWORD')
         MYSQL_DATABASE = credentials('MYSQL_DATABASE')
+        ELASTIC_PASSWORD = credentials('ELASTIC_PASSWORD')
         VITE_API_URL = credentials('VITE_API_URL')
         YOUTUBE_API_KEY = credentials('YOUTUBE_API_KEY')
         OPENAI_API_KEY = credentials('OPENAI_API_KEY')
@@ -22,38 +23,6 @@ pipeline {
             }
         }
 
-        stage('Check Environment Variables') {
-            steps {
-                script {
-                    sh """
-                    echo "====================[CHECK ENVIRONMENT VARIABLES]===================="
-                    echo "MYSQL_ROOT_PASSWORD: ${env.MYSQL_ROOT_PASSWORD}"
-                    echo "MYSQL_DATABASE: ${env.MYSQL_DATABASE}"
-                    echo "VITE_API_URL: ${env.VITE_API_URL}"
-                    echo "YOUTUBE_API_KEY: ${env.YOUTUBE_API_KEY}"
-                    echo "OPENAI_API_KEY: ${env.OPENAI_API_KEY}"
-                    echo "USDA_API_KEY: ${env.USDA_API_KEY}"
-                    echo "ALLOWED_ORIGINS: ${env.ALLOWED_ORIGINS}"
-                    echo "========================================================================"
-                    """
-                }
-            }
-        }
-
-        // stage('Copy .env to Jenkins Container') {
-        //     steps {
-        //         script {
-        //             sh """
-        //             ssh -i /root/.ssh/id_rsa ubuntu@j12s003.p.ssafy.io \\
-        //                 "docker cp /home/ubuntu/S12P21S003/.env my-jenkins:${env.WORKSPACE}/.env && \\
-        //                 docker cp /home/ubuntu/S12P21S003/backend/.env my-jenkins:${env.WORKSPACE}/backend/.env && \\
-        //                 docker cp /home/ubuntu/S12P21S003/frontend/.env my-jenkins:${env.WORKSPACE}/frontend/.env && \\
-        //                 docker cp /home/ubuntu/S12P21S003/ai/.env my-jenkins:${env.WORKSPACE}/ai/.env"
-        //             """
-        //         }
-        //     }
-        // }
-
         stage('Stop & Remove Old App Containers') {
             steps {
                 script {
@@ -61,6 +30,7 @@ pipeline {
                     cd ${env.WORKSPACE}
                     MYSQL_ROOT_PASSWORD=${env.MYSQL_ROOT_PASSWORD} \
                     MYSQL_DATABASE=${env.MYSQL_DATABASE} \
+                    ELASTIC_PASSWORD=${env.ELASTIC_PASSWORD} \
                     docker-compose -f docker-compose-app.yml down
                     """
                 }

@@ -5,6 +5,8 @@ import Button from "@components/common/button/Button.tsx";
 
 import TakeoutIngredientModal from "@pages/takeoutIngredient/TakeoutIngredientModal";
 
+import noImg from "@assets/images/noIngredient/carrot.png";
+
 const HomeSelectedIngredients = () => {
   const { selectedIngredients } = useIngredientsStore();
   const { openModal } = useModalStore();
@@ -17,7 +19,7 @@ const HomeSelectedIngredients = () => {
             <div key={ingredient.ingredientInfoId} className="w-12 aspect-[1/1]">
               <div className="relative w-full aspect-[1/1] rounded-3xl">
                 <img
-                  src={ingredient.imageUrl}
+                  src={ingredient.imageUrl ? ingredient.imageUrl : noImg}
                   alt={ingredient.imageUrl}
                   className="w-full h-full object-cover rounded-3xl"
                 />
