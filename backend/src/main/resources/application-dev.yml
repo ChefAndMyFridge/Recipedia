@@ -31,6 +31,8 @@ logging.level:
     security: DEBUG
     web.socket: DEBUG
     messaging: DEBUG
+  org.elasticsearch.client: DEBUG
+  org.springframework.data.elasticsearch: DEBUG
 
 springdoc:
   swagger-ui:

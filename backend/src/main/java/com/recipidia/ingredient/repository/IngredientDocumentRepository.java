@@ -8,6 +8,6 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 public interface IngredientDocumentRepository extends
     ElasticsearchRepository<IngredientDocument, Long> {
 
-  @Query("{\"wildcard\": { \"name\": \"?0\" }}")
+  @Query("{\"match\": { \"name\": \"?0\" }}")
   List<IngredientDocument> findByTermUsingWildCard(String morpheme); // morpheme은 형태소
 }
