@@ -95,7 +95,7 @@ class RecipeSummary:
 
         # 비디오 설명이 있다면, 이를 프롬프트에 추가
         video_info = Video.getInfo(video_id)
-        if 'description' in video_info:
+        if 'description' in video_info and (len(video_info) > settings.YOUTUBE_DESCRIPTION_LEN_TH):
             user_input += SUMMARY_DESCRIPTION_INPUT
             user_input.append(
                 {"role": "user", "content": video_info['description']})
