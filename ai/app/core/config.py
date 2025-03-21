@@ -1,15 +1,24 @@
 # app/core/config.py
 from typing import List, Optional
 from pydantic_settings import BaseSettings
+from pydantic import validator
 
 
 class Settings(BaseSettings):
     APP_NAME: str = "FastAPI Server"
     DEBUG: bool = False
     ALLOWED_ORIGINS: List[str]
-    YOUTUBE_API_KEY: str
+    YOUTUBE_API_KEY: str = ""
     OPENAI_API_KEY: str
     USDA_API_KEY: str
+
+    YOUTUBE_API_KEYS: List[str]
+
+    @validator("YOUTUBE_API_KEY", pre=True, always=True)
+    def set_default_youtube_api_key(cls, v, values):
+        if v is "" and "YOUTUBE_API_KEYS" in values and values["YOUTUBE_API_KEYS"]:
+            return values["YOUTUBE_API_KEYS"][0]
+        return v
 
     # 할루시네이션 줄이기 위한 파라미터 최적화
     # Query OpenAI 설정
@@ -32,6 +41,15 @@ class Settings(BaseSettings):
 
     # 생성할 음식 이름 개수
     NUM_DISHES_TO_GENERATE: int = 3
+
+    # 로그 파일 관련 설정
+    LOG_INTERVAL_UNIT: str = "midnight"
+    LOG_INTERVAL: int = 1
+    LOG_FILE_BACKUP_COUNT: int = 7
+    LOG_ENCODING_METHOD: str = "utf-8"
+
+    # 로그 메시지 관련 설정
+    LOG_SUMMARY_PREFIX: str = "SUMMARY"
 
     class Config:
         env_file = ".env"
