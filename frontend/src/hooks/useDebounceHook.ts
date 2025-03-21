@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 // 디바운스 훅: 입력값을 지연시간 후에 반환
-const useDebounce = (value: string, delay: number) => {
+export const useDebounce = (value: string, delay: number) => {
   const [debouncedValue, setDebouncedValue] = useState(value);
 
   useEffect(() => {
@@ -11,5 +11,3 @@ const useDebounce = (value: string, delay: number) => {
 
   return debouncedValue;
 };
-
-export default useDebounce;

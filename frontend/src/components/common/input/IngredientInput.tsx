@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { InputProps } from "@/types/commonProps.ts";
 import { IngredientsSearchInfo } from "@/types/ingredientsTypes.ts";
 
-import useDebounce from "@hooks/useDebounceHook";
+import { useDebounce } from "@hooks/useDebounceHook";
 
 import { searchIngredientsApi } from "@apis/ingredientApi";
 
