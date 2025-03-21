@@ -49,6 +49,7 @@ pipeline {
                     OPENAI_API_KEY=${env.OPENAI_API_KEY} \
                     USDA_API_KEY=${env.USDA_API_KEY} \
                     ELASTIC_PASSWORD=${env.ELASTIC_PASSWORD} \
+                    ALLOWED_ORIGINS=${env.ALLOWED_ORIGINS} \
                     docker-compose -f docker-compose-app.yml up -d --build
                     """
                 }
