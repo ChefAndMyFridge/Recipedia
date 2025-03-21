@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 
 import useIngredientsStore from "@stores/ingredientsStore.ts";
-import { useGetIngredientsList } from "@hooks/useIngredientsHooks";
 
 import HomeIngredient from "@pages/home/components/HomeIngredient.tsx";
 
@@ -15,9 +14,6 @@ const HomeIngredients = () => {
 
   const touchStartX = useRef(0);
   const touchMoveX = useRef(0);
-
-  // 고내에 저장된 재료 목록 조회
-  useGetIngredientsList();
 
   useEffect(() => {
     setPageIndex(0);
