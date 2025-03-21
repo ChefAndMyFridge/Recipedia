@@ -72,3 +72,10 @@ SUMMARY_SYSTEM_INPUT = [
         "content": "답변을 key : value 형태로 제공해줘"
     },
 ]
+
+SUMMARY_DESCRIPTION_INPUT = [
+    {
+        "role": "user",
+        "content": "아래 설명은 영상의 레시피를 요약해놓은 자료니까 스크립트와 함께 참고해서 결과물을 제공해줘."
+    },
+]
