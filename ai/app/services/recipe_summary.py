@@ -22,8 +22,43 @@ class RecipeSummary:
         # OpenAI 클라이언트 (비동기) 생성 – YoutubeQuery와 유사하게 생성자에서 한 번만 초기화
         self.request_gpt = RequestGPT(self.api_key)
 
+        # 자막 언어 우선순위
+        self.priority_lang = ["Korean, English"]
+
         # 디버그 모드
         self.debug_mode = settings.DEBUG
+
+    def get_transcript_params(self, res):
+        """ Transcript 응답을 기반으로 우선 순위가 높은 언어의 Param을 반환합니다.
+
+        Args:
+            res: 자막, 자막 언어 데이터
+
+        Returns:
+            dict: 우선 순위가 가장 높은 언어 Param
+        """
+        # 작성된 영어, 한국어의 자막이 있다면 가져오기
+        en_ko_manually_data = [
+            lang for lang in res["languages"] if lang['title'] in self.priority_lang]
+
+        if len(en_ko_manually_data) > 0:
+            logger.info(
+                f"{settings.LOG_SUMMARY_PREFIX}_사용된 자막 : {en_ko_manually_data[0]['title']}")
+            return en_ko_manually_data[0]["params"]
+
+        # 자동 생성된 영어, 한국어의 자막이 있다면 가져오기
+        en_ko_generated_data = [lang for lang in res['languages'] if any(
+            keyword in lang['title'] for keyword in ['English', 'Korean'])]
+
+        if len(en_ko_generated_data) > 0:
+            logger.info(
+                f"{settings.LOG_SUMMARY_PREFIX}_사용된 자막 : {en_ko_generated_data[0]['title']}")
+            return en_ko_generated_data[0]["params"]
+
+        # 없다면, 있는 자막 중 아무거나 가져오기
+        logger.info(
+            f"{settings.LOG_SUMMARY_PREFIX}_사용된 자막 : {res['languages'][-1]['title']}")
+        return res["languages"][-1]["params"]
 
     async def summarize_recipe(self, video_id: str) -> str:
         """ 주어진 영상 ID를 기반으로 자막을 가져와 OpenAI API로 요약된 레시피를 반환합니다.
@@ -37,8 +72,14 @@ class RecipeSummary:
         if self.debug_mode:
             start = time.time()
 
-        # 비디오 Id에 대한 자막 가져오기
-        transcription = Transcript.get(video_id)
+        # 영상 자막 데이터 가져오기
+        res = Transcript.get(video_id)
+
+        # 영상에서 지원하는 자막 Param을 우선순위에 따라서 가져오기
+        param = self.get_transcript_params(res)
+
+        # 특정 언어에 대한 자막 가져오기
+        transcription = Transcript.get(video_id, param)
 
         # 자막 텍스트를 모두 결합
         scripts = " ".join([f"[{(int(item['startMs']) // 1000)}]" + item["text"].replace(
