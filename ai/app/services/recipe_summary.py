@@ -28,7 +28,7 @@ class RecipeSummary:
         # 디버그 모드
         self.debug_mode = settings.DEBUG
 
-    def get_transcript_params(self, res):
+    def get_transcript_params(self, res: dict) -> str:
         """ Transcript 응답을 기반으로 우선 순위가 높은 언어의 Param을 반환합니다.
 
         Args:
@@ -77,6 +77,8 @@ class RecipeSummary:
 
         # 영상에서 지원하는 자막 Param을 우선순위에 따라서 가져오기
         param = self.get_transcript_params(res)
+        assert isinstance(
+            param, str), f"Excepted return type of get_transcript_params is str, but got {type(param)}"
 
         # 특정 언어에 대한 자막 가져오기
         transcription = Transcript.get(video_id, param)
