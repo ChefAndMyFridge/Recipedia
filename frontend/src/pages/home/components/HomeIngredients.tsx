@@ -66,7 +66,7 @@ const HomeIngredients = () => {
 
   return (
     <div
-      className="flex flex-col justify-between items-center w-full h-full px-4 py-2 overflow-hidden"
+      className="flex flex-col justify-between items-center w-full h-full py-2 overflow-hidden"
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
@@ -83,7 +83,7 @@ const HomeIngredients = () => {
             const startIdx = idx * ITEM_PER_PAGE;
             const endIdx = startIdx + ITEM_PER_PAGE;
             return (
-              <div key={idx} className="w-full flex-shrink-0 grid grid-cols-5 gap-2">
+              <div key={idx} className="w-[90%] mx-[5%] my-4 flex-shrink-0 grid grid-cols-5 gap-2">
                 {ingredients &&
                   ingredients
                     .slice(startIdx, endIdx)
