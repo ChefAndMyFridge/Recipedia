@@ -1,11 +1,13 @@
 package com.recipidia.ingredient.service.impl;
 
+import com.recipidia.ingredient.document.IngredientDocument;
 import com.recipidia.ingredient.dto.IngredientInfoDto;
 import com.recipidia.ingredient.dto.IngredientInfoWithNutrientDto;
 import com.recipidia.ingredient.dto.IngredientSimpleInfoDto;
 import com.recipidia.ingredient.entity.Ingredient;
 import com.recipidia.ingredient.entity.IngredientInfo;
 import com.recipidia.ingredient.exception.IngredientDeleteException;
+import com.recipidia.ingredient.repository.IngredientDocumentRepository;
 import com.recipidia.ingredient.repository.IngredientInfoRepository;
 import com.recipidia.ingredient.repository.IngredientRepository;
 import com.recipidia.ingredient.request.IngredientIncomingReq;
@@ -30,6 +32,7 @@ public class IngredientServiceImpl implements IngredientService {
 
   private final IngredientInfoRepository ingredientInfoRepository;
   private final IngredientRepository ingredientRepository;
+  private final IngredientDocumentRepository ingredientDocumentRepository;
 
   @Override
   public List<IngredientSimpleInfoDto> getAllIngredientInfo() {
@@ -72,6 +75,8 @@ public class IngredientServiceImpl implements IngredientService {
     if (ingredientInfo.getId() == null) { // 새로운 엔티티라면 ID가 null일 것
       // ingredientInfo에 대한 Nutrient 정보를 추가해야함
       ingredientInfoRepository.save(ingredientInfo);
+      // Elasctic Search index에 추가
+      ingredientDocumentRepository.save(IngredientDocument.fromEntity(ingredientInfo));
     }
 
     // 저장: 새로운 냉장고거나 기존 냉장고에 item 추가된 상태 저장
