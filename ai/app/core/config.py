@@ -49,6 +49,7 @@ class Settings(BaseSettings):
 
     # 로그 메시지 관련 설정
     LOG_SUMMARY_PREFIX: str = "SUMMARY"
+    LOG_QUERY_MAKER_PREFIX: str = "QUERY_MAKER"
 
     class Config:
         env_file = ".env"

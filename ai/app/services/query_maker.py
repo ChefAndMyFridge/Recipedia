@@ -5,9 +5,7 @@ from app.services.LLM.food_generator import generate_dish_names
 from app.services.external_api.youtube_lib import get_youtube_videos
 from app.core.config import settings
 from app.utils.youtube_change_key import rotate_youtube_api_key
-import logging
-
-logger = logging.getLogger(__name__)
+from app.core.logging_config import logger
 
 
 class QueryMaker:
@@ -41,7 +39,7 @@ class QueryMaker:
         """
         # generate_dish_names가 동기 함수이면 비동기로 변환 필요
         loop = asyncio.get_running_loop()
-        logger.info("요리 이름 생성 시작")
+        logger.info(f"{settings.LOG_QUERY_MAKER_PREFIX}_요리 이름 생성 시작")
         self.dishes = await loop.run_in_executor(None,
                                                  lambda: generate_dish_names(
                                                      self.ingredients, 
@@ -49,7 +47,7 @@ class QueryMaker:
                                                      self.preferred_ingredients,
                                                      self.disliked_ingredients
                                                  ))
-        logger.info(f"요리 이름 생성 완료: {len(self.dishes)}개 생성됨")
+        logger.info(f"{settings.LOG_QUERY_MAKER_PREFIX}_요리 이름 생성 완료: {len(self.dishes)}개 생성됨")
         return self.dishes
 
     async def search_recipes(self) -> Dict[str, List[Dict[str, Any]]]:
@@ -59,7 +57,7 @@ class QueryMaker:
         기능: YouTube API를 사용해 요리 이름에 맞는 레시피 동영상 검색
         """
         self.all_videos = {}
-        logger.info(f"{len(self.dishes)}개 요리에 대한 레시피 검색 시작")
+        logger.info(f"{settings.LOG_QUERY_MAKER_PREFIX}_{len(self.dishes)}개 요리에 대한 레시피 검색 시작")
 
         # 각 요리별로 비동기 작업 생성
         tasks = []
@@ -74,13 +72,13 @@ class QueryMaker:
             # 결과를 딕셔너리에 저장
             for dish, result in zip(self.dishes, results):
                 if isinstance(result, Exception):
-                    logger.warning(f"⚠️ {dish} 검색 중 오류: {result}")
+                    logger.warning(f"{settings.LOG_QUERY_MAKER_PREFIX}_⚠️ {dish} 검색 중 오류: {result}")
                     self.all_videos[dish] = []
                 else:
                     self.all_videos[dish] = result
-                    logger.info(f"{dish}: {len(result)}개의 동영상 찾음")
+                    logger.info(f"{settings.LOG_QUERY_MAKER_PREFIX}_{dish}: {len(result)}개의 동영상 찾음")
         except Exception as e:
-            logger.error(f"⚠️ 레시피 검색 중 오류 발생: {e}")
+            logger.error(f"{settings.LOG_QUERY_MAKER_PREFIX}_⚠️ 레시피 검색 중 오류 발생: {e}")
         return self.all_videos
 
     async def search_recipe_with_timeout(self, dish: str) -> List[Dict[str, Any]]:
@@ -90,15 +88,15 @@ class QueryMaker:
         기능: 각 요청에 타임아웃 설정
         """
         try:
-            logger.debug(f"{dish} 레시피 검색 시작")
+            logger.debug(f"{settings.LOG_QUERY_MAKER_PREFIX}_{dish} 레시피 검색 시작")
             result = await asyncio.wait_for(get_youtube_videos(dish), timeout=10.0)
-            logger.debug(f"{dish} 레시피 검색 완료")
+            logger.debug(f"{settings.LOG_QUERY_MAKER_PREFIX}_{dish} 레시피 검색 완료")
             return result
         except asyncio.TimeoutError:
-            logger.warning(f"⚠️ {dish} 검색 타임아웃")
+            logger.warning(f"{settings.LOG_QUERY_MAKER_PREFIX}_⚠️ {dish} 검색 타임아웃")
             return []
         except Exception as e:
-            logger.error(f"⚠️ {dish} 검색 중 예외 발생: {e}")
+            logger.error(f"{settings.LOG_QUERY_MAKER_PREFIX}_⚠️ {dish} 검색 중 예외 발생: {e}")
             return []
 
     async def run(self) -> Dict[str, Any]:
@@ -108,7 +106,7 @@ class QueryMaker:
         기능: 전체 과정 실행(요리 이름 생성, 유튜브 레시피 검색)
         """
         start_time = time.time()
-        logger.info("QueryMaker 실행 시작")
+        logger.info(f"{settings.LOG_QUERY_MAKER_PREFIX}_QueryMaker 실행 시작")
 
         # youtube api 키 라운드 로빈
         await rotate_youtube_api_key()
@@ -118,18 +116,18 @@ class QueryMaker:
         await self.generate_dishes()
         openai_end = time.time()
         self.openai_time = openai_end - openai_start
-        logger.info(f"음식 이름 생성 완료: {self.openai_time:.2f}초 소요")
+        logger.info(f"{settings.LOG_QUERY_MAKER_PREFIX}_음식 이름 생성 완료: {self.openai_time:.2f}초 소요")
 
         # 2단계: YouTube 레시피 검색
         youtube_start = time.time()
         await self.search_recipes()
         youtube_end = time.time()
         self.youtube_time = youtube_end - youtube_start
-        logger.info(f"레시피 검색 완료: {self.youtube_time:.2f}초 소요")
+        logger.info(f"{settings.LOG_QUERY_MAKER_PREFIX}_레시피 검색 완료: {self.youtube_time:.2f}초 소요")
 
         end_time = time.time()
         self.execution_time = end_time - start_time
-        logger.info(f"전체 처리 완료: {self.execution_time:.2f}초 소요")
+        logger.info(f"{settings.LOG_QUERY_MAKER_PREFIX}_전체 처리 완료: {self.execution_time:.2f}초 소요")
 
         # 통합된 출력 함수 호출
         self.print_results()
