@@ -30,8 +30,7 @@ services:
     networks:
       - app-network
     restart: always
-    
-
+  
 networks:
   app-network:
     name: app-network  # ✅ 공통 네트워크 설정

@@ -53,6 +53,9 @@ dependencies {
 
 	// spring validation
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	// elastic search
+	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
 }
 
 tasks.named('test') {
