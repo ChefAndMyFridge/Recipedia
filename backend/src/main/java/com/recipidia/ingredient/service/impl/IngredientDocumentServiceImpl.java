@@ -19,11 +19,12 @@ public class IngredientDocumentServiceImpl implements IngredientDocumentService 
   @PostConstruct
   public void indexIngredients() {
     List<IngredientDocument> ingredientDocuments = jdbcTemplate.query(
-        "select id, name from ingredient_info",
+        "select * from ingredient_info",
         (rs, rowNum) -> {
           IngredientDocument ingredientDocument = new IngredientDocument();
           ingredientDocument.setId(rs.getLong("id"));
           ingredientDocument.setName(rs.getString("name"));
+          ingredientDocument.setImageUrl(rs.getString("image_url"));
           return ingredientDocument;
         }
     );

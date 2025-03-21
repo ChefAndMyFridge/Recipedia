@@ -15,4 +15,7 @@ public class IngredientDocument {
 
   @Field(type = FieldType.Text)
   private String name;
+
+  @Field(type = FieldType.Text)
+  private String imageUrl;
 }
