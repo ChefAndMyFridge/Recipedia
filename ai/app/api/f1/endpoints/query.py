@@ -6,9 +6,6 @@ from fastapi.responses import JSONResponse
 from app.services.query_maker import QueryMaker
 from app.models.ingredients import Ingredients
 from app.utils.docs import QueryDocs
-import logging
-
-logger = logging.getLogger(__name__)
 
 router = APIRouter()
 docs = QueryDocs()
@@ -28,5 +25,5 @@ async def query_maker_endpoint(request: Request, data: Ingredients = docs.base["
         result = await query_maker.run()
         return JSONResponse(status_code=200, content=result)
     except Exception as e:
-        logger.error(f"레시피 메이커 실행 오류: {e}")
+        logger.error(f"{LOG_QUERY_PREFIX}_레시피 메이커 실행 오류: {e}")
         raise HTTPException(status_code=500, detail="레시피 생성 중 오류가 발생했습니다.")
