@@ -3,7 +3,6 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 import {
   Ingredients,
-  IngredientsSearchInfo,
   StoreIngredient,
   StoreResponseIngredient,
   IngredientNutrition,
@@ -13,7 +12,6 @@ import {
 
 import {
   getIngredientsApi,
-  searchIngredientsApi,
   storeIngredientApi,
   getIngredientNutritionApi,
   deleteIngredientApi,
@@ -37,17 +35,6 @@ export const useGetIngredientsList = () => {
       setIngredients(query.data);
     }
   }, [query.data, setIngredients]);
-
-  return query;
-};
-
-// 재료 자동완성 검색
-export const useSearchIngredientsInfo = (inputValue: string) => {
-  const query = useQuery<IngredientsSearchInfo[]>({
-    queryKey: ["ingredientsSearch"],
-    queryFn: () => searchIngredientsApi(inputValue),
-    throwOnError: true,
-  });
 
   return query;
 };

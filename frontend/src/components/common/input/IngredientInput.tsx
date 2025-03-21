@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 
-import { useSearchIngredientsInfo } from "@hooks/useIngredientsHooks";
-
 import { InputProps } from "@/types/commonProps.ts";
 import { IngredientsSearchInfo } from "@/types/ingredientsTypes.ts";
+
+import useDebounce from "@hooks/useDebounceHook";
+
+import { searchIngredientsApi } from "@apis/ingredientApi";
 
 import noImg from "@assets/images/noIngredient/carrot.png";
 
@@ -37,18 +39,27 @@ const IngredientInput = ({ label, name, type, placeHolder, labelTextSize }: Inpu
   const [isFocused, setIsFocused] = useState(false);
   const [filteredSuggestions, setFilteredSuggestions] = useState<IngredientsSearchInfo[] | []>([]);
 
-  const { data, refetch } = useSearchIngredientsInfo(inputValue);
+  const debouncedInputValue = useDebounce(inputValue, 300);
 
-  // 자동완성 데이터 저장
   useEffect(() => {
-    if (data) {
-      setFilteredSuggestions(data);
+    if (!isFocused) return;
+
+    let isCancelled = false;
+
+    async function fetchSuggestion() {
+      const suggestions = await searchIngredientsApi(debouncedInputValue);
+      if (!isCancelled) {
+        setFilteredSuggestions(suggestions);
+      }
     }
-  }, [data]);
 
-  useEffect(() => {
-    refetch(); // 입력값이 변경될 때마다 API를 호출
-  }, [inputValue, isFocused]);
+    fetchSuggestion();
+
+    // 컴포넌트가 언마운트되면 이전 요청 취소
+    return () => {
+      isCancelled = true;
+    };
+  }, [debouncedInputValue, isFocused]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
