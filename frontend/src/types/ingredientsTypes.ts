@@ -77,8 +77,14 @@ export interface DeleteIngredientResponse {
   [key: string]: number;
 }
 
-export interface filteredInfomations {
-  type: string[];
+export interface filteringInformationKeys {
+  category: string[];
   preference: string[];
+}
+
+export interface filteredInfomations {
+  category: string[];
+  preference: string[];
+  like: string[];
   dislike: string[];
 }
