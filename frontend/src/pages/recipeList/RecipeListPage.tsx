@@ -3,7 +3,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import RecipeList from "@pages/recipeList/components/RecipeList";
 import SelectedIngredients from "@pages/recipeList/components/RecipeListSelectedIngredients";
 import Header from "@components/Layout/Header";
-import Error from "@components/common/error/ErrorPage";
+import ErrorPage from "@components/common/error/ErrorPage";
 import LoadingPlayer from "@components/common/loading/LoadingPlayer";
 import useIngredientsStore from "@stores/ingredientsStore";
 import { usePostRecipeList } from "@hooks/useRecipeHooks";
@@ -16,15 +16,16 @@ const RecipeListPage = () => {
   const selectedIngredientsNames = Object.values(selectedIngredients).map((ingredient) => ingredient.name);
 
   //선택된 재료 기반 레시피 조회 Hook 호출
-  const { isLoading } = usePostRecipeList(selectedIngredientsNames);
+  const { isLoading, isError } = usePostRecipeList(selectedIngredientsNames);
 
   if (isLoading) return <LoadingPlayer />;
+  if (isError) return <ErrorPage />;
 
   return (
     <section className="flex flex-col h-screen p-3">
       <Header title={HeaderTitle} isIcon />
       <div className="flex-1 overflow-auto relative">
-        <ErrorBoundary FallbackComponent={Error} onReset={() => window.location.reload()}>
+        <ErrorBoundary FallbackComponent={ErrorPage}>
           <RecipeList />
         </ErrorBoundary>
       </div>
