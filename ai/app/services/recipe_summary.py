@@ -3,7 +3,6 @@ import time
 import asyncio
 
 from youtubesearchpython import Transcript
-from youtube_transcript_api import YouTubeTranscriptApi, NoTranscriptFound, TranscriptsDisabled, VideoUnavailable
 from app.services.LLM.recipe_generator import RequestGPT
 from fastapi import HTTPException
 from app.utils.prompts.few_shot import SUMMARY_FEW_SHOT_DATA
@@ -25,74 +24,6 @@ class RecipeSummary:
 
         # 디버그 모드
         self.debug_mode = settings.DEBUG
-
-    def safe_find(self, method, languages):
-        """ 유튜브 자막을 try except 문으로 안전한게 찾아 반환합니다.
-
-        Args:
-            method: 유튜브 자막 찾는 메서드
-            languages: 자막 언어
-
-        Returns:
-            Optional[method]: 찾고자 하는 메서드
-        """
-        try:
-            return method(languages)
-        except NoTranscriptFound:
-            logger.warning(
-                f"{settings.LOG_SUMMARY_PREFIX}_{languages} : 제공된 자막 없음")
-            return None
-        except TranscriptsDisabled:
-            logger.warning(f"{settings.LOG_SUMMARY_PREFIX}_자막 비활성화")
-            return None
-        except VideoUnavailable:
-            logger.warning(f"{settings.LOG_SUMMARY_PREFIX}_영상 사용 불가")
-            return None
-        except Exception as e:
-            logger.error(f"{settings.LOG_SUMMARY_PREFIX}_자막 추출 중 에러 발생 : {e}")
-            return None
-
-    async def get_transcript(self, video_id: str) -> list[dict]:
-        """ 유튜브 영상 ID를 받아 자막(번역 포함)을 가져옵니다.
-
-        Args:
-            video_id(str): 유튜브 비디오 ID
-
-        Returns:
-            list[dict]: 자막 데이터
-        """
-        transcripts_list = YouTubeTranscriptApi.list_transcripts(video_id)
-
-        # 제공된 한국어 자막을 우선 시도해보고, 영어 자막을 우선적으로 가져오기
-        transcript = (
-            self.safe_find(
-                transcripts_list.find_manually_created_transcript, ['ko'])
-            or self.safe_find(transcripts_list.find_manually_created_transcript, ['en'])
-            or self.safe_find(transcripts_list.find_generated_transcript, ['en'])
-            or self.safe_find(transcripts_list.find_manually_created_transcript, transcripts_list._manually_created_transcripts.keys())
-            or self.safe_find(transcripts_list.find_generated_transcript, transcripts_list._generated_transcripts.keys())
-        )
-
-        if transcript is None:
-            logger.error("{settings.LOG_SUMMARY_PREFIX}_사용 가능한 자막이 없습니다.")
-            return None
-
-        # 자막 데이터 가져오기
-        try:
-            result = transcript.fetch()
-            # 1차 타입 검사 (스크립트 0차원 데이터) => list
-            assert isinstance(
-                result, list), f"Excepted return outter type of get_transcript is list[dict], but got {type(result)}"
-
-            # 2차 타입 검사 (스크립트 1차원 데이터) => dict
-            assert isinstance(
-                result[0], dict), f"Excepted return inner type of get_transcript is list[dict], but got {type(result[0])}"
-
-            return result
-        except Exception as e:
-            logger.error(
-                f"{settings.LOG_SUMMARY_PREFIX}_자막 가져오는 중 에러 발생 : {e}")
-            return None
 
     async def summarize_recipe(self, video_id: str) -> str:
         """ 주어진 영상 ID를 기반으로 자막을 가져와 OpenAI API로 요약된 레시피를 반환합니다.
