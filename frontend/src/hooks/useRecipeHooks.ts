@@ -12,7 +12,6 @@ export const usePostRecipeList = (ingredients: string[]) => {
     queryKey: ["recipeList", ingredients],
     queryFn: () => makeRecipeApi(ingredients),
     staleTime: 1000 * 60 * 60 * 24, // 1일, 추후 줄일 필요 O
-    throwOnError: true,
   });
 
   //query 호출 후 데이터 저장
