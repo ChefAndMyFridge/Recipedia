@@ -48,7 +48,7 @@ const IngredientInput = ({ label, name, type, placeHolder, labelTextSize }: Inpu
 
   useEffect(() => {
     refetch(); // 입력값이 변경될 때마다 API를 호출
-  }, [inputValue]);
+  }, [inputValue, isFocused]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
