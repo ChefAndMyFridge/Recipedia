@@ -72,20 +72,23 @@ class RecipeSummary:
         if self.debug_mode:
             start = time.time()
 
-        # 영상 자막 데이터 가져오기
-        res = Transcript.get(video_id)
+        scripts = ""
 
-        # 영상에서 지원하는 자막 Param을 우선순위에 따라서 가져오기
-        param = self.get_transcript_params(res)
-        assert isinstance(
-            param, str), f"Excepted return type of get_transcript_params is str, but got {type(param)}"
+        try:
+            # 영상 자막 데이터 가져오기
+            res = Transcript.get(video_id)
 
-        # 특정 언어에 대한 자막 가져오기
-        transcription = Transcript.get(video_id, param)
+            # 영상에서 지원하는 자막 Param을 우선순위에 따라서 가져오기
+            param = self.get_transcript_params(res)
 
-        # 자막 텍스트를 모두 결합
-        scripts = " ".join([f"[{(int(item['startMs']) // 1000)}]" + item["text"].replace(
-            "\n", "").replace("\r", "") for item in transcription["segments"]])
+            # 특정 언어에 대한 자막 가져오기
+            transcription = Transcript.get(video_id, param)
+
+            # 자막 텍스트를 모두 결합
+            scripts = " ".join([f"[{(int(item['startMs']) // 1000)}]" + item["text"].replace(
+                "\n", "").replace("\r", "") for item in transcription["segments"]])
+        except Exception as e:
+            logger.error(f"{settings.LOG_SUMMARY_PREFIX}_유튜브 자막 추출 오류: {e}")
 
         # OpenAI 요청을 위한 메시지 구성
         system_input, user_input = SUMMARY_SYSTEM_INPUT, SUMMARY_USER_INPUT
