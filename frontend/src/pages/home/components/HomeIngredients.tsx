@@ -83,7 +83,7 @@ const HomeIngredients = () => {
             const startIdx = idx * ITEM_PER_PAGE;
             const endIdx = startIdx + ITEM_PER_PAGE;
             return (
-              <div key={idx} className="w-[90%] mx-[5%] my-4 flex-shrink-0 grid grid-cols-5 gap-2">
+              <div key={idx} className="w-[90%] mx-[5%] flex-shrink-0 grid grid-cols-5 gap-2">
                 {ingredients &&
                   ingredients
                     .slice(startIdx, endIdx)
@@ -94,7 +94,7 @@ const HomeIngredients = () => {
       </div>
 
       {/* 페이지네이션 */}
-      <div className="flex justify-center items-end gap-1.5 h-[5%]">
+      <div className="flex justify-center items-center gap-1.5 h-[5%]">
         {pagination &&
           pagination.map((_, idx) => (
             <span
