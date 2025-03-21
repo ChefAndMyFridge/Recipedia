@@ -2,9 +2,9 @@
 import time
 import asyncio
 
+from youtubesearchpython import Transcript
 from youtube_transcript_api import YouTubeTranscriptApi, NoTranscriptFound, TranscriptsDisabled, VideoUnavailable
 from app.services.LLM.recipe_generator import RequestGPT
-
 from fastapi import HTTPException
 from app.utils.prompts.few_shot import SUMMARY_FEW_SHOT_DATA
 from app.utils.prompts.recipe_summary_prompts import SUMMARY_SYSTEM_INPUT, SUMMARY_USER_INPUT
@@ -106,13 +106,12 @@ class RecipeSummary:
         if self.debug_mode:
             start = time.time()
 
-        transcription = await self.get_transcript(video_id)
-        if transcription is None:
-            raise HTTPException(status_code=404, detail="자막을 가져올 수 없습니다.")
+        # 비디오 Id에 대한 자막 가져오기
+        transcription = Transcript.get(video_id)
 
         # 자막 텍스트를 모두 결합
-        scripts = " ".join([f"[{(int)(item['start'])}]" + item["text"].replace(
-            "\n", "").replace("\r", "") for item in transcription])
+        scripts = " ".join([f"[{(int(item['startMs']) // 1000)}]" + item["text"].replace(
+            "\n", "").replace("\r", "") for item in transcription["segments"]])
 
         # OpenAI 요청을 위한 메시지 구성
         system_input, user_input = SUMMARY_SYSTEM_INPUT, SUMMARY_USER_INPUT
