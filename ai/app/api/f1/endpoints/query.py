@@ -25,5 +25,4 @@ async def query_maker_endpoint(request: Request, data: Ingredients = docs.base["
         result = await query_maker.run()
         return JSONResponse(status_code=200, content=result)
     except Exception as e:
-        logger.error(f"{LOG_QUERY_PREFIX}_레시피 메이커 실행 오류: {e}")
         raise HTTPException(status_code=500, detail="레시피 생성 중 오류가 발생했습니다.")
