@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 
 import { useGetIngredientsList } from "@hooks/useIngredientsHooks";
+import useIngredientsStore from "@stores/ingredientsStore";
 
 import HomeExpandFilter from "@pages/home/components/HomeExpandFilter";
 
@@ -10,6 +11,8 @@ import IconFilter from "@assets/icons/IconFilter";
 import ArrowUp from "@assets/icons/ArrowUp";
 
 const HomeFilter = () => {
+  const { filteredInfomations } = useIngredientsStore();
+
   const [isExpand, setIsExpand] = useState<boolean>(false);
   const [location, setLocation] = useState<"all" | "refrigeration" | "frozen">("all");
 
@@ -21,6 +24,14 @@ const HomeFilter = () => {
       getAllIngredientList();
     }
   }, [location]);
+
+  function handleSaveFilter(): void {
+    console.log(filteredInfomations);
+
+    // 필터 저장하는 API 호출
+
+    setIsExpand(false);
+  }
 
   return (
     <div className="relative flex justify-between items-center w-full h-10 px-4">
@@ -48,7 +59,7 @@ const HomeFilter = () => {
         />
       </div>
       {!isExpand && <IconFilter width={20} height={20} strokeColor="gray" onClick={() => setIsExpand(true)} />}
-      {isExpand && <ArrowUp width={20} height={20} strokeColor="gray" onClick={() => setIsExpand(false)} />}
+      {isExpand && <ArrowUp width={20} height={20} strokeColor="gray" onClick={handleSaveFilter} />}
 
       {isExpand && <HomeExpandFilter />}
     </div>

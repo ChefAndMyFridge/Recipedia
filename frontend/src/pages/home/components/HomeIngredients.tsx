@@ -65,16 +65,18 @@ const HomeIngredients = () => {
   }
 
   return (
-    <div className="flex flex-col justify-between items-center w-full h-full px-4 py-2 overflow-hidden">
+    <div
+      className="flex flex-col justify-between items-center w-full h-full px-4 py-2 overflow-hidden"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
       {/* 터치 이동이 가능한 슬라이드 영역 */}
       <div
         className="flex justify-between items-start w-full h-[95%] transition-transform duration-300 ease-out will-change-transform"
         style={{
           transform: `translateX(calc(-${pageIndex * 100}% + ${isSwiping ? touchMoveX.current - touchStartX.current : 0}px))`,
         }}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
       >
         {pagination &&
           pagination.map((_, idx) => {
