@@ -1,7 +1,6 @@
 from rouge_score import rouge_scorer
 from test.utils.recipe_summary_correct_answer import correct_answer, data_url
 from app.services.recipe_summary import RecipeSummary
-import pandas as pd
 import asyncio
 import json
 
