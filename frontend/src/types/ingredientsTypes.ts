@@ -14,11 +14,10 @@ export interface Ingredients {
   ingredients: Ingredient[];
 }
 
-export interface IngredientsInfo {
-  ingredientInfoId: number;
+export interface IngredientsSearchInfo {
+  id: number;
   name: string;
   imageUrl: string;
-  totalCount: number;
 }
 
 export interface Nutritions {

@@ -95,9 +95,9 @@ const IngredientsPreference = ({
             초기화
           </button>
         </div>
-        <form onSubmit={handleAddItem} className="w-full flex gap-2 justify-center items-end">
+        <form onSubmit={handleAddItem} className="w-full flex gap-2 justify-center items-center">
           <IngredientInput name="ingredient" type="text" placeHolder={placeHolder} labelTextSize="text-lg" />
-          <Button type="submit" design="confirm" content="추가" className="w-20 h-10 mb-1" />
+          <Button type="submit" design="confirm" content="추가" className="w-12 aspect-[1/1]" />
         </form>
       </div>
 
