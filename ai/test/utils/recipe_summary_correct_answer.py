@@ -286,70 +286,70 @@ correct_answer["소고기 볶음"] = """
         "kcal" : 1400
     },
     "ingredients" : [
-            {
-                "name" : "소고기",
-                "quantity": "500g"
-            },
-            {
-                "name" : "브로콜리",
-                "quantity": "100g"
-            },
-            {
-                "name" : "베이킹 소다",
-                "quantity": "0.5큰술"
-            },
-            {
-                "name" : "생강",
-                "quantity": "약간"
-            },
-            {
-                "name" : "마늘",
-                "quantity": "4쪽"
-            },
-            {
-                "name" : "대파",
-                "quantity": "0.5대"
-            },
-            {
-                "name" : "당근",
-                "quantity": "1/3개"
-            },
-            {
-                "name" : "굴 소스",
-                "quantity": "2큰술"
-            },
-            {
-                "name" : "간장",
-                "quantity": "2큰술"
-            },
-            {
-                "name" : "청주",
-                "quantity": "1큰술"
-            },
-            {
-                "name" : "감자 전분",
-                "quantity": "약간"
-            },
-            {
-                "name" : "중국 간장",
-                "quantity": "1큰술"
-            },
-            {
-                "name" : "소홍주",
-                "quantity": "1큰술"
-            },
-            {
-                "name" : "설탕",
-                "quantity": "1큰술"
-            },
-            {
-                "name" : "백후추",
-                "quantity": "약간"
-            },
-            {
-                "name" : "물",
-                "quantity": "약간"
-            }
+        {
+            "name" : "소고기",
+            "quantity": "500g"
+        },
+        {
+            "name" : "브로콜리",
+            "quantity": "100g"
+        },
+        {
+            "name" : "베이킹 소다",
+            "quantity": "0.5큰술"
+        },
+        {
+            "name" : "생강",
+            "quantity": "약간"
+        },
+        {
+            "name" : "마늘",
+            "quantity": "4쪽"
+        },
+        {
+            "name" : "대파",
+            "quantity": "0.5대"
+        },
+        {
+            "name" : "당근",
+            "quantity": "1/3개"
+        },
+        {
+            "name" : "굴 소스",
+            "quantity": "2큰술"
+        },
+        {
+            "name" : "간장",
+            "quantity": "2큰술"
+        },
+        {
+            "name" : "청주",
+            "quantity": "1큰술"
+        },
+        {
+            "name" : "감자 전분",
+            "quantity": "약간"
+        },
+        {
+            "name" : "중국 간장",
+            "quantity": "1큰술"
+        },
+        {
+            "name" : "소홍주",
+            "quantity": "1큰술"
+        },
+        {
+            "name" : "설탕",
+            "quantity": "1큰술"
+        },
+        {
+            "name" : "백후추",
+            "quantity": "약간"
+        },
+        {
+            "name" : "물",
+            "quantity": "약간"
+        }
     ],
     "cooking_tips" : [
         "아롱사태와 같은 소고기를 사용해도 좋습니다.",
@@ -402,54 +402,54 @@ correct_answer["쇼가야키 덮밥"] = """
         "kcal" : 1000
     },
     "ingredients" : [
-            {
-                "name" : "대패 삼겹살",
-                "quantity": "200g"
-            },
-            {
-                "name" : "맛술",
-                "quantity": "1큰술"
-            },
-            {
-                "name" : "알룰로스(물엿)",
-                "quantity": "1큰술"
-            },
-            {
-                "name" : "굴소스",
-                "quantity": "1큰술"
-            },
-            {
-                "name" : "간장",
-                "quantity": "1큰술"
-            },
-            {
-                "name" : "설탕",
-                "quantity": "0.5큰술"
-            },
-            {
-                "name" : "생강",
-                "quantity": "1/2개"
-            },
-            {
-                "name" : "양배추",
-                "quantity": "100g"
-            },
-            {
-                "name" : "팽이버섯",
-                "quantity": "50g"
-            },
-            {
-                "name" : "대파",
-                "quantity": "약간"
-            },
-            {
-                "name" : "계란",
-                "quantity": "1개"
-            },
-            {
-                "name" : "밥",
-                "quantity": "1인분"
-            }
+        {
+            "name" : "대패 삼겹살",
+            "quantity": "200g"
+        },
+        {
+            "name" : "맛술",
+            "quantity": "1큰술"
+        },
+        {
+            "name" : "알룰로스(물엿)",
+            "quantity": "1큰술"
+        },
+        {
+            "name" : "굴소스",
+            "quantity": "1큰술"
+        },
+        {
+            "name" : "간장",
+            "quantity": "1큰술"
+        },
+        {
+            "name" : "설탕",
+            "quantity": "0.5큰술"
+        },
+        {
+            "name" : "생강",
+            "quantity": "1/2개"
+        },
+        {
+            "name" : "양배추",
+            "quantity": "100g"
+        },
+        {
+            "name" : "팽이버섯",
+            "quantity": "50g"
+        },
+        {
+            "name" : "대파",
+            "quantity": "약간"
+        },
+        {
+            "name" : "계란",
+            "quantity": "1개"
+        },
+        {
+            "name" : "밥",
+            "quantity": "1인분"
+        }
     ],
     "cooking_tips" : [
         "생강을 활용하면 고기의 잡내를 없앨 수 있습니다.",
@@ -493,74 +493,74 @@ correct_answer["도미 오차즈케"] = """
         "kcal" : 500
     },
     "ingredients" : [
-            {
-                "name" : "청주",
-                "quantity": "200g"
-            },
-            {
-                "name" : "미림",
-                "quantity": "200g"
-            },
-            {
-                "name" : "참깨",
-                "quantity": "400g"
-            },
-            {
-                "name" : "아타리고마 소스",
-                "quantity": "300g"
-            },
-            {
-                "name" : "간장",
-                "quantity": "200g"
-            },
-            {
-                "name" : "설탕",
-                "quantity": "50g"
-            },
-            {
-                "name" : "생강",
-                "quantity": "35g"
-            },
-            {
-                "name" : "다시마",
-                "quantity": "25g"
-            },
-            {
-                "name" : "가쓰오부시",
-                "quantity": "50g"
-            },
-            {
-                "name" : "소금",
-                "quantity": "약간"
-            },
-            {
-                "name" : "김",
-                "quantity": "1장"
-            },
-            {
-                "name" : "시소",
-                "quantity": "적당량"
-            },
-            {
-                "name" : "파",
-                "quantity": "적당량"
-            },
-            {
-                "name" : "도미",
-                "quantity": "100g"
-            },
-            {
-                "name" : "참깨",
-                "quantity": "400g"
-            },
-            {
-                "name" : "물",
-                "quantity": "3.5L"
-            },
-            {
-                "name" : "밥",
-                "quantity": "1인분"
-            }
+        {
+            "name" : "청주",
+            "quantity": "200g"
+        },
+        {
+            "name" : "미림",
+            "quantity": "200g"
+        },
+        {
+            "name" : "참깨",
+            "quantity": "400g"
+        },
+        {
+            "name" : "아타리고마 소스",
+            "quantity": "300g"
+        },
+        {
+            "name" : "간장",
+            "quantity": "200g"
+        },
+        {
+            "name" : "설탕",
+            "quantity": "50g"
+        },
+        {
+            "name" : "생강",
+            "quantity": "35g"
+        },
+        {
+            "name" : "다시마",
+            "quantity": "25g"
+        },
+        {
+            "name" : "가쓰오부시",
+            "quantity": "50g"
+        },
+        {
+            "name" : "소금",
+            "quantity": "약간"
+        },
+        {
+            "name" : "김",
+            "quantity": "1장"
+        },
+        {
+            "name" : "시소",
+            "quantity": "적당량"
+        },
+        {
+            "name" : "파",
+            "quantity": "적당량"
+        },
+        {
+            "name" : "도미",
+            "quantity": "100g"
+        },
+        {
+            "name" : "참깨",
+            "quantity": "400g"
+        },
+        {
+            "name" : "물",
+            "quantity": "3.5L"
+        },
+        {
+            "name" : "밥",
+            "quantity": "1인분"
+        }
     ],
     "cooking_tips" : [
         "청주, 미림 대신 설탕을 사용해도 됩니다."
@@ -628,66 +628,66 @@ correct_answer["파에야"] = """
         "kcal" : 1000
     },
     "ingredients" : [
-            {
-                "name" : "토마토",
-                "quantity": "2개"
-            },
-            {
-                "name" : "양송이 버섯",
-                "quantity": "4개"
-            },
-            {
-                "name" : "양파",
-                "quantity": "2컵"
-            },
-            {
-                "name" : "쌀",
-                "quantity": "2컵"
-            },
-            {
-                "name" : "오징어",
-                "quantity": "1개"
-            },
-            {
-                "name" : "칵테일 새우",
-                "quantity": "10개"
-            },
-            {
-                "name" : "올리브유",
-                "quantity": "반 컵"
-            },
-            {
-                "name" : "간마늘",
-                "quantity": "1큰술"
-            },
-            {
-                "name" : "토마토 케첩",
-                "quantity": "1/3 큰술"
-            },
-            {
-                "name" : "진간장",
-                "quantity": "3큰술"
-            },
-            {
-                "name" : "식초",
-                "quantity": "1큰술"
-            },
-            {
-                "name" : "설탕",
-                "quantity": "1/2큰술"
-            },
-            {
-                "name" : "소금",
-                "quantity": "1/2큰술"
-            },
-            {
-                "name" : "피망",
-                "quantity": "적당량"
-            },
-            {
-                "name" : "물",
-                "quantity": "2컵"
-            }
+        {
+            "name" : "토마토",
+            "quantity": "2개"
+        },
+        {
+            "name" : "양송이 버섯",
+            "quantity": "4개"
+        },
+        {
+            "name" : "양파",
+            "quantity": "2컵"
+        },
+        {
+            "name" : "쌀",
+            "quantity": "2컵"
+        },
+        {
+            "name" : "오징어",
+            "quantity": "1개"
+        },
+        {
+            "name" : "칵테일 새우",
+            "quantity": "10개"
+        },
+        {
+            "name" : "올리브유",
+            "quantity": "반 컵"
+        },
+        {
+            "name" : "간마늘",
+            "quantity": "1큰술"
+        },
+        {
+            "name" : "토마토 케첩",
+            "quantity": "1/3 큰술"
+        },
+        {
+            "name" : "진간장",
+            "quantity": "3큰술"
+        },
+        {
+            "name" : "식초",
+            "quantity": "1큰술"
+        },
+        {
+            "name" : "설탕",
+            "quantity": "1/2큰술"
+        },
+        {
+            "name" : "소금",
+            "quantity": "1/2큰술"
+        },
+        {
+            "name" : "피망",
+            "quantity": "적당량"
+        },
+        {
+            "name" : "물",
+            "quantity": "2컵"
+        }
     ],
     "cooking_tips" : [
         "쌀은 미리 1시간정도 불려 조리 시간을 절약합니다.",
@@ -743,82 +743,82 @@ correct_answer["버터치킨커리"] = """
         "kcal" : 3000
     },
     "ingredients" : [
-            {
-                "name" : "다진 마늘",
-                "quantity": "4 테이블 스푼"
-            },
-            {
-                "name" : "다진 생강",
-                "quantity": "2 테이블 스푼"
-            },
-            {
-                "name" : "닭고기",
-                "quantity": "800g"
-            },
-            {
-                "name" : "소금",
-                "quantity": "적당량"
-            },
-            {
-                "name" : "칠리 파우더",
-                "quantity": "6 테이블 스푼"
-            },
-            {
-                "name" : "인도 쌀",
-                "quantity": "1~2인분"
-            },
-            {
-                "name" : "강황 가루",
-                "quantity": "1 테이블 스푼"
-            },
-            {
-                "name" : "올리브 오일",
-                "quantity": "적당량"
-            },
-            {
-                "name" : "물",
-                "quantity": "1컵"
-            },
-            {
-                "name" : "난",
-                "quantity": "적당량"
-            },
-            {
-                "name" : "양파",
-                "quantity": "큰 거 1개"
-            },
-            {
-                "name" : "버터",
-                "quantity": "2 테이블 스푼"
-            },
-            {
-                "name" : "토마토",
-                "quantity": "1kg"
-            },
-            {
-                "name" : "캐슈넛",
-                "quantity": "100g"
-            },
-            {
-                "name" : "식초",
-                "quantity": "3 테이블 스푼"
-            },
-            {
-                "name" : "가람 마살라",
-                "quantity": "1티스푼"
-            },
-            {
-                "name" : "설탕",
-                "quantity": "6 테이블 스푼"
-            },
-            {
-                "name" : "생크림",
-                "quantity": "4 테이블 스푼"
-            },
-            {
-                "name" : "카수리 메티",
-                "quantity": "2 티스푼"
-            }
+        {
+            "name" : "다진 마늘",
+            "quantity": "4 테이블 스푼"
+        },
+        {
+            "name" : "다진 생강",
+            "quantity": "2 테이블 스푼"
+        },
+        {
+            "name" : "닭고기",
+            "quantity": "800g"
+        },
+        {
+            "name" : "소금",
+            "quantity": "적당량"
+        },
+        {
+            "name" : "칠리 파우더",
+            "quantity": "6 테이블 스푼"
+        },
+        {
+            "name" : "인도 쌀",
+            "quantity": "1~2인분"
+        },
+        {
+            "name" : "강황 가루",
+            "quantity": "1 테이블 스푼"
+        },
+        {
+            "name" : "올리브 오일",
+            "quantity": "적당량"
+        },
+        {
+            "name" : "물",
+            "quantity": "1컵"
+        },
+        {
+            "name" : "난",
+            "quantity": "적당량"
+        },
+        {
+            "name" : "양파",
+            "quantity": "큰 거 1개"
+        },
+        {
+            "name" : "버터",
+            "quantity": "2 테이블 스푼"
+        },
+        {
+            "name" : "토마토",
+            "quantity": "1kg"
+        },
+        {
+            "name" : "캐슈넛",
+            "quantity": "100g"
+        },
+        {
+            "name" : "식초",
+            "quantity": "3 테이블 스푼"
+        },
+        {
+            "name" : "가람 마살라",
+            "quantity": "1티스푼"
+        },
+        {
+            "name" : "설탕",
+            "quantity": "6 테이블 스푼"
+        },
+        {
+            "name" : "생크림",
+            "quantity": "4 테이블 스푼"
+        },
+        {
+            "name" : "카수리 메티",
+            "quantity": "2 티스푼"
+        }
     ],
     "cooking_tips" : [
         "취향에 따라 고수를 곁들여 먹습니다."
