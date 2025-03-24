@@ -1,11 +1,11 @@
 import { useState } from "react";
 import MenuList from "@pages/recipeList/components/RecipeMenuList";
 import Carousel from "@pages/recipeList/components/RecipeCarousel";
+
 import recipeStore from "@stores/recipeStore";
 
-const RecipeList = () => {
+const RecipeList = ({ DISHES }: { DISHES: string[] }) => {
   const { recipeList } = recipeStore();
-  const DISHES = recipeList.dishes.length > 0 ? recipeList.dishes : [];
   const VIDEOS = recipeList.videos;
 
   const [selectedDish, setSelectedDish] = useState<keyof typeof VIDEOS | string>(DISHES.length > 0 ? DISHES[0] : "");
@@ -13,7 +13,6 @@ const RecipeList = () => {
   return (
     <section className="h-full flex flex-col">
       <MenuList dishes={DISHES} selectedDish={selectedDish} setSelectedDish={setSelectedDish} />
-
       {
         //메뉴 리스트는 있는데 selectedDish가 없을 때
         DISHES.length > 0 && !selectedDish && (
