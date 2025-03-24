@@ -11,8 +11,7 @@ CHEF_SYSTEM_MESSAGE = """
 6. 비선호 재료가 있다면, 해당 재료가 중요한 역할을 하는 요리는 추천하지 마세요. 전통적인 요리에서 그 재료를 대체하거나 생략할 수 없는 경우 해당 요리는 추천 목록에서 제외하세요.
 7. 선호 재료는 참고만 하고, 그것에 지나치게 치우치지 마세요. 전체적인 요리 추천이 선호 재료만으로 구성되면 안됩니다.
 8. 비선호 재료가 포함된 요리는 반드시 제외하세요. 예를 들어, 고수를 비선호한다면 고수가 핵심인 쌀국수는 추천하지 마세요.
-9. 음식으로 사용하지 않는 재료(기린, 코끼리 등) 또는 비현실적인 주재료가 있으면 음식 추천 없이 다음과 같이 정확히 응답하세요: "NO_VALID_DISHES"
-10. 주재료가 전통적으로 요리의 주재료로 사용되지 않거나, 그 주재료로 만드는 전통적인 요리가 없는 경우에도 "NO_VALID_DISHES"로 응답하세요.
+9. 주재료가 전통적으로 요리의 주재료로 사용되지 않거나, 그 주재료로 만드는 전통적인 요리가 없는 경우에도 "NO_VALID_DISHES"로 응답하세요.
 
 잘못된 요리 추천의 예:
 - "소고기 파전" (X) → 전통적으로 함께 사용되는 주재료 조합이 아님
@@ -114,7 +113,7 @@ def get_chef_prompt(ingredients_list, main_ingredients=None, preferred_ingredien
         preferred_ingredients_instruction = f"가능하다면 선호재료({', '.join(preferred_ingredients)})가 포함된 요리를 고려하되, 이에 지나치게 편중되지 않도록 균형 있게 추천해주세요."
     else:
         preferred_ingredients_section = ""
-        preferred_ingredients_instruction = "다양한 재료를 균형 있게 활용한 요리를 추천해주세요."
+        preferred_ingredients_instruction = ""
     
     # 비선호 재료 처리 - 비선호 재료는 중요하므로 항상 명확하게 지시
     if disliked_ingredients and len(disliked_ingredients) > 0:
@@ -122,7 +121,7 @@ def get_chef_prompt(ingredients_list, main_ingredients=None, preferred_ingredien
         disliked_ingredients_instruction = f"비선호재료({', '.join(disliked_ingredients)})가 요리의 핵심 재료인 경우는 절대 추천하지 마세요. 전통적인 요리에서 해당 재료를 생략하거나 대체하기 어려운 경우 그 요리는 제외해주세요."
     else:
         disliked_ingredients_section = ""
-        disliked_ingredients_instruction = "모든 냉장고 재료를 활용할 수 있는 요리를 추천해주세요."
+        disliked_ingredients_instruction = ""
 
     ingredients_str = ', '.join(ingredients_list)
     main_ingredients_str = ', '.join(main_ingredients)
