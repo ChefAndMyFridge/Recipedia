@@ -25,16 +25,13 @@ const StoreIngredientForm = () => {
     `${new Date().getHours().toString().padStart(2, "0")}:${new Date().getMinutes().toString().padStart(2, "0")}`
   );
 
-  const [expirationDate, setExpirationDate] = useState<string>(new Date().toISOString().split("T")[0]);
-  const [expirationTime, setExpirationTime] = useState<string>(
-    `${new Date().getHours().toString().padStart(2, "0")}:${new Date().getMinutes().toString().padStart(2, "0")}`
-  );
+  const [expirationDate, setExpirationDate] = useState<string>("");
+  const [expirationTime, setExpirationTime] = useState<string>("");
 
   const [storagePlace, setStoragePlace] = useState<string>("냉장실");
 
   useEffect(() => {
-    // 입고일로부터 7일 후 만료일 설정
-    // 추후 재료별 유통기한 설정 필요
+    // 입고일로부터 7일 후 만료일 설정: 추후 재료별 유통기한 설정 필요
     setExpirationDate(new Date(new Date(incomingDate).getTime() + 1000 * 60 * 60 * 24 * 7).toISOString().split("T")[0]);
   }, [incomingDate]);
 
@@ -65,7 +62,6 @@ const StoreIngredientForm = () => {
       return;
     }
 
-    // 추후 시간에 대한 고려 필요
     const ingredient: StoreIngredient = {
       name: data.name as string,
       imageUrl: "",
@@ -85,8 +81,6 @@ const StoreIngredientForm = () => {
       }
     );
   }
-
-  console.log(incomingDate, expirationDate);
 
   return (
     <form className="px-2" onSubmit={handleSubmit}>
