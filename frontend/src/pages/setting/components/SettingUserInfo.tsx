@@ -11,6 +11,7 @@ const SettingUserInfo = () => {
 
   const [isEdit, setIsEdit] = useState(false);
   const [editUsername, setEditUsername] = useState(username);
+  const [originalUsername, setOriginalUsername] = useState(username);
   const inputRef = useRef<HTMLInputElement>(null);
 
   function handleChangeUsername(e: React.ChangeEvent<HTMLInputElement>) {
@@ -20,10 +21,13 @@ const SettingUserInfo = () => {
   async function modifyUserName() {
     try {
       const response = await modifyNameApi(userId, editUsername);
-      setUserName(response.newMembername);
+      setUserName(response.membername);
+      setOriginalUsername(response.membername);
 
       alert("성공적으로 수정했습니다.");
     } catch {
+      setEditUsername(originalUsername);
+      setUserName(originalUsername);
       alert("이름 변경에 실패했습니다. 잠시 후 다시 시도해 주세요.");
     }
   }
