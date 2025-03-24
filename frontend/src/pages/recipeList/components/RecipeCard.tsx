@@ -1,9 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import { Video } from "@/types/recipeListTypes";
+
 import { getYoutubeThumbnailUrl } from "@utils/getYoutubeThumbnailUrl";
+
 import VideoInfos from "@components/common/videoInfo/VideoInfos";
 import Button from "@components/common/button/Button";
+
 import IconHeart from "@assets/icons/IconHeart";
 import IconHeartFill from "@/assets/icons/IconHeartFill";
 

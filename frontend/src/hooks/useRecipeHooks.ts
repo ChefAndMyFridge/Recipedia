@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getRecipeDetailApi, makeRecipeApi } from "@apis/recipeApi";
-import recipeStore from "@stores/recipeStore";
+import useRecipeStore from "@stores/recipeStore";
 import { RecipeInfo, RecipeList } from "@/types/recipeListTypes";
 
 //선택 재료 기반 레시피 리스트 조회 API 호출
 export const usePostRecipeList = (ingredients: string[]) => {
-  const { setRecipeList } = recipeStore();
+  const { setRecipeList } = useRecipeStore();
 
   const query = useQuery<RecipeList>({
     queryKey: ["recipeList", ingredients],
@@ -26,7 +26,7 @@ export const usePostRecipeList = (ingredients: string[]) => {
 
 //레시피 상세 및 텍스트 추출 API
 export const useGetRecipeDetail = (recipeId: number) => {
-  const { setDetailRecipe } = recipeStore();
+  const { setDetailRecipe } = useRecipeStore();
 
   const query = useQuery<RecipeInfo>({
     queryKey: ["recipeDetail", recipeId],

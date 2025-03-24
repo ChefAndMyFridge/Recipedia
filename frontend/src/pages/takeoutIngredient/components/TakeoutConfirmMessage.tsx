@@ -3,14 +3,17 @@ import { useNavigate } from "react-router-dom";
 
 import useModalStore from "@stores/modalStore";
 import useIngredientsStore from "@stores/ingredientsStore";
+import useRecipeStore from "@stores/recipeStore";
 
 import Button from "@components/common/button/Button.tsx";
+import { SelectedIngredients } from "@/types/ingredientsTypes";
 
 const TakeoutConfirmMessage = () => {
   const navigate = useNavigate();
 
   const { closeModal } = useModalStore();
-  const { setClearSelectedIngredients } = useIngredientsStore();
+  const { selectedIngredients, setClearSelectedIngredients } = useIngredientsStore();
+  const { setRecipeSelectedIngredients } = useRecipeStore();
 
   const [countdown, setCountdown] = useState(5);
 
@@ -35,7 +38,22 @@ const TakeoutConfirmMessage = () => {
   }
 
   function handleRecipeRecommendation(): void {
+    //selectedIngredients 를 recipeSelectedIngredients 에 저장
+    let arraySelectedIngredients: SelectedIngredients[] = [];
+
+    Object.values(selectedIngredients).forEach((ingredient) => {
+      arraySelectedIngredients.push(ingredient);
+    });
+
+    setRecipeSelectedIngredients(arraySelectedIngredients);
+
+    //selectedIngredients 초기화
+    setClearSelectedIngredients();
+
+    //레시피 추천 페이지로 이동
     navigate("/recipeList/ingredient");
+
+    //모달 닫기
     closeModal();
   }
 
