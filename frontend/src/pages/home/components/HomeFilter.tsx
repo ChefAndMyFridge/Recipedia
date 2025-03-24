@@ -7,11 +7,14 @@ import HomeExpandFilter from "@pages/home/components/HomeExpandFilter";
 
 import Button from "@components/common/button/Button";
 
+import IconSort from "@assets/icons/IconSort";
 import IconFilter from "@assets/icons/IconFilter";
 import ArrowUp from "@assets/icons/ArrowUp";
 
 const HomeFilter = () => {
   const { filteredInfomations } = useIngredientsStore();
+
+  const [sort, setSort] = useState<"name" | "expirationDate">("name");
 
   const [isExpand, setIsExpand] = useState<boolean>(false);
   const [location, setLocation] = useState<"all" | "refrigeration" | "frozen">("all");
@@ -58,8 +61,19 @@ const HomeFilter = () => {
           className="px-2.5 py-1"
         />
       </div>
-      {!isExpand && <IconFilter width={20} height={20} strokeColor="gray" onClick={() => setIsExpand(true)} />}
-      {isExpand && <ArrowUp width={20} height={20} strokeColor="gray" onClick={handleSaveFilter} />}
+      <div className="flex justify-end items-center gap-2 font-preMedium text-sm text-gray-500">
+        <div
+          className="flex justify-center items-center gap-1 cursor-pointer"
+          onClick={() => setSort(sort === "name" ? "expirationDate" : "name")}
+        >
+          <IconSort width={18} height={18} strokeColor="#0381fe" />
+          <p className="text-primary">{sort === "name" ? "이름순" : "만료일순"}</p>
+        </div>
+        <div className="border-r border-[#dddddd] h-5 mx-1" />
+
+        {!isExpand && <IconFilter width={18} height={18} strokeColor="#9d9d9d" onClick={() => setIsExpand(true)} />}
+        {isExpand && <ArrowUp width={18} height={18} strokeColor="#9d9d9d" onClick={handleSaveFilter} />}
+      </div>
 
       {isExpand && <HomeExpandFilter />}
     </div>
