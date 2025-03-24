@@ -19,15 +19,25 @@ const StoreIngredientForm = () => {
 
   const [customAmountInput, setCustomAmountInput] = useState<boolean>(false);
   const [keypadValue, setKeypadValue] = useState("");
+
   const [incomingDate, setIncomingDate] = useState<string>(new Date().toISOString().split("T")[0]);
-  const [expirationDate, setExpirationDate] = useState<string>(new Date().toISOString().split("T")[0]);
+  const [incomingTime, setIncomingTime] = useState<string>(
+    `${new Date().getHours().toString().padStart(2, "0")}:${new Date().getMinutes().toString().padStart(2, "0")}`
+  );
+
+  const [expirationDate, setExpirationDate] = useState<string>("");
+  const [expirationTime, setExpirationTime] = useState<string>("");
+
   const [storagePlace, setStoragePlace] = useState<string>("냉장실");
 
   useEffect(() => {
-    // 입고일로부터 7일 후 만료일 설정
-    // 추후 재료별 유통기한 설정 필요
+    // 입고일로부터 7일 후 만료일 설정: 추후 재료별 유통기한 설정 필요
     setExpirationDate(new Date(new Date(incomingDate).getTime() + 1000 * 60 * 60 * 24 * 7).toISOString().split("T")[0]);
   }, [incomingDate]);
+
+  useEffect(() => {
+    setExpirationTime(incomingTime);
+  }, [incomingTime]);
 
   // 저장 위치 변경
   function handleStoragePlace(place: string): void {
@@ -40,18 +50,24 @@ const StoreIngredientForm = () => {
     const fd = new FormData(event.currentTarget);
     const data = Object.fromEntries(fd.entries());
 
-    if (!data.name || !data.amount || !data.incomingDate || !data.expirationDate) {
+    if (
+      !data.name ||
+      !data.amount ||
+      !data.incomingDate ||
+      !data.incomingTime ||
+      !data.expirationDate ||
+      !data.expirationTime
+    ) {
       alert("모든 항목을 입력해주세요.");
       return;
     }
 
-    // 추후 시간에 대한 고려 필요
     const ingredient: StoreIngredient = {
       name: data.name as string,
       imageUrl: "",
       amount: Number(data.amount),
-      incomingDate: `${data.incomingDate as string}T00:00:00`,
-      expirationDate: `${data.expirationDate as string}T23:59:59`,
+      incomingDate: `${data.incomingDate as string}T${data.incomingTime}:00`,
+      expirationDate: `${data.expirationDate as string}T${data.expirationTime}:00`,
       storagePlace: storagePlace === "냉장실" ? "냉장고" : "냉동고",
     };
 
@@ -69,6 +85,7 @@ const StoreIngredientForm = () => {
   return (
     <form className="px-2" onSubmit={handleSubmit}>
       <div className="flex flex-col gap-4 px-6 py-4 bg-[#EEE] rounded-xl">
+        {/* 재료명, 수량 입력 */}
         <div className="relative flex gap-4 justify-between items-center">
           <IngredientInput label="재료명" name="name" type="text" placeHolder="재료명을 입력해주세요" />
           <div className="flex flex-col gap-2 w-2/5">
@@ -87,9 +104,8 @@ const StoreIngredientForm = () => {
           </div>
         </div>
 
-        {/* 커스텀 수량 입력 */}
-        {/* 입고, 만료일 입력 */}
-        <div className="flex gap-4 justify-between items-center">
+        {/* 입고일 입력 */}
+        <div className="flex gap-4 justify-between items-end">
           <Input
             label="입고일"
             name="incomingDate"
@@ -99,12 +115,30 @@ const StoreIngredientForm = () => {
             onChange={(event) => setIncomingDate(event.target.value)}
           />
           <Input
+            name="incomingTime"
+            type="time"
+            placeHolder="수량을 입력해주세요"
+            value={incomingTime}
+            onChange={(event) => setIncomingTime(event.target.value)}
+          />
+        </div>
+
+        {/* 만료일 입력 */}
+        <div className="flex gap-4 justify-between items-end">
+          <Input
             label="만료일"
             name="expirationDate"
             type="date"
             placeHolder="수량을 입력해주세요"
             value={expirationDate}
             onChange={(event) => setExpirationDate(event.target.value)}
+          />
+          <Input
+            name="expirationTime"
+            type="time"
+            placeHolder="수량을 입력해주세요"
+            value={expirationTime}
+            onChange={(event) => setExpirationTime(event.target.value)}
           />
         </div>
 
