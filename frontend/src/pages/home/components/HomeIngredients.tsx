@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 
 import useIngredientsStore from "@stores/ingredientsStore.ts";
-import { useGetIngredientsList } from "@hooks/useIngredientsHooks";
 
 import HomeIngredient from "@pages/home/components/HomeIngredient.tsx";
 
@@ -15,9 +14,6 @@ const HomeIngredients = () => {
 
   const touchStartX = useRef(0);
   const touchMoveX = useRef(0);
-
-  // 고내에 저장된 재료 목록 조회
-  useGetIngredientsList();
 
   useEffect(() => {
     setPageIndex(0);
@@ -69,23 +65,25 @@ const HomeIngredients = () => {
   }
 
   return (
-    <div className="flex flex-col justify-between items-center w-full h-full px-4 py-2 overflow-hidden">
+    <div
+      className="flex flex-col justify-between items-center w-full h-full py-2 overflow-hidden"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
       {/* 터치 이동이 가능한 슬라이드 영역 */}
       <div
         className="flex justify-between items-start w-full h-[95%] transition-transform duration-300 ease-out will-change-transform"
         style={{
           transform: `translateX(calc(-${pageIndex * 100}% + ${isSwiping ? touchMoveX.current - touchStartX.current : 0}px))`,
         }}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
       >
         {pagination &&
           pagination.map((_, idx) => {
             const startIdx = idx * ITEM_PER_PAGE;
             const endIdx = startIdx + ITEM_PER_PAGE;
             return (
-              <div key={idx} className="w-full flex-shrink-0 grid grid-cols-5 gap-2">
+              <div key={idx} className="w-[90%] mx-[5%] flex-shrink-0 grid grid-cols-5 gap-2">
                 {ingredients &&
                   ingredients
                     .slice(startIdx, endIdx)
@@ -96,7 +94,7 @@ const HomeIngredients = () => {
       </div>
 
       {/* 페이지네이션 */}
-      <div className="flex justify-center items-end gap-1.5 h-[5%]">
+      <div className="flex justify-center items-center gap-1.5 h-[5%]">
         {pagination &&
           pagination.map((_, idx) => (
             <span

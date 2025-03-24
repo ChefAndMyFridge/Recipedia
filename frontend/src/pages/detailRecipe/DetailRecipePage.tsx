@@ -11,13 +11,14 @@ const DetailRecipePage = () => {
   const { recipeId } = useParams();
 
   // API 호출로 상세 정보 가져오기
-  const { isLoading, isFetching } = useGetRecipeDetail(Number(recipeId));
+  const { isLoading, isFetching, isError } = useGetRecipeDetail(Number(recipeId));
 
   if (isLoading || isFetching) return <LoadingPlayer />;
+  if (isError) return <ErrorPage />;
 
   return (
     <>
-      <ErrorBoundary FallbackComponent={ErrorPage} onReset={() => window.location.reload()}>
+      <ErrorBoundary FallbackComponent={ErrorPage}>
         {/* 세로모드 레이아웃 */}
         <div className="portrait:block landscape:hidden h-screen">
           <DetailRecipePortraitPage />

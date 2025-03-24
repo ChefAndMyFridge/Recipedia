@@ -14,11 +14,10 @@ export interface Ingredients {
   ingredients: Ingredient[];
 }
 
-export interface IngredientsInfo {
-  ingredientInfoId: number;
+export interface IngredientsSearchInfo {
+  id: number;
   name: string;
   imageUrl: string;
-  totalCount: number;
 }
 
 export interface Nutritions {
@@ -41,7 +40,7 @@ export interface IngredientNutrition {
   imageUrl: string;
   totalCount: number;
   ingredients: Ingredient[];
-  nutrients: Nutritions;
+  nutrients: Nutritions | null;
 }
 
 export interface StoreIngredient {
@@ -77,8 +76,14 @@ export interface DeleteIngredientResponse {
   [key: string]: number;
 }
 
-export interface filteredInfomations {
-  type: string[];
+export interface filteringInformationKeys {
+  category: string[];
   preference: string[];
+}
+
+export interface filteredInfomations {
+  category: string[];
+  preference: string[];
+  like: string[];
   dislike: string[];
 }

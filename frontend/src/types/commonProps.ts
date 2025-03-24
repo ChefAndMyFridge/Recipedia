@@ -9,7 +9,7 @@ export interface ButtonProps {
 }
 
 export interface FilterButtonProps {
-  isSelected: boolean;
+  isSelected?: boolean;
   content: string;
   count?: number;
   className?: string;

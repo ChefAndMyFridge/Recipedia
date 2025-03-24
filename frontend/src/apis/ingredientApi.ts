@@ -1,6 +1,6 @@
 import {
   Ingredients,
-  IngredientsInfo,
+  IngredientsSearchInfo,
   StoreIngredient,
   StoreResponseIngredient,
   IngredientNutrition,
@@ -21,11 +21,12 @@ export const getIngredientsApi = async (): Promise<Ingredients[]> => {
   }
 };
 
-// 전체 재료 목록 조회 (아직 릴리즈되지 않은 API)
-export const getIngredientsInfoApi = async (): Promise<IngredientsInfo[]> => {
+// 재료 자동완성 검색
+export const searchIngredientsApi = async (inputValue: string): Promise<IngredientsSearchInfo[]> => {
+  console.log(`v1/ingredient/search?req=${inputValue}`);
   try {
-    const response = await instance.get("v1/ingredient/info");
-    console.log("v1/ingredient/info", response.data);
+    const response = await instance.get(`v1/ingredient/search?req=${inputValue}`);
+    console.log("v1/ingredient/search", response.data);
     return response.data;
   } catch (error: unknown) {
     throw new Error(error as string);

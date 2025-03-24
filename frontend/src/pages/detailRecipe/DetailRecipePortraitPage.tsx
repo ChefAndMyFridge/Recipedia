@@ -7,7 +7,6 @@ import Header from "@components/Layout/Header";
 import Button from "@components/common/button/Button";
 import RecipeRatingModal from "@components/recipeRating/RecipeRatingModal";
 import Modal from "@components/common/modal/Modal";
-import ErrorPage from "@components/common/error/ErrorPage";
 import RecipeInfos from "@pages/detailRecipe/components/RecipeInfos";
 import RecipeTitle from "@pages/detailRecipe/components/RecipeTitle";
 import RecipeTexts from "@pages/detailRecipe/components/RecipeTexts";
@@ -21,10 +20,6 @@ const DetailRecipePortraitPage = () => {
 
   const { recipeList, detailRecipe, findRecipeVideo } = recipeStore();
   const { recipeId } = useParams();
-
-  if (Object.keys(recipeList.videos).length === 0 || detailRecipe.title === "") {
-    return <ErrorPage />;
-  }
 
   const video = findRecipeVideo(recipeList, Number(recipeId));
 
