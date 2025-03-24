@@ -30,7 +30,7 @@ interface IngredientsPreferenceProps {
 const FilterElement = ({ type, content, keys, elements, onSetFilter, onClear }: FilterElementProps) => {
   return (
     <div className="mb-4">
-      <div className="flex justify-between items-center h-8 border-content">
+      <div className="flex justify-between items-center h-8 mb-2 border-content">
         <span className="text-sm font-preBold">{content}</span>
         <button onClick={() => onClear(type)} className="text-xs font-preRegular text-content2">
           초기화

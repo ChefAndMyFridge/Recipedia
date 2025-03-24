@@ -83,10 +83,10 @@ const StoreIngredientForm = () => {
   }
 
   return (
-    <form className="px-2" onSubmit={handleSubmit}>
-      <div className="flex flex-col gap-4 px-6 py-4 bg-[#EEE] rounded-xl">
+    <form className="px-2 w-full" onSubmit={handleSubmit}>
+      <div className="flex flex-col w-full gap-4 px-6 py-4 bg-[#EEE] rounded-xl">
         {/* 재료명, 수량 입력 */}
-        <div className="relative flex gap-4 justify-between items-center">
+        <div className="relative flex w-full gap-4 justify-between items-center">
           <IngredientInput label="재료명" name="name" type="text" placeHolder="재료명을 입력해주세요" />
           <div className="flex flex-col gap-2 w-2/5">
             <p className="font-preMedium text-[#333] text-xs font-semibold">수량</p>
@@ -105,7 +105,7 @@ const StoreIngredientForm = () => {
         </div>
 
         {/* 입고일 입력 */}
-        <div className="flex gap-4 justify-between items-end">
+        <div className="flex justify-between items-end w-full gap-4">
           <Input
             label="입고일"
             name="incomingDate"
@@ -124,7 +124,7 @@ const StoreIngredientForm = () => {
         </div>
 
         {/* 만료일 입력 */}
-        <div className="flex gap-4 justify-between items-end">
+        <div className="flex justify-between items-end w-full gap-4">
           <Input
             label="만료일"
             name="expirationDate"
@@ -143,7 +143,7 @@ const StoreIngredientForm = () => {
         </div>
 
         {/* 저장 위치 선택 */}
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col w-full gap-2">
           <p className="font-preMedium text-[#333] text-xs font-semibold">위치</p>
           <div className="flex justify-start gap-2 items-center">
             <Button
