@@ -8,10 +8,13 @@ import { RecipeInfo, RecipeList } from "@/types/recipeListTypes";
 export const usePostRecipeList = (ingredients: string[]) => {
   const { setRecipeList } = useRecipeStore();
 
+  // ingredients를 정렬하고 문자열로 변환하여 일관된 queryKey 생성
+  const ingredientsKey = ingredients.length > 0 ? ingredients.sort().join(",") : "empty";
+
   const query = useQuery<RecipeList>({
-    queryKey: ["recipeList", ingredients],
+    queryKey: ["recipeList", ingredientsKey],
     queryFn: () => makeRecipeApi(ingredients),
-    staleTime: 1000 * 60 * 60 * 24, // 1일, 추후 줄일 필요 O
+    staleTime: 1000 * 60 * 60, // 1시간
   });
 
   //query 호출 후 데이터 저장
