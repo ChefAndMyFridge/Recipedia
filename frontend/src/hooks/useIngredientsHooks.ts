@@ -22,6 +22,7 @@ import useIngredientsStore from "@stores/ingredientsStore";
 // 고내에 저장된 재료 목록 조회
 export const useGetIngredientsList = (location: string, sort: string) => {
   const { setIngredients } = useIngredientsStore();
+  const queryClient = useQueryClient();
 
   const query = useQuery<Ingredients[]>({
     queryKey: ["ingredients"],
@@ -32,8 +33,9 @@ export const useGetIngredientsList = (location: string, sort: string) => {
 
   // location 또는 sort가 변경될 때마다 refetch 실행
   useEffect(() => {
+    queryClient.cancelQueries({ queryKey: ["ingredients"] }); // 이전 요청 취소
     query.refetch();
-  }, [query.refetch, location, sort]);
+  }, [queryClient, query.refetch, location, sort]);
 
   useEffect(() => {
     if (query.data) {
