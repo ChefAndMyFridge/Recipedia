@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Video } from "@/types/recipeListTypes";
+
 import MyRecipeItem from "@pages/myRecipe/components/MyRecipeItem";
-import NoRecipeList from "@pages/myRecipe/components/NoRecipeList";
+import NoMyRecipeList from "@pages/myRecipe/components/NoMyRecipeList";
 
 //임의 데이터 리스트, 추후 API 연결 시 삭제 예정
 // const DATA_RECIPE_LIST = [
@@ -43,7 +44,7 @@ const MyRecipeFavorite = () => {
           </div>
         ))
       ) : (
-        <NoRecipeList text="즐겨찾는" />
+        <NoMyRecipeList text="즐겨찾는" />
       )}
     </>
   );
