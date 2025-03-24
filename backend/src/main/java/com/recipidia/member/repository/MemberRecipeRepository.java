@@ -12,4 +12,7 @@ import java.util.Optional;
 public interface MemberRecipeRepository extends JpaRepository<MemberRecipe, Long> {
   Optional<MemberRecipe> findByMemberIdAndRecipeId(Long memberId, Long recipeId);
   List<MemberRecipe> findAllByMember(Member member);
+  List<MemberRecipe> findAllByMemberAndFavoriteTrue(Member member);
+  List<MemberRecipe> findAllByMemberAndRatingIsNotNull(Member member);
+
 }

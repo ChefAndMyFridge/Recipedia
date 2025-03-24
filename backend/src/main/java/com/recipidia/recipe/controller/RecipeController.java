@@ -36,7 +36,7 @@ public class RecipeController {
                       name = "요청 데이터",
                       value = """
                           {
-                              "member_id" : 1,
+                              "memberId" : 1,
                               "ingredients": ["돼지고기", "대파"]
                           }
                           """
