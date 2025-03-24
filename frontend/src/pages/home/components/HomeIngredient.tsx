@@ -73,7 +73,6 @@ const HomeIngredient = ({ ingredient }: HomeIngredientProps) => {
   }
 
   const daysRemaining = calculateDaysRemaining();
-  console.log(ingredient.name, daysRemaining);
 
   return (
     <div className="flex flex-col w-full h-fit p-1 justify-center items-center ">

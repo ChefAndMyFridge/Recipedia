@@ -68,7 +68,7 @@ const StoreIngredientForm = () => {
       amount: Number(data.amount),
       incomingDate: `${data.incomingDate as string}T${data.incomingTime}:00`,
       expirationDate: `${data.expirationDate as string}T${data.expirationTime}:00`,
-      storagePlace: storagePlace === "냉장실" ? "냉장고" : "냉동고",
+      storagePlace: storagePlace === "냉장실" ? "fridge" : "freezer",
     };
 
     console.log(ingredient);
