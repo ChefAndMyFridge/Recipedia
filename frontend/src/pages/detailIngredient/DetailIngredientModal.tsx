@@ -1,9 +1,12 @@
-import { Ingredients } from "@/types/ingredientsTypes.ts";
+import { useState } from "react";
+
+import { Ingredients, Ingredient } from "@/types/ingredientsTypes.ts";
 
 import useModalStore from "@stores/modalStore";
 
 import DetailIngredientImage from "@pages/detailIngredient/components/DetailIngredientImage.tsx";
 import DetailIngredientItem from "@pages/detailIngredient/components/DetailIngredientItem.tsx";
+import DetailIngredientInfo from "@pages/detailIngredient/components/DetailIngredientInfo.tsx";
 
 import Button from "@components/common/button/Button";
 
@@ -16,15 +19,35 @@ interface IngredientsProps {
 const DetailIngredientModal = ({ ingredient }: IngredientsProps) => {
   const { closeModal } = useModalStore();
 
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [selectedIngredient, setSelectedIngredient] = useState<Ingredient | null>(null);
+
+  function handleOpenDetailInfo(ingredient: Ingredient) {
+    setIsExpanded(true);
+    setSelectedIngredient(ingredient);
+
+    const timer = setTimeout(() => {
+      handleCloseDetailInfo();
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }
+
+  function handleCloseDetailInfo() {
+    setIsExpanded(false);
+    setSelectedIngredient(null);
+  }
+
   return (
-    <div>
+    <div className="relative">
       <DetailIngredientImage
         imgSrc={ingredient.imageUrl ? ingredient.imageUrl : noImg}
         ingredientId={ingredient.ingredientInfoId}
       />
+      {isExpanded && selectedIngredient !== null && <DetailIngredientInfo ingredient={selectedIngredient} />}
 
       {/* 선택된 식재료 현황 */}
-      <div className="flex justify-between items-center w-full h-10 px-6 py-8 font-preSemiBold">
+      <div className="flex justify-between items-center w-full h-14 px-6 py-2 font-preSemiBold">
         <h1 className="m-0 text-xl">{ingredient.name}</h1>
         <h1 className="m-0 text-xl">{ingredient.totalCount}개</h1>
       </div>
@@ -38,6 +61,8 @@ const DetailIngredientModal = ({ ingredient }: IngredientsProps) => {
                 key={item.ingredientId}
                 ingredient={item}
                 imgSrc={ingredient.imageUrl ? ingredient.imageUrl : noImg}
+                onOpen={handleOpenDetailInfo}
+                onClose={handleCloseDetailInfo}
               />
             ))}
         </div>
