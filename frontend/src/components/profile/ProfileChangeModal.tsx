@@ -1,6 +1,8 @@
 import ModalHeader from "@components/common/modal/ModalHeader";
+
 import useUserStore from "@stores/userStore";
 import useModalStore from "@stores/modalStore";
+
 import { USERS } from "@/data/USERS";
 import { User } from "@/types/userTypes";
 
