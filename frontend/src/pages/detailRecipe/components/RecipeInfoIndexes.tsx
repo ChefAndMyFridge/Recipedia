@@ -21,12 +21,6 @@ const RecipeInfoIndexes = ({ selectedIndex, setSelectedIndex }: RecipeInfoIndexe
         text="요리 꿀팁"
         type="cooking_tips"
       />
-      <RecipeInfoIndex
-        selectedIndex={selectedIndex}
-        setSelectedIndex={setSelectedIndex}
-        text="도구 정보"
-        type="cooking_tools"
-      />
     </div>
   );
 };
