@@ -1,16 +1,19 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ReactPlayer from "react-player";
+
 import useModalStore from "@stores/modalStore";
+import recipeStore from "@stores/recipeStore";
+
 import VideoInfos from "@components/common/videoInfo/VideoInfos";
 import Header from "@components/Layout/Header";
 import Button from "@components/common/button/Button";
 import RecipeRatingModal from "@components/recipeRating/RecipeRatingModal";
 import Modal from "@components/common/modal/Modal";
+
 import RecipeInfos from "@pages/detailRecipe/components/RecipeInfos";
 import RecipeTitle from "@pages/detailRecipe/components/RecipeTitle";
 import RecipeTexts from "@pages/detailRecipe/components/RecipeTexts";
-import recipeStore from "@stores/recipeStore";
 
 //가로모드 레이아웃
 const DetailRecipeLandscapePage = () => {

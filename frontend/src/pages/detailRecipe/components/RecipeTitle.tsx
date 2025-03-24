@@ -18,7 +18,7 @@ const RecipeTitle = ({ video, isRecipeOpen, setIsRecipeOpen }: RecipeTitleProps)
       {/* 레시피 보기 버튼 및 토글버튼 표시 */}
       <div className="w-[30%] flex justify-end items-start">
         <div className="flex items-center gap-2">
-          <p className="text-sm font-preSemiBold text-content">레시피 보기 </p>
+          <p className="w-[50%] text-xs font-preSemiBold text-content">레시피 보기 </p>
           <Toggle isToggle={isRecipeOpen} onToggle={setIsRecipeOpen} />
         </div>
       </div>
