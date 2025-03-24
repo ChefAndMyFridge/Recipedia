@@ -7,26 +7,26 @@ import HomeExpandFilter from "@pages/home/components/HomeExpandFilter";
 
 import Button from "@components/common/button/Button";
 
-import IconSort from "@assets/icons/IconSort";
-import IconFilter from "@assets/icons/IconFilter";
+import IconSort from "@/assets/icons/IconSort";
+import IconFilter from "@/assets/icons/IconFilter";
 import ArrowUp from "@assets/icons/ArrowUp";
 
 const HomeFilter = () => {
-  const { filteredInfomations } = useIngredientsStore();
+  const { setIngredients, filteredInfomations } = useIngredientsStore();
 
   const [sort, setSort] = useState<"name" | "expirationDate">("name");
 
   const [isExpand, setIsExpand] = useState<boolean>(false);
-  const [location, setLocation] = useState<"all" | "refrigeration" | "frozen">("all");
+  const [location, setLocation] = useState<"all" | "fridge" | "freezer">("all");
 
   // 재료 목록을 가져오는 API 호출
-  const { refetch: getAllIngredientList } = useGetIngredientsList();
+  const { data: ingredients } = useGetIngredientsList(location, sort);
 
   useEffect(() => {
-    if (location === "all") {
-      getAllIngredientList();
+    if (ingredients) {
+      setIngredients(ingredients);
     }
-  }, [location]);
+  }, [ingredients, setIngredients]);
 
   function handleSaveFilter(): void {
     console.log(filteredInfomations);
@@ -48,16 +48,16 @@ const HomeFilter = () => {
         />
         <Button
           type="button"
-          design={location === "refrigeration" ? "confirm" : "cancel"}
+          design={location === "fridge" ? "confirm" : "cancel"}
           content="냉장실"
-          onAction={() => setLocation("refrigeration")}
+          onAction={() => setLocation("fridge")}
           className="px-2.5 py-1"
         />
         <Button
           type="button"
-          design={location === "frozen" ? "confirm" : "cancel"}
+          design={location === "freezer" ? "confirm" : "cancel"}
           content="냉동실"
-          onAction={() => setLocation("frozen")}
+          onAction={() => setLocation("freezer")}
           className="px-2.5 py-1"
         />
       </div>
