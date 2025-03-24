@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import ArrowLeft from "@assets/icons/ArrowLeft";
-import useRecipeStore from "@/stores/recipeStore";
+import useRecipeStore from "@stores/recipeStore";
 
 interface HeaderProps {
   title: string;
