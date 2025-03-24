@@ -6,6 +6,7 @@ interface UserState {
   userId: number;
   username: string;
   currentProfileImg: string;
+  setUserId: (userId: number) => void;
   setUserName: (username: string) => void;
   setCurrentProfileImg: (profileImg: string) => void;
 }
@@ -13,9 +14,10 @@ interface UserState {
 const useUserStore = create<UserState>()(
   persist(
     (set) => ({
-      userId: 1,
-      username: "아빠",
+      userId: 0,
+      username: "닉네임",
       currentProfileImg: defaultProfile,
+      setUserId: (userId) => set({ userId }),
       setUserName: (username) => set({ username }),
       setCurrentProfileImg: (profileImg) => set({ currentProfileImg: profileImg }),
     }),
