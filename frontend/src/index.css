@@ -98,6 +98,6 @@
 /* 노트북 & 이외 사이즈 */
 @media screen and (min-width: 1024px) {
   html {
-    @apply text-[30px];
+    @apply text-[24px];
   }
 }
