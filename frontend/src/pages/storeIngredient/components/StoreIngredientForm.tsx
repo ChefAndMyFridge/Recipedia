@@ -104,7 +104,7 @@ const StoreIngredientForm = () => {
           </div>
         </div>
 
-        {/* 입고, 만료일 입력 */}
+        {/* 입고일 입력 */}
         <div className="flex gap-4 justify-between items-end">
           <Input
             label="입고일"
@@ -123,7 +123,7 @@ const StoreIngredientForm = () => {
           />
         </div>
 
-        {/* 입고, 만료일 입력 */}
+        {/* 만료일 입력 */}
         <div className="flex gap-4 justify-between items-end">
           <Input
             label="만료일"
