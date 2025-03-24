@@ -41,6 +41,8 @@ public class MemberRecipeServiceImpl implements MemberRecipeService {
       MemberRecipe newMemberRecipe = MemberRecipe.builder()
           .member(member)
           .recipe(recipe)
+          .rating(rating)
+          .favorite(favorite != null ? favorite : false) // 기본 값 false
           .createdAt(LocalDateTime.now())
           .build();
       memberRecipeRepository.save(newMemberRecipe); // 새 객체 저장
