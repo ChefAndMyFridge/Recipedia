@@ -114,16 +114,16 @@ const HomeIngredient = ({ ingredient }: HomeIngredientProps) => {
       <div className="flex w-full h-8 justify-between items-center p-1">
         <button
           onClick={count <= 0 ? triggerShake : handleDecrease}
-          className="flex justify-center items-center w-3.5 aspect-[1/1] p-[2px] bg-subContent rounded-full"
+          className="flex justify-center items-center w-3.5 aspect-[1/1] p-[2px] bg-[#cccccc] rounded-full"
         >
-          <IconDecrease strokeColor="black" />
+          <IconDecrease strokeColor="white" strokeWidth={6} />
         </button>
         <span className="font-preMedium text-center text-sm">{ingredient.totalCount - count}</span>
         <button
           onClick={count >= ingredient.totalCount ? triggerShake : handleIncrease}
-          className="flex justify-center items-center w-3.5 aspect-[1/1] p-[2px] bg-subContent rounded-full"
+          className="flex justify-center items-center w-3.5 aspect-[1/1] p-[2px] bg-[#cccccc] rounded-full"
         >
-          <IconIncrease strokeColor="black" />
+          <IconIncrease strokeColor="white" strokeWidth={6} />
         </button>
       </div>
     </div>
