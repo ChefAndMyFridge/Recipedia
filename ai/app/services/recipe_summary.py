@@ -93,12 +93,16 @@ class RecipeSummary:
         # OpenAI 요청을 위한 메시지 구성
         system_input, user_input = SUMMARY_SYSTEM_INPUT, SUMMARY_USER_INPUT
 
-        # 비디오 설명이 있다면, 이를 프롬프트에 추가
-        video_info = Video.getInfo(video_id)
-        if 'description' in video_info and (len(video_info) > settings.YOUTUBE_DESCRIPTION_LEN_TH):
-            user_input += SUMMARY_DESCRIPTION_INPUT
-            user_input.append(
-                {"role": "user", "content": video_info['description']})
+        try:
+            # 비디오 설명이 있다면, 이를 프롬프트에 추가
+            video_info = Video.getInfo(video_id)
+            if 'description' in video_info and video_info['description'] and (len(video_info['description']) > settings.YOUTUBE_DESCRIPTION_LEN_TH):
+                user_input += SUMMARY_DESCRIPTION_INPUT
+                user_input.append(
+                    {"role": "user", "content": video_info['description']})
+        except Exception as e:
+            logger.error(
+                f"{settings.LOG_SUMMARY_PREFIX}_유튜브 영상 설명 추가 중 오류: {e}")
 
         # Few shot 데이터 적용
         user_input += SUMMARY_FEW_SHOT_DATA
