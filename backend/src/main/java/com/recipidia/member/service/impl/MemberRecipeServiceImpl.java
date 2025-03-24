@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,31 +29,27 @@ public class MemberRecipeServiceImpl implements MemberRecipeService {
   private final MemberRecipeRepository memberRecipeRepository;
 
   @Override
+  @Transactional
   public MemberRecipeDto patchMemberRecipe(Long memberId, Long recipeId, Integer rating, Boolean favorite) {
     Member member = memberRepository.findById(memberId)
         .orElseThrow(() -> new MemberNotFoundException(memberId));
     Recipe recipe = recipeRepository.findById(recipeId)
         .orElseThrow(() -> new RecipeNotFoundException(recipeId));
 
-    MemberRecipe memberRecipe = memberRecipeRepository
-        .findByMemberIdAndRecipeId(memberId, recipeId)
-        .orElseGet(() -> MemberRecipe.builder()
-            .member(member)
-            .recipe(recipe)
-            .rating(null)
-            .favorite(false)
-            .createdAt(LocalDateTime.now())
-            .build()
-        );
+    Optional<MemberRecipe> optMemberRecipe = memberRecipeRepository.findByMemberIdAndRecipeId(memberId, recipeId);
+    MemberRecipe memberRecipe = optMemberRecipe.orElseGet(() -> {
+      MemberRecipe newMemberRecipe = MemberRecipe.builder()
+          .member(member)
+          .recipe(recipe)
+          .createdAt(LocalDateTime.now())
+          .build();
+      memberRecipeRepository.save(newMemberRecipe); // 새 객체 저장
+      return newMemberRecipe;
+    });
 
-    if (rating != null && !rating.equals(memberRecipe.getRating())) {
-      memberRecipe.updateRating(rating);
-    }
-    if (favorite != null && !favorite.equals(memberRecipe.getFavorite())) {
-      memberRecipe.updateFavorite(favorite);
-    }
+    if (rating != null) memberRecipe.updateRating(rating);
+    if (favorite != null) memberRecipe.updateFavorite(favorite);
 
-    memberRecipeRepository.save(memberRecipe);
     return MemberRecipeDto.fromEntity(memberRecipe);
   }
 
