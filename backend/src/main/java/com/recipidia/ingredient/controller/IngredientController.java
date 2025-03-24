@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -179,8 +180,10 @@ public class IngredientController {
       }
   )
   @GetMapping
-  public List<IngredientInfoDto> getAllExistingIngredients() {
-    return ingredientService.getAllExistingIngredients();
+  // 지금은 전체 조회
+  // 냉장고, 냉동고 각각 쿼리스트링으로 구별
+  public List<IngredientInfoDto> getAllExistingIngredients(@RequestParam Map<String, String> filterParam) {
+    return ingredientService.findAllExistingIngredients(filterParam);
   }
 
   // item 수정
