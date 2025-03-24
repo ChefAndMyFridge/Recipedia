@@ -5,14 +5,14 @@ import random
 from collections import Counter
 import json
 
-class RecipeScraper:
+class RecipeCrawler:
     """
     만개의레시피 사이트에서 특정 요리 이름에 대한 레시피를 검색하고,
     레시피 상세 페이지에서 재료를 추출해 통계 정보를 만드는 클래스.
     """
     def __init__(self, input_file="recipes.txt", max_recipes_per_search=40):
         """
-        RecipeScraper 클래스 초기화.
+        RecipeCrawler 클래스 초기화.
 
         Args:
             input_file (str): 요리 목록이 담긴 파일 경로.
@@ -245,5 +245,5 @@ class RecipeScraper:
 
 # 아래는 직접 실행 시 사용 예시 (다른 모듈에서 import해서 사용할 수 있음)
 if __name__ == "__main__":
-    scraper = RecipeScraper("recipes.txt", max_recipes_per_search=40)
+    scraper = RecipeCrawler("recipes.txt", max_recipes_per_search=40)
     asyncio.run(scraper.scrape())
