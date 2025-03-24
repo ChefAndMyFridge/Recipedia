@@ -38,6 +38,7 @@ class Settings(BaseSettings):
 
     # YouTube 설정
     YOUTUBE_MAX_RESULTS: int = 5
+    YOUTUBE_DESCRIPTION_LEN_TH: int = 200
 
     # 생성할 음식 이름 개수
     NUM_DISHES_TO_GENERATE: int = 3
@@ -50,6 +51,7 @@ class Settings(BaseSettings):
 
     # 로그 메시지 관련 설정
     LOG_SUMMARY_PREFIX: str = "SUMMARY"
+    LOG_QUERY_MAKER_PREFIX: str = "QUERY_MAKER"
 
     class Config:
         env_file = ".env"
