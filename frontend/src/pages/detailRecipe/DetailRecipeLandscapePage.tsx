@@ -31,11 +31,11 @@ const DetailRecipeLandscapePage = () => {
       <section className={`w-full h-full flex flex-col justify-start items-center gap-2 p-3`}>
         <Header title="레시피" isIcon />
         <div className="h-full pb-10 flex gap-8">
-          <div className="w-[60%] h-full flex flex-col justify-between">
+          <div className="w-[60%] h-full flex flex-col justify-between gap-2">
             <ReactPlayer
               url={video.url}
               width="100%"
-              height="50%"
+              height="80%"
               playing={true}
               muted={true}
               controls={true}
