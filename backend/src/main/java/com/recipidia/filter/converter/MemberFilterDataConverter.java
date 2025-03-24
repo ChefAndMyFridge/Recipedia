@@ -1,11 +1,11 @@
 package com.recipidia.filter.converter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recipidia.filter.dto.MemberFilterData;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -38,7 +38,7 @@ public class MemberFilterDataConverter implements AttributeConverter<MemberFilte
           .build();
     }
     try {
-      return objectMapper.readValue(dbData, new TypeReference<MemberFilterData>() {});
+      return objectMapper.readValue(dbData, MemberFilterData.class);
     } catch (IOException e) {
       throw new IllegalArgumentException("Error converting JSON to MemberFilterData", e);
     }

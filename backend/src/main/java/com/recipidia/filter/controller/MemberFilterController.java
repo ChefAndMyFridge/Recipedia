@@ -2,6 +2,7 @@ package com.recipidia.filter.controller;
 
 import com.recipidia.filter.dto.MemberFilterDto;
 import com.recipidia.filter.dto.MemberFilterData;
+import com.recipidia.filter.request.MemberFilterUpdateReq;
 import com.recipidia.filter.service.MemberFilterService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -30,7 +31,6 @@ public class MemberFilterController {
                   schema = @Schema(implementation = MemberFilterDto.class),
                   examples = @ExampleObject(value = """
                     {
-                      "id": 1,
                       "memberId": 10,
                       "filterData": {
                         "preferredGenres": ["로맨스", "코미디"],
@@ -81,7 +81,6 @@ public class MemberFilterController {
                   schema = @Schema(implementation = MemberFilterDto.class),
                   examples = @ExampleObject(value = """
                     {
-                      "id": 1,
                       "memberId": 10,
                       "filterData": {
                         "preferredGenres": ["로맨스", "코미디"],
@@ -100,7 +99,25 @@ public class MemberFilterController {
   )
   @PutMapping("/{memberId}")
   public ResponseEntity<MemberFilterDto> updateMemberFilter(@PathVariable Long memberId,
-                                                            @RequestBody MemberFilterData filterData) {
+                                                            @RequestBody MemberFilterUpdateReq request) {
+    /** 제대로 요청 본문이 인식 되도록 수정할 필요가 있습니다.
+     *  아무리 고쳐봐도 계속 request가 null 값이 뜨는데, 이 부분에선 아직 딱히 Json 컨버터가 적용되지도 않는데
+     *  왜 아무것도 받고 있지 않다고 뜨는 지 이해할 수 가 없습니다.
+     *  일단 수정해야하지만 냅두고 다른 우선순위가 높은 작업부터 진행한 뒤
+     *  나중에 다시 돌아와서 작업하겠습니다.
+      */
+    System.out.println(request);
+    System.out.println(request.getPreferredGenres());
+    // 요청 DTO를 MemberFilterData로 변환
+    MemberFilterData filterData = MemberFilterData.builder()
+        .preferredGenres(request.getPreferredGenres())
+        .dislikedGenres(request.getDislikedGenres())
+        .preferredDietaries(request.getPreferredDietaries())
+        .dislikedDietaries(request.getDislikedDietaries())
+        .preferredIngredients(request.getPreferredIngredients())
+        .dislikedIngredients(request.getDislikedIngredients())
+        .build();
+    System.out.println(filterData);
     MemberFilterDto dto = memberFilterService.updateMemberFilter(memberId, filterData);
     return ResponseEntity.ok(dto);
   }
