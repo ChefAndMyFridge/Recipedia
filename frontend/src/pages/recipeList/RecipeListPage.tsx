@@ -5,15 +5,15 @@ import SelectedIngredients from "@pages/recipeList/components/RecipeListSelected
 import Header from "@components/Layout/Header";
 import ErrorPage from "@components/common/error/ErrorPage";
 import LoadingPlayer from "@components/common/loading/LoadingPlayer";
-import useIngredientsStore from "@stores/ingredientsStore";
 import { usePostRecipeList } from "@hooks/useRecipeHooks";
+import useRecipeStore from "@stores/recipeStore";
 
 const RecipeListPage = () => {
   const { recommendType } = useParams();
   const HeaderTitle = recommendType === "AI" ? "AI 레시피" : "레시피";
 
-  const { selectedIngredients } = useIngredientsStore();
-  const selectedIngredientsNames = Object.values(selectedIngredients).map((ingredient) => ingredient.name);
+  const { recipeSelectedIngredients } = useRecipeStore();
+  const selectedIngredientsNames = recipeSelectedIngredients.map((ingredient) => ingredient.name);
 
   //선택된 재료 기반 레시피 조회 Hook 호출
   const { isLoading, isError } = usePostRecipeList(selectedIngredientsNames);
