@@ -31,7 +31,7 @@ const HomeIngredient = ({ ingredient }: HomeIngredientProps) => {
     setCount(selectedIngredients[ingredient.ingredientInfoId]?.selectedCount || 0);
   }, [selectedIngredients]);
 
-  function handleIncrease() {
+  function handleIncrease(): void {
     if (count < ingredient.totalCount) {
       setCount(count + 1);
       setSelectedCount(ingredient.ingredientInfoId, {
@@ -43,7 +43,7 @@ const HomeIngredient = ({ ingredient }: HomeIngredientProps) => {
     }
   }
 
-  function handleDecrease() {
+  function handleDecrease(): void {
     if (count > 0) {
       setCount(count - 1);
       setSelectedCount(ingredient.ingredientInfoId, {
@@ -55,10 +55,25 @@ const HomeIngredient = ({ ingredient }: HomeIngredientProps) => {
     }
   }
 
-  function triggerShake() {
+  function triggerShake(): void {
     setIsShaking(true);
     setTimeout(() => setIsShaking(false), 300);
   }
+
+  function calculateDaysRemaining(): number {
+    if (!ingredient.ingredients) return 1000;
+
+    const today = new Date();
+    const expirationDate = new Date(ingredient.ingredients[0].expirationDate);
+
+    const diffTime = expirationDate.getTime() - today.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+    return diffDays;
+  }
+
+  const daysRemaining = calculateDaysRemaining();
+  console.log(ingredient.name, daysRemaining);
 
   return (
     <div className="flex flex-col w-full h-fit p-1 justify-center items-center ">
@@ -67,11 +82,14 @@ const HomeIngredient = ({ ingredient }: HomeIngredientProps) => {
         className={`relative w-full aspect-[1/1] rounded-3xl cursor-pointer bg-subContent ${isShaking ? "shake" : ""}`}
         onClick={() => openModal(<DetailIngredientModal ingredient={ingredient} />)}
       >
+        {/* 재료 이미지 */}
         <img
           src={ingredient.imageUrl ? ingredient.imageUrl : noImg}
           alt="no image"
           className="w-full h-full object-cover rounded-3xl"
         />
+
+        {/* 재료 이름 출력 */}
         <span className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/50 to-transparent rounded-b-3xl" />
         <p
           className="absolute bottom-0.5 w-full font-preMedium text-xs text-center text-white"
@@ -81,6 +99,11 @@ const HomeIngredient = ({ ingredient }: HomeIngredientProps) => {
         >
           {ingredient.name}
         </p>
+
+        {/* 만료일 임박 / 초과 표시 */}
+        {2 > daysRemaining && <span className="absolute top-0 left-0 w-[5px] aspect-[1/1] bg-error rounded-full" />}
+
+        {/* 선택된 개수 카운트 */}
         {count > 0 && (
           <span className="absolute flex justify-center items-center right-0 top-0 bg-orange-500 w-6 h-6 rounded-full cursor-pointer">
             <p className="font-preSemiBold text-white text-sm">{count}</p>
