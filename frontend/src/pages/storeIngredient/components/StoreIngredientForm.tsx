@@ -131,7 +131,7 @@ const StoreIngredientForm = () => {
             type="date"
             placeHolder="수량을 입력해주세요"
             value={expirationDate}
-            onChange={(event) => setIncomingDate(event.target.value)}
+            onChange={(event) => setExpirationDate(event.target.value)}
           />
           <Input
             name="expirationTime"
