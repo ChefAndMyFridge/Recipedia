@@ -6,7 +6,7 @@ import com.recipidia.recipe.response.RecipeExtractRes;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
-@Converter(autoApply = true)
+@Converter
 public class RecipeExtractResConverter implements AttributeConverter<RecipeExtractRes, String> {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
