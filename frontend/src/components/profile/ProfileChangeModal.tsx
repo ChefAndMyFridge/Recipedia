@@ -3,19 +3,22 @@ import ModalHeader from "@components/common/modal/ModalHeader";
 import useUserStore from "@stores/userStore";
 import useModalStore from "@stores/modalStore";
 
-import { USERS } from "@/data/USERS";
+import { useGetMemberList } from "@hooks/useUserHook";
+
+// import { USERS } from "@/data/USERS";
 import { User } from "@/types/userTypes";
+import ProfileGirl from "@assets/images/ProfileGirl.png";
 
 const ProfileChangeModal = () => {
   const { setCurrentProfileImg, setUserName, setUserId } = useUserStore();
   const { closeModal } = useModalStore();
 
   //목데이터, 추후 API 연동 필요
-  const profiles = USERS;
+  const { data: profiles } = useGetMemberList();
 
   const handleProfileChange = (profile: User) => {
     setUserId(profile.memberId);
-    setCurrentProfileImg(profile.profileImg);
+    setCurrentProfileImg(ProfileGirl);
     setUserName(profile.membername);
     closeModal();
   };
@@ -32,7 +35,7 @@ const ProfileChangeModal = () => {
                 className="flex flex-col items-center justify-center gap-4"
                 onClick={() => handleProfileChange(profile)}
               >
-                <img src={profile.profileImg} alt={profile.membername} className="w-32" />
+                <img src={ProfileGirl} alt={profile.membername} className="w-32" />
                 <p className="font-preSemiBold text-lg">{profile.membername}</p>
               </button>
             ))}
