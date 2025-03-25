@@ -7,3 +7,5 @@ from pydantic import BaseModel
 class Ingredients(BaseModel):
     ingredients: List[str] = None
     main_ingredients: List[str] = None
+    preferred_ingredients: List[str] = None
+    disliked_ingredients: List[str] = None
