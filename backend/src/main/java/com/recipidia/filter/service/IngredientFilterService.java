@@ -1,7 +1,13 @@
 package com.recipidia.filter.service;
 
 import java.util.List;
+import java.util.Set;
 
 public interface IngredientFilterService {
-  List<String> filterIngredientsByDietaries(List<String> dietaries);
+  FilteredIngredientResult filterIngredientsByDietaries(List<String> dietaries, List<String> mainIngredients);
+
+  record FilteredIngredientResult(
+      List<String> ingredients,
+      Set<String> preferredIngredients
+  ) {}
 }

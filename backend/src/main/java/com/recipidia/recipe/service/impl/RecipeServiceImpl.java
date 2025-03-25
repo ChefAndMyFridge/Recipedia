@@ -29,10 +29,7 @@ import reactor.core.scheduler.Schedulers;
 import reactor.util.function.Tuple2;
 import reactor.util.function.Tuples;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -64,63 +61,72 @@ public class RecipeServiceImpl implements RecipeService {
   @Override
   @Transactional
   public Mono<ResponseEntity<RecipeQueryRes>> handleRecipeQuery(RecipeQueryReq request) {
+
     // 1. 사용자 필터 정보 조회 단계 (MemberFilter 체크)
-    Long memberId = request.getMemberId();
-    Mono<MemberFilter> memberFilterMono = Mono.fromCallable(() -> memberFilterRepository.findByMemberId(memberId)
-            .orElseThrow(() -> new RuntimeException("Member filter not found for memberId: " + memberId)))
-        .subscribeOn(Schedulers.boundedElastic());
+    Mono<MemberFilter> memberFilterMono = fetchMemberFilter(request.getMemberId());
 
-    // 2. 전체 재료 목록 조회 단계 (DB 호출/필터링 추가)
-//    Mono<List<String>> fullIngredientsMono = Mono.fromCallable(ingredientService::getAllExistingIngredients)
-//        .subscribeOn(Schedulers.boundedElastic())
-//        .map(list -> list.stream()
-//            .map(IngredientInfoDto::getName)
-//            .collect(Collectors.toList())
-//        );
-    Mono<List<String>> filteredIngredientsMono = memberFilterMono.flatMap(memberFilter ->
-        Mono.fromCallable(() -> ingredientFilterService.filterIngredientsByDietaries(memberFilter.getFilterData().getDietaries()))
-            .subscribeOn(Schedulers.boundedElastic())
-    );
-
+    // 2. 식단 기반 재료 필터링 단계
+    Mono<IngredientFilterService.FilteredIngredientResult> filteredIngredientsMono = filterIngredientsByDietaries(memberFilterMono, request.getIngredients());
 
     // 3. FastAPI 호출 단계
-    Mono<RecipeQueryRes> fastApiResponseMono = Mono.zip(filteredIngredientsMono, memberFilterMono)
+    return callFastApi(filteredIngredientsMono, memberFilterMono, request);
+  }
+
+  // 멤버-필터 체크 함수
+  private Mono<MemberFilter> fetchMemberFilter(Long memberId) {
+    return Mono.fromCallable(() -> memberFilterRepository.findByMemberId(memberId)
+            .orElseThrow(() -> new RuntimeException("Member filter not found for memberId: " + memberId)))
+        .subscribeOn(Schedulers.boundedElastic());
+  }
+
+  // 멤버-필터의 식단 설정에 따라 냉장고의 식재료들을 필터링합니다.
+  private Mono<IngredientFilterService.FilteredIngredientResult> filterIngredientsByDietaries(Mono<MemberFilter> memberFilterMono, List<String> mainIngredients) {
+    return memberFilterMono.flatMap(memberFilter ->
+        Mono.fromCallable(() -> ingredientFilterService.filterIngredientsByDietaries(
+                memberFilter.getFilterData().getDietaries(),
+                mainIngredients
+            ))
+            .subscribeOn(Schedulers.boundedElastic())
+    );
+  }
+
+  // FastAPI를 호출해 레시피 검색 결과 응답을 받아옵니다.
+  private Mono<ResponseEntity<RecipeQueryRes>> callFastApi(
+      Mono<IngredientFilterService.FilteredIngredientResult> filteredIngredientsMono,
+      Mono<MemberFilter> memberFilterMono,
+      RecipeQueryReq request
+  ) {
+    return Mono.zip(filteredIngredientsMono, memberFilterMono)
         .flatMap(tuple -> {
-          List<String> fullIngredients = tuple.getT1();
+          IngredientFilterService.FilteredIngredientResult result = tuple.getT1();
           MemberFilter memberFilter = tuple.getT2();
 
+          Set<String> combinedPreferredIngredients = new HashSet<>(memberFilter.getFilterData().getPreferredIngredients());
+          combinedPreferredIngredients.addAll(result.preferredIngredients());
+
           Map<String, Object> payload = new HashMap<>();
-          payload.put("ingredients", fullIngredients);
+          payload.put("ingredients", result.ingredients());
           payload.put("main_ingredients", request.getIngredients());
-
-          // MemberFilter에서 선호/비선호 재료 추가
-          payload.put("preferred_ingredients", memberFilter.getFilterData().getPreferredIngredients());
+          payload.put("preferred_ingredients", List.copyOf(combinedPreferredIngredients));
           payload.put("disliked_ingredients", memberFilter.getFilterData().getDislikedIngredients());
-
-          // 카테고리와 식단 필터링 단순 스트링으로도 전달
-          payload.put("categories", memberFilter.getFilterData().getCategories());
           payload.put("dietaries", memberFilter.getFilterData().getDietaries());
+          payload.put("categories", memberFilter.getFilterData().getCategories());
 
-          System.out.println("🚩 Nutrient-based Filtered Payload: " + payload);
+          // 최종 요청 본문 확인
+          log.info("🚩 Final Enhanced Payload: {}", payload);
 
           return webClient.post()
               .uri("/api/f1/query/")
               .contentType(MediaType.APPLICATION_JSON)
               .bodyValue(payload)
-              // FastAPI 응답을 String으로 받아서 Converter를 통해 변환합니다.
               .retrieve()
               .bodyToMono(String.class)
               .map(queryResConverter::convertToEntityAttribute);
-        });
-
-    // 최종적으로 ResponseEntity로 매핑
-    return fastApiResponseMono
+        })
         .map(ResponseEntity::ok)
-        .onErrorResume(e ->
-            Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(null))
-        );
+        .onErrorResume(e -> Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null)));
   }
+
 
   @Override
   @Transactional
