@@ -9,7 +9,11 @@ import VideoInfos from "@components/common/videoInfo/VideoInfos";
 import Button from "@components/common/button/Button";
 
 import IconHeart from "@assets/icons/IconHeart";
-import IconHeartFill from "@/assets/icons/IconHeartFill";
+import IconHeartFill from "@assets/icons/IconHeartFill";
+
+import useUserStore from "@stores/userStore";
+
+import { patchRecipeApi } from "@apis/recipeApi";
 
 interface RecipeCardProps {
   video: Video;
@@ -17,12 +21,16 @@ interface RecipeCardProps {
 
 const RecipeCard = ({ video }: RecipeCardProps) => {
   const navigate = useNavigate();
+  const { userId } = useUserStore();
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const thumbnailUrl = getYoutubeThumbnailUrl(video.url);
 
   const handleLike = () => {
+    const newLiked = !isLiked;
+    setIsLiked(newLiked);
+
     //추후 API 연결 시, 좋아요 서버 데이터 반영
-    setIsLiked(!isLiked);
+    patchRecipeApi(userId, video.recipeId, 0, newLiked);
   };
 
   return (
