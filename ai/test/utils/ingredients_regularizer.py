@@ -113,7 +113,7 @@ class IngredientsRegularizer:
 
         # 먼저 수동 규칙 적용
         pre_normalized = self._apply_manual_rules(ingredient)
-        if pre_normalized != ingredient:
+        if (pre_normalized != ingredient):
             self.normalized_cache[ingredient] = pre_normalized
             return pre_normalized
 
@@ -266,14 +266,11 @@ class IngredientsRegularizer:
         Returns:
             정규화된 결과
         """
-        # 전체 재료 빈도 추출
-        aggregated_stats = {}
+        # 전체 재료 빈도 추출 - defaultdict 사용
+        aggregated_stats = defaultdict(int)
         for recipe_name, recipe_info in recipe_data.get('recipe_stats', {}).items():
             for ingre, count in recipe_info.get('ingredients', {}).items():
-                if ingre in aggregated_stats:
-                    aggregated_stats[ingre] += count
-                else:
-                    aggregated_stats[ingre] += count
+                aggregated_stats[ingre] += count  # KeyError 발생 방지를 위함함
         
         # 재료 목록 추출 및 정규화
         all_ingredients = list(aggregated_stats.keys())
@@ -293,7 +290,7 @@ class IngredientsRegularizer:
                 'reduction_rate': f"{(1 - len(normalized_stats)/len(aggregated_stats))*100:.1f}%"
             },
             'normalized_stats': dict(sorted(normalized_stats.items(), key=lambda x: x[1], reverse=True)),
-            'mapping': self.normalized_cache
+            'mapping': normalized_map
         }
 
 
