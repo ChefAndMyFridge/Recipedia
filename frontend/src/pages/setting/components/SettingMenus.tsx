@@ -1,10 +1,12 @@
 import { useNavigate } from "react-router-dom";
+
 import IconHistory from "@assets/icons/IconHistory";
-import IconPreference from "@assets/icons/IconPreference";
 import IconHeart from "@assets/icons/IconHeart";
+import IconUserRemove from "@assets/icons/IconUserRemove";
 
 const SettingMenus = () => {
   const navigate = useNavigate();
+
   const BANNER_CLASS = "flex flex-col items-start";
   const TITLE_CLASS = "text-lg font-preSemiBold";
   const DESCRIPTION_CLASS = "text-sm font-preRegular break-keep";
@@ -26,11 +28,11 @@ const SettingMenus = () => {
           <p className={DESCRIPTION_CLASS}>과거에 요리했던 레시피를 모아볼 수 있어요.</p>
         </div>
       </button>
-      <button className={BUTTON_CLASS} onClick={() => navigate("/setting/preference")}>
-        <IconPreference width={30} height={30} />
+      <button className={BUTTON_CLASS} onClick={() => navigate("/setting/history")}>
+        <IconUserRemove width={30} height={30} />
         <div className={BANNER_CLASS}>
-          <p className={TITLE_CLASS}>개인 선호</p>
-          <p className={DESCRIPTION_CLASS}>재료 선호도 등을 설정할 수 있어요.</p>
+          <p className={TITLE_CLASS}>유저 프로필 삭제</p>
+          <p className={DESCRIPTION_CLASS}>프로필 정보를 삭제할 수 있어요.</p>
         </div>
       </button>
     </div>
