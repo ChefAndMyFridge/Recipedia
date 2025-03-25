@@ -40,7 +40,7 @@ public class MemberFilterServiceImpl implements MemberFilterService {
         .orElseGet(() -> MemberFilter.builder()
             .member(member)
             .filterData(MemberFilterData.builder()  // 초기 기본값(빈 리스트) 할당
-                .genres(List.of())
+                .categories(List.of())
                 .dietaries(List.of())
                 .preferredIngredients(List.of())
                 .dislikedIngredients(List.of())

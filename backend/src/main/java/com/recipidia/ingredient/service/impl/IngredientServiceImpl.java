@@ -10,6 +10,7 @@ import com.recipidia.ingredient.exception.IngredientDeleteException;
 import com.recipidia.ingredient.repository.IngredientDocumentRepository;
 import com.recipidia.ingredient.repository.IngredientInfoRepository;
 import com.recipidia.ingredient.repository.IngredientRepository;
+import com.recipidia.ingredient.repository.querydsl.IngredientQueryRepository;
 import com.recipidia.ingredient.request.IngredientIncomingReq;
 import com.recipidia.ingredient.request.IngredientMultipleDeleteReq;
 import com.recipidia.ingredient.request.IngredientUpdateReq;
@@ -20,6 +21,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,12 +36,20 @@ public class IngredientServiceImpl implements IngredientService {
   private final IngredientRepository ingredientRepository;
   private final IngredientDocumentRepository ingredientDocumentRepository;
 
+  // queryDSL
+  private final IngredientQueryRepository ingredientQueryRepository;
+
   @Override
   public List<IngredientSimpleInfoDto> getAllIngredientInfo() {
     List<IngredientInfo> ingredientInfos = ingredientInfoRepository.findAll();
     return ingredientInfos.stream()
         .map(IngredientSimpleInfoDto::fromEntity)
         .toList();
+  }
+
+  @Override
+  public List<IngredientInfoDto> findAllExistingIngredients(Map<String, String> filterParam) {
+    return ingredientQueryRepository.findAllExistingIngredients(filterParam);
   }
 
   @Override
@@ -173,5 +183,14 @@ public class IngredientServiceImpl implements IngredientService {
       remainCounts.put(req.name(), result.get("remainCount"));
     }
     return remainCounts;
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public List<IngredientInfoWithNutrientDto> getAllExistingIngredientsWithNutrients() {
+    List<IngredientInfo> ingredientInfos = ingredientInfoRepository.findAllExistingWithIngredientsAndNutrients();
+    return ingredientInfos.stream()
+        .map(IngredientInfoWithNutrientDto::fromEntity)
+        .collect(Collectors.toList());
   }
 }
