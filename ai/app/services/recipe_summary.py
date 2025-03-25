@@ -96,10 +96,12 @@ class RecipeSummary:
         try:
             # 비디오 설명이 있다면, 이를 프롬프트에 추가
             video_info = Video.getInfo(video_id)
-            if 'description' in video_info and video_info['description'] and (len(video_info['description']) > settings.YOUTUBE_DESCRIPTION_LEN_TH):
-                user_input += SUMMARY_DESCRIPTION_INPUT
-                user_input.append(
-                    {"role": "user", "content": video_info['description']})
+            logger.info(
+                f"{settings.LOG_SUMMARY_PREFIX}_video_info\n {video_info}")
+            # if 'description' in video_info and video_info['description'] and (len(video_info['description']) > settings.YOUTUBE_DESCRIPTION_LEN_TH):
+            #     user_input += SUMMARY_DESCRIPTION_INPUT
+            #     user_input.append(
+            #         {"role": "user", "content": video_info['description']})
         except Exception as e:
             logger.error(
                 f"{settings.LOG_SUMMARY_PREFIX}_유튜브 영상 설명 추가 중 오류: {e}")
