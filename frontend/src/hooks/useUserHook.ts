@@ -4,6 +4,7 @@ import { getMemberListApi, addMemberApi, deleteMemberApi } from "@apis/userApi";
 
 import { User } from "@/types/userTypes";
 
+// 가족 구성원 목록 조회
 export const useGetMemberList = () => {
   const query = useQuery({
     queryKey: ["memberList"],
@@ -14,6 +15,7 @@ export const useGetMemberList = () => {
   return query;
 };
 
+// 가족 구성원 추가
 export const useAddMember = () => {
   const queryClient = useQueryClient();
 
@@ -31,6 +33,7 @@ export const useAddMember = () => {
   return mutation;
 };
 
+// 가족 구성원 삭제
 export const useDeleteMember = () => {
   const queryClient = useQueryClient();
 

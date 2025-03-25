@@ -47,12 +47,12 @@ const handlers = [
   }),
 
   //사용자 이름 수정
-  http.put(VITE_API_URL + "/v1/member/:id", () => {
-    return HttpResponse.json({
-      memberId: 9007199254740991,
-      membername: "이름 수정",
-    });
-  }),
+  // http.put(VITE_API_URL + "/v1/member/:id", () => {
+  //   return HttpResponse.json({
+  //     memberId: 9007199254740991,
+  //     membername: "이름 수정",
+  //   });
+  // }),
 ];
 
 export default handlers;

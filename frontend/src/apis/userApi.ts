@@ -24,7 +24,7 @@ export const addMemberApi = async (newMemberName: string): Promise<User> => {
   }
 };
 
-export const modifyNameApi = async (id: number, newMemberName: string) => {
+export const modifyNameApi = async (id: number, newMemberName: string): Promise<User> => {
   try {
     const response = await instance.put(`/v1/member/${id}`, {
       newMembername: newMemberName,
