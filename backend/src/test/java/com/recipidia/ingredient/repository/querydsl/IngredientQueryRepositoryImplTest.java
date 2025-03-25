@@ -34,7 +34,7 @@ class IngredientQueryRepositoryImplTest {
       Ingredient ingredient = Ingredient.builder()
           .ingredientInfo(info)
           .storagePlace(storagePlace)
-          .expirationDate(LocalDateTime.now().plusDays(7))
+          .expirationDate(LocalDateTime.now().plusDays(7-i))
           .incomingDate(LocalDateTime.now())
           .build();
       em.persist(ingredient);
