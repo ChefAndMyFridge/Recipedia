@@ -31,4 +31,6 @@ public interface IngredientService {
   IngredientInfoWithNutrientDto getIngredientInfoWithNutrients(Long id);
 
   Map<String, Integer> releaseMultipleItems(List<IngredientMultipleDeleteReq> requests);
+
+  List<IngredientInfoWithNutrientDto> getAllExistingIngredientsWithNutrients();
 }
