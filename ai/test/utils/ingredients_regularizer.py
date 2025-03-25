@@ -1,10 +1,9 @@
 import json
 import re
-import os
 from collections import defaultdict
 import openai
 import asyncio
-from typing import List, Dict, Any, Optional
+from typing import List, Dict
 from test.utils.regularizer_prompts import get_ingredient_prompt, get_batch_ingredient_prompt
 from app.core.config import settings
 

@@ -1,4 +1,4 @@
-from typing import List, Dict, Union, Optional
+from typing import List, Dict
 
 # 시스템 프롬프트
 INGREDIENT_SYSTEM_PROMPT = """당신은 요리 재료를 정규화하는 전문가입니다. 

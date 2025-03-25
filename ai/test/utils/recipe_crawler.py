@@ -3,7 +3,6 @@ import asyncio
 from bs4 import BeautifulSoup
 import random
 from collections import Counter
-import json
 from typing import List
 
 class RecipeCrawler:
