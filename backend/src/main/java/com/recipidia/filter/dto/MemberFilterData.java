@@ -9,7 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class MemberFilterData {
-  private List<String> genres;
+  private List<String> categories;
   private List<String> dietaries;
   private List<String> preferredIngredients;
   private List<String> dislikedIngredients;

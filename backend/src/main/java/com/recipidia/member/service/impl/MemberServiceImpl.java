@@ -33,7 +33,7 @@ public class MemberServiceImpl implements MemberService {
 
     // 새로 생성된 멤버에 대해 기본 빈 필터 데이터를 가진 MemberFilter 생성
     MemberFilterData filterData = MemberFilterData.builder()
-        .genres(List.of())
+        .categories(List.of())
         .dietaries(List.of())
         .preferredIngredients(List.of())
         .dislikedIngredients(List.of())
