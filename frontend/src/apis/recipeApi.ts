@@ -22,3 +22,29 @@ export const getRecipeDetailApi = async (recipeId: number) => {
     throw new Error(error as string);
   }
 };
+
+//레시피 평가 및 즐겨찾기 API
+export const patchRecipeApi = async (memberId: number, recipeId: number, rating?: number, favorite?: boolean) => {
+  const reqBody =
+    rating && favorite
+      ? {
+          memberId: memberId,
+          rating: rating,
+          favorite: favorite,
+        }
+      : rating
+        ? {
+            memberId: memberId,
+            rating: rating,
+          }
+        : {
+            memberId: memberId,
+            favorite: favorite,
+          };
+  try {
+    const response = await instance.patch(`/v1/member/recipe/${recipeId}`, reqBody);
+    return response.data;
+  } catch (error: unknown) {
+    throw new Error(error as string);
+  }
+};
