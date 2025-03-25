@@ -5,7 +5,7 @@ import { useState } from "react";
 import useIngredientsStore from "@stores/ingredientsStore";
 import useModalStore from "@stores/modalStore";
 
-import Button from "@components/common/button/Button.tsx";
+import Button from "@components/common/button/Button";
 
 import TakeoutIngredientModal from "@pages/takeoutIngredient/TakeoutIngredientModal";
 

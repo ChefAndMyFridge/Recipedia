@@ -111,14 +111,16 @@ const HomeIngredient = ({ ingredient }: HomeIngredientProps) => {
       </div>
 
       {/* 재료 조작 관련 부분 */}
-      <div className="flex w-full h-8 justify-between items-center p-1">
+      <div className="flex w-full h-8 justify-between items-center p-0.5">
         <button
           onClick={count <= 0 ? triggerShake : handleDecrease}
           className="flex justify-center items-center w-3.5 aspect-[1/1] p-[2px] bg-[#cccccc] rounded-full"
         >
           <IconDecrease strokeColor="white" strokeWidth={6} />
         </button>
-        <span className="font-preMedium text-center text-sm">{ingredient.totalCount - count}</span>
+        <span className="font-preMedium text-center text-sm">
+          {ingredient.totalCount - count <= 99 ? ingredient.totalCount - count : "99+"}
+        </span>
         <button
           onClick={count >= ingredient.totalCount ? triggerShake : handleIncrease}
           className="flex justify-center items-center w-3.5 aspect-[1/1] p-[2px] bg-[#cccccc] rounded-full"

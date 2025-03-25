@@ -1,13 +1,18 @@
+import React, { useState } from "react";
+
 import { Ingredient } from "@/types/ingredientsTypes.ts";
+
+import DetailIngredientInfo from "@pages/detailIngredient/components/DetailIngredientInfo.tsx";
 
 interface IngredientItemProps {
   ingredient: Ingredient;
   imgSrc: string;
-  onOpen: (ingredient: Ingredient) => void;
-  onClose: () => void;
 }
 
-const DetailIngredientItem = ({ ingredient, imgSrc, onOpen, onClose }: IngredientItemProps) => {
+const DetailIngredientItem = ({ ingredient, imgSrc }: IngredientItemProps) => {
+  const [isClicked, setIsClicked] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+
   // 남은 만료일 계산
   function calculateDaysRemaining() {
     const today = new Date();
@@ -29,6 +34,22 @@ const DetailIngredientItem = ({ ingredient, imgSrc, onOpen, onClose }: Ingredien
     return remaining;
   }
 
+  function handleClick(event: React.MouseEvent<HTMLDivElement>) {
+    setIsClicked(true);
+    setPosition({ x: window.innerWidth / 2, y: event.clientY });
+
+    const timer = setTimeout(() => {
+      handleBlur();
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }
+
+  function handleBlur() {
+    setIsClicked(false);
+    setPosition({ x: 0, y: 0 });
+  }
+
   const daysRemaining = calculateDaysRemaining();
 
   return (
@@ -36,13 +57,14 @@ const DetailIngredientItem = ({ ingredient, imgSrc, onOpen, onClose }: Ingredien
       <div
         className="relative w-full p-1 aspect-[1/1] rounded-3xl"
         tabIndex={0}
-        onClick={() => onOpen(ingredient)}
-        onBlur={() => onClose()}
+        onClick={handleClick}
+        onBlur={handleBlur}
       >
         <img src={imgSrc} alt={imgSrc} className="w-full h-full object-cover rounded-3xl" />
         <span className="absolute right-0 top-0 bg-error text-white text-xs px-2 py-1 rounded-3xl">
           {daysRemaining}
         </span>
+        {isClicked && <DetailIngredientInfo ingredient={ingredient} position={position} />}
       </div>
     </div>
   );

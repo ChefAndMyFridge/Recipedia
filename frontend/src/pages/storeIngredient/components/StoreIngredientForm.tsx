@@ -6,9 +6,9 @@ import { StoreIngredient } from "@/types/ingredientsTypes";
 import { useStoreIngredient } from "@hooks/useIngredientsHooks";
 
 import IngredientInput from "@components/common/input/IngredientInput";
-import Input from "@components/common/input/Input.tsx";
+import Input from "@components/common/input/Input";
 import DateInput from "@components/common/input/DateInput";
-import Button from "@components/common/button/Button.tsx";
+import Button from "@components/common/button/Button";
 import Keypad from "@components/common/keypad/Keypad";
 
 import StoreConfirmModal from "@pages/storeIngredient/StoreConfirmModal";
