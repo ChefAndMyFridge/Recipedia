@@ -3,6 +3,7 @@ package com.recipidia.ingredient.dto;
 import com.recipidia.ingredient.entity.IngredientInfo;
 import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -21,6 +22,8 @@ public class IngredientInfoDto implements Serializable {
   private String name;
   private String imageUrl;
   private int totalCount;
+  private LocalDateTime earliestExpiration;
+  private LocalDateTime latestExpiration;
   private final List<IngredientDto> ingredients = new ArrayList<>();
 
   public IngredientInfoDto(Long id, String name, String imageUrl) {
@@ -30,6 +33,7 @@ public class IngredientInfoDto implements Serializable {
   }
 
   public static IngredientInfoDto fromEntity(IngredientInfo ingredientInfo) {
+    ingredientInfo.setEarliestExpiration();
     IngredientInfoDto ingredientInfoDto = new IngredientInfoDto(
         ingredientInfo.getId(),
         ingredientInfo.getName(),
@@ -39,6 +43,8 @@ public class IngredientInfoDto implements Serializable {
     ingredientInfoDto.totalCount = (int) ingredientInfo.getIngredients().stream()
         .filter(ingredient -> !ingredient.isReleased())
         .count();
+    ingredientInfoDto.earliestExpiration = ingredientInfo.getEarliestExpiration();
+    ingredientInfoDto.latestExpiration = ingredientInfo.getLatestExpiration();
     //ingredientInfoDto.totalCount = ingredientInfoDto.ingredients.size();
     return ingredientInfoDto;
   }
