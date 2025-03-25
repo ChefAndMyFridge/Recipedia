@@ -1,5 +1,7 @@
 package com.recipidia.recipe.service.impl;
 
+import com.recipidia.filter.entity.MemberFilter;
+import com.recipidia.filter.repository.MemberFilterRepository;
 import com.recipidia.ingredient.dto.IngredientInfoDto;
 import com.recipidia.ingredient.service.IngredientService;
 import com.recipidia.recipe.converter.RecipeQueryResConverter;
@@ -42,14 +44,17 @@ public class RecipeServiceImpl implements RecipeService {
   private final RecipeRepository recipeRepository;
   private final RecipeQueryResConverter queryResConverter = new RecipeQueryResConverter();
   private final MemberRecipeRepository memberRecipeRepository;
+  private final MemberFilterRepository memberFilterRepository;
 
   public RecipeServiceImpl(IngredientService ingredientService, WebClient webClient,
-                           RecipeRepository recipeRepository, MemberRecipeRepository memberRecipeRepository) {
+                           RecipeRepository recipeRepository, MemberRecipeRepository memberRecipeRepository,
+                           MemberFilterRepository memberFilterRepository) {
     this.ingredientService = ingredientService;
     // FastAPI 컨테이너의 서비스명을 사용
     this.webClient = webClient;
     this.recipeRepository = recipeRepository;
     this.memberRecipeRepository = memberRecipeRepository;
+    this.memberFilterRepository = memberFilterRepository;
   }
 
   @Override
@@ -63,21 +68,37 @@ public class RecipeServiceImpl implements RecipeService {
             .collect(Collectors.toList())
         );
 
-    // 2. FastAPI 호출 단계
-    Mono<RecipeQueryRes> fastApiResponseMono = fullIngredientsMono.flatMap(fullIngredients -> {
-      Map<String, Object> payload = new HashMap<>();
-      payload.put("ingredients", fullIngredients);
-      payload.put("main_ingredients", request.getIngredients());
+    // 2. 사용자 필터 정보 조회 단계 (MemberFilter 체크)
+    Long memberId = request.getMemberId();
+    Mono<MemberFilter> memberFilterMono = Mono.fromCallable(() -> memberFilterRepository.findByMemberId(memberId)
+            .orElseThrow(() -> new RuntimeException("Member filter not found for memberId: " + memberId)))
+        .subscribeOn(Schedulers.boundedElastic());
 
-      return webClient.post()
-          .uri("/api/f1/query/")
-          .contentType(MediaType.APPLICATION_JSON)
-          .bodyValue(payload)
-          // FastAPI 응답을 String으로 받아서 Converter를 통해 변환합니다.
-          .retrieve()
-          .bodyToMono(String.class)
-          .map(queryResConverter::convertToEntityAttribute);
-    });
+    // 3. FastAPI 호출 단계
+    Mono<RecipeQueryRes> fastApiResponseMono = Mono.zip(fullIngredientsMono, memberFilterMono)
+        .flatMap(tuple -> {
+          List<String> fullIngredients = tuple.getT1();
+          MemberFilter memberFilter = tuple.getT2();
+
+          Map<String, Object> payload = new HashMap<>();
+          payload.put("ingredients", fullIngredients);
+          payload.put("main_ingredients", request.getIngredients());
+
+          // MemberFilter에서 선호/비선호 재료 추가
+          payload.put("preferred_ingredients", memberFilter.getFilterData().getPreferredIngredients());
+          payload.put("disliked_ingredients", memberFilter.getFilterData().getDislikedIngredients());
+          System.out.println("THEHEHEHE");
+          System.out.println(payload);
+
+          return webClient.post()
+              .uri("/api/f1/query/")
+              .contentType(MediaType.APPLICATION_JSON)
+              .bodyValue(payload)
+              // FastAPI 응답을 String으로 받아서 Converter를 통해 변환합니다.
+              .retrieve()
+              .bodyToMono(String.class)
+              .map(queryResConverter::convertToEntityAttribute);
+        });
 
     // 최종적으로 ResponseEntity로 매핑
     return fastApiResponseMono
