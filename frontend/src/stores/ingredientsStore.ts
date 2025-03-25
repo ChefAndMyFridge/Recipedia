@@ -16,6 +16,7 @@ interface IngredientsState {
   setSelectedCount: (ingredientInfoId: number, ingredientInfo: SelectedIngredients) => void;
   setRemoveSelectedIngredients: (ingredientInfoId: number) => void;
   setClearSelectedIngredients: () => void;
+  setInitFilteredInfomations: (filterInfo: filteredInfomations) => void;
   setFilteredInfomations: (filterKey: keyof filteredInfomations, filterValue: string) => void;
   setClearFilteredInfomations: (filterKey: keyof filteredInfomations) => void;
 }
@@ -49,6 +50,9 @@ const useIngredientsStore = create<IngredientsState>((set) => ({
     });
   },
   setClearSelectedIngredients: () => set({ selectedIngredients: {} }),
+  setInitFilteredInfomations: (filterInfo: filteredInfomations) => {
+    set({ filteredInfomations: filterInfo });
+  },
   setFilteredInfomations: (filterKey, filterValue) => {
     set((state) => {
       const newSelected = { ...state.filteredInfomations };

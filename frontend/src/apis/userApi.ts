@@ -1,6 +1,7 @@
 import instance from "./instance";
 
 import { User } from "@/types/userTypes";
+import { filteredInfomations } from "@/types/ingredientsTypes";
 
 export const getMemberListApi = async (): Promise<User[]> => {
   try {
@@ -40,6 +41,18 @@ export const deleteMemberApi = async (id: number) => {
   try {
     const response = await instance.delete(`/v1/member/${id}`);
     console.log(`v1/member/${id} (delete)`, response.data);
+    return response.data;
+  } catch (error: unknown) {
+    throw new Error(error as string);
+  }
+};
+
+export const getMemberFilterApi = async (
+  id: number
+): Promise<{ memberId: number; filterData: filteredInfomations }> => {
+  try {
+    const response = await instance.get(`/v1/filter/${id}`);
+    console.log(`v1/member/${id}/filter`, response.data);
     return response.data;
   } catch (error: unknown) {
     throw new Error(error as string);

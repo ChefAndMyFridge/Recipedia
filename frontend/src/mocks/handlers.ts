@@ -74,6 +74,19 @@ const handlers = [
       message: "사용자가 성공적으로 삭제되었습니다.",
     });
   }),
+
+  // 필터 정보 조회
+  http.get(VITE_API_URL + "/v1/filter/:id", () => {
+    return HttpResponse.json({
+      memberId: 9007199254740991,
+      filterData: {
+        categories: ["한식", "중식", "일식", "양식"],
+        dietaries: ["고단백식", "고열량식", "저염식", "저당식", "저지방식", "저열량식", "비건식", "무가공식", "육식"],
+        preferredIngredients: ["사과", "대파"],
+        dislikedIngredients: ["양파", "고추"],
+      },
+    });
+  }),
 ];
 
 export default handlers;

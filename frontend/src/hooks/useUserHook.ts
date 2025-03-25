@@ -1,8 +1,12 @@
+import { useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { getMemberListApi, addMemberApi, deleteMemberApi } from "@apis/userApi";
-
 import { User } from "@/types/userTypes";
+
+import { getMemberListApi, addMemberApi, deleteMemberApi, getMemberFilterApi } from "@apis/userApi";
+
+import useUserStore from "@stores/userStore";
+import useIngredientsStore from "@stores/ingredientsStore";
 
 // 가족 구성원 목록 조회
 export const useGetMemberList = () => {
@@ -49,4 +53,31 @@ export const useDeleteMember = () => {
   });
 
   return mutation;
+};
+
+export const useGetFilteredInfomations = () => {
+  const { userId } = useUserStore();
+  const { filteredInfomations, setInitFilteredInfomations } = useIngredientsStore();
+
+  const queryClient = useQueryClient();
+
+  const query = useQuery({
+    queryKey: ["filteredInfomations", userId],
+    queryFn: () => getMemberFilterApi(userId),
+    staleTime: 1000 * 60 * 60 * 24,
+  });
+
+  // userId 또는 filteredInfomations가 변경될 때마다 refetch 실행
+  useEffect(() => {
+    queryClient.cancelQueries({ queryKey: ["filteredInfomations", userId] });
+    query.refetch();
+  }, [queryClient, query.refetch, userId, filteredInfomations]);
+
+  useEffect(() => {
+    if (query.data) {
+      setInitFilteredInfomations(query.data.filterData);
+    }
+  }, [query.data, setInitFilteredInfomations]);
+
+  return query;
 };

@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 
-import { useGetIngredientsList } from "@hooks/useIngredientsHooks";
 import useIngredientsStore from "@stores/ingredientsStore";
+import { useGetIngredientsList } from "@hooks/useIngredientsHooks";
+import { useGetFilteredInfomations } from "@hooks/useUserHook";
 
 import HomeExpandFilter from "@pages/home/components/HomeExpandFilter";
 
@@ -13,7 +14,7 @@ import IconFilter from "@assets/icons/IconFilter";
 import ArrowUp from "@assets/icons/ArrowUp";
 
 const HomeFilter = () => {
-  const { setIngredients, filteredInfomations } = useIngredientsStore();
+  const { filteredInfomations } = useIngredientsStore();
 
   const [order, setOrder] = useState<"asc" | "desc">("asc");
   const [sort, setSort] = useState<"name" | "expire">("name");
@@ -21,14 +22,9 @@ const HomeFilter = () => {
   const [isExpand, setIsExpand] = useState<boolean>(false);
   const [location, setLocation] = useState<"all" | "fridge" | "freezer">("all");
 
-  // 재료 목록을 가져오는 API 호출
-  const { data: ingredients } = useGetIngredientsList(location, sort, order);
-
-  useEffect(() => {
-    if (ingredients) {
-      setIngredients(ingredients);
-    }
-  }, [ingredients, setIngredients]);
+  // API 호출: 재료 목록 조회, 필터 정보 조회
+  useGetIngredientsList(location, sort, order);
+  useGetFilteredInfomations();
 
   function handleSaveFilter(): void {
     console.log(filteredInfomations);
