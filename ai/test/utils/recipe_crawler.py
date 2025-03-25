@@ -231,6 +231,17 @@ class RecipeCrawler:
         for ingre, count in sorted_stats:
             print(f"{ingre}: {count}개")
 
+        # 재료 정보를 정렬하여 저장
+        sorted_recipe_stats = {}
+        for recipe_name, stats in self.recipe_stats.items():
+            sorted_ingredients = dict(sorted(stats['ingredients'].items(), 
+                                            key=lambda x: x[1], 
+                                            reverse=True))
+            sorted_recipe_stats[recipe_name] = {
+                **{k: stats[k] for k in stats if k != 'ingredients'},
+                'ingredients': sorted_ingredients
+            }
+
         # JSON 저장
         with open('ingredients_stats.json', 'w', encoding='utf-8') as f:
             json.dump({
@@ -240,7 +251,7 @@ class RecipeCrawler:
                     'success_rate': f"{(self.total_recipe_count/self.total_requests)*100:.1f}%",
                     'unique_ingredients': len(self.aggregated_stats)
                 },
-                'recipe_stats': self.recipe_stats
+                'recipe_stats': sorted_recipe_stats
             }, f, ensure_ascii=False, indent=2)
 
 # 아래는 직접 실행 시 사용 예시 (다른 모듈에서 import해서 사용할 수 있음)
