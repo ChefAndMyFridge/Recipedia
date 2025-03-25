@@ -6,6 +6,7 @@ import com.recipidia.filter.service.IngredientFilterService;
 import com.recipidia.ingredient.dto.IngredientInfoDto;
 import com.recipidia.ingredient.service.IngredientService;
 import com.recipidia.recipe.converter.RecipeQueryResConverter;
+import com.recipidia.recipe.dto.RecipeDetailDto;
 import com.recipidia.recipe.dto.RecipeDto;
 import com.recipidia.recipe.dto.VideoInfo;
 import com.recipidia.recipe.entity.Recipe;
@@ -281,6 +282,20 @@ public class RecipeServiceImpl implements RecipeService {
           return Mono.fromCallable(() -> recipeRepository.save(recipe))
               .subscribeOn(Schedulers.boundedElastic())
               .then();
+        });
+  }
+
+  @Override
+  public Mono<RecipeDetailDto> getRecipeDetail(Long recipeId, RecipeExtractRes extractRes) {
+    return Mono.fromCallable(() -> recipeRepository.findByIdWithIngredients(recipeId))
+        .subscribeOn(Schedulers.boundedElastic())
+        .flatMap(optionalRecipe -> {
+          if (optionalRecipe.isEmpty()) {
+            return Mono.error(new NoRecipeException("Recipe not found"));
+          }
+          Recipe recipe = optionalRecipe.get();
+          RecipeDetailDto dto = RecipeDetailDto.fromEntities(recipe, extractRes);
+          return Mono.just(dto);
         });
   }
 
