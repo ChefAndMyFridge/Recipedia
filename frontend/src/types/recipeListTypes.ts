@@ -17,24 +17,27 @@ export interface RecipeList {
   videos: VideoList;
 }
 
+export interface recipeIngredientsInfo {
+  name: string;
+  quantity: string;
+}
+
+export interface recipeCookingSequenceInfo {
+  [step: string]: {
+    sequence: string[];
+    timestamp: number;
+  };
+}
+
 export interface RecipeInfo {
-  // recipeId: number; //추후 api 구조 변경 시 사용
   title: string;
   cooking_info: {
     cooking_time: string;
     kcal: number;
   };
-  ingredients: string[];
-  cooking_tools: string[];
+  ingredients: recipeIngredientsInfo[];
   cooking_tips: string[];
-  cooking_sequence: {
-    [step: string]: string[];
-  };
+  cooking_sequence: recipeCookingSequenceInfo;
 }
 
-//레시피 텍스트 타입
-export interface RecipeText {
-  [key: string]: string[];
-}
-
-export type RecipeInfoKeys = "ingredients" | "cooking_tools" | "cooking_tips";
+export type RecipeInfoKeys = "ingredients" | "cooking_tips";

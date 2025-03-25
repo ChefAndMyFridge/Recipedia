@@ -35,6 +35,7 @@ export const useGetRecipeDetail = (recipeId: number) => {
     queryKey: ["recipeDetail", recipeId],
     queryFn: () => getRecipeDetailApi(recipeId),
     staleTime: 1000 * 60 * 60 * 24,
+    retry: false,
   });
 
   // useEffect로 data 변화 관찰

@@ -21,12 +21,12 @@ const useRecipeStore = create<RecipeStore>((set) => ({
       cooking_time: "",
       kcal: 0,
     },
-    ingredients: [],
-    cooking_tools: [],
+    ingredients: [{ name: "", quantity: "" }],
     cooking_tips: [],
     cooking_sequence: {},
   },
   recipeSelectedIngredients: [],
+
   setRecipeList: (recipeList: RecipeList) => set({ recipeList }),
   setDetailRecipe: (detailRecipe: RecipeInfo) => set({ detailRecipe }),
   setRecipeSelectedIngredients: (recipeSelectedIngredients: SelectedIngredients[]) =>

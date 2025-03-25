@@ -1,31 +1,22 @@
-import ProfileDad from "@assets/images/ProfileDad.png";
-import ProfileMom from "@assets/images/ProfileMom.png";
-import ProfileBoy from "@assets/images/ProfileBoy.png";
-import ProfileGirl from "@assets/images/ProfileGirl.png";
 import ModalHeader from "@components/common/modal/ModalHeader";
+
 import useUserStore from "@stores/userStore";
 import useModalStore from "@stores/modalStore";
 
-interface ProfileInterface {
-  image: string;
-  alt: string;
-  label: string;
-}
+import { USERS } from "@/data/USERS";
+import { User } from "@/types/userTypes";
 
 const ProfileChangeModal = () => {
-  const { setCurrentProfileImg, setUserName } = useUserStore();
+  const { setCurrentProfileImg, setUserName, setUserId } = useUserStore();
   const { closeModal } = useModalStore();
 
-  const profiles = [
-    { image: ProfileDad, alt: "dad", label: "아빠" },
-    { image: ProfileMom, alt: "mom", label: "엄마" },
-    { image: ProfileBoy, alt: "boy", label: "아들" },
-    { image: ProfileGirl, alt: "girl", label: "딸" },
-  ];
+  //목데이터, 추후 API 연동 필요
+  const profiles = USERS;
 
-  const handleProfileChange = (profile: ProfileInterface) => {
-    setCurrentProfileImg(profile.image);
-    setUserName(profile.label);
+  const handleProfileChange = (profile: User) => {
+    setUserId(profile.memberId);
+    setCurrentProfileImg(profile.profileImg);
+    setUserName(profile.membername);
     closeModal();
   };
 
@@ -37,12 +28,12 @@ const ProfileChangeModal = () => {
           {profiles &&
             profiles.map((profile) => (
               <button
-                key={profile.alt}
+                key={profile.memberId}
                 className="flex flex-col items-center justify-center gap-4"
                 onClick={() => handleProfileChange(profile)}
               >
-                <img src={profile.image} alt={profile.alt} className="w-32" />
-                <p className="font-preSemiBold text-lg">{profile.label}</p>
+                <img src={profile.profileImg} alt={profile.membername} className="w-32" />
+                <p className="font-preSemiBold text-lg">{profile.membername}</p>
               </button>
             ))}
         </div>

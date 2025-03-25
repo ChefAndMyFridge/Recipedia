@@ -1,5 +1,5 @@
 import useModalStore from "@stores/modalStore";
-import ProfileChangeModal from "./ProfileChangeModal";
+import ProfileChangeModal from "@components/profile/ProfileChangeModal";
 import { useNavigate } from "react-router-dom";
 
 const ProfileModal = () => {

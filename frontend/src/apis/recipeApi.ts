@@ -18,6 +18,7 @@ export const getRecipeDetailApi = async (recipeId: number) => {
     const response = await instance.get(`/v1/recipe/${recipeId}`);
     return response.data;
   } catch (error: unknown) {
+    console.log("레시피 추출 에러", error);
     throw new Error(error as string);
   }
 };

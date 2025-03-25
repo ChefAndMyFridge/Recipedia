@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "@components/common/button/Button";
 import IconClipboard from "@assets/icons/IconClipboard";
 
-const NoRecipeList = ({ text }: { text: string }) => {
+const NoMyRecipeList = ({ text }: { text: string }) => {
   const navigate = useNavigate();
   return (
     <section className="w-full flex flex-col py-20 px-10 gap-20 items-center justify-around h-full bg-offWhite rounded-2xl">
@@ -26,4 +26,4 @@ const NoRecipeList = ({ text }: { text: string }) => {
   );
 };
 
-export default NoRecipeList;
+export default NoMyRecipeList;
