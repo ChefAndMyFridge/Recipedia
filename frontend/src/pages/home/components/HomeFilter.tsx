@@ -1,39 +1,48 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+
+import useUserStore from "@stores/userStore";
+import useIngredientsStore from "@stores/ingredientsStore";
 
 import { useGetIngredientsList } from "@hooks/useIngredientsHooks";
-import useIngredientsStore from "@stores/ingredientsStore";
+import { useGetFilteredInfomations, useSaveFilteredInfomations } from "@hooks/useUserHook";
 
 import HomeExpandFilter from "@pages/home/components/HomeExpandFilter";
 
 import Button from "@components/common/button/Button";
 
-import IconSort from "@/assets/icons/IconSort";
-import IconFilter from "@/assets/icons/IconFilter";
+import IconSortAsc from "@assets/icons/IconSortAsc";
+import IconSortDesc from "@assets/icons/IconSortDesc";
+import IconFilter from "@assets/icons/IconFilter";
 import ArrowUp from "@assets/icons/ArrowUp";
 
 const HomeFilter = () => {
-  const { setIngredients, filteredInfomations } = useIngredientsStore();
+  const { userId } = useUserStore();
+  const { filteredInfomations } = useIngredientsStore();
 
-  const [sort, setSort] = useState<"name" | "expirationDate">("name");
+  const { mutate: useSaveFilteredRequest } = useSaveFilteredInfomations();
+
+  const [order, setOrder] = useState<"asc" | "desc">("asc");
+  const [sort, setSort] = useState<"name" | "expire">("name");
 
   const [isExpand, setIsExpand] = useState<boolean>(false);
   const [location, setLocation] = useState<"all" | "fridge" | "freezer">("all");
 
-  // 재료 목록을 가져오는 API 호출
-  const { data: ingredients } = useGetIngredientsList(location, sort);
-
-  useEffect(() => {
-    if (ingredients) {
-      setIngredients(ingredients);
-    }
-  }, [ingredients, setIngredients]);
+  // API 호출: 재료 목록 조회, 필터 정보 조회
+  useGetIngredientsList(location, sort, order);
+  useGetFilteredInfomations();
 
   function handleSaveFilter(): void {
     console.log(filteredInfomations);
 
     // 필터 저장하는 API 호출
-
-    setIsExpand(false);
+    useSaveFilteredRequest(
+      { id: userId, filterData: filteredInfomations },
+      {
+        onSuccess: () => {
+          setIsExpand(false);
+        },
+      }
+    );
   }
 
   return (
@@ -62,12 +71,15 @@ const HomeFilter = () => {
         />
       </div>
       <div className="flex justify-end items-center gap-2 font-preMedium text-sm text-gray-500">
-        <div
-          className="flex justify-center items-center gap-1 cursor-pointer"
-          onClick={() => setSort(sort === "name" ? "expirationDate" : "name")}
-        >
-          <IconSort width={18} height={18} strokeColor="#0381fe" />
-          <p className="text-primary">{sort === "name" ? "이름순" : "만료일순"}</p>
+        <div className="flex justify-center items-center gap-1 cursor-pointer">
+          {order === "asc" ? (
+            <IconSortAsc width={20} height={20} strokeColor="#0381fe" onClick={() => setOrder("desc")} />
+          ) : (
+            <IconSortDesc width={20} height={20} strokeColor="#0381fe" onClick={() => setOrder("asc")} />
+          )}
+          <div className="text-primary" onClick={() => setSort(sort === "name" ? "expire" : "name")}>
+            {sort === "name" ? "이름순" : "만료일순"}
+          </div>
         </div>
         <div className="border-r border-[#dddddd] h-5 mx-1" />
 

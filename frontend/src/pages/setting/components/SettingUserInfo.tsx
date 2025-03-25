@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
+
 import useUserStore from "@stores/userStore";
+import { useGetMemberList } from "@hooks/useUserHook";
 
 import { modifyNameApi } from "@apis/userApi";
 
@@ -8,6 +10,7 @@ import IconCheck from "@assets/icons/IconCheck";
 
 const SettingUserInfo = () => {
   const { currentProfileImg, userId, username, setUserName } = useUserStore();
+  const { refetch: refetchMemberList } = useGetMemberList();
 
   const [isEdit, setIsEdit] = useState(false);
   const [editUsername, setEditUsername] = useState(username);
@@ -23,6 +26,7 @@ const SettingUserInfo = () => {
       const response = await modifyNameApi(userId, editUsername);
       setUserName(response.membername);
       setOriginalUsername(response.membername);
+      refetchMemberList();
 
       alert("성공적으로 수정했습니다.");
     } catch {

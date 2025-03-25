@@ -20,13 +20,13 @@ import {
 import useIngredientsStore from "@stores/ingredientsStore";
 
 // 고내에 저장된 재료 목록 조회
-export const useGetIngredientsList = (location: string, sort: string) => {
+export const useGetIngredientsList = (location: string, sort: string, order: string) => {
   const { setIngredients } = useIngredientsStore();
   const queryClient = useQueryClient();
 
   const query = useQuery<Ingredients[]>({
     queryKey: ["ingredients"],
-    queryFn: () => getIngredientsApi(location, sort),
+    queryFn: () => getIngredientsApi(location, sort, order),
     staleTime: 1000 * 60 * 60 * 8, // 8시간
     throwOnError: true,
   });
@@ -35,7 +35,7 @@ export const useGetIngredientsList = (location: string, sort: string) => {
   useEffect(() => {
     queryClient.cancelQueries({ queryKey: ["ingredients"] }); // 이전 요청 취소
     query.refetch();
-  }, [queryClient, query.refetch, location, sort]);
+  }, [queryClient, query.refetch, location, sort, order]);
 
   useEffect(() => {
     if (query.data) {
