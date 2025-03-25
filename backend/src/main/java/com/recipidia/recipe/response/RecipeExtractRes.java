@@ -15,7 +15,6 @@ public class RecipeExtractRes {
   private String title;
   private CookingInfo cooking_info;
   private List<IngredientQueryRes> ingredients;
-  // private List<String> cooking_tools;
   private List<String> cooking_tips;
   private Map<String, CookingStep> cooking_sequence;
 }

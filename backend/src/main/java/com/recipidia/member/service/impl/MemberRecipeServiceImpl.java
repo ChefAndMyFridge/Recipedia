@@ -2,6 +2,7 @@ package com.recipidia.member.service.impl;
 
 
 import com.recipidia.member.dto.MemberRecipeDto;
+import com.recipidia.member.dto.RecipeWithMemberInfoDto;
 import com.recipidia.member.entity.Member;
 import com.recipidia.member.entity.MemberRecipe;
 import com.recipidia.member.exception.MemberNotFoundException;
@@ -70,20 +71,26 @@ public class MemberRecipeServiceImpl implements MemberRecipeService {
 
   @Override
   @Transactional(readOnly = true)
-  public List<MemberRecipeDto> getMemberFavorites(Long memberId) {
+  public List<RecipeWithMemberInfoDto> getMemberFavorites(Long memberId) {
     Member member = memberRepository.findById(memberId)
         .orElseThrow(() -> new MemberNotFoundException(memberId));
+
     return memberRecipeRepository.findAllByMemberAndFavoriteTrue(member)
-        .stream().map(MemberRecipeDto::fromEntity).toList();
+        .stream()
+        .map(mr -> RecipeWithMemberInfoDto.fromEntities(mr.getRecipe(), mr))
+        .collect(Collectors.toList());
   }
 
   @Override
   @Transactional(readOnly = true)
-  public List<MemberRecipeDto> getMemberRatedRecipes(Long memberId) {
+  public List<RecipeWithMemberInfoDto> getMemberRatedRecipes(Long memberId) {
     Member member = memberRepository.findById(memberId)
         .orElseThrow(() -> new MemberNotFoundException(memberId));
+
     return memberRecipeRepository.findAllByMemberAndRatingIsNotNull(member)
-        .stream().map(MemberRecipeDto::fromEntity).toList();
+        .stream()
+        .map(mr -> RecipeWithMemberInfoDto.fromEntities(mr.getRecipe(), mr))
+        .collect(Collectors.toList());
   }
 
 }
