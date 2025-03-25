@@ -1,8 +1,8 @@
 package com.recipidia.filter.controller;
 
-import com.recipidia.filter.dto.MemberFilterDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recipidia.filter.dto.MemberFilterData;
-import com.recipidia.filter.request.MemberFilterUpdateReq;
+import com.recipidia.filter.dto.MemberFilterDto;
 import com.recipidia.filter.service.MemberFilterService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -10,15 +10,21 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/filter")
 @RequiredArgsConstructor
 public class MemberFilterController {
 
+  private final ObjectMapper objectMapper;
   private final MemberFilterService memberFilterService;
 
   @Operation(
@@ -33,10 +39,8 @@ public class MemberFilterController {
                     {
                       "memberId": 10,
                       "filterData": {
-                        "preferredGenres": ["로맨스", "코미디"],
-                        "dislikedGenres": ["공포"],
-                        "preferredDietaries": ["채식"],
-                        "dislikedDietaries": ["고단백"],
+                        "genres": ["한식", "일식"],
+                        "dietaries": ["채식"],
                         "preferredIngredients": ["토마토", "바질"],
                         "dislikedIngredients": ["마늘"]
                       }
@@ -64,10 +68,8 @@ public class MemberFilterController {
               schema = @Schema(implementation = MemberFilterData.class),
               examples = @ExampleObject(value = """
                 {
-                  "preferredGenres": ["로맨스", "코미디"],
-                  "dislikedGenres": ["공포"],
-                  "preferredDietaries": ["채식"],
-                  "dislikedDietaries": ["고단백"],
+                  "genres": ["한식", "일식"],
+                  "dietaries": ["채식"],
                   "preferredIngredients": ["토마토", "바질"],
                   "dislikedIngredients": ["마늘"]
                 }
@@ -83,10 +85,8 @@ public class MemberFilterController {
                     {
                       "memberId": 10,
                       "filterData": {
-                        "preferredGenres": ["로맨스", "코미디"],
-                        "dislikedGenres": ["공포"],
-                        "preferredDietaries": ["채식"],
-                        "dislikedDietaries": ["고단백"],
+                        "genres": ["한식", "일식"],
+                        "dietaries": ["채식"],
                         "preferredIngredients": ["토마토", "바질"],
                         "dislikedIngredients": ["마늘"]
                       }
@@ -99,25 +99,13 @@ public class MemberFilterController {
   )
   @PutMapping("/{memberId}")
   public ResponseEntity<MemberFilterDto> updateMemberFilter(@PathVariable Long memberId,
-                                                            @RequestBody MemberFilterUpdateReq request) {
-    /** 제대로 요청 본문이 인식 되도록 수정할 필요가 있습니다.
-     *  아무리 고쳐봐도 계속 request가 null 값이 뜨는데, 이 부분에선 아직 딱히 Json 컨버터가 적용되지도 않는데
-     *  왜 아무것도 받고 있지 않다고 뜨는 지 이해할 수 가 없습니다.
-     *  일단 수정해야하지만 냅두고 다른 우선순위가 높은 작업부터 진행한 뒤
-     *  나중에 다시 돌아와서 작업하겠습니다.
-      */
-    System.out.println(request);
-    System.out.println(request.getPreferredGenres());
-    // 요청 DTO를 MemberFilterData로 변환
-    MemberFilterData filterData = MemberFilterData.builder()
-        .preferredGenres(request.getPreferredGenres())
-        .dislikedGenres(request.getDislikedGenres())
-        .preferredDietaries(request.getPreferredDietaries())
-        .dislikedDietaries(request.getDislikedDietaries())
-        .preferredIngredients(request.getPreferredIngredients())
-        .dislikedIngredients(request.getDislikedIngredients())
-        .build();
-    System.out.println(filterData);
+                                                            HttpServletRequest request) throws IOException {
+
+    String json = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
+
+    // jackson과 섞어씀으로 인한 문제로 objectMapper로 직접 읽어주기
+    MemberFilterData filterData = objectMapper.readValue(json, MemberFilterData.class);
+
     MemberFilterDto dto = memberFilterService.updateMemberFilter(memberId, filterData);
     return ResponseEntity.ok(dto);
   }
