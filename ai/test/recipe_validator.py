@@ -169,7 +169,7 @@ class RecipeValidator:
         return normalized_map
     
     async def validate_ingredients(self) -> Dict[str, Dict[str, Any]]:
-        """각 음식에 대해 필수 재료 포함 여부 검증"""
+        """각 음식에 대해 필수 재료 포함 여부 검증 (백분율 기반)"""
         print("6단계: 재료 유효성 검증 중...")
         
         self.validation_results = {}
@@ -185,27 +185,51 @@ class RecipeValidator:
         for dish, essential_ingrs in self.essential_ingredients.items():
             essential_set = set(essential_ingrs.keys())
             
-            # 검증 1: 모든 필수 재료가 사용자 재료에 포함되는지
-            all_essential_included = essential_set.issubset(normalized_ingredients)
+            # 필수 재료 충족률 계산 (%)
+            total_essential = len(essential_set)
+            matched_essential = len(essential_set.intersection(normalized_ingredients))
+            essential_score = (matched_essential / total_essential * 100) if total_essential > 0 else 100
             
-            # 검증 2: 주재료가 필수 재료에 포함되는지
+            # 주재료 사용률 계산 (%)
+            if normalized_main_ingredients:
+                main_in_essential_count = len(normalized_main_ingredients.intersection(essential_set))
+                main_score = (main_in_essential_count / len(normalized_main_ingredients) * 100)
+            else:
+                main_score = 100  # 주재료가 없으면 100% 점수
+            
+            # 종합 점수 (가중치 적용 가능)
+            essential_weight = 0.7  # 필수재료 가중치
+            main_weight = 0.3      # 주재료 가중치
+            total_score = (essential_score * essential_weight) + (main_score * main_weight)
+            
+            # 기존 O/X 결과 (호환성 유지)
+            all_essential_included = essential_set.issubset(normalized_ingredients)
             main_in_essential = bool(normalized_main_ingredients & essential_set) if normalized_main_ingredients else True
             
             # 검증 결과 저장
             self.validation_results[dish] = {
+                # 기존 필드
                 'all_essential_included': all_essential_included,
                 'main_in_essential': main_in_essential,
                 'is_valid': all_essential_included and main_in_essential,
-                'missing_ingredients': list(essential_set - normalized_ingredients) if not all_essential_included else [],
+                'missing_ingredients': list(essential_set - normalized_ingredients),
                 'essential_ingredients': list(essential_ingrs.keys()),
                 'essential_count': {k: v for k, v in essential_ingrs.items()},
-                'normalized_user_ingredients': list(normalized_ingredients)
+                'normalized_user_ingredients': list(normalized_ingredients),
+                
+                # 새로운 점수 필드
+                'essential_score': round(essential_score, 1),
+                'main_score': round(main_score, 1),
+                'total_score': round(total_score, 1),
+                'matched_essential': matched_essential,
+                'total_essential': total_essential
             }
             
             # 결과 출력
             print(f"'{dish}' 검증 결과:")
-            print(f"  - 모든 필수 재료 포함: {'예' if all_essential_included else '아니오'}")
-            print(f"  - 주재료가 필수 재료에 포함됨: {'예' if main_in_essential else '아니오'}")
+            print(f"  - 필수 재료 충족률: {self.validation_results[dish]['essential_score']}% ({matched_essential}/{total_essential})")
+            print(f"  - 주재료 사용률: {self.validation_results[dish]['main_score']}%")
+            print(f"  - 종합 점수: {self.validation_results[dish]['total_score']}%")
             if not all_essential_included:
                 print(f"  - 부족한 재료: {', '.join(self.validation_results[dish]['missing_ingredients'])}")
         
