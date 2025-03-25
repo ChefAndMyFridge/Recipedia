@@ -117,6 +117,9 @@ class RecipeSummary:
             summary = await self.request_gpt.run(system_input, user_input)
 
             end = time.time()
+            if summary["title"] == "None":
+                return settings.SUMMARY_NOT_COOKCING_VIDEO
+
             if self.debug_mode:
                 time_dict = {"exec time cons": f"{end - start:.5f}"}
                 summary = summary | time_dict
@@ -137,7 +140,7 @@ if __name__ == "__main__":
     async def main():
         try:
             recipe_summary = RecipeSummary()
-            summary = await recipe_summary.summarize_recipe("qWbHSOplcvY")
+            summary = await recipe_summary.summarize_recipe("BBy9iBzZanw")
             print(summary)
         except HTTPException as e:
             raise e

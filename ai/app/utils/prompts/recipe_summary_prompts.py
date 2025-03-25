@@ -71,6 +71,10 @@ SUMMARY_SYSTEM_INPUT = [
         "role": "system",
         "content": "답변을 key : value 형태로 제공해줘"
     },
+    {
+        "role": "system",
+        "content": "만약 스크립트가 요리와 관련 없는 것이라면 None이라는 텍스트를 제공해줘."
+    }
 ]
 
 SUMMARY_DESCRIPTION_INPUT = [
