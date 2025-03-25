@@ -5,6 +5,7 @@ import { useGetRecipeDetail } from "@hooks/useRecipeHooks";
 import DetailRecipeLandscapePage from "@pages/detailRecipe/DetailRecipeLandscapePage";
 import DetailRecipePortraitPage from "@pages/detailRecipe/DetailRecipePortraitPage";
 import { ErrorBoundary } from "react-error-boundary";
+import Modal from "@/components/common/modal/Modal";
 
 const DetailRecipePage = () => {
   //detailRecipe 페이지 진입 시, 해당 레시피 정보 get api 호출 예정
@@ -27,6 +28,7 @@ const DetailRecipePage = () => {
         <div className="landscape:block portrait:hidden h-full">
           <DetailRecipeLandscapePage />
         </div>
+        <Modal />
       </ErrorBoundary>
     </>
   );
