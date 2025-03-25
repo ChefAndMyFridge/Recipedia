@@ -65,8 +65,12 @@ class RecipeValidator:
         print(f"생성된 음식 이름: {', '.join(self.generated_dishes)}")
         return self.generated_dishes
     
-    async def crawl_recipes(self, max_recipes_per_dish: int = 10) -> Dict[str, Any]:
+    async def crawl_recipes(self, max_recipes_per_dish: int = None) -> Dict[str, Any]:
         """각 음식에 대해 레시피 및 재료 정보 크롤링"""
+        
+        if max_recipes_per_dish is None:
+            max_recipes_per_dish = self.MAX_RECIPES_PER_DISH
+
         print("2단계: 레시피 및 재료 정보 크롤링 중...")
         
         self.recipe_data = {}
@@ -246,19 +250,7 @@ class RecipeValidator:
             return {'success': False, 'error': '음식 이름을 생성할 수 없습니다.'}
         
         # 2. 레시피 크롤링
-        async with aiohttp.ClientSession() as session:
-            for dish in self.generated_dishes:
-                print(f"'{dish}' 레시피 크롤링 중...")
-                crawler = RecipeCrawler(max_recipes_per_search=self.MAX_RECIPES_PER_DISH)
-                ingredients, recipe_count, ingredient_counter = await crawler.process_recipe(session, dish)
-                
-                if recipe_count > 0:
-                    self.recipe_data[dish] = {
-                        'ingredients': ingredients,
-                        'recipe_count': recipe_count,
-                        'ingredient_counter': dict(ingredient_counter)
-                    }
-                    print(f"  - {recipe_count}개 레시피 발견, {len(ingredient_counter)}개 고유 재료")
+        await self.crawl_recipes(max_recipes_per_dish=self.MAX_RECIPES_PER_DISH)
         
         if not self.recipe_data:
             return {'success': False, 'error': '레시피를 찾을 수 없습니다.'}
