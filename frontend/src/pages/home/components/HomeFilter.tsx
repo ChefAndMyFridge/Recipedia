@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
+import useUserStore from "@stores/userStore";
 import useIngredientsStore from "@stores/ingredientsStore";
+
 import { useGetIngredientsList } from "@hooks/useIngredientsHooks";
-import { useGetFilteredInfomations } from "@hooks/useUserHook";
+import { useGetFilteredInfomations, useSaveFilteredInfomations } from "@hooks/useUserHook";
 
 import HomeExpandFilter from "@pages/home/components/HomeExpandFilter";
 
@@ -14,7 +16,10 @@ import IconFilter from "@assets/icons/IconFilter";
 import ArrowUp from "@assets/icons/ArrowUp";
 
 const HomeFilter = () => {
+  const { userId } = useUserStore();
   const { filteredInfomations } = useIngredientsStore();
+
+  const { mutate: useSaveFilteredRequest } = useSaveFilteredInfomations();
 
   const [order, setOrder] = useState<"asc" | "desc">("asc");
   const [sort, setSort] = useState<"name" | "expire">("name");
@@ -30,8 +35,14 @@ const HomeFilter = () => {
     console.log(filteredInfomations);
 
     // 필터 저장하는 API 호출
-
-    setIsExpand(false);
+    useSaveFilteredRequest(
+      { id: userId, filterData: filteredInfomations },
+      {
+        onSuccess: () => {
+          setIsExpand(false);
+        },
+      }
+    );
   }
 
   return (

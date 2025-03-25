@@ -2,8 +2,15 @@ import { useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { User } from "@/types/userTypes";
+import { filteredInfomations } from "@/types/ingredientsTypes";
 
-import { getMemberListApi, addMemberApi, deleteMemberApi, getMemberFilterApi } from "@apis/userApi";
+import {
+  getMemberListApi,
+  addMemberApi,
+  deleteMemberApi,
+  getMemberFilterApi,
+  saveMemberFilterApi,
+} from "@apis/userApi";
 
 import useUserStore from "@stores/userStore";
 import useIngredientsStore from "@stores/ingredientsStore";
@@ -57,7 +64,7 @@ export const useDeleteMember = () => {
 
 export const useGetFilteredInfomations = () => {
   const { userId } = useUserStore();
-  const { filteredInfomations, setInitFilteredInfomations } = useIngredientsStore();
+  const { setInitFilteredInfomations } = useIngredientsStore();
 
   const queryClient = useQueryClient();
 
@@ -71,7 +78,7 @@ export const useGetFilteredInfomations = () => {
   useEffect(() => {
     queryClient.cancelQueries({ queryKey: ["filteredInfomations", userId] });
     query.refetch();
-  }, [queryClient, query.refetch, userId, filteredInfomations]);
+  }, [queryClient, query.refetch, userId]);
 
   useEffect(() => {
     if (query.data) {
@@ -80,4 +87,27 @@ export const useGetFilteredInfomations = () => {
   }, [query.data, setInitFilteredInfomations]);
 
   return query;
+};
+
+export const useSaveFilteredInfomations = () => {
+  const { userId } = useUserStore();
+
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation<
+    { memberId: number; filterData: filteredInfomations },
+    Error,
+    { id: number; filterData: filteredInfomations }
+  >({
+    mutationFn: saveMemberFilterApi,
+    onSuccess: () => {
+      console.log("필터 저장 성공");
+      queryClient.invalidateQueries({ queryKey: ["filteredInfomations", userId] }); // 🔥 캐시 무효화하여 refetch 실행
+    },
+    onError: (error) => {
+      console.log("필터 저장 실패", error);
+    },
+  });
+
+  return mutation;
 };

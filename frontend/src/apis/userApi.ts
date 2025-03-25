@@ -58,3 +58,19 @@ export const getMemberFilterApi = async (
     throw new Error(error as string);
   }
 };
+
+export const saveMemberFilterApi = async ({
+  id,
+  filterData,
+}: {
+  id: number;
+  filterData: filteredInfomations;
+}): Promise<{ memberId: number; filterData: filteredInfomations }> => {
+  try {
+    const response = await instance.put(`/v1/filter/${id}`, filterData);
+    console.log(`v1/member/${id}/filter`, response.data);
+    return response.data;
+  } catch (error: unknown) {
+    throw new Error(error as string);
+  }
+};
