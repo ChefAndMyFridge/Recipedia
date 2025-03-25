@@ -5,7 +5,7 @@ from collections import defaultdict
 import openai
 import asyncio
 from typing import List, Dict, Any, Optional
-from test.utils.regularizer_prompts import *
+from test.utils.regularizer_prompts import get_ingredient_prompt, get_batch_ingredient_prompt
 from app.core.config import settings
 
 # OpenAI API 키 설정
