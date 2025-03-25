@@ -66,19 +66,16 @@ export const useGetFilteredInfomations = () => {
   const { userId } = useUserStore();
   const { setInitFilteredInfomations } = useIngredientsStore();
 
-  const queryClient = useQueryClient();
-
   const query = useQuery({
     queryKey: ["filteredInfomations", userId],
     queryFn: () => getMemberFilterApi(userId),
     staleTime: 1000 * 60 * 60 * 24,
   });
 
-  // userId 또는 filteredInfomations가 변경될 때마다 refetch 실행
+  // userId가 변경될 때마다 refetch 실행
   useEffect(() => {
-    queryClient.cancelQueries({ queryKey: ["filteredInfomations", userId] });
     query.refetch();
-  }, [queryClient, query.refetch, userId]);
+  }, [query.refetch, userId]);
 
   useEffect(() => {
     if (query.data) {

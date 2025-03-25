@@ -8,8 +8,6 @@ import HomeSelectedIngredients from "@pages/home/components/HomeSelectedIngredie
 const HomeFooter = () => {
   const { selectedIngredients } = useIngredientsStore();
 
-  console.log(selectedIngredients);
-
   return (
     <div className="flex items-center justify-center w-full h-24 px-4">
       {selectedIngredients && Object.keys(selectedIngredients).length === 0 ? (
