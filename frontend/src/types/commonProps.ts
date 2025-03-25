@@ -26,6 +26,16 @@ export interface InputProps {
   labelTextSize?: string;
 }
 
+export interface DateInputProps {
+  label?: string;
+  name: string;
+  type: string;
+  value?: string;
+  min?: string;
+  max?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
 export interface ToggleProps {
   isToggle: boolean;
   onToggle: (isToggle: boolean) => void;
