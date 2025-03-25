@@ -24,6 +24,7 @@ services:
     environment:
       - TZ=Asia/Seoul
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}  # .env에서 가져옴
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
     build:
       context: ./backend   # server 폴더를 빌드 컨텍스트로 지정
       dockerfile: Dockerfile  # 서버용 Dockerfile 경로
@@ -37,6 +38,7 @@ services:
     environment:
       - TZ=Asia/Seoul
       - YOUTUBE_API_KEY=${YOUTUBE_API_KEY}
+      - YOUTUBE_API_KEYS=${YOUTUBE_API_KEYS}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - USDA_API_KEY=${USDA_API_KEY}
       - ALLOWED_ORIGINS=${ALLOWED_ORIGINS}

@@ -4,49 +4,36 @@ CHEF_SYSTEM_MESSAGE = """
 
 다음 규칙을 엄격히 준수하세요:
 1. 모든 주재료는 반드시 실제 요리에 포함되어야 합니다(요리 이름에 언급될 필요는 없음).
-2. 단순히 재료를 나열한 이름(예: "소고기 파무침")이 아닌, 실제로 널리 알려진 요리명만 추천하세요.
+2. 단순히 재료를 나열한 이름(예: "소고기 파무침", "메추리알 볶음")이나 재료와 조리법만 결합한 이름(예: "메추리알 볶음밥", "메추리알 찜")이 아닌, 실제로 널리 알려진 전통적 요리명만 추천하세요.
 3. 주재료가 여러 개일 경우, 해당 재료들이 전통적으로 함께 사용되는 요리만 추천하세요.
-4. 요리의 전통적 레시피를 존중하세요.
+4. 요리의 전통적 레시피를 존중하세요. 실제로 존재하지 않는 요리(예: "메추리알 스튜")는 추천하지 마세요.
 5. 한식, 중식, 일식, 양식 등 다양한 요리를 균형있게 추천해야 합니다. 한 국가의 요리만 추천하지 마세요.
-
-각 요리와 재료의 전통적 관계를 정확히 유지하세요. 예를 들어:
-- 불고기는 소고기가 필수 주재료입니다.
-- 감자탕은 돼지뼈가 필수 주재료입니다.
-- 닭볶음탕은 닭고기가 필수 주재료입니다.
-요리의 정확성을 확인하기 어렵거나, 주재료들이 함께 사용되는 알려진 요리가 없는 경우 해당 조합은 추천하지 마세요.
-최종 출력에서는 오직 음식 이름만을 불릿 리스트로 나열합니다.
-"""
-
-# 음식 생성 프롬프트 템플릿
-FOOD_GENERATOR_PROMPT = """
-냉장고 재료: [{ingredients}]
-주재료: [{main_ingredients}]
-제안할 음식 이름 개수: 최대 {num_dishes}개
-
-위 냉장고 재료를 활용하여, 다음 조건을 만족하는 요리 이름을 제안해주세요:
-
-1. 주재료 조건: {main_ingredients_instruction}
-2. 주재료가 여러 개인 경우, 모든 주재료가 해당 요리에 실제로 사용되어야 합니다.
-3. 추천하는 요리는 반드시 실존하고 대중적으로 알려진 요리명이어야 합니다.
-4. 요리 이름은 단순히 주재료를 나열한 형태(예: "소고기 파무침")가 아니어야 합니다.
-5. 모든 주재료가 요리 이름에 언급될 필요는 없지만, 실제 요리에는 포함되어야 합니다.
-6. 한식, 중식, 일식, 양식 등 다양한 국가의 요리를 균형있게 포함해야 합니다. 재료 조합이 가능하다면 한 국가/스타일의 요리만 추천하지 마세요.
+6. 비선호 재료가 있다면, 해당 재료가 중요한 역할을 하는 요리는 추천하지 마세요. 전통적인 요리에서 그 재료를 대체하거나 생략할 수 없는 경우 해당 요리는 추천 목록에서 제외하세요.
+7. 선호 재료는 참고만 하고, 그것에 지나치게 치우치지 마세요. 전체적인 요리 추천이 선호 재료만으로 구성되면 안됩니다.
+8. 비선호 재료가 포함된 요리는 반드시 제외하세요. 예를 들어, 고수를 비선호한다면 고수가 핵심인 쌀국수는 추천하지 마세요.
+9. 음식으로 사용하지 않는 재료(기린, 코끼리 등) 또는 비현실적인 주재료가 있으면 음식 추천 없이 다음과 같이 정확히 응답하세요: "NO_VALID_DISHES"
+10. 주재료가 전통적으로 요리의 주재료로 사용되지 않거나, 그 주재료로 만드는 전통적인 요리가 없는 경우에도 "NO_VALID_DISHES"로 응답하세요.
 
 잘못된 요리 추천의 예:
 - "소고기 파전" (X) → 전통적으로 함께 사용되는 주재료 조합이 아님
 - "소고기 파볶음" (X) → 단순히 재료를 나열한 이름
+- "메추리알 볶음" (X) → 단순히 재료를 조리법만 붙인 이름
+- "메추리알 볶음밥" (X) → 메추리알이 볶음밥의 전통적 주재료가 아님
+- "메추리알 찜" (X) → 단순히 재료와 조리법을 결합한 이름
 - "닭고기 감자탕" (X) → 감자탕은 돼지뼈가 주재료인 요리
 - "비프 스튜", "비프 스트로가노프", "비프 부르기뇽" (X) → 모두 서양식만 추천함
+- 비선호재료가 양파인데 "프렌치 어니언 스프" 추천 (X) → 양파가 대체 불가능한 핵심 재료임
+- "메추리알 스튜" (X) → 실제로 존재하지 않는 요리
 
 올바른 요리 추천의 예:
 - 주재료: [소고기] → 균형 있는 추천: "불고기"(한식), "비프 스튜"(양식), "소고기 볶음밥"(중식)
 - 주재료: [소고기, 파] → "불고기"(한식), "쟁반짜장"(중식), "타코"(멕시코)
-- 주재료: [닭고기] → "닭도리탕"(한식), "치킨 커틀릿"(양식), "탕수육"(중식), "치킨 카레"(일식)
+- 주재료: [닭고기] → "닭도리탕"(한식), "치킨 커틀릿"(양식), "치킨 카레"(일식)
+- 주재료: [메추리알] → "스카치 에그"(양식), "차완무시"(일식, 메추리알로 대체 가능)
+- 주재료: [기린] → "NO_VALID_DISHES" (식용으로 사용하지 않는 재료이므로 추천 불가)
+- 주재료: [메추리알] → "NO_VALID_DISHES" (메추리알만으로 만드는 전통적인 요리가 거의 없음)
 
-요리 추천시 반드시 주재료들이 함께 사용되는 실존하는 요리명만 추천하세요.
-실제로 존재하지 않거나 대중적이지 않은 조합은 추천하지 마세요.
-
-예시)
+요청 예시와 응답 형식:
 냉장고 재료: [닭고기, 감자, 당근, 양파, 간장]
 주재료: [닭고기, 감자]
 출력:
@@ -62,15 +49,52 @@ FOOD_GENERATOR_PROMPT = """
 - 소고기 칠리 (중식/멕시코)
 - 소고기 볶음밥 (중식)
 - 페퍼 스테이크 (양식)
+
+냉장고 재료: [돼지고기, 양배추, 당근, 양파, 마늘]
+주재료: [돼지고기]
+비선호재료: [당근]
+출력:
+- 제육볶음 (한식) - 당근 없이 조리 가능
+- 돈까스 (일식)
+- 탕수육 (중식) - 당근 제외 가능
+
+냉장고 재료: [기린고기, 양파, 마늘, 소금]
+주재료: [기린고기]
+출력:
+NO_VALID_DISHES
+
+최종 출력에서는 음식 이름을 불릿 리스트로 나열하고, 괄호 안에 해당 요리의 국가/스타일을 표시합니다.
+요리명이 불분명하거나 주재료 조합이 전통적이지 않은 경우는 추천하지 말고, 확실한 요리만 추천하세요.
+음식으로 사용되지 않는 재료나 비현실적인 주재료인 경우 "NO_VALID_DISHES"로만 응답하세요.
+"""
+
+# 음식 생성 프롬프트 템플릿 - 선호/비선호 재료 추가
+FOOD_GENERATOR_PROMPT = """
+냉장고 재료: [{ingredients}]
+주재료: [{main_ingredients}]
+{preferred_ingredients_section}
+{disliked_ingredients_section}
+제안할 음식 이름 개수: 최대 {num_dishes}개
+
+위 냉장고 재료를 활용하여, 다음 조건을 만족하는 요리 이름을 제안해주세요:
+
+1. 주재료 조건: {main_ingredients_instruction}
+2. {disliked_ingredients_instruction}
+3. {preferred_ingredients_instruction}
+4. 한식, 중식, 일식, 양식 등 다양한 국가/스타일의 요리를 균형있게 추천해주세요.
+5. 각 요리 이름 뒤에 괄호로 해당 요리의 국가/스타일을 표시해주세요.
+6. 음식 이름만 간결하게 불릿 포인트로 나열해주세요.
 """
 
 
-def get_chef_prompt(ingredients_list, main_ingredients=None, num_dishes=5):
+def get_chef_prompt(ingredients_list, main_ingredients=None, preferred_ingredients=None, disliked_ingredients=None, num_dishes=5):
     """요리사 AI에게 전달할 프롬프트를 생성합니다.
 
     Args:
         ingredients_list (list): 사용 가능한 모든 재료 목록
         main_ingredients (list, optional): 주재료 목록. 기본값은 None
+        preferred_ingredients (list, optional): 선호하는 재료 목록. 기본값은 None
+        disliked_ingredients (list, optional): 비선호하는 재료 목록. 기본값은 None
         num_dishes (int, optional): 생성할 요리 개수. 기본값은 5
 
     Returns:
@@ -83,6 +107,22 @@ def get_chef_prompt(ingredients_list, main_ingredients=None, num_dishes=5):
     else:
         main_ingredients_instruction = "반드시 주재료(" + ", ".join(
             main_ingredients) + ")를 핵심 재료로 하는 실존 요리만 추천해주세요. 주재료와 요리 간의 전통적 관계를 엄격히 지켜야 합니다."
+    
+    # 선호 재료 처리
+    if preferred_ingredients and len(preferred_ingredients) > 0:
+        preferred_ingredients_section = f"선호재료: [{', '.join(preferred_ingredients)}]"
+        preferred_ingredients_instruction = f"가능하다면 선호재료({', '.join(preferred_ingredients)})가 포함된 요리를 고려하되, 이에 지나치게 편중되지 않도록 균형 있게 추천해주세요."
+    else:
+        preferred_ingredients_section = ""
+        preferred_ingredients_instruction = "다양한 재료를 균형 있게 활용한 요리를 추천해주세요."
+    
+    # 비선호 재료 처리 - 비선호 재료는 중요하므로 항상 명확하게 지시
+    if disliked_ingredients and len(disliked_ingredients) > 0:
+        disliked_ingredients_section = f"비선호재료: [{', '.join(disliked_ingredients)}]"
+        disliked_ingredients_instruction = f"비선호재료({', '.join(disliked_ingredients)})가 요리의 핵심 재료인 경우는 절대 추천하지 마세요. 전통적인 요리에서 해당 재료를 생략하거나 대체하기 어려운 경우 그 요리는 제외해주세요."
+    else:
+        disliked_ingredients_section = ""
+        disliked_ingredients_instruction = "모든 냉장고 재료를 활용할 수 있는 요리를 추천해주세요."
 
     ingredients_str = ', '.join(ingredients_list)
     main_ingredients_str = ', '.join(main_ingredients)
@@ -90,6 +130,10 @@ def get_chef_prompt(ingredients_list, main_ingredients=None, num_dishes=5):
     return FOOD_GENERATOR_PROMPT.format(
         ingredients=ingredients_str,
         main_ingredients=main_ingredients_str,
+        preferred_ingredients_section=preferred_ingredients_section,
+        disliked_ingredients_section=disliked_ingredients_section,
         main_ingredients_instruction=main_ingredients_instruction,
+        preferred_ingredients_instruction=preferred_ingredients_instruction,
+        disliked_ingredients_instruction=disliked_ingredients_instruction,
         num_dishes=num_dishes
     )

@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -106,8 +107,14 @@ public class IngredientController {
       }
   )
   @GetMapping
-  public List<IngredientInfoDto> getAllExistingIngredients() {
-    return ingredientService.getAllExistingIngredients();
+  /**
+   * filterParam의 key
+   * storagePlace: 냉장고, 냉동고
+   * sort : 정렬 기준 (expire, name, count, incoming)
+   * order : 정렬 순서 (asc, desc)
+   */
+  public List<IngredientInfoDto> getAllExistingIngredients(@RequestParam Map<String, String> filterParam) {
+    return ingredientService.findAllExistingIngredients(filterParam);
   }
 
   // 다중 items 삭제

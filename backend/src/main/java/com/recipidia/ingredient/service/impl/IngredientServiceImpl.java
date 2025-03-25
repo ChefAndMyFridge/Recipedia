@@ -10,6 +10,7 @@ import com.recipidia.ingredient.exception.IngredientDeleteException;
 import com.recipidia.ingredient.repository.IngredientDocumentRepository;
 import com.recipidia.ingredient.repository.IngredientInfoRepository;
 import com.recipidia.ingredient.repository.IngredientRepository;
+import com.recipidia.ingredient.repository.querydsl.IngredientQueryRepository;
 import com.recipidia.ingredient.request.IngredientIncomingReq;
 import com.recipidia.ingredient.request.IngredientMultipleDeleteReq;
 import com.recipidia.ingredient.request.IngredientUpdateReq;
@@ -35,12 +36,20 @@ public class IngredientServiceImpl implements IngredientService {
   private final IngredientRepository ingredientRepository;
   private final IngredientDocumentRepository ingredientDocumentRepository;
 
+  // queryDSL
+  private final IngredientQueryRepository ingredientQueryRepository;
+
   @Override
   public List<IngredientSimpleInfoDto> getAllIngredientInfo() {
     List<IngredientInfo> ingredientInfos = ingredientInfoRepository.findAll();
     return ingredientInfos.stream()
         .map(IngredientSimpleInfoDto::fromEntity)
         .toList();
+  }
+
+  @Override
+  public List<IngredientInfoDto> findAllExistingIngredients(Map<String, String> filterParam) {
+    return ingredientQueryRepository.findAllExistingIngredients(filterParam);
   }
 
   @Override
