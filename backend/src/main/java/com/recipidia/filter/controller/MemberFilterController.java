@@ -39,7 +39,7 @@ public class MemberFilterController {
                     {
                       "memberId": 10,
                       "filterData": {
-                        "genres": ["한식", "일식"],
+                        "categories": ["한식", "일식"],
                         "dietaries": ["채식"],
                         "preferredIngredients": ["토마토", "바질"],
                         "dislikedIngredients": ["마늘"]
@@ -68,7 +68,7 @@ public class MemberFilterController {
               schema = @Schema(implementation = MemberFilterData.class),
               examples = @ExampleObject(value = """
                 {
-                  "genres": ["한식", "일식"],
+                  "categories": ["한식", "일식"],
                   "dietaries": ["채식"],
                   "preferredIngredients": ["토마토", "바질"],
                   "dislikedIngredients": ["마늘"]
@@ -85,7 +85,7 @@ public class MemberFilterController {
                     {
                       "memberId": 10,
                       "filterData": {
-                        "genres": ["한식", "일식"],
+                        "categories": ["한식", "일식"],
                         "dietaries": ["채식"],
                         "preferredIngredients": ["토마토", "바질"],
                         "dislikedIngredients": ["마늘"]

@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -173,5 +174,14 @@ public class IngredientServiceImpl implements IngredientService {
       remainCounts.put(req.name(), result.get("remainCount"));
     }
     return remainCounts;
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public List<IngredientInfoWithNutrientDto> getAllExistingIngredientsWithNutrients() {
+    List<IngredientInfo> ingredientInfos = ingredientInfoRepository.findAllExistingWithIngredientsAndNutrients();
+    return ingredientInfos.stream()
+        .map(IngredientInfoWithNutrientDto::fromEntity)
+        .collect(Collectors.toList());
   }
 }

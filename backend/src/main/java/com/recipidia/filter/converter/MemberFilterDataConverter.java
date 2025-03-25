@@ -29,7 +29,7 @@ public class MemberFilterDataConverter implements AttributeConverter<MemberFilte
   public MemberFilterData convertToEntityAttribute(String dbData) {
     if (dbData == null || dbData.isEmpty()) {
       return MemberFilterData.builder()
-          .genres(List.of())
+          .categories(List.of())
           .dietaries(List.of())
           .preferredIngredients(List.of())
           .dislikedIngredients(List.of())

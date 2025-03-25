@@ -25,10 +25,10 @@ public class NutrientUpdateScheduler {
 
     public NutrientUpdateScheduler(IngredientInfoRepository ingredientInfoRepository,
                                    IngredientNutrientRepository nutrientRepository,
-                                   WebClient.Builder webClientBuilder) {
+                                   WebClient webClient) {
         this.ingredientInfoRepository = ingredientInfoRepository;
         this.nutrientRepository = nutrientRepository;
-        this.webClient = webClientBuilder.baseUrl("http://my-fastapi:8000").build();
+        this.webClient = webClient;
     }
 
     // 매 정각(초 0, 분 0, 매시)에 실행
