@@ -1,5 +1,8 @@
 package com.recipidia.member.service.impl;
 
+import com.recipidia.filter.dto.MemberFilterData;
+import com.recipidia.filter.entity.MemberFilter;
+import com.recipidia.filter.repository.MemberFilterRepository;
 import com.recipidia.member.dto.MemberDto;
 import com.recipidia.member.entity.Member;
 import com.recipidia.member.repository.MemberRepository;
@@ -17,6 +20,7 @@ import java.util.stream.Collectors;
 public class MemberServiceImpl implements MemberService {
 
   private final MemberRepository memberRepository;
+  private final MemberFilterRepository memberFilterRepository;
 
   @Override
   @Transactional
@@ -26,8 +30,24 @@ public class MemberServiceImpl implements MemberService {
         .membername(membername)
         .build();
     member = memberRepository.save(member);
+
+    // 새로 생성된 멤버에 대해 기본 빈 필터 데이터를 가진 MemberFilter 생성
+    MemberFilterData filterData = MemberFilterData.builder()
+        .categories(List.of())
+        .dietaries(List.of())
+        .preferredIngredients(List.of())
+        .dislikedIngredients(List.of())
+        .build();
+
+    MemberFilter memberFilter = MemberFilter.builder()
+        .member(member)
+        .filterData(filterData)
+        .build();
+    memberFilterRepository.save(memberFilter);
+
     return MemberDto.fromEntity(member);
   }
+
 
   @Override
   @Transactional

@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -88,13 +89,18 @@ public class IngredientServiceImpl implements IngredientService {
       ingredientDocumentRepository.save(IngredientDocument.fromEntity(ingredientInfo));
     }
 
-    // 저장: 새로운 냉장고거나 기존 냉장고에 item 추가된 상태 저장
+    // 미출고 재료의 개수 계산 (isReleased가 false인 것들만)
+    int validCount = (int) ingredients.stream()
+        .filter(ingredient -> !ingredient.isReleased())
+        .count();
+
+    // 저장: 새로운 재료거나 기존 재료에 item 추가된 상태 저장 후 응답
     return IngredientIncomingRes.builder()
         .name(request.getName())
         .storagePlace(request.getStoragePlace())
         .expirationDate(request.getExpirationDate())
         .incomingDate(request.getIncomingDate())
-        .amount(ingredients.size())
+        .amount(validCount)
         .build();
   }
 
@@ -126,19 +132,25 @@ public class IngredientServiceImpl implements IngredientService {
       throw new IngredientDeleteException("재료의 수량이 0개여서 삭제가 불가능합니다");
     }
 
-    int startIdx = ingredients.indexOf(remainIngredients.get(0));
+    // 요청한 수량과 남은 재료 수 중 작은 값을 사용
+    int validQuantity = Math.min(quantity, remainIngredients.size());
 
-    List<Long> releaseIds = remainIngredients.stream()
+    // 출고할 재료 목록: 가장 오래된 미출고 재료부터 validQuantity 개 선택
+    List<Ingredient> toRelease = remainIngredients.subList(0, validQuantity);
+    List<Long> releaseIds = toRelease.stream()
         .map(Ingredient::getId)
-        .limit(Math.min(quantity, remainIngredients.size())).toList();
+        .toList();
 
-    // 현재 시간을 기준으로 출고일을 지정함
+    // 현재 시간으로 출고 처리 (DB update)
     ingredientRepository.markReleasedByIds(releaseIds, LocalDateTime.now());
 
-    int endIndex = Math.min(quantity, ingredients.size());
-    int remainCount = ingredients.size() - endIndex;
+    // 출고된 재료들을 ingredients 컬렉션에서 제거
+    ingredients.removeAll(toRelease);
 
-    ingredients.subList(startIdx, endIndex).clear();
+    // 남은 미출고 재료의 수를 새로 계산
+    int remainCount = (int) ingredients.stream()
+        .filter(i -> !i.isReleased())
+        .count();
 
     return Map.of("remainCount", remainCount);
   }
@@ -171,5 +183,14 @@ public class IngredientServiceImpl implements IngredientService {
       remainCounts.put(req.name(), result.get("remainCount"));
     }
     return remainCounts;
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public List<IngredientInfoWithNutrientDto> getAllExistingIngredientsWithNutrients() {
+    List<IngredientInfo> ingredientInfos = ingredientInfoRepository.findAllExistingWithIngredientsAndNutrients();
+    return ingredientInfos.stream()
+        .map(IngredientInfoWithNutrientDto::fromEntity)
+        .collect(Collectors.toList());
   }
 }
