@@ -1,16 +1,25 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+
 import useModalStore from "@stores/modalStore";
+import useUserStore from "@stores/userStore";
+
 import IconStarBlank from "@assets/icons/IconStarBlank";
 import IconStarFill from "@assets/icons/IconStarFill";
+
 import Button from "@components/common/button/Button";
+
+import { patchRecipeApi } from "@apis/recipeApi";
 
 const RecipeRatingForm = () => {
   const navigate = useNavigate();
   const { closeModal } = useModalStore();
+  const { recipeId } = useParams();
+  const { userId } = useUserStore();
+
   const [rating, setRating] = useState<boolean[]>([true, true, true, true, true]);
 
-  const starRating = (index: number) => {
+  function starRating(index: number) {
     const newRating = [...rating];
 
     newRating.forEach((_, idx) => {
@@ -18,14 +27,17 @@ const RecipeRatingForm = () => {
     });
 
     setRating(newRating);
-  };
+  }
 
-  const handleSaveRating = () => {
+  function handleSaveRating() {
+    const ratingNumber = rating.filter((star) => star === true).length;
+
     //레시피 저장 API 호출
+    patchRecipeApi(userId, Number(recipeId), ratingNumber);
 
     closeModal();
     navigate("/");
-  };
+  }
 
   return (
     <div className="py-6 flex flex-col items-center gap-10">

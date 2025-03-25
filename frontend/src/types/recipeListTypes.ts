@@ -2,10 +2,12 @@ export interface Video {
   recipeId: number;
   title: string;
   url: string;
-  channel_title: string;
+  channelTitle: string;
   duration: string;
-  view_count: number;
-  like_count: number;
+  viewCount: number;
+  likeCount: number;
+  favorite: boolean;
+  rating: number;
 }
 
 export interface VideoList {

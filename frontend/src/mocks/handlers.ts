@@ -53,6 +53,17 @@ const handlers = [
       membername: "이름 수정",
     });
   }),
+
+  //레시피 평가 및 즐겨찾기 기능
+  http.patch(VITE_API_URL + "/v1/member/recipe/:recipeId", () => {
+    return HttpResponse.json({
+      memberId: 2,
+      recipeId: 12,
+      rating: 4,
+      favorite: true,
+      createdAt: "2025-03-24T10:15:30",
+    });
+  }),
 ];
 
 export default handlers;
