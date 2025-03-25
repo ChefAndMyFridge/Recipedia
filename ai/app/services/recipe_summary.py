@@ -69,8 +69,7 @@ class RecipeSummary:
         Returns:
             str: 레시피 요약 데이터
         """
-        if self.debug_mode:
-            start = time.time()
+        start = time.time()
 
         scripts = ""
 
@@ -117,11 +116,12 @@ class RecipeSummary:
             # OpenAI API 호출 (RequestGPT.run이 비동기 함수라고 가정)
             summary = await self.request_gpt.run(system_input, user_input)
 
+            end = time.time()
             if self.debug_mode:
-                end = time.time()
                 time_dict = {"exec time cons": f"{end - start:.5f}"}
-                print(f"\n{end - start:.5f} sec")
                 summary = summary | time_dict
+            logger.info(
+                f"{settings.LOG_SUMMARY_PREFIX}_전체 처리 완료 : {end - start:.2f} 초 소요")
 
             # 리턴 타입 검사
             assert isinstance(
