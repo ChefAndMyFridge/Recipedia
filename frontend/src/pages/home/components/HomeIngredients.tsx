@@ -59,7 +59,7 @@ const HomeIngredients = () => {
   if (ingredients && ingredients.length === 0) {
     return (
       <div className="flex justify-center items-center w-full h-full">
-        <p className="text-lg text-content">등록된 재료가 없습니다.</p>
+        <p className="font-preSemiBold text-lg text-content">등록된 재료가 없습니다.</p>
       </div>
     );
   }

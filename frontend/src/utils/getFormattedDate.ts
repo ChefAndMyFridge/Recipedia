@@ -1,5 +1,3 @@
-import { Ingredients } from "@/types/ingredientsTypes";
-
 export function getCurrentDate(): string {
   const date = new Date();
 
@@ -22,12 +20,9 @@ export function formatDate(date: Date) {
   return `${year}년 ${month}월 ${day}일 ${ampm} ${String(hours12).padStart(2, "0")}:${minutes}`;
 }
 
-// 추후 날짜 값이 들어오면 통합할 예정
-export function calculateDaysRemaining(ingredient: Ingredients): number {
-  if (!ingredient.ingredients) return 1000;
-
+export function calculateDaysRemaining(earliestExpiration: string): number {
   const today = new Date();
-  const expirationDate = new Date(ingredient.ingredients[0].expirationDate);
+  const expirationDate = new Date(earliestExpiration);
 
   const diffTime = expirationDate.getTime() - today.getTime();
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));

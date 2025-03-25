@@ -29,7 +29,7 @@ const HomeIngredient = ({ ingredient }: HomeIngredientProps) => {
   const [count, setCount] = useState<number>(selectedIngredient?.selectedCount || 0);
   const [isShaking, setIsShaking] = useState<boolean>(false);
 
-  const daysRemaining = calculateDaysRemaining(ingredient);
+  const daysRemaining = calculateDaysRemaining(ingredient.earliestExpiration);
 
   useEffect(() => {
     setCount(selectedIngredients[ingredient.ingredientInfoId]?.selectedCount || 0);
