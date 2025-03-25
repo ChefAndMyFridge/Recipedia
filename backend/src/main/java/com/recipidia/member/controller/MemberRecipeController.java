@@ -1,8 +1,10 @@
 package com.recipidia.member.controller;
 
 import com.recipidia.member.dto.MemberRecipeDto;
+import com.recipidia.member.dto.RecipeWithMemberInfoDto;
 import com.recipidia.member.request.BookmarkPatchReq;
 import com.recipidia.member.service.MemberRecipeService;
+import com.recipidia.recipe.dto.RecipeDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -76,7 +78,7 @@ public class MemberRecipeController {
   }
 
   @Operation(
-      summary = "사용자의 즐겨찾기 레시피 목록 조회",
+      summary = "사용자의 즐겨찾기/별점 레시피 목록 조회",
       description = "특정 사용자가 평가하거나 즐겨찾기한 모든 레시피 목록을 조회합니다.",
       responses = {
           @ApiResponse(
@@ -127,13 +129,34 @@ public class MemberRecipeController {
       summary = "사용자가 즐겨찾기한 레시피 목록 조회",
       description = "특정 사용자가 favorite=true 로 표시한 모든 레시피를 반환합니다.",
       responses = {
-          @ApiResponse(responseCode = "200", description = "조회 성공",
-              content = @Content(mediaType = "application/json",
-                  schema = @Schema(implementation = MemberRecipeDto.class)))
+          @ApiResponse(
+              responseCode = "200",
+              description = "조회 성공",
+              content = @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = RecipeWithMemberInfoDto.class),
+                  examples = @ExampleObject(value = """
+                  [
+                    {
+                      "recipeId": 123,
+                      "name": "불고기",
+                      "title": "백종원 불고기 레시피",
+                      "url": "https://youtu.be/xxx",
+                      "channel_title": "백종원 PAIK JONG WON",
+                      "duration": "10:30",
+                      "view_count": 1000000,
+                      "like_count": 50000,
+                      "favorite": true,
+                      "rating": 5
+                    }
+                  ]
+                """)
+              )
+          )
       }
   )
   @GetMapping("/{memberId}/favorites")
-  public ResponseEntity<List<MemberRecipeDto>> getMemberFavorites(@PathVariable Long memberId) {
+  public ResponseEntity<List<RecipeWithMemberInfoDto>> getMemberFavorites(@PathVariable Long memberId) {
     return ResponseEntity.ok(memberRecipeService.getMemberFavorites(memberId));
   }
 
@@ -141,13 +164,34 @@ public class MemberRecipeController {
       summary = "사용자가 별점을 준 레시피 목록 조회",
       description = "특정 사용자가 rating 값을 부여한 모든 레시피를 반환합니다.",
       responses = {
-          @ApiResponse(responseCode = "200", description = "조회 성공",
-              content = @Content(mediaType = "application/json",
-                  schema = @Schema(implementation = MemberRecipeDto.class)))
+          @ApiResponse(
+              responseCode = "200",
+              description = "조회 성공",
+              content = @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = RecipeWithMemberInfoDto.class),
+                  examples = @ExampleObject(value = """
+                  [
+                    {
+                      "recipeId": 456,
+                      "name": "김치찌개",
+                      "title": "집에서 만드는 김치찌개",
+                      "url": "https://youtu.be/yyy",
+                      "channel_title": "맛있는TV",
+                      "duration": "08:45",
+                      "view_count": 750000,
+                      "like_count": 32000,
+                      "favorite": false,
+                      "rating": 4
+                    }
+                  ]
+                """)
+              )
+          )
       }
   )
   @GetMapping("/{memberId}/ratings")
-  public ResponseEntity<List<MemberRecipeDto>> getMemberRatedRecipes(@PathVariable Long memberId) {
+  public ResponseEntity<List<RecipeWithMemberInfoDto>> getMemberRatedRecipes(@PathVariable Long memberId) {
     return ResponseEntity.ok(memberRecipeService.getMemberRatedRecipes(memberId));
   }
 
