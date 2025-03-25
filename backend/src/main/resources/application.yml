@@ -32,4 +32,4 @@ springdoc:
 
 fastapi:
   base:
-    url: http://localhost:8000
+    url: http://my-fastapi:8000

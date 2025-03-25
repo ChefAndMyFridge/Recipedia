@@ -43,11 +43,11 @@ public class RecipeServiceImpl implements RecipeService {
   private final RecipeQueryResConverter queryResConverter = new RecipeQueryResConverter();
   private final MemberRecipeRepository memberRecipeRepository;
 
-  public RecipeServiceImpl(IngredientService ingredientService, WebClient.Builder webClientBuilder,
+  public RecipeServiceImpl(IngredientService ingredientService, WebClient webClient,
                            RecipeRepository recipeRepository, MemberRecipeRepository memberRecipeRepository) {
     this.ingredientService = ingredientService;
     // FastAPI 컨테이너의 서비스명을 사용
-    this.webClient = webClientBuilder.baseUrl("http://my-fastapi:8000").build();
+    this.webClient = webClient;
     this.recipeRepository = recipeRepository;
     this.memberRecipeRepository = memberRecipeRepository;
   }

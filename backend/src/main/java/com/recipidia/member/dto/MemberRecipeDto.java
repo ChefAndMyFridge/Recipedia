@@ -8,13 +8,12 @@ import java.time.LocalDateTime;
 /**
  * DTO for {@link MemberRecipe}
  */
-public record MemberRecipeDto(Long memberRecipeId, Long memberId, Long recipeId,
+public record MemberRecipeDto(Long memberId, Long recipeId,
                               Integer rating, Boolean favorite, LocalDateTime createdAt)
     implements Serializable {
 
   public static MemberRecipeDto fromEntity(MemberRecipe memberRecipe) {
     return new MemberRecipeDto(
-        memberRecipe.getId(),
         memberRecipe.getMember().getId(),
         memberRecipe.getRecipe().getId(),
         memberRecipe.getRating(),
