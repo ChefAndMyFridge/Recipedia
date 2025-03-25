@@ -196,9 +196,21 @@ class RecipeValidator:
             
             # 주재료 사용률 계산 (%)
             if normalized_main_ingredients:
-                main_in_essential_count = len(normalized_main_ingredients.intersection(essential_set))
+                # 필수 재료에 포함된 주재료
+                used_main_ingredients = normalized_main_ingredients.intersection(essential_set)
+                main_in_essential_count = len(used_main_ingredients)
+                
+                # 필수 재료에 포함되지 않은 주재료
+                unused_main_ingredients = normalized_main_ingredients - essential_set
+                
+                # 사용자가 가지고 있지 않은 주재료
+                missing_main_ingredients = normalized_main_ingredients - normalized_ingredients
+                
                 main_score = (main_in_essential_count / len(normalized_main_ingredients) * 100)
             else:
+                used_main_ingredients = set()
+                unused_main_ingredients = set()
+                missing_main_ingredients = set()
                 main_score = 100  # 주재료가 없으면 100% 점수
             
             # 종합 점수 (가중치 적용 가능)
@@ -226,7 +238,12 @@ class RecipeValidator:
                 'main_score': round(main_score, 1),
                 'total_score': round(total_score, 1),
                 'matched_essential': matched_essential,
-                'total_essential': total_essential
+                'total_essential': total_essential,
+                
+                # 주재료 관련 추가 필드
+                'used_main_ingredients': list(used_main_ingredients),
+                'unused_main_ingredients': list(unused_main_ingredients),
+                'missing_main_ingredients': list(missing_main_ingredients)
             }
             
             # 결과 출력
@@ -234,8 +251,18 @@ class RecipeValidator:
             print(f"  - 필수 재료 충족률: {self.validation_results[dish]['essential_score']}% ({matched_essential}/{total_essential})")
             print(f"  - 주재료 사용률: {self.validation_results[dish]['main_score']}%")
             print(f"  - 종합 점수: {self.validation_results[dish]['total_score']}%")
+            
+            # 부족한 재료 출력
             if not all_essential_included:
-                print(f"  - 부족한 재료: {', '.join(self.validation_results[dish]['missing_ingredients'])}")
+                print(f"  - 부족한 필수 재료: {', '.join(self.validation_results[dish]['missing_ingredients'])}")
+            
+            # 부족한 주재료 출력
+            if missing_main_ingredients:
+                print(f"  - 부족한 주재료: {', '.join(missing_main_ingredients)}")
+                
+            # 필수 재료에 포함되지 않은 주재료 출력
+            if unused_main_ingredients:
+                print(f"  - 필수 재료에 포함되지 않은 주재료: {', '.join(unused_main_ingredients)}")
         
         return self.validation_results
     
