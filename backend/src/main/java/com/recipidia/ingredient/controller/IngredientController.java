@@ -180,8 +180,12 @@ public class IngredientController {
       }
   )
   @GetMapping
-  // 지금은 전체 조회
-  // 냉장고, 냉동고 각각 쿼리스트링으로 구별
+  /**
+   * filterParam의 key
+   * storagePlace: 냉장고, 냉동고
+   * sort : 정렬 기준 (expire, name, count, incoming)
+   * order : 정렬 순서 (asc, desc)
+   */
   public List<IngredientInfoDto> getAllExistingIngredients(@RequestParam Map<String, String> filterParam) {
     return ingredientService.findAllExistingIngredients(filterParam);
   }
