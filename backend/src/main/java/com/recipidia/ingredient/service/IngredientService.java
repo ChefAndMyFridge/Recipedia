@@ -21,4 +21,5 @@ public interface IngredientService {
     Map<String, Integer> releaseItems(Long itemId, int quantity);
     IngredientInfoWithNutrientDto getIngredientInfoWithNutrients(Long id);
     Map<String, Integer> releaseMultipleItems(List<IngredientMultipleDeleteReq> requests);
+    List<IngredientInfoWithNutrientDto> getAllExistingIngredientsWithNutrients();
 }

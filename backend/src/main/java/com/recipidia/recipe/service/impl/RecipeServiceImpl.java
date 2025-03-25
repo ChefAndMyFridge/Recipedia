@@ -2,6 +2,7 @@ package com.recipidia.recipe.service.impl;
 
 import com.recipidia.filter.entity.MemberFilter;
 import com.recipidia.filter.repository.MemberFilterRepository;
+import com.recipidia.filter.service.IngredientFilterService;
 import com.recipidia.ingredient.dto.IngredientInfoDto;
 import com.recipidia.ingredient.service.IngredientService;
 import com.recipidia.recipe.converter.RecipeQueryResConverter;
@@ -40,16 +41,19 @@ import java.util.stream.Collectors;
 public class RecipeServiceImpl implements RecipeService {
 
   private final IngredientService ingredientService;
+  private final IngredientFilterService ingredientFilterService;
   private final WebClient webClient;
   private final RecipeRepository recipeRepository;
   private final RecipeQueryResConverter queryResConverter = new RecipeQueryResConverter();
   private final MemberRecipeRepository memberRecipeRepository;
   private final MemberFilterRepository memberFilterRepository;
 
-  public RecipeServiceImpl(IngredientService ingredientService, WebClient webClient,
+  public RecipeServiceImpl(IngredientService ingredientService,
+                           IngredientFilterService ingredientFilterService, WebClient webClient,
                            RecipeRepository recipeRepository, MemberRecipeRepository memberRecipeRepository,
                            MemberFilterRepository memberFilterRepository) {
     this.ingredientService = ingredientService;
+    this.ingredientFilterService = ingredientFilterService;
     // FastAPI 컨테이너의 서비스명을 사용
     this.webClient = webClient;
     this.recipeRepository = recipeRepository;
@@ -60,22 +64,27 @@ public class RecipeServiceImpl implements RecipeService {
   @Override
   @Transactional
   public Mono<ResponseEntity<RecipeQueryRes>> handleRecipeQuery(RecipeQueryReq request) {
-    // 1. 전체 재료 목록 조회 단계 (DB 호출)
-    Mono<List<String>> fullIngredientsMono = Mono.fromCallable(ingredientService::getAllExistingIngredients)
-        .subscribeOn(Schedulers.boundedElastic())
-        .map(list -> list.stream()
-            .map(IngredientInfoDto::getName)
-            .collect(Collectors.toList())
-        );
-
-    // 2. 사용자 필터 정보 조회 단계 (MemberFilter 체크)
+    // 1. 사용자 필터 정보 조회 단계 (MemberFilter 체크)
     Long memberId = request.getMemberId();
     Mono<MemberFilter> memberFilterMono = Mono.fromCallable(() -> memberFilterRepository.findByMemberId(memberId)
             .orElseThrow(() -> new RuntimeException("Member filter not found for memberId: " + memberId)))
         .subscribeOn(Schedulers.boundedElastic());
 
+    // 2. 전체 재료 목록 조회 단계 (DB 호출/필터링 추가)
+//    Mono<List<String>> fullIngredientsMono = Mono.fromCallable(ingredientService::getAllExistingIngredients)
+//        .subscribeOn(Schedulers.boundedElastic())
+//        .map(list -> list.stream()
+//            .map(IngredientInfoDto::getName)
+//            .collect(Collectors.toList())
+//        );
+    Mono<List<String>> filteredIngredientsMono = memberFilterMono.flatMap(memberFilter ->
+        Mono.fromCallable(() -> ingredientFilterService.filterIngredientsByDietaries(memberFilter.getFilterData().getDietaries()))
+            .subscribeOn(Schedulers.boundedElastic())
+    );
+
+
     // 3. FastAPI 호출 단계
-    Mono<RecipeQueryRes> fastApiResponseMono = Mono.zip(fullIngredientsMono, memberFilterMono)
+    Mono<RecipeQueryRes> fastApiResponseMono = Mono.zip(filteredIngredientsMono, memberFilterMono)
         .flatMap(tuple -> {
           List<String> fullIngredients = tuple.getT1();
           MemberFilter memberFilter = tuple.getT2();
@@ -87,8 +96,12 @@ public class RecipeServiceImpl implements RecipeService {
           // MemberFilter에서 선호/비선호 재료 추가
           payload.put("preferred_ingredients", memberFilter.getFilterData().getPreferredIngredients());
           payload.put("disliked_ingredients", memberFilter.getFilterData().getDislikedIngredients());
-          System.out.println("THEHEHEHE");
-          System.out.println(payload);
+
+          // 카테고리와 식단 필터링 단순 스트링으로도 전달
+          payload.put("categories", memberFilter.getFilterData().getCategories());
+          payload.put("dietaries", memberFilter.getFilterData().getDietaries());
+
+          System.out.println("🚩 Nutrient-based Filtered Payload: " + payload);
 
           return webClient.post()
               .uri("/api/f1/query/")

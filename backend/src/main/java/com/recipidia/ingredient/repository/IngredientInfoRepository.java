@@ -28,4 +28,10 @@ public interface IngredientInfoRepository extends JpaRepository<IngredientInfo, 
     IngredientInfo findWithIngredientsAndNutrients(Long ingredientId);
 
     List<IngredientInfo> findByIngredientNutrientsIsNull();
+
+    @Query("SELECT DISTINCT i FROM IngredientInfo i " +
+        "JOIN FETCH i.ingredients ing " +
+        "LEFT JOIN FETCH i.ingredientNutrients nut " +
+        "WHERE ing.isReleased = false")
+    List<IngredientInfo> findAllExistingWithIngredientsAndNutrients();
 }
