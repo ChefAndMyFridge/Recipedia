@@ -20,8 +20,6 @@ class IngredientsRegularizer:
 
     def __init__(
         self,
-        input_file: str = 'ingredients_stats.json',
-        output_file: str = 'normalized_ingredients.json',
         model: str = "gpt-4o",
         mode: str = "normal"
     ):
@@ -29,18 +27,9 @@ class IngredientsRegularizer:
         IngredientsRegularizer 클래스 초기화
 
         Args:
-            api_key (str): OpenAI API 키 (None이면 환경변수에서 가져옴)
-            input_file (str): 재료 통계 정보가 담긴 JSON 파일 경로
-            output_file (str): 정규화된 결과를 저장할 JSON 파일 경로
             model (str): 사용할 OpenAI 모델
+            mode (str): 정규화 모드 ('normal', 'conservative', 'aggressive')
         """
-        # 스크립트 위치 기준의 절대 경로 계산
-        self.script_dir = os.path.dirname(os.path.abspath(__file__))
-
-        # 입력 및 출력 파일의 절대 경로 설정
-        self.input_file = os.path.join(self.script_dir, input_file)
-        self.output_file = os.path.join(self.script_dir, output_file)
-
         self.model = model
         self.mode = mode
 
@@ -64,7 +53,6 @@ class IngredientsRegularizer:
             '생수': '물',
             '식용유': '식용유',
             '포도씨유': '식용유',
-            '올리브유': '올리브오일',
             '대파': '파',
             '쪽파': '파',
             '국간장': '간장',
@@ -254,72 +242,6 @@ class IngredientsRegularizer:
 
         return results
 
-    async def process_ingredients(self) -> Dict[str, Any]:
-        """
-        재료 목록을 처리하여 정규화하고 결과 저장
-
-        Returns:
-            dict: 처리 결과 요약
-        """
-        # 입력 JSON 읽기
-        try:
-            with open(self.input_file, 'r', encoding='utf-8') as f:
-                data = json.load(f)
-        except Exception as e:
-            print(f"파일 읽기 오류: {str(e)}")
-            return {"success": False, "error": str(e)}
-
-        # 전체 재료 빈도 추출
-        print("재료 통계 분석 중...")
-        aggregated_stats = {}
-        for recipe_name, recipe_data in data.get('recipe_stats', {}).items():
-            for ingre, count in recipe_data.get('ingredients', {}).items():
-                if ingre in aggregated_stats:
-                    aggregated_stats[ingre] += count
-                else:
-                    aggregated_stats[ingre] = count
-
-        total_ingredients = len(aggregated_stats)
-        print(f"총 {total_ingredients}개 고유 재료 발견")
-
-        # 재료 목록 추출 및 배치 정규화
-        all_ingredients = list(aggregated_stats.keys())
-        batch_size = 10  # 배치당 재료 수
-
-        print("재료 정규화 중...")
-        normalized_map = await self.batch_normalize_with_openai(all_ingredients, batch_size)
-
-        # 정규화된 결과로 통계 집계
-        normalized_stats = defaultdict(int)
-        for original, count in aggregated_stats.items():
-            normalized = normalized_map.get(original, original)
-            normalized_stats[normalized] += count
-
-        # 재료별 정규화 결과 출력
-        for original, normalized in normalized_map.items():
-            if original != normalized:
-                print(f"정규화: '{original}' → '{normalized}'")
-
-        # 결과 저장
-        result = {
-            'summary': {
-                'original_ingredients': total_ingredients,
-                'normalized_ingredients': len(normalized_stats),
-                'reduction_rate': f"{(1 - len(normalized_stats)/total_ingredients)*100:.1f}%"
-            },
-            'normalized_stats': dict(sorted(normalized_stats.items(), key=lambda x: x[1], reverse=True)),
-            'mapping': self.normalized_cache
-        }
-
-        try:
-            with open(self.output_file, 'w', encoding='utf-8') as f:
-                json.dump(result, f, ensure_ascii=False, indent=2)
-            print(f"정규화 결과가 {self.output_file}에 저장되었습니다.")
-            return {"success": True, "stats": result['summary']}
-        except Exception as e:
-            print(f"파일 쓰기 오류: {str(e)}")
-            return {"success": False, "error": str(e)}
-
     def get_mapping_table(self) -> Dict[str, str]:
         """현재 캐시된 매핑 테이블 반환"""
         return self.normalized_cache
@@ -335,18 +257,72 @@ class IngredientsRegularizer:
         # 캐시도 함께 업데이트
         self.normalized_cache.update(new_mappings)
 
+    async def normalize_data(self, recipe_data: Dict) -> Dict:
+        """
+        직접 레시피 데이터를 받아 정규화 처리
+        
+        Args:
+            recipe_data: 크롤링된 레시피 데이터
+            
+        Returns:
+            정규화된 결과
+        """
+        # 전체 재료 빈도 추출
+        aggregated_stats = {}
+        for recipe_name, recipe_info in recipe_data.get('recipe_stats', {}).items():
+            for ingre, count in recipe_info.get('ingredients', {}).items():
+                if ingre in aggregated_stats:
+                    aggregated_stats[ingre] += count
+                else:
+                    aggregated_stats[ingre] += count
+        
+        # 재료 목록 추출 및 정규화
+        all_ingredients = list(aggregated_stats.keys())
+        normalized_map = await self.batch_normalize_with_openai(all_ingredients)
+        
+        # 정규화된 결과로 통계 집계
+        normalized_stats = defaultdict(int)
+        for original, count in aggregated_stats.items():
+            normalized = normalized_map.get(original, original)
+            normalized_stats[normalized] += count
+        
+        # 결과 반환
+        return {
+            'summary': {
+                'original_ingredients': len(aggregated_stats),
+                'normalized_ingredients': len(normalized_stats),
+                'reduction_rate': f"{(1 - len(normalized_stats)/len(aggregated_stats))*100:.1f}%"
+            },
+            'normalized_stats': dict(sorted(normalized_stats.items(), key=lambda x: x[1], reverse=True)),
+            'mapping': self.normalized_cache
+        }
+
 
 # 사용 예시
 if __name__ == "__main__":
     async def main():
+        example_data = {
+            'recipe_stats': {
+                '김치찌개': {
+                    'ingredients': {
+                        '김치 1/2포기': 10,
+                        '두부 1모': 8,
+                        '대파 1뿌리': 7,
+                        '고춧가루 1큰술': 5
+                    }
+                }
+            }
+        }
+        
         regularizer = IngredientsRegularizer(mode="aggressive")
-        result = await regularizer.process_ingredients()
-
-        if result["success"]:
-            print("\n=== 정규화 요약 ===")
-            for key, value in result["stats"].items():
-                print(f"{key}: {value}")
-        else:
-            print(f"오류 발생: {result.get('error', '알 수 없는 오류')}")
+        result = await regularizer.normalize_data(example_data)
+        
+        print("\n=== 정규화 요약 ===")
+        for key, value in result['summary'].items():
+            print(f"{key}: {value}")
+            
+        print("\n=== 정규화된 재료 ===")
+        for ing, count in list(result['normalized_stats'].items())[:10]:  # 상위 10개만
+            print(f"{ing}: {count}")
 
     asyncio.run(main())

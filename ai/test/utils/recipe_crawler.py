@@ -4,21 +4,20 @@ from bs4 import BeautifulSoup
 import random
 from collections import Counter
 import json
+from typing import List
 
 class RecipeCrawler:
     """
     만개의레시피 사이트에서 특정 요리 이름에 대한 레시피를 검색하고,
     레시피 상세 페이지에서 재료를 추출해 통계 정보를 만드는 클래스.
     """
-    def __init__(self, input_file="recipes.txt", max_recipes_per_search=40):
+    def __init__(self, max_recipes_per_search=40):
         """
         RecipeCrawler 클래스 초기화.
 
         Args:
-            input_file (str): 요리 목록이 담긴 파일 경로.
             max_recipes_per_search (int): 검색당 최대 레시피 개수.
         """
-        self.input_file = input_file
         self.max_recipes_per_search = max_recipes_per_search
 
         # 크롤링/통계 결과를 저장할 변수들
@@ -187,22 +186,10 @@ class RecipeCrawler:
 
         return all_ingredients, recipe_count, recipe_ingredient_counter
 
-    async def scrape(self):
-        """
-        실제 크롤링을 실행하는 메서드.
-        input_file에서 요리 목록을 읽고,
-        각 요리에 대한 레시피를 처리한 뒤 집계 결과를 콘솔에 출력하고,
-        결과를 ingredients_stats.json 파일로 저장합니다.
-        """
-        with open(self.input_file, "r", encoding="utf-8") as f:
-            lines = f.readlines()
-
+    async def process_recipes(self, recipe_names: List[str]):
+        """요리 이름 목록을 직접 받아 처리"""
         async with aiohttp.ClientSession() as session:
-            for line in lines:
-                recipe_name = line.strip()
-                if not recipe_name:
-                    continue
-
+            for recipe_name in recipe_names:
                 ingredients, recipe_count, recipe_counter = await self.process_recipe(session, recipe_name)
                 self.total_requests += self.max_recipes_per_search
 
@@ -219,42 +206,18 @@ class RecipeCrawler:
                     'ingredients': dict(recipe_counter)
                 }
 
-        # 콘솔 출력 (요약)
-        print("\n=== 크롤링 요약 정보 ===")
-        print(f"총 요청 레시피 수: {self.total_requests}")
-        print(f"수집된 레시피 수: {self.total_recipe_count}")
-        print(f"성공률: {(self.total_recipe_count/self.total_requests)*100:.1f}%")
-        print(f"수집된 고유 재료 수: {len(self.aggregated_stats)}")
-
-        sorted_stats = sorted(self.aggregated_stats.items(), key=lambda x: x[1], reverse=True)
-        print("\n=== 전체 재료 출현 빈도 ===")
-        for ingre, count in sorted_stats:
-            print(f"{ingre}: {count}개")
-
-        # 재료 정보를 정렬하여 저장
-        sorted_recipe_stats = {}
-        for recipe_name, stats in self.recipe_stats.items():
-            sorted_ingredients = dict(sorted(stats['ingredients'].items(), 
-                                            key=lambda x: x[1], 
-                                            reverse=True))
-            sorted_recipe_stats[recipe_name] = {
-                **{k: stats[k] for k in stats if k != 'ingredients'},
-                'ingredients': sorted_ingredients
-            }
-
-        # JSON 저장
-        with open('ingredients_stats.json', 'w', encoding='utf-8') as f:
-            json.dump({
-                'summary': {
-                    'total_requests': self.total_requests,
-                    'total_success': self.total_recipe_count,
-                    'success_rate': f"{(self.total_recipe_count/self.total_requests)*100:.1f}%",
-                    'unique_ingredients': len(self.aggregated_stats)
-                },
-                'recipe_stats': sorted_recipe_stats
-            }, f, ensure_ascii=False, indent=2)
+        # 결과 직접 반환
+        return {
+            'summary': {
+                'total_requests': self.total_requests,
+                'total_success': self.total_recipe_count,
+                'success_rate': f"{(self.total_recipe_count/self.total_requests)*100:.1f}%",
+                'unique_ingredients': len(self.aggregated_stats)
+            },
+            'recipe_stats': self.recipe_stats
+        }
 
 # 아래는 직접 실행 시 사용 예시 (다른 모듈에서 import해서 사용할 수 있음)
 if __name__ == "__main__":
-    scraper = RecipeCrawler("recipes.txt", max_recipes_per_search=40)
-    asyncio.run(scraper.scrape())
+    scraper = RecipeCrawler(max_recipes_per_search=40)
+    asyncio.run(scraper.process_recipes(["김치찌개", "된장찌개", "비빔밥"]))
