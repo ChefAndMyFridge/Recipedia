@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { getMemberListApi, addMemberApi } from "@apis/userApi";
+import { getMemberListApi, addMemberApi, deleteMemberApi } from "@apis/userApi";
 
 import { User } from "@/types/userTypes";
 
@@ -25,6 +25,23 @@ export const useAddMember = () => {
     },
     onError: (error) => {
       console.log("가족 구성원 등록 실패", error);
+    },
+  });
+
+  return mutation;
+};
+
+export const useDeleteMember = () => {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation<void, Error, number>({
+    mutationFn: deleteMemberApi,
+    onSuccess: () => {
+      console.log("가족 구성원 삭제 성공");
+      queryClient.invalidateQueries({ queryKey: ["memberList"] });
+    },
+    onError: (error) => {
+      console.log("가족 구성원 삭제 실패", error);
     },
   });
 

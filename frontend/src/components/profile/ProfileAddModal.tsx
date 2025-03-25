@@ -46,10 +46,10 @@ const ProfileAddModal = () => {
       return;
     }
 
-    const memberName = data.memberName.toString();
+    const newMemberName = data.memberName.toString();
 
     // 사용자 추가 API 호출
-    addMemberRequest(memberName, {
+    addMemberRequest(newMemberName, {
       onSuccess: () => {
         openModal(<ProfileChangeModal />);
       },
