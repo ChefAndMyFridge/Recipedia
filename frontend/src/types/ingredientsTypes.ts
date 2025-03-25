@@ -11,6 +11,8 @@ export interface Ingredients {
   name: string;
   imageUrl: string;
   totalCount: number;
+  earliestExpiration: string;
+  latestExpiration: string;
   ingredients: Ingredient[];
 }
 
