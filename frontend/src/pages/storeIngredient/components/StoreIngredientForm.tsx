@@ -7,6 +7,7 @@ import { useStoreIngredient } from "@hooks/useIngredientsHooks";
 
 import IngredientInput from "@components/common/input/IngredientInput";
 import Input from "@components/common/input/Input.tsx";
+import DateInput from "@components/common/input/DateInput";
 import Button from "@components/common/button/Button.tsx";
 import Keypad from "@components/common/keypad/Keypad";
 
@@ -17,18 +18,22 @@ const StoreIngredientForm = () => {
 
   const { mutate: storeIngredientRequest } = useStoreIngredient();
 
-  const [customAmountInput, setCustomAmountInput] = useState<boolean>(false);
+  const now = new Date();
+  const formattedDate = now.toISOString().split("T")[0];
+  const formattedTime = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
+
+  const minDate = new Date(now.getFullYear() - 5, now.getMonth(), now.getDate()).toISOString().split("T")[0];
+  const maxDate = new Date(now.getFullYear() + 5, now.getMonth(), now.getDate()).toISOString().split("T")[0];
+
+  const [customAmountInput, setCustomAmountInput] = useState(false);
   const [keypadValue, setKeypadValue] = useState("");
 
-  const [incomingDate, setIncomingDate] = useState<string>(new Date().toISOString().split("T")[0]);
-  const [incomingTime, setIncomingTime] = useState<string>(
-    `${new Date().getHours().toString().padStart(2, "0")}:${new Date().getMinutes().toString().padStart(2, "0")}`
-  );
+  const [incomingDate, setIncomingDate] = useState(formattedDate);
+  const [incomingTime, setIncomingTime] = useState(formattedTime);
+  const [expirationDate, setExpirationDate] = useState("");
+  const [expirationTime, setExpirationTime] = useState("");
 
-  const [expirationDate, setExpirationDate] = useState<string>("");
-  const [expirationTime, setExpirationTime] = useState<string>("");
-
-  const [storagePlace, setStoragePlace] = useState<string>("냉장실");
+  const [storagePlace, setStoragePlace] = useState("냉장실");
 
   useEffect(() => {
     // 입고일로부터 7일 후 만료일 설정: 추후 재료별 유통기한 설정 필요
@@ -106,18 +111,18 @@ const StoreIngredientForm = () => {
 
         {/* 입고일 입력 */}
         <div className="flex justify-between items-end w-full gap-4">
-          <Input
+          <DateInput
             label="입고일"
             name="incomingDate"
             type="date"
-            placeHolder="수량을 입력해주세요"
             value={incomingDate}
+            min={minDate}
+            max={maxDate}
             onChange={(event) => setIncomingDate(event.target.value)}
           />
           <Input
             name="incomingTime"
             type="time"
-            placeHolder="수량을 입력해주세요"
             value={incomingTime}
             onChange={(event) => setIncomingTime(event.target.value)}
           />
@@ -125,18 +130,18 @@ const StoreIngredientForm = () => {
 
         {/* 만료일 입력 */}
         <div className="flex justify-between items-end w-full gap-4">
-          <Input
+          <DateInput
             label="만료일"
             name="expirationDate"
             type="date"
-            placeHolder="수량을 입력해주세요"
             value={expirationDate}
+            min={incomingDate}
+            max={maxDate}
             onChange={(event) => setExpirationDate(event.target.value)}
           />
           <Input
             name="expirationTime"
             type="time"
-            placeHolder="수량을 입력해주세요"
             value={expirationTime}
             onChange={(event) => setExpirationTime(event.target.value)}
           />

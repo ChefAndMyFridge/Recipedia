@@ -5,12 +5,23 @@ import { KeypadElemProps } from "@/types/commonProps";
 const NUMBER_KEYS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "DEL", "0", "C"];
 
 const KeypadElem = ({ value, onChange }: KeypadElemProps) => {
-  const handleInput = (val: string) => onChange(value + val);
-  const handleDelete = () => {
+  function handleInput(val: string) {
+    if (Number(value + val) > 999) {
+      alert("최대 999까지 입력 가능합니다.");
+      return;
+    }
+
+    onChange(value + val);
+  }
+
+  function handleDelete() {
     if (!value) return;
     onChange(value.slice(0, -1));
-  };
-  const handleClear = () => onChange("");
+  }
+
+  function handleClear() {
+    onChange("");
+  }
 
   return (
     <div className="flex flex-col items-center justify-center w-fit h-fit bg-white">
