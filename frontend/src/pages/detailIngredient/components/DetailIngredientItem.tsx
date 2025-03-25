@@ -19,7 +19,6 @@ const DetailIngredientItem = ({ ingredient, imgSrc }: IngredientItemProps) => {
     const expirationDate = new Date(ingredient.expirationDate);
 
     const diffTime = expirationDate.getTime() - today.getTime();
-
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
     let remaining = "";

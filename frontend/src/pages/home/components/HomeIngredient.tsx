@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import useIngredientsStore from "@stores/ingredientsStore.ts";
 import useModalStore from "@stores/modalStore";
 
+import { calculateDaysRemaining } from "@utils/getFormattedDate";
+
 import { Ingredients } from "@/types/ingredientsTypes";
 
 import DetailIngredientModal from "@pages/detailIngredient/DetailIngredientModal";
@@ -26,6 +28,8 @@ const HomeIngredient = ({ ingredient }: HomeIngredientProps) => {
 
   const [count, setCount] = useState<number>(selectedIngredient?.selectedCount || 0);
   const [isShaking, setIsShaking] = useState<boolean>(false);
+
+  const daysRemaining = calculateDaysRemaining(ingredient);
 
   useEffect(() => {
     setCount(selectedIngredients[ingredient.ingredientInfoId]?.selectedCount || 0);
@@ -59,20 +63,6 @@ const HomeIngredient = ({ ingredient }: HomeIngredientProps) => {
     setIsShaking(true);
     setTimeout(() => setIsShaking(false), 300);
   }
-
-  function calculateDaysRemaining(): number {
-    if (!ingredient.ingredients) return 1000;
-
-    const today = new Date();
-    const expirationDate = new Date(ingredient.ingredients[0].expirationDate);
-
-    const diffTime = expirationDate.getTime() - today.getTime();
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-
-    return diffDays;
-  }
-
-  const daysRemaining = calculateDaysRemaining();
 
   return (
     <div className="flex flex-col w-full h-fit p-1 justify-center items-center ">
