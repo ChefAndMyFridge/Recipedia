@@ -1,5 +1,9 @@
 import { useParams } from "react-router-dom";
+import { ErrorBoundary } from "react-error-boundary";
+
 import Header from "@components/Layout/Header";
+import ErrorPage from "@components/common/error/ErrorPage";
+
 import MyRecipeHistory from "@pages/myRecipe/components/MyRecipeHistory";
 import MyRecipeFavorite from "@pages/myRecipe/components/MyRecipeFavorite";
 
@@ -10,7 +14,9 @@ const MyRecipePage = () => {
   return (
     <section className="flex flex-col h-screen p-3">
       <Header title={TITLE} isIcon />
-      {myRecipeType === "favorite" ? <MyRecipeFavorite /> : <MyRecipeHistory />}
+      <ErrorBoundary fallback={<ErrorPage />}>
+        {myRecipeType === "favorite" ? <MyRecipeFavorite /> : <MyRecipeHistory />}
+      </ErrorBoundary>
     </section>
   );
 };
