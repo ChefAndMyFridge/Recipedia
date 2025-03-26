@@ -5,7 +5,7 @@ import Button from "@components/common/button/Button";
 const ErrorPage = () => {
   const navigate = useNavigate();
   return (
-    <section className="flex flex-col py-20 px-10 gap-20 items-center justify-around h-screen bg-white rounded-2xl">
+    <section className="flex flex-col py-20 px-10 gap-20 items-center justify-around h-full bg-white rounded-2xl">
       <div className="flex flex-col gap-8 items-center justify-center">
         <IconError width={120} height={120} />
         <div className="flex flex-col gap-4 items-center justify-center">

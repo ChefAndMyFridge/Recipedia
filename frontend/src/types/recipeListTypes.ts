@@ -31,7 +31,7 @@ export interface recipeCookingSequenceInfo {
   };
 }
 
-export interface RecipeInfo {
+export interface textRecipeType {
   title: string;
   cooking_info: {
     cooking_time: string;
@@ -40,6 +40,18 @@ export interface RecipeInfo {
   ingredients: recipeIngredientsInfo[];
   cooking_tips: string[];
   cooking_sequence: recipeCookingSequenceInfo;
+}
+
+export interface RecipeInfo {
+  recipeId: number;
+  name: string;
+  title: string;
+  url: string;
+  channelTitle: string;
+  duration: string;
+  viewCount: number;
+  likeCount: number;
+  textRecipe: textRecipeType;
 }
 
 export type RecipeInfoKeys = "ingredients" | "cooking_tips";

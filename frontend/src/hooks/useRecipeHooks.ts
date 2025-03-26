@@ -5,7 +5,7 @@ import useRecipeStore from "@stores/recipeStore";
 import { RecipeInfo, RecipeList } from "@/types/recipeListTypes";
 
 //선택 재료 기반 레시피 리스트 조회 API 호출
-export const usePostRecipeList = (ingredients: string[]) => {
+export const usePostRecipeList = (userId: number, ingredients: string[]) => {
   const { setRecipeList } = useRecipeStore();
 
   // ingredients를 정렬하고 문자열로 변환하여 일관된 queryKey 생성
@@ -13,7 +13,7 @@ export const usePostRecipeList = (ingredients: string[]) => {
 
   const query = useQuery<RecipeList>({
     queryKey: ["recipeList", ingredientsKey],
-    queryFn: () => makeRecipeApi(ingredients),
+    queryFn: () => makeRecipeApi(userId, ingredients),
     staleTime: 1000 * 60 * 60, // 1시간
   });
 

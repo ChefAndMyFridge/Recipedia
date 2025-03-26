@@ -5,7 +5,7 @@ import IconClipboard from "@assets/icons/IconClipboard";
 const NoMyRecipeList = ({ text }: { text: string }) => {
   const navigate = useNavigate();
   return (
-    <section className="w-full flex flex-col py-20 px-10 gap-20 items-center justify-around h-full bg-offWhite rounded-2xl">
+    <section className="w-full h-full flex flex-col py-20 px-10 gap-20 items-center justify-around  bg-offWhite rounded-2xl">
       <div className="flex flex-col gap-8 items-center justify-center">
         <IconClipboard width={120} height={120} />
         <div className="flex flex-col gap-4 items-center justify-center">
