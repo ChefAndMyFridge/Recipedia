@@ -3,7 +3,7 @@ import { persist } from "zustand/middleware";
 import defaultProfile from "@assets/images/DefaultProfile.png";
 
 interface UserState {
-  userId: number | null;
+  userId: number;
   username: string;
   currentProfileImg: string;
   setUserId: (userId: number) => void;
@@ -14,7 +14,7 @@ interface UserState {
 const useUserStore = create<UserState>()(
   persist(
     (set) => ({
-      userId: null,
+      userId: 0,
       username: "닉네임",
       currentProfileImg: defaultProfile,
       setUserId: (userId) => set({ userId }),

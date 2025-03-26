@@ -48,16 +48,12 @@ export const deleteMemberApi = async (id: number) => {
 };
 
 export const getMemberFilterApi = async (
-  id: number | null
+  id: number
 ): Promise<{ memberId: number; filterData: filteredInfomations }> => {
   try {
-    if (id) {
-      const response = await instance.get(`/v1/filter/${id}`);
-      console.log(`v1/filter/${id} (get)`, response.data);
-      return response.data;
-    }
-
-    throw new Error("id가 없습니다.");
+    const response = await instance.get(`/v1/filter/${id}`);
+    console.log(`v1/filter/${id} (get)`, response.data);
+    return response.data;
   } catch (error: unknown) {
     throw new Error(error as string);
   }
@@ -67,17 +63,13 @@ export const saveMemberFilterApi = async ({
   id,
   filterData,
 }: {
-  id: number | null;
+  id: number;
   filterData: filteredInfomations;
 }): Promise<{ memberId: number; filterData: filteredInfomations }> => {
   try {
-    if (id) {
-      const response = await instance.put(`/v1/filter/${id}`, filterData);
-      console.log(`v1/filter/${id} (put)`, response.data);
-      return response.data;
-    }
-
-    throw new Error("id가 없습니다.");
+    const response = await instance.put(`/v1/filter/${id}`, filterData);
+    console.log(`v1/filter/${id} (put)`, response.data);
+    return response.data;
   } catch (error: unknown) {
     throw new Error(error as string);
   }
