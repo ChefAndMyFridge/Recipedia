@@ -1,15 +1,29 @@
+import { useEffect } from "react";
+
 import useModalStore from "@stores/modalStore.ts";
+import useUserStore from "@stores/userStore";
+
+import { useGetMemberList } from "@hooks/useUserHook";
 
 import Button from "@components/common/button/Button.tsx";
 
 import StoreIngredientModal from "@pages/storeIngredient/StoreIngredientModal";
 
 import ProfileModal from "@components/profile/ProfileModal";
-import useUserStore from "@stores/userStore";
 
 const HomeHeaderButtons = () => {
   const { openModal } = useModalStore();
-  const { currentProfileImg } = useUserStore();
+  const { userId, currentProfileImg, setUserId, setUserName } = useUserStore();
+
+  const { data: profiles } = useGetMemberList();
+
+  // 만약 설정된 프로필이 없을 경우, 첫번째 가족 구성원의 정보를 설정
+  useEffect(() => {
+    if (userId === 0 && profiles && profiles.length > 0) {
+      setUserId(profiles[0].memberId);
+      setUserName(profiles[0].membername);
+    }
+  }, [profiles]);
 
   return (
     <div className="flex h-fit justify-between items-center gap-2">
