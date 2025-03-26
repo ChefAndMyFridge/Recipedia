@@ -14,5 +14,5 @@ public interface MemberRecipeRepository extends JpaRepository<MemberRecipe, Long
   List<MemberRecipe> findAllByMember(Member member);
   List<MemberRecipe> findAllByMemberAndFavoriteTrue(Member member);
   List<MemberRecipe> findAllByMemberAndRatingIsNotNull(Member member);
-
+  void deleteAllByMember(Member member);
 }

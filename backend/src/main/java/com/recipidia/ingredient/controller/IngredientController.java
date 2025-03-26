@@ -51,7 +51,6 @@ public class IngredientController {
                       value = """
                           {
                           "name": "대파",
-                          "imageUrl": "https://image.com",
                           "amount": "3",
                           "storagePlace": "냉장고",
                           "expirationDate": "2025-03-08T11:00:00",

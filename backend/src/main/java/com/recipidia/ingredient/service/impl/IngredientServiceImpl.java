@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +32,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class IngredientServiceImpl implements IngredientService {
+
+  @Value("${host.url}")
+  private String hostUrl;
 
   private final IngredientInfoRepository ingredientInfoRepository;
   private final IngredientRepository ingredientRepository;
@@ -66,7 +70,12 @@ public class IngredientServiceImpl implements IngredientService {
   public IngredientIncomingRes stockItem(IngredientIncomingReq request) {
     // 이름으로 재료를 검색. 있으면 해당 재료를 사용.
     IngredientInfo ingredientInfo = ingredientInfoRepository.findByName(request.getName())
-        .orElseGet(() -> new IngredientInfo(request.getName(), request.getImageUrl()));
+        .orElseGet(() -> {
+          String imageUrl = buildImgUrl(request.getName());
+          return ingredientInfoRepository.save(
+              new IngredientInfo(request.getName(), imageUrl)
+          );
+        });
 
     // 개수만큼 추가
     List<Ingredient> ingredients = ingredientInfo.getIngredients();
@@ -102,6 +111,10 @@ public class IngredientServiceImpl implements IngredientService {
         .incomingDate(request.getIncomingDate())
         .amount(validCount)
         .build();
+  }
+
+  private String buildImgUrl(String name) {
+    return String.format("%s/images/ingredients/%s.jpg", hostUrl, name);
   }
 
   @Override

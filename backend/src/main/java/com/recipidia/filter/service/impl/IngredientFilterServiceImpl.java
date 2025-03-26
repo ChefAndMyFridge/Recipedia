@@ -83,7 +83,7 @@ public class IngredientFilterServiceImpl implements IngredientFilterService {
     // 고단백식일 경우 preferred에 추가
     double proteinRatio = (nutrients.protein() * 4 / calories) * 100;
     if (dietaries.contains("고단백식") && proteinRatio >= 35.0) {
-      log.info("💡 '{}' 추가 (고단백식 선호재료): 단백질 비율 {}% 이상", name, proteinRatio);
+      log.info("💡 '{}' 선호 재료 추가 (고단백식): 단백질 비율 {}% 이상", name, proteinRatio);
       preferredIngredients.add(name);
     }
 
