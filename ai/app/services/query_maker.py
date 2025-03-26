@@ -9,7 +9,7 @@ from app.core.logging_config import logger
 
 
 class QueryMaker:
-    def __init__(self, ingredients: List[str] = None, main_ingredients: List[str] = None, 
+    def __init__(self, ingredients: List[str] = None, main_ingredients: List[str] = None,
                  preferred_ingredients: List[str] = None, disliked_ingredients: List[str] = None) -> None:
         """
         QueryMaker 클래스 초기화
@@ -42,12 +42,13 @@ class QueryMaker:
         logger.info(f"{settings.LOG_QUERY_MAKER_PREFIX}_요리 이름 생성 시작")
         self.dishes = await loop.run_in_executor(None,
                                                  lambda: generate_dish_names(
-                                                     self.ingredients, 
+                                                     self.ingredients,
                                                      self.main_ingredients,
                                                      self.preferred_ingredients,
                                                      self.disliked_ingredients
                                                  ))
-        logger.info(f"{settings.LOG_QUERY_MAKER_PREFIX}_요리 이름 생성 완료: {len(self.dishes)}개 생성됨")
+        logger.info(
+            f"{settings.LOG_QUERY_MAKER_PREFIX}_요리 이름 생성 완료: {len(self.dishes)}개 생성됨")
         return self.dishes
 
     async def search_recipes(self) -> Dict[str, List[Dict[str, Any]]]:
@@ -57,7 +58,8 @@ class QueryMaker:
         기능: YouTube API를 사용해 요리 이름에 맞는 레시피 동영상 검색
         """
         self.all_videos = {}
-        logger.info(f"{settings.LOG_QUERY_MAKER_PREFIX}_{len(self.dishes)}개 요리에 대한 레시피 검색 시작")
+        logger.info(
+            f"{settings.LOG_QUERY_MAKER_PREFIX}_{len(self.dishes)}개 요리에 대한 레시피 검색 시작")
 
         # 각 요리별로 비동기 작업 생성
         tasks = []
@@ -72,13 +74,16 @@ class QueryMaker:
             # 결과를 딕셔너리에 저장
             for dish, result in zip(self.dishes, results):
                 if isinstance(result, Exception):
-                    logger.warning(f"{settings.LOG_QUERY_MAKER_PREFIX}_⚠️ {dish} 검색 중 오류: {result}")
+                    logger.warning(
+                        f"{settings.LOG_QUERY_MAKER_PREFIX}_⚠️ {dish} 검색 중 오류: {result}")
                     self.all_videos[dish] = []
                 else:
                     self.all_videos[dish] = result
-                    logger.info(f"{settings.LOG_QUERY_MAKER_PREFIX}_{dish}: {len(result)}개의 동영상 찾음")
+                    logger.info(
+                        f"{settings.LOG_QUERY_MAKER_PREFIX}_{dish}: {len(result)}개의 동영상 찾음")
         except Exception as e:
-            logger.error(f"{settings.LOG_QUERY_MAKER_PREFIX}_⚠️ 레시피 검색 중 오류 발생: {e}")
+            logger.error(
+                f"{settings.LOG_QUERY_MAKER_PREFIX}_⚠️ 레시피 검색 중 오류 발생: {e}")
         return self.all_videos
 
     async def search_recipe_with_timeout(self, dish: str) -> List[Dict[str, Any]]:
@@ -93,10 +98,12 @@ class QueryMaker:
             logger.debug(f"{settings.LOG_QUERY_MAKER_PREFIX}_{dish} 레시피 검색 완료")
             return result
         except asyncio.TimeoutError:
-            logger.warning(f"{settings.LOG_QUERY_MAKER_PREFIX}_⚠️ {dish} 검색 타임아웃")
+            logger.warning(
+                f"{settings.LOG_QUERY_MAKER_PREFIX}_⚠️ {dish} 검색 타임아웃")
             return []
         except Exception as e:
-            logger.error(f"{settings.LOG_QUERY_MAKER_PREFIX}_⚠️ {dish} 검색 중 예외 발생: {e}")
+            logger.error(
+                f"{settings.LOG_QUERY_MAKER_PREFIX}_⚠️ {dish} 검색 중 예외 발생: {e}")
             return []
 
     async def run(self) -> Dict[str, Any]:
@@ -116,18 +123,21 @@ class QueryMaker:
         await self.generate_dishes()
         openai_end = time.time()
         self.openai_time = openai_end - openai_start
-        logger.info(f"{settings.LOG_QUERY_MAKER_PREFIX}_음식 이름 생성 완료: {self.openai_time:.2f}초 소요")
+        logger.info(
+            f"{settings.LOG_QUERY_MAKER_PREFIX}_음식 이름 생성 완료: {self.openai_time:.2f}초 소요")
 
         # 2단계: YouTube 레시피 검색
         youtube_start = time.time()
         await self.search_recipes()
         youtube_end = time.time()
         self.youtube_time = youtube_end - youtube_start
-        logger.info(f"{settings.LOG_QUERY_MAKER_PREFIX}_레시피 검색 완료: {self.youtube_time:.2f}초 소요")
+        logger.info(
+            f"{settings.LOG_QUERY_MAKER_PREFIX}_레시피 검색 완료: {self.youtube_time:.2f}초 소요")
 
         end_time = time.time()
         self.execution_time = end_time - start_time
-        logger.info(f"{settings.LOG_QUERY_MAKER_PREFIX}_전체 처리 완료: {self.execution_time:.2f}초 소요")
+        logger.info(
+            f"{settings.LOG_QUERY_MAKER_PREFIX}_전체 처리 완료: {self.execution_time:.2f}초 소요")
 
         # 통합된 출력 함수 호출
         self.print_results()
@@ -157,10 +167,10 @@ class QueryMaker:
                 print(f"주재료: {', '.join(self.main_ingredients)}")
             else:
                 print("주재료: 지정되지 않음")
-                
+
             if self.preferred_ingredients:
                 print(f"선호재료: {', '.join(self.preferred_ingredients)}")
-                
+
             if self.disliked_ingredients:
                 print(f"비선호재료: {', '.join(self.disliked_ingredients)}")
 
@@ -224,23 +234,25 @@ if __name__ == "__main__":
     # 테스트 모드 설정: False - 음식 이름 생성만, True - 전체 과정(이름 생성 + 유튜브 검색)
     FULL_TEST_MODE = True  # 테스트 모드 변경을 위한 플래그
 
-    async def test_dish_generation(ingredients: List[str], main_ingredients: Optional[List[str]] = None, 
-                                  preferred_ingredients: Optional[List[str]] = None, 
-                                  disliked_ingredients: Optional[List[str]] = None, 
-                                  title: str = "") -> List[str]:
+    async def test_dish_generation(ingredients: List[str], main_ingredients: Optional[List[str]] = None,
+                                   preferred_ingredients: Optional[List[str]] = None,
+                                   disliked_ingredients: Optional[List[str]] = None,
+                                   title: str = "") -> List[str]:
         """음식 이름 생성만 테스트하는 간소화된 함수"""
         print(f"\n===== {title} =====")
         print(f"냉장고 재료: {', '.join(ingredients)}")
-        print(f"주재료: {', '.join(main_ingredients) if main_ingredients else '지정되지 않음'}")
-        
+        print(
+            f"주재료: {', '.join(main_ingredients) if main_ingredients else '지정되지 않음'}")
+
         if preferred_ingredients:
             print(f"선호재료: {', '.join(preferred_ingredients)}")
-            
+
         if disliked_ingredients:
             print(f"비선호재료: {', '.join(disliked_ingredients)}")
 
         # QueryMaker 생성
-        qm = QueryMaker(ingredients, main_ingredients, preferred_ingredients, disliked_ingredients)
+        qm = QueryMaker(ingredients, main_ingredients,
+                        preferred_ingredients, disliked_ingredients)
 
         # 음식 이름 생성 시간 측정
         start_time = time.time()
@@ -258,22 +270,24 @@ if __name__ == "__main__":
         return qm.dishes
 
     async def test_full_process(ingredients: List[str], main_ingredients: Optional[List[str]] = None,
-                               preferred_ingredients: Optional[List[str]] = None,
-                               disliked_ingredients: Optional[List[str]] = None,
-                               title: str = "") -> None:
+                                preferred_ingredients: Optional[List[str]] = None,
+                                disliked_ingredients: Optional[List[str]] = None,
+                                title: str = "") -> None:
         """전체 과정(음식 이름 생성 + 유튜브 검색)을 테스트하는 함수"""
         print(f"\n===== {title} (전체 과정) =====")
         print(f"냉장고 재료: {', '.join(ingredients)}")
-        print(f"주재료: {', '.join(main_ingredients) if main_ingredients else '지정되지 않음'}")
-        
+        print(
+            f"주재료: {', '.join(main_ingredients) if main_ingredients else '지정되지 않음'}")
+
         if preferred_ingredients:
             print(f"선호재료: {', '.join(preferred_ingredients)}")
-            
+
         if disliked_ingredients:
             print(f"비선호재료: {', '.join(disliked_ingredients)}")
 
         # QueryMaker 생성
-        qm = QueryMaker(ingredients, main_ingredients, preferred_ingredients, disliked_ingredients)
+        qm = QueryMaker(ingredients, main_ingredients,
+                        preferred_ingredients, disliked_ingredients)
 
         # 전체 과정 실행
         await qm.run()
@@ -306,15 +320,15 @@ if __name__ == "__main__":
             [["돼지뼈", "감자", "당근", "양파", "고추장", "마늘", "대파", "메추리알"],
              ["메추리알"], ["마늘", "대파"], ["고추장"], "테스트 케이스 6: 돼지뼈/감자 + 매운맛 비선호"],
 
-             [["돼지뼈", "감자", "당근", "양파", "고추장", "마늘", "대파", "메추리알", "기린", "코끼리리"],
+            [["돼지뼈", "감자", "당근", "양파", "고추장", "마늘", "대파", "메추리알", "기린", "코끼리리"],
              ["기린"], ["마늘", "대파"], ["고추장"], "테스트 케이스 6: 돼지뼈/감자 + 매운맛 비선호"],
 
-             [["돼지뼈", "감자", "당근", "양파", "고추장", "마늘", "대파", "메추리알", "기린", "코끼리"],
+            [["돼지뼈", "감자", "당근", "양파", "고추장", "마늘", "대파", "메추리알", "기린", "코끼리"],
              ["코끼리"], ["마늘", "대파"], ["고추장"], "테스트 케이스 6: 돼지뼈/감자 + 매운맛 비선호"],
 
             [["소고기", "양파", "당근", "감자", "토마토", "버섯", "파슬리", "바질", "치즈"],
              ["소고기"], ["치즈", "버섯"], ["토마토"], "테스트 케이스 7: 소고기 요리 (치즈/버섯 선호, 토마토 비선호)"],
-             
+
             [["돼지고기", "김치", "쌀", "달걀", "당근", "양파", "마늘", "생강", "고추", "간장"],
              ["돼지고기", "김치"], ["마늘"], ["생강", "고추"], "테스트 케이스 8: 돼지고기/김치 요리 (매운맛/생강 비선호)"]
         ])
