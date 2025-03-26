@@ -46,9 +46,11 @@ const HomeFilter = () => {
     refectchIngredinetsList();
   }, [order, sort, location]);
 
-  // useEffect(() => {
-  //   refetchFilteredInfomations();
-  // }, [userId]);
+  useEffect(() => {
+    if (userId) {
+      refetchFilteredInfomations();
+    }
+  }, [userId]);
 
   function handleSaveFilter(): void {
     console.log(filteredInfomations);
