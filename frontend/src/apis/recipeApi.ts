@@ -1,4 +1,4 @@
-import { RecipeList, Video } from "@/types/recipeListTypes";
+import { RecipeInfo, RecipeList, Video } from "@/types/recipeListTypes";
 import instance from "./instance";
 
 //재료 기반 요리이름 생성 및 레시피 리스트 조회 API
@@ -16,12 +16,11 @@ export const makeRecipeApi = async (userId: number, ingredients: string[]): Prom
 };
 
 //레시피 추출 API
-export const getRecipeDetailApi = async (recipeId: number) => {
+export const getRecipeDetailApi = async (recipeId: number): Promise<RecipeInfo> => {
   try {
     const response = await instance.get(`/v1/recipe/${recipeId}`);
     return response.data;
   } catch (error: unknown) {
-    console.log("레시피 추출 에러", error);
     throw new Error(error as string);
   }
 };
