@@ -58,8 +58,6 @@ class QueryMaker:
         기능: YouTube API를 사용해 요리 이름에 맞는 레시피 동영상 검색
         """
         self.all_videos = {}
-        logger.info(
-            f"{settings.LOG_QUERY_MAKER_PREFIX}_{len(self.dishes)}개 요리에 대한 레시피 검색 시작")
 
         # 각 요리별로 비동기 작업 생성
         tasks = []
@@ -93,7 +91,6 @@ class QueryMaker:
         기능: 각 요청에 타임아웃 설정
         """
         try:
-            logger.debug(f"{settings.LOG_QUERY_MAKER_PREFIX}_{dish} 레시피 검색 시작")
             result = await asyncio.wait_for(get_youtube_videos(dish), timeout=10.0)
             logger.debug(f"{settings.LOG_QUERY_MAKER_PREFIX}_{dish} 레시피 검색 완료")
             return result
@@ -123,8 +120,6 @@ class QueryMaker:
         await self.generate_dishes()
         openai_end = time.time()
         self.openai_time = openai_end - openai_start
-        logger.info(
-            f"{settings.LOG_QUERY_MAKER_PREFIX}_음식 이름 생성 완료: {self.openai_time:.2f}초 소요")
 
         # 2단계: YouTube 레시피 검색
         youtube_start = time.time()
