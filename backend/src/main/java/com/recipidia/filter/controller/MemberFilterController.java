@@ -34,18 +34,7 @@ public class MemberFilterController {
           @ApiResponse(responseCode = "200", description = "회원 필터 정보 조회 성공",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = MemberFilterDto.class),
-                  examples = @ExampleObject(value = """
-                    {
-                      "memberId": 10,
-                      "filterData": {
-                        "categories": ["한식", "일식"],
-                        "dietaries": ["채식"],
-                        "preferredIngredients": ["토마토", "바질"],
-                        "dislikedIngredients": ["마늘"]
-                      }
-                    }
-                    """)
+                  schema = @Schema(implementation = MemberFilterDto.class)
               )
           ),
           @ApiResponse(responseCode = "404", description = "회원 정보를 찾을 수 없음")
@@ -69,7 +58,7 @@ public class MemberFilterController {
               examples = @ExampleObject(value = """
                 {
                   "categories": ["한식", "일식"],
-                  "dietaries": ["채식"],
+                  "dietaries": ["저당식"],
                   "preferredIngredients": ["토마토", "바질"],
                   "dislikedIngredients": ["마늘"]
                 }
@@ -80,18 +69,7 @@ public class MemberFilterController {
           @ApiResponse(responseCode = "200", description = "회원 필터 정보 업데이트 성공",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = MemberFilterDto.class),
-                  examples = @ExampleObject(value = """
-                    {
-                      "memberId": 10,
-                      "filterData": {
-                        "categories": ["한식", "일식"],
-                        "dietaries": ["채식"],
-                        "preferredIngredients": ["토마토", "바질"],
-                        "dislikedIngredients": ["마늘"]
-                      }
-                    }
-                    """)
+                  schema = @Schema(implementation = MemberFilterDto.class)
               )
           ),
           @ApiResponse(responseCode = "404", description = "회원 정보를 찾을 수 없음")

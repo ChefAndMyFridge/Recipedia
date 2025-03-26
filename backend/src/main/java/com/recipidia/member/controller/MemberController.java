@@ -108,7 +108,7 @@ public class MemberController {
               description = "전체 사용자 조회 성공",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = MemberDto.class)
+                  schema = @Schema(implementation = MemberDto[].class)
               )
           )
       }

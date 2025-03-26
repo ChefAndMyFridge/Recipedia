@@ -86,27 +86,7 @@ public class MemberRecipeController {
               description = "사용자 레시피 목록 조회 성공",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = MemberRecipeDto.class),
-                  examples = @ExampleObject(value = """
-                    [
-                      {
-                        "memberRecipeId": 1,
-                        "memberId": 10,
-                        "recipeId": 100,
-                        "rating": 5,
-                        "favorite": true,
-                        "createdAt": "2025-03-18T13:45:00"
-                      },
-                      {
-                        "memberRecipeId": 2,
-                        "memberId": 10,
-                        "recipeId": 101,
-                        "rating": 4,
-                        "favorite": false,
-                        "createdAt": "2025-03-17T11:30:00"
-                      }
-                    ]
-                """)
+                  schema = @Schema(implementation = MemberRecipeDto[].class)
               )
           ),
           @ApiResponse(
@@ -134,23 +114,7 @@ public class MemberRecipeController {
               description = "조회 성공",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = RecipeWithMemberInfoDto.class),
-                  examples = @ExampleObject(value = """
-                  [
-                    {
-                      "recipeId": 123,
-                      "name": "불고기",
-                      "title": "백종원 불고기 레시피",
-                      "url": "https://youtu.be/xxx",
-                      "channel_title": "백종원 PAIK JONG WON",
-                      "duration": "10:30",
-                      "view_count": 1000000,
-                      "like_count": 50000,
-                      "favorite": true,
-                      "rating": 5
-                    }
-                  ]
-                """)
+                  schema = @Schema(implementation = RecipeWithMemberInfoDto[].class)
               )
           )
       }
@@ -169,23 +133,7 @@ public class MemberRecipeController {
               description = "조회 성공",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = RecipeWithMemberInfoDto.class),
-                  examples = @ExampleObject(value = """
-                  [
-                    {
-                      "recipeId": 456,
-                      "name": "김치찌개",
-                      "title": "집에서 만드는 김치찌개",
-                      "url": "https://youtu.be/yyy",
-                      "channel_title": "맛있는TV",
-                      "duration": "08:45",
-                      "view_count": 750000,
-                      "like_count": 32000,
-                      "favorite": false,
-                      "rating": 4
-                    }
-                  ]
-                """)
+                  schema = @Schema(implementation = RecipeWithMemberInfoDto[].class)
               )
           )
       }

@@ -1,8 +1,8 @@
 package com.recipidia.recipe.controller;
 
+import com.recipidia.recipe.dto.RecipeDetailDto;
 import com.recipidia.recipe.dto.RecipeDto;
 import com.recipidia.recipe.request.RecipeQueryReq;
-import com.recipidia.recipe.response.RecipeExtractRes;
 import com.recipidia.recipe.response.RecipeQueryCustomResponse;
 import com.recipidia.recipe.service.RecipeService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -46,62 +46,8 @@ public class RecipeController {
       ),
       responses = {
           @ApiResponse(responseCode = "200", description = "레시피 정보 조회 성공",
-              content = @Content(schema = @Schema(implementation = RecipeDto.class),
-                  examples = {
-                      @ExampleObject(
-                          name = "응답 데이터",
-                          value = """
-                              {
-                                "dishes": [
-                                  "불고기",
-                                  "소고기 볶음밥",
-                                  "페퍼 스테이크"
-                                ],
-                                "videos": {
-                                  "불고기": [
-                                    {
-                                      "recipeId" : 1,
-                                      "title": "양념 4개면 '소불고기' 끝!",
-                                      "url": "https://www.youtube.com/watch?v=nVzwOOJLt24",
-                                      "channel_title": "백종원 PAIK JONG WON",
-                                      "duration": "11:39",
-                                      "view_count": 4637323,
-                                      "like_count": 47830,
-                                      "favorite": false,
-                                      "rating": 3.8
-                                    }
-                                  ],
-                                  "소고기 볶음밥": [
-                                    {
-                                      "recipeId" : 2,
-                                      "title": "[이연복] 고기 볶음밥",
-                                      "url": "https://www.youtube.com/watch?v=Gp3AqI76Fyk",
-                                      "channel_title": "이연복의 복주머니",
-                                      "duration": "8:27",
-                                      "view_count": 1210887,
-                                      "like_count": 20958,
-                                      "favorite": false,
-                                      "rating": 2.6
-                                    }
-                                  ],
-                                  "페퍼 스테이크": [
-                                    {
-                                      "recipeId" : 3,
-                                      "title": "소고기 볶음 레시피 ㅣ 베이킹 소다 연육 시리즈 - 저렴한 부위 30분만에 안심처럼 연하게 만드는 법",
-                                      "url": "https://www.youtube.com/watch?v=CWXPUpr_iHw",
-                                      "channel_title": "더 프로키친 [The Prokitchen]",
-                                      "duration": "11:47",
-                                      "view_count": 45840,
-                                      "like_count": 984,
-                                      "favorite": true,
-                                      "rating": 4.2
-                                    }
-                                  ]
-                                }
-                              }
-                              """
-                      )
-                  }))
+              content = @Content(schema = @Schema(implementation = RecipeQueryCustomResponse.class))
+          )
       }
   )
   @PostMapping
@@ -120,44 +66,8 @@ public class RecipeController {
       description = "FIGMA : 레시피 리스트 페이지?",
       responses = {
           @ApiResponse(responseCode = "200", description = "레시피 정보 조회 성공",
-              content = @Content(schema = @Schema(implementation = RecipeDto.class),
-                  examples = {
-                      @ExampleObject(
-                          name = "응답 데이터",
-                          value = """
-                              [
-                                {
-                                  "id": 1,
-                                  "name": "돼지고기 계란 볶음",
-                                  "youtubeUrl": "https://www.youtube.com/watch?v=MvxXe4gDjcI",
-                                  "textRecipe": null,
-                                  "ingredients": [
-                                    {
-                                      "id": 1,
-                                      "recipeId": 1,
-                                      "name": "돼지고기",
-                                      "quantity": "1근"
-                                    }
-                                  ]
-                                },
-                                {
-                                  "id": 2,
-                                  "name": "돼지고기 사과 조림",
-                                  "youtubeUrl": "https://www.youtube.com/watch?v=IzsOPD4Yh8Y",
-                                  "textRecipe": null,
-                                  "ingredients": [
-                                    {
-                                      "id": 2,
-                                      "recipeId": 2,
-                                      "name": "돼지고기",
-                                      "quantity": "1근"
-                                    }
-                                  ]
-                                }
-                              ]
-                              """
-                      )
-                  }))
+              content = @Content(schema = @Schema(implementation = RecipeDto[].class))
+          )
       }
   )
   @GetMapping("/check")
@@ -171,39 +81,18 @@ public class RecipeController {
       description = "FIGMA : 레시피 ㅇㅇ ㅇㅇ",
       responses = {
           @ApiResponse(responseCode = "200", description = "텍스트 레시피 추출 성공",
-              content = @Content(schema = @Schema(implementation = RecipeExtractRes.class),
-                  examples = {
-                      @ExampleObject(
-                          name = "응답 데이터",
-                          value = """
-                              {
-                                  title: string,
-                                  cooking_info: {
-                                      cooking_time: string,
-                                      kcal: number
-                                  },
-                                  ingredients: string[],
-                                  cooking_tools: string[],
-                                  cooking_tips: string[],
-                                  cooking_sequence: {
-                                      [step: string]: {
-                                          sequence : string[]
-                                          timestamp : number
-                                      }
-                                  }
-                              }
-                              """
-                      )
-                  }))
+              content = @Content(schema = @Schema(implementation = RecipeDetailDto.class))
+          )
       }
   )
   @GetMapping("/{recipeId}")
-  public Mono<ResponseEntity<RecipeExtractRes>> extractAndSaveRecipe(@PathVariable Long recipeId) {
+  public Mono<ResponseEntity<RecipeDetailDto>> extractAndSaveRecipe(@PathVariable Long recipeId) {
     return recipeService.extractRecipe(recipeId)
         .flatMap(extractRes ->
             recipeService.saveExtractResult(recipeId, extractRes)
                 .thenReturn(extractRes)
         )
+        .flatMap(extractRes -> recipeService.getRecipeDetail(recipeId, extractRes))
         .map(ResponseEntity::ok);
   }
 }
