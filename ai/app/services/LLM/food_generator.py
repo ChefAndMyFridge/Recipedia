@@ -47,9 +47,9 @@ def _parse_dish_names(content: str) -> List[str]:
     # 예외 처리 추가가
     if "NO_VALID_DISHES" in content:
         return []
-    
+
     non_valid_patterns = [
-        "죄송합니다", "죄송하지만", "존재하지 않습니다", "추천할 수 없습니다", 
+        "죄송합니다", "죄송하지만", "존재하지 않습니다", "추천할 수 없습니다",
         "추천할 수 있는 요리가 없습니다", "실존하는 요리는 존재하지 않습니다"
     ]
 
@@ -79,9 +79,9 @@ def _parse_dish_names(content: str) -> List[str]:
 
 
 def generate_dish_names(
-    ingredients: List[str] = None, 
-    main_ingredients: List[str] = None, 
-    preferred_ingredients: List[str] = None, 
+    ingredients: List[str] = None,
+    main_ingredients: List[str] = None,
+    preferred_ingredients: List[str] = None,
     disliked_ingredients: List[str] = None,
     num_dishes: Optional[int] = None
 ) -> List[str]:
@@ -107,10 +107,10 @@ def generate_dish_names(
 
     # 프롬프트 생성
     user_prompt = get_chef_prompt(
-        ingredients_list=ingredients, 
+        ingredients_list=ingredients,
         main_ingredients=main_ingredients,
         preferred_ingredients=preferred_ingredients,
-        disliked_ingredients=disliked_ingredients, 
+        disliked_ingredients=disliked_ingredients,
         num_dishes=num_dishes
     )
 
