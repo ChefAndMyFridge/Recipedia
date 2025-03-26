@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import useUserStore from "@stores/userStore";
 import useIngredientsStore from "@stores/ingredientsStore";
@@ -28,8 +28,12 @@ const HomeFilter = () => {
   const [location, setLocation] = useState<"all" | "fridge" | "freezer">("all");
 
   // API 호출: 재료 목록 조회, 필터 정보 조회
-  useGetIngredientsList(location, sort, order);
+  const { refetch: refectchIngredinetsList } = useGetIngredientsList(location, sort, order);
   useGetFilteredInfomations();
+
+  useEffect(() => {
+    refectchIngredinetsList();
+  }, [order, sort, location]);
 
   function handleSaveFilter(): void {
     console.log(filteredInfomations);
