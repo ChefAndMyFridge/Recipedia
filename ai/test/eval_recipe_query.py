@@ -269,18 +269,14 @@ class RecipeValidator:
             print(
                 f"  - 주재료 사용률: {self.validation_results[dish]['main_score']}%")
 
-            # 부족한 재료 출력
+            # 요리에 필요하나 냉장고에 없는 재료 출력 (문구 변경)
             if not all_essential_included:
                 print(
-                    f"  - 부족한 필수 재료: {', '.join(self.validation_results[dish]['missing_ingredients'])}")
+                    f"  - 요리에 필요하나 냉장고에 없는 재료: {', '.join(self.validation_results[dish]['missing_ingredients'])}")
 
             # 부족한 주재료 출력
             if missing_main_ingredients:
-                print(f"  - 부족한 주재료: {', '.join(missing_main_ingredients)}")
-
-            # 필수재료에 없지만 요리에 사용되는 주재료 출력
-            if main_in_nonessential:
-                print(f"  - 필수 재료는 아니지만 요리에 사용되는 주재료: {', '.join(main_in_nonessential)}")
+                print(f"  - 냉장고에 없는 주재료: {', '.join(missing_main_ingredients)}")
                 
             # 요리에 사용되지 않는 주재료 출력
             if unused_main_ingredients:
