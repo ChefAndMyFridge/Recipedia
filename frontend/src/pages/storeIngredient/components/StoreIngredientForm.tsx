@@ -18,25 +18,38 @@ const StoreIngredientForm = () => {
 
   const { mutate: storeIngredientRequest } = useStoreIngredient();
 
-  const now = new Date();
-  const formattedDate = now.toISOString().split("T")[0];
-  const formattedTime = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
-
-  const minDate = new Date(now.getFullYear() - 5, now.getMonth(), now.getDate()).toISOString().split("T")[0];
-  const maxDate = new Date(now.getFullYear() + 5, now.getMonth(), now.getDate()).toISOString().split("T")[0];
+  const [now, setNow] = useState(new Date());
 
   const [customAmountInput, setCustomAmountInput] = useState(false);
   const [keypadValue, setKeypadValue] = useState("");
 
-  const [incomingDate, setIncomingDate] = useState(formattedDate);
-  const [incomingTime, setIncomingTime] = useState(formattedTime);
+  const [incomingDate, setIncomingDate] = useState(now.toISOString().split("T")[0]);
+  const [incomingTime, setIncomingTime] = useState(
+    `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`
+  );
   const [expirationDate, setExpirationDate] = useState("");
   const [expirationTime, setExpirationTime] = useState("");
 
   const [storagePlace, setStoragePlace] = useState("냉장실");
 
+  const minDate = new Date(now.getFullYear() - 5, now.getMonth(), now.getDate()).toISOString().split("T")[0];
+  const maxDate = new Date(now.getFullYear() + 5, now.getMonth(), now.getDate()).toISOString().split("T")[0];
+
+  // 현재 시간 자동 갱신
   useEffect(() => {
-    // 입고일로부터 7일 후 만료일 설정: 추후 재료별 유통기한 설정 필요
+    const timer = setInterval(() => setNow(new Date()), 5000); // 5초마다 갱신
+    return () => clearInterval(timer);
+  }, []);
+
+  // 입고일 자동 갱신
+  useEffect(() => {
+    setIncomingDate(now.toISOString().split("T")[0]);
+    setIncomingTime(`${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`);
+  }, [now]);
+
+  // 만료일 자동 갱신
+  useEffect(() => {
+    // 입고일로부터 7일 후 만료일 설정: 추후 재료별 유통기한 설정 가능하다면..
     setExpirationDate(new Date(new Date(incomingDate).getTime() + 1000 * 60 * 60 * 24 * 7).toISOString().split("T")[0]);
   }, [incomingDate]);
 
@@ -55,14 +68,7 @@ const StoreIngredientForm = () => {
     const fd = new FormData(event.currentTarget);
     const data = Object.fromEntries(fd.entries());
 
-    if (
-      !data.name ||
-      !data.amount ||
-      !data.incomingDate ||
-      !data.incomingTime ||
-      !data.expirationDate ||
-      !data.expirationTime
-    ) {
+    if (!data.name || !data.amount || !data.expirationDate || !data.expirationTime) {
       alert("모든 항목을 입력해주세요.");
       return;
     }
@@ -71,8 +77,8 @@ const StoreIngredientForm = () => {
       name: data.name as string,
       imageUrl: "",
       amount: Number(data.amount),
-      incomingDate: `${data.incomingDate as string}T${data.incomingTime}:00`,
-      expirationDate: `${data.expirationDate as string}T${data.expirationTime}:00`,
+      incomingDate: `${incomingDate}T${incomingTime}:00`,
+      expirationDate: `${expirationDate}T${expirationTime}:00`,
       storagePlace: storagePlace === "냉장실" ? "fridge" : "freezer",
     };
 
@@ -118,12 +124,14 @@ const StoreIngredientForm = () => {
             value={incomingDate}
             min={minDate}
             max={maxDate}
+            disabled={true}
             onChange={(event) => setIncomingDate(event.target.value)}
           />
           <Input
             name="incomingTime"
             type="time"
             value={incomingTime}
+            disabled={true}
             onChange={(event) => setIncomingTime(event.target.value)}
           />
         </div>

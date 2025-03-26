@@ -22,6 +22,7 @@ export interface InputProps {
   type: string;
   placeHolder?: string;
   value?: string;
+  disabled?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   labelTextSize?: string;
 }
@@ -33,6 +34,7 @@ export interface DateInputProps {
   value?: string;
   min?: string;
   max?: string;
+  disabled?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
