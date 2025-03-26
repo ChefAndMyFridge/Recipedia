@@ -8,9 +8,8 @@ import ProfileAddModal from "@components/profile/ProfileAddModal";
 
 import IconIncrease from "@assets/icons/IconIncrease";
 
-// import { USERS } from "@/data/USERS";
 import { User } from "@/types/userTypes";
-import ProfileGirl from "@assets/images/ProfileGirl.png";
+import defaultProfile from "@assets/images/DefaultProfile.png";
 
 const ProfileChangeModal = () => {
   const { setCurrentProfileImg, setUserName, setUserId } = useUserStore();
@@ -21,7 +20,7 @@ const ProfileChangeModal = () => {
 
   const handleProfileChange = (profile: User) => {
     setUserId(profile.memberId);
-    setCurrentProfileImg(ProfileGirl);
+    setCurrentProfileImg(defaultProfile);
     setUserName(profile.membername);
     closeModal();
   };
@@ -35,10 +34,14 @@ const ProfileChangeModal = () => {
             profiles.map((profile) => (
               <button
                 key={profile.memberId}
-                className="flex flex-col items-center justify-center gap-4"
+                className="flex flex-col items-center justify-center gap-4 rounded-full"
                 onClick={() => handleProfileChange(profile)}
               >
-                <img src={ProfileGirl} alt={profile.membername} className="w-32" />
+                <img
+                  src={defaultProfile}
+                  alt={profile.membername}
+                  className="w-32 aspect-[1/1] rounded-full object-cover"
+                />
                 <p className="font-preSemiBold text-lg">{profile.membername}</p>
               </button>
             ))}

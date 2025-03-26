@@ -68,14 +68,9 @@ export const useGetFilteredInfomations = () => {
 
   const query = useQuery({
     queryKey: ["filteredInfomations", userId],
-    queryFn: () => getMemberFilterApi(userId),
+    queryFn: () => getMemberFilterApi(userId as number),
     staleTime: 1000 * 60 * 60 * 24,
   });
-
-  // userId가 변경될 때마다 refetch 실행
-  useEffect(() => {
-    query.refetch();
-  }, [query.refetch, userId]);
 
   useEffect(() => {
     if (query.data) {

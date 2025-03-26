@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 
 import useUserStore from "@stores/userStore";
 import useIngredientsStore from "@stores/ingredientsStore";
+import useModalStore from "@stores/modalStore";
 
 import { useGetIngredientsList } from "@hooks/useIngredientsHooks";
 import { useGetFilteredInfomations, useSaveFilteredInfomations } from "@hooks/useUserHook";
 
 import HomeExpandFilter from "@pages/home/components/HomeExpandFilter";
+import ProfileChangeModal from "@components/profile/ProfileChangeModal";
 
 import Button from "@components/common/button/Button";
 
@@ -18,6 +20,7 @@ import ArrowUp from "@assets/icons/ArrowUp";
 const HomeFilter = () => {
   const { userId } = useUserStore();
   const { filteredInfomations } = useIngredientsStore();
+  const { openModal } = useModalStore();
 
   const { mutate: useSaveFilteredRequest } = useSaveFilteredInfomations();
 
@@ -29,14 +32,32 @@ const HomeFilter = () => {
 
   // API 호출: 재료 목록 조회, 필터 정보 조회
   const { refetch: refectchIngredinetsList } = useGetIngredientsList(location, sort, order);
-  useGetFilteredInfomations();
+  const { refetch: refetchFilteredInfomations } = useGetFilteredInfomations();
+
+  useEffect(() => {
+    if (!userId) {
+      openModal(<ProfileChangeModal />);
+    } else {
+      refetchFilteredInfomations();
+    }
+  }, []);
 
   useEffect(() => {
     refectchIngredinetsList();
   }, [order, sort, location]);
 
+  // useEffect(() => {
+  //   refetchFilteredInfomations();
+  // }, [userId]);
+
   function handleSaveFilter(): void {
     console.log(filteredInfomations);
+
+    // 프로필 설정이 되어있지 않다면 프로필 변경 모달 오픈
+    if (!userId) {
+      openModal(<ProfileChangeModal />);
+      return;
+    }
 
     // 필터 저장하는 API 호출
     useSaveFilteredRequest(

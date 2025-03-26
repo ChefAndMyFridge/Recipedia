@@ -17,7 +17,7 @@ const HomeHeaderButtons = () => {
         className="flex flex-1 w-10 aspect-[1/1] bg-white rounded-full items-center justify-center"
         onClick={() => openModal(<ProfileModal />)}
       >
-        <img src={`${currentProfileImg}`} alt="profile" />
+        <img src={`${currentProfileImg}`} alt="profile" className="w-full h-full rounded-full object-cover" />
       </button>
 
       <Button
