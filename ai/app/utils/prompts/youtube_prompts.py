@@ -109,8 +109,14 @@ def get_chef_prompt(ingredients_list, main_ingredients=None, preferred_ingredien
     
     # 선호 재료 처리 - 빈 리스트인 경우에도 기본 지시사항 제공
     if preferred_ingredients and len(preferred_ingredients) > 0:
-        preferred_ingredients_section = f"선호재료: [{', '.join(preferred_ingredients)}]"
-        preferred_ingredients_instruction = f"가능하다면 선호재료({', '.join(preferred_ingredients)})가 포함된 요리를 고려하되, 이에 지나치게 편중되지 않도록 균형 있게 추천해주세요."
+        # 냉장고 재료에 있는 선호 재료만 필터링
+        valid_preferred = [p for p in preferred_ingredients if p in ingredients_list]
+        if valid_preferred:
+            preferred_ingredients_section = f"선호재료: [{', '.join(valid_preferred)}]"
+            preferred_ingredients_instruction = f"가능하다면 선호재료({', '.join(valid_preferred)})가 포함된 요리를 고려하되, 이에 지나치게 편중되지 않도록 균형 있게 추천해주세요."
+        else:
+            preferred_ingredients_section = ""
+            preferred_ingredients_instruction = "냉장고 재료를 활용한 다양한 요리를 추천해주세요."
     else:
         preferred_ingredients_section = ""
         preferred_ingredients_instruction = "냉장고 재료를 활용한 다양한 요리를 추천해주세요."
