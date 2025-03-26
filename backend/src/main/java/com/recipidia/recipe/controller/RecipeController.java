@@ -84,7 +84,7 @@ public class RecipeController {
           )
       }
   )
-  @GetMapping("/{recipeId}")
+  @GetMapping("/{recipeId}/check")
   public Mono<ResponseEntity<RecipeDetailDto>> getRecipeDetail(@PathVariable Long recipeId) {
     return recipeService.getCurrentRecipeDetail(recipeId)
         .map(ResponseEntity::ok);
@@ -100,7 +100,7 @@ public class RecipeController {
           )
       }
   )
-  @GetMapping("/{recipeId}/extract")
+  @GetMapping("/{recipeId}")
   public Mono<ResponseEntity<RecipeDetailDto>> extractAndSaveRecipe(@PathVariable Long recipeId) {
     return recipeService.extractRecipe(recipeId)
         .flatMap(extractRes ->
