@@ -32,7 +32,6 @@ const StoreIngredientForm = () => {
 
   const [storagePlace, setStoragePlace] = useState("냉장실");
 
-  const minDate = new Date(now.getFullYear() - 5, now.getMonth(), now.getDate()).toISOString().split("T")[0];
   const maxDate = new Date(now.getFullYear() + 5, now.getMonth(), now.getDate()).toISOString().split("T")[0];
 
   // 현재 시간 자동 갱신
@@ -122,8 +121,6 @@ const StoreIngredientForm = () => {
             name="incomingDate"
             type="date"
             value={incomingDate}
-            min={minDate}
-            max={maxDate}
             disabled={true}
             onChange={(event) => setIncomingDate(event.target.value)}
           />
