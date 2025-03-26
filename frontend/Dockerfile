@@ -21,7 +21,7 @@ RUN mkdir -p /usr/share/nginx/html /etc/nginx/conf.d
 RUN mkdir -p /var/www/images 
 COPY --from=builder /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY /images /var/www/images
+COPY ./images /var/www/images
 ENV TZ=Asia/Seoul
 RUN ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 RUN echo "Asia/Seoul" > /etc/timezone
