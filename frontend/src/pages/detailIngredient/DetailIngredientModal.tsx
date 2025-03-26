@@ -31,15 +31,22 @@ const DetailIngredientModal = ({ ingredient }: IngredientsProps) => {
 
       {/* 선택된 식재료 상세 목록  */}
       <div className="w-full h-fit px-2">
-        <div className="flex h-[35vh] max-h-[35vh] items-start content-start py-2 px-4 gap-y-5 shrink-0 flex-wrap font-preMedium bg-[#EEE] rounded-xl overflow-y-auto">
-          {ingredient.ingredients &&
-            ingredient.ingredients.map((item) => (
-              <DetailIngredientItem
-                key={item.ingredientId}
-                ingredient={item}
-                imgSrc={ingredient.imageUrl ? ingredient.imageUrl : noImg}
-              />
-            ))}
+        <div className="flex h-[35vh] max-h-[35vh] items-start content-start px-4 gap-y-5 shrink-0 flex-wrap font-preMedium bg-[#EEE] rounded-xl overflow-y-auto">
+          <table className="w-full font-preRegular text-center text-xs">
+            <thead className="sticky top-0  bg-[#EEE] z-10">
+              <tr className="h-10 border-b-2 border-gray-300">
+                <th className="w-1/5"></th>
+                <th className="w-2/5">입고일</th>
+                <th className="w-2/5">만료일</th>
+              </tr>
+            </thead>
+            <tbody>
+              {ingredient.ingredients &&
+                ingredient.ingredients.map((item, index) => {
+                  return <DetailIngredientItem key={item.ingredientId} ingredient={item} index={index} />;
+                })}
+            </tbody>
+          </table>
         </div>
       </div>
 
