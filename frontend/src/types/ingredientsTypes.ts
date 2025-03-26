@@ -11,6 +11,8 @@ export interface Ingredients {
   name: string;
   imageUrl: string;
   totalCount: number;
+  earliestExpiration: string;
+  latestExpiration: string;
   ingredients: Ingredient[];
 }
 
@@ -77,13 +79,13 @@ export interface DeleteIngredientResponse {
 }
 
 export interface filteringInformationKeys {
-  category: string[];
-  preference: string[];
+  categories: string[];
+  dietaries: string[];
 }
 
 export interface filteredInfomations {
-  category: string[];
-  preference: string[];
-  like: string[];
-  dislike: string[];
+  categories: string[];
+  dietaries: string[];
+  preferredIngredients: string[];
+  dislikedIngredients: string[];
 }

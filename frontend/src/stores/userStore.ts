@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import defaultProfile from "@assets/images/ProfileDad.png";
+import defaultProfile from "@assets/images/DefaultProfile.png";
 
 interface UserState {
   userId: number;

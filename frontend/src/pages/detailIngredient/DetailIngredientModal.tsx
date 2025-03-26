@@ -17,14 +17,14 @@ const DetailIngredientModal = ({ ingredient }: IngredientsProps) => {
   const { closeModal } = useModalStore();
 
   return (
-    <div>
+    <div className="relative">
       <DetailIngredientImage
         imgSrc={ingredient.imageUrl ? ingredient.imageUrl : noImg}
         ingredientId={ingredient.ingredientInfoId}
       />
 
       {/* 선택된 식재료 현황 */}
-      <div className="flex justify-between items-center w-full h-10 px-6 py-8 font-preSemiBold">
+      <div className="flex justify-between items-center w-full h-14 px-6 py-2 font-preSemiBold">
         <h1 className="m-0 text-xl">{ingredient.name}</h1>
         <h1 className="m-0 text-xl">{ingredient.totalCount}개</h1>
       </div>

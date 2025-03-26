@@ -10,27 +10,27 @@ import IngredientButton from "@components/common/button/IngredientButton";
 import useIngredientsStore from "@stores/ingredientsStore";
 
 interface FilterElementProps {
-  type: "category" | "preference";
+  type: "categories" | "dietaries";
   content: string;
   keys: string[];
   elements: string[];
-  onSetFilter: (type: "category" | "preference", value: string) => void;
-  onClear: (type: "category" | "preference") => void;
+  onSetFilter: (type: "categories" | "dietaries", value: string) => void;
+  onClear: (type: "categories" | "dietaries") => void;
 }
 
 interface IngredientsPreferenceProps {
-  type: "like" | "dislike";
+  type: "preferredIngredients" | "dislikedIngredients";
   label: string;
   placeHolder: string;
   selectedList: filteredInfomations;
-  onSetFilter: (type: "like" | "dislike", value: string) => void;
-  onClear: (type: "like" | "dislike") => void;
+  onSetFilter: (type: "preferredIngredients" | "dislikedIngredients", value: string) => void;
+  onClear: (type: "preferredIngredients" | "dislikedIngredients") => void;
 }
 
 const FilterElement = ({ type, content, keys, elements, onSetFilter, onClear }: FilterElementProps) => {
   return (
     <div className="mb-4">
-      <div className="flex justify-between items-center h-8 border-content">
+      <div className="flex justify-between items-center h-8 mb-2 border-content">
         <span className="text-sm font-preBold">{content}</span>
         <button onClick={() => onClear(type)} className="text-xs font-preRegular text-content2">
           초기화
@@ -66,7 +66,7 @@ const IngredientsPreference = ({
     const ingredient = Object.fromEntries(fd.entries()).ingredient as string;
 
     if (ingredient) {
-      const oppositeType = type === "like" ? "dislike" : "like";
+      const oppositeType = type === "preferredIngredients" ? "dislikedIngredients" : "preferredIngredients";
 
       if (selectedList[type].includes(ingredient)) {
         alert("이미 선택된 재료입니다.");
@@ -74,7 +74,11 @@ const IngredientsPreference = ({
       }
 
       if (selectedList[oppositeType].includes(ingredient)) {
-        alert(type === "like" ? "이미 싫어하는 재료로 선택된 재료입니다." : "이미 좋아하는 재료로 선택된 재료입니다.");
+        alert(
+          type === "preferredIngredients"
+            ? "이미 싫어하는 재료로 선택된 재료입니다."
+            : "이미 좋아하는 재료로 선택된 재료입니다."
+        );
         return;
       }
 
@@ -107,7 +111,7 @@ const IngredientsPreference = ({
           selectedList[type].map((item, index) => (
             <IngredientButton
               key={index}
-              isSelected={type === "like" ? true : false}
+              isSelected={type === "preferredIngredients" ? true : false}
               content={item}
               onAction={() => onSetFilter(type, item)}
             />
@@ -124,23 +128,23 @@ const HomeExpandFilter = () => {
   return (
     <div className="absolute top-10 left-0 w-full bg-white shadow-md z-10 px-4 py-3 font-preMedium">
       <FilterElement
-        type={"category"}
+        type={"categories"}
         content="카테고리"
-        keys={filteringInfomationKeys.category}
-        elements={filteredInfomations.category}
+        keys={filteringInfomationKeys.categories}
+        elements={filteredInfomations.categories}
         onSetFilter={setFilteredInfomations}
         onClear={setClearFilteredInfomations}
       />
       <FilterElement
-        type={"preference"}
+        type={"dietaries"}
         content="선호 식단"
-        keys={filteringInfomationKeys.preference}
-        elements={filteredInfomations.preference}
+        keys={filteringInfomationKeys.dietaries}
+        elements={filteredInfomations.dietaries}
         onSetFilter={setFilteredInfomations}
         onClear={setClearFilteredInfomations}
       />
       <IngredientsPreference
-        type={"like"}
+        type={"preferredIngredients"}
         label="좋아하는 재료"
         placeHolder="좋아하는 재료를 입력해주세요."
         selectedList={filteredInfomations}
@@ -148,7 +152,7 @@ const HomeExpandFilter = () => {
         onClear={setClearFilteredInfomations}
       />
       <IngredientsPreference
-        type={"dislike"}
+        type={"dislikedIngredients"}
         label="싫어하는 재료"
         placeHolder="싫어하는 재료를 입력해주세요."
         selectedList={filteredInfomations}

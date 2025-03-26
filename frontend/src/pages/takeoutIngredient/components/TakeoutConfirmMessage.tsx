@@ -5,7 +5,8 @@ import useModalStore from "@stores/modalStore";
 import useIngredientsStore from "@stores/ingredientsStore";
 import useRecipeStore from "@stores/recipeStore";
 
-import Button from "@components/common/button/Button.tsx";
+import Button from "@components/common/button/Button";
+
 import { SelectedIngredients } from "@/types/ingredientsTypes";
 
 const TakeoutConfirmMessage = () => {

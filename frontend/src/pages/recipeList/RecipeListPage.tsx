@@ -12,11 +12,12 @@ import LoadingPlayer from "@components/common/loading/LoadingPlayer";
 
 import { usePostRecipeList } from "@hooks/useRecipeHooks";
 import useRecipeStore from "@stores/recipeStore";
+import useUserStore from "@/stores/userStore";
 
 const RecipeListPage = () => {
   const { recommendType } = useParams();
-  const { recipeList } = useRecipeStore();
-  const { recipeSelectedIngredients } = useRecipeStore();
+  const { userId } = useUserStore();
+  const { recipeSelectedIngredients, recipeList } = useRecipeStore();
 
   const [DISHES, setDISHES] = useState<string[]>([]);
 
@@ -24,7 +25,7 @@ const RecipeListPage = () => {
 
   //선택된 재료 기반 레시피 조회 Hook 호출
   const selectedIngredientsNames = recipeSelectedIngredients.map((ingredient) => ingredient.name);
-  const { isLoading, isError } = usePostRecipeList(selectedIngredientsNames);
+  const { isLoading, isError } = usePostRecipeList(userId, selectedIngredientsNames);
 
   //레시피 추출 시 DISHES 상태 업데이트
   useEffect(() => {
@@ -39,7 +40,7 @@ const RecipeListPage = () => {
   if (isError) return <ErrorPage />;
 
   return (
-    <section className="flex flex-col h-screen p-3">
+    <section className="flex flex-col h-full p-3">
       {DISHES.length > 0 ? (
         <>
           <Header title={HeaderTitle} isIcon />

@@ -11,10 +11,10 @@ import {
 import instance from "./instance";
 
 // 고내에 저장된 재료 목록 조회
-export const getIngredientsApi = async (): Promise<Ingredients[]> => {
+export const getIngredientsApi = async (location: string, sort: string, order: string): Promise<Ingredients[]> => {
   try {
-    const response = await instance.get("v1/ingredient");
-    console.log("v1/ingredient", response.data);
+    const response = await instance.get(`v1/ingredient?storage=${location}&sort=${sort}&order=${order}`);
+    console.log(`v1/ingredient?storage=${location}&sort=${sort}&order=${order}`, response.data);
     return response.data;
   } catch (error: unknown) {
     throw new Error(error as string);
