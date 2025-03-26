@@ -27,7 +27,7 @@ const DetailIngredientInfo = ({
       </div>
 
       <span className="flex justify-center items-center h-full aspect-[1/1] rounded-full bg-primary font-preBold text-white">
-        <p>{ingredient.storagePlace === "냉장고" ? "냉장" : "냉동"}</p>
+        <p>{ingredient.storagePlace === "fridge" ? "냉장" : "냉동"}</p>
       </span>
     </div>
   );
