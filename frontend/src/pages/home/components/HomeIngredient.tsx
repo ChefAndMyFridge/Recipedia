@@ -68,14 +68,14 @@ const HomeIngredient = ({ ingredient }: HomeIngredientProps) => {
     <div className="flex flex-col w-full h-fit p-1 justify-center items-center ">
       {/* 아이콘 부분 */}
       <div
-        className={`relative w-full aspect-[1/1] rounded-3xl cursor-pointer bg-subContent ${isShaking ? "shake" : ""}`}
+        className={`relative w-full aspect-[1/1] rounded-3xl cursor-pointer ${isShaking ? "shake" : ""}`}
         onClick={() => openModal(<DetailIngredientModal ingredient={ingredient} />)}
       >
         {/* 재료 이미지 */}
         <img
           src={ingredient.imageUrl ? ingredient.imageUrl : noImg}
           alt="no image"
-          className="w-full h-full object-cover rounded-3xl"
+          className="w-full aspect-[1/1] object-cover rounded-3xl"
         />
 
         {/* 재료 이름 출력 */}

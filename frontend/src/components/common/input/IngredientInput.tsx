@@ -26,7 +26,7 @@ const Suggestion = ({
         <img
           src={suggestion.imageUrl ? suggestion.imageUrl : noImg}
           alt="no image"
-          className="w-full h-full object-cover rounded-3xl"
+          className="h-full aspect-[1/1] object-cover rounded-3xl"
         />
       </span>
       <span className="font-preRegular">{suggestion.name}</span>
