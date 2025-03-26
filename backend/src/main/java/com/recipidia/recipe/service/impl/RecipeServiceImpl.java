@@ -299,4 +299,21 @@ public class RecipeServiceImpl implements RecipeService {
         });
   }
 
+  @Override
+  public Mono<RecipeDetailDto> getCurrentRecipeDetail(Long recipeId) {
+    return Mono.fromCallable(() -> recipeRepository.findByIdWithIngredients(recipeId))
+        .subscribeOn(Schedulers.boundedElastic())
+        .flatMap(optionalRecipe -> {
+          if (optionalRecipe.isEmpty()) {
+            return Mono.error(new NoRecipeException("Recipe not found"));
+          }
+          Recipe recipe = optionalRecipe.get();
+          // textRecipe가 없으면 빈 RecipeExtractRes를 생성하거나 null을 사용 (DTO 설계에 따라 선택)
+          RecipeExtractRes extractRes = recipe.getTextRecipe();
+          RecipeDetailDto dto = RecipeDetailDto.fromEntities(recipe, extractRes);
+          return Mono.just(dto);
+        });
+  }
+
+
 }

@@ -75,6 +75,21 @@ public class RecipeController {
     return recipeService.getAllRecipes();
   }
 
+  @Operation(
+      summary = "단일 레시피 조회",
+      description = "레시피 ID를 기반으로 단일 레시피 상세 정보를 조회합니다.",
+      responses = {
+          @ApiResponse(responseCode = "200", description = "레시피 조회 성공",
+              content = @Content(schema = @Schema(implementation = RecipeDetailDto.class))
+          )
+      }
+  )
+  @GetMapping("/{recipeId}")
+  public Mono<ResponseEntity<RecipeDetailDto>> getRecipeDetail(@PathVariable Long recipeId) {
+    return recipeService.getCurrentRecipeDetail(recipeId)
+        .map(ResponseEntity::ok);
+  }
+
 
   @Operation(
       summary = "특정 레시피 텍스트 추출",
@@ -85,7 +100,7 @@ public class RecipeController {
           )
       }
   )
-  @GetMapping("/{recipeId}")
+  @GetMapping("/{recipeId}/extract")
   public Mono<ResponseEntity<RecipeDetailDto>> extractAndSaveRecipe(@PathVariable Long recipeId) {
     return recipeService.extractRecipe(recipeId)
         .flatMap(extractRes ->

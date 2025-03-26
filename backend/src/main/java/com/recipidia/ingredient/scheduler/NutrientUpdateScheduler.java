@@ -51,7 +51,7 @@ public class NutrientUpdateScheduler {
                             .saturatedFat(response.getSaturatedFat())
                             .unsaturatedFat(response.getUnsaturatedFat())
                             .transFat(response.getTransFat())
-                            .allergenInfo(response.getAllergenInfo())  // 이제 응답 값에서 받아옴
+                            .allergenInfo(response.getAllergenInfo())
                             .build();
                     nutrientRepository.save(nutrient);
                 }

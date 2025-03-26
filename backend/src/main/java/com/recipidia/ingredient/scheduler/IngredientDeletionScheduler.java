@@ -21,14 +21,14 @@ public class IngredientDeletionScheduler {
   @Scheduled(cron = "0 0 0 * * *")
   @Transactional
   public void deleteOldReleasedIngredients() {
-    LocalDateTime sevenDaysAgo = LocalDateTime.now().minusDays(7);
+    LocalDateTime nDaysAgo = LocalDateTime.now().minusDays(28); // 4주마다 삭제
     List<Ingredient> oldReleasedIngredients = ingredientRepository
-        .findByReleasingDateBeforeAndIsReleasedTrue(sevenDaysAgo);
+        .findByReleasingDateBeforeAndIsReleasedTrue(nDaysAgo);
 
     if (!oldReleasedIngredients.isEmpty()) {
       ingredientRepository.deleteAll(oldReleasedIngredients);
       // 필요 시 로깅 추가
-      System.out.println("Deleted " + oldReleasedIngredients.size() + " ingredients released before " + sevenDaysAgo);
+      System.out.println("Deleted " + oldReleasedIngredients.size() + " ingredients released before " + nDaysAgo);
     }
   }
 }
