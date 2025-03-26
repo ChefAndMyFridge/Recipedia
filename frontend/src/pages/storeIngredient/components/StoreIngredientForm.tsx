@@ -72,11 +72,15 @@ const StoreIngredientForm = () => {
       return;
     }
 
+    // 현재 시간을 UTC+9로 변환
+    const currentTime = new Date();
+    currentTime.setMinutes(currentTime.getMinutes() - currentTime.getTimezoneOffset());
+
     const ingredient: StoreIngredient = {
       name: data.name as string,
       imageUrl: "",
       amount: Number(data.amount),
-      incomingDate: `${incomingDate}T${incomingTime}:00`,
+      incomingDate: currentTime.toISOString().slice(0, 16) + ":00",
       expirationDate: `${expirationDate}T${expirationTime}:00`,
       storagePlace: storagePlace === "냉장실" ? "fridge" : "freezer",
     };
