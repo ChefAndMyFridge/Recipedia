@@ -2,9 +2,10 @@ import { RecipeList, Video } from "@/types/recipeListTypes";
 import instance from "./instance";
 
 //재료 기반 요리이름 생성 및 레시피 리스트 조회 API
-export const makeRecipeApi = async (ingredients: string[]): Promise<RecipeList> => {
+export const makeRecipeApi = async (userId: number, ingredients: string[]): Promise<RecipeList> => {
   try {
     const response = await instance.post("/v1/recipe", {
+      memberId: userId,
       ingredients: ingredients,
     });
 
