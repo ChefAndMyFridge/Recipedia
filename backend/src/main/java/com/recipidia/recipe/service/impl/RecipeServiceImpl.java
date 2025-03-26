@@ -5,6 +5,7 @@ import com.recipidia.filter.repository.MemberFilterRepository;
 import com.recipidia.filter.service.IngredientFilterService;
 import com.recipidia.ingredient.dto.IngredientInfoDto;
 import com.recipidia.ingredient.service.IngredientService;
+import com.recipidia.member.entity.MemberRecipe;
 import com.recipidia.recipe.converter.RecipeQueryResConverter;
 import com.recipidia.recipe.dto.RecipeDetailDto;
 import com.recipidia.recipe.dto.RecipeDto;
@@ -195,11 +196,13 @@ public class RecipeServiceImpl implements RecipeService {
             Mono.fromCallable(() -> memberRecipeRepository.findByMemberIdAndRecipeId(memberId, recipeId))
                 .subscribeOn(Schedulers.boundedElastic())
                 .map(optionalMemberRecipe -> {
-                  boolean favorite = false;
-                  double rating = 0.0;
+                  Boolean favorite = false;
+                  Integer rating = 0;
                   if (optionalMemberRecipe.isPresent()) {
-                    favorite = optionalMemberRecipe.get().getFavorite();
-                    rating = optionalMemberRecipe.get().getRating();
+                    MemberRecipe memberRecipe = optionalMemberRecipe.get();
+
+                    favorite = Optional.ofNullable(memberRecipe.getFavorite()).orElse(false);
+                    rating = Optional.ofNullable(memberRecipe.getRating()).orElse(0);
                   }
                   return VideoInfoCustomResponse.builder()
                       .recipeId(recipeId)

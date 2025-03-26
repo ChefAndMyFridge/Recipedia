@@ -27,11 +27,11 @@ public class MemberRecipe {
 
   // 별점
   @Column
-  private Integer rating;
+  private Integer rating = 0;
 
   // 즐겨찾기 여부
   @Column
-  private Boolean favorite;
+  private Boolean favorite = false;
 
   // 사용 날짜
   @Column(name = "created_at")
