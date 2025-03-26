@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     ALLOWED_ORIGINS: List[str]
     YOUTUBE_API_KEY: str = ""
     OPENAI_API_KEY: str
+    USDA_API_KEY: str
 
     YOUTUBE_API_KEYS: List[str]
 

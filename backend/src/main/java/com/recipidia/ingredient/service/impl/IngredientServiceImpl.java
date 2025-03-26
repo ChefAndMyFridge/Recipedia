@@ -1,19 +1,28 @@
 package com.recipidia.ingredient.service.impl;
 
+import com.recipidia.ingredient.document.IngredientDocument;
 import com.recipidia.ingredient.dto.IngredientInfoDto;
+import com.recipidia.ingredient.dto.IngredientInfoWithNutrientDto;
+import com.recipidia.ingredient.dto.IngredientSimpleInfoDto;
 import com.recipidia.ingredient.entity.Ingredient;
 import com.recipidia.ingredient.entity.IngredientInfo;
 import com.recipidia.ingredient.exception.IngredientDeleteException;
+import com.recipidia.ingredient.repository.IngredientDocumentRepository;
 import com.recipidia.ingredient.repository.IngredientInfoRepository;
 import com.recipidia.ingredient.repository.IngredientRepository;
+import com.recipidia.ingredient.repository.querydsl.IngredientQueryRepository;
 import com.recipidia.ingredient.request.IngredientIncomingReq;
+import com.recipidia.ingredient.request.IngredientMultipleDeleteReq;
 import com.recipidia.ingredient.request.IngredientUpdateReq;
 import com.recipidia.ingredient.response.IngredientIncomingRes;
 import com.recipidia.ingredient.response.IngredientUpdateRes;
 import com.recipidia.ingredient.service.IngredientService;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,9 +34,27 @@ public class IngredientServiceImpl implements IngredientService {
 
   private final IngredientInfoRepository ingredientInfoRepository;
   private final IngredientRepository ingredientRepository;
+  private final IngredientDocumentRepository ingredientDocumentRepository;
+
+  // queryDSL
+  private final IngredientQueryRepository ingredientQueryRepository;
 
   @Override
-  public List<IngredientInfoDto> getAllIngredients() {
+  public List<IngredientSimpleInfoDto> getAllIngredientInfo() {
+    List<IngredientInfo> ingredientInfos = ingredientInfoRepository.findAll();
+    return ingredientInfos.stream()
+        .map(IngredientSimpleInfoDto::fromEntity)
+        .toList();
+  }
+
+  @Override
+  public List<IngredientInfoDto> findAllExistingIngredients(Map<String, String> filterParam) {
+    return ingredientQueryRepository.findAllExistingIngredients(filterParam);
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public List<IngredientInfoDto> getAllExistingIngredients() {
     List<IngredientInfo> ingredientInfos = ingredientInfoRepository.findAllWithIngredients();
     return ingredientInfos.stream()
         .map(IngredientInfoDto::fromEntity)
@@ -56,16 +83,24 @@ public class IngredientServiceImpl implements IngredientService {
 
     // 만약 ingredientInfo가 새로 생성된 객체라면 save 호출
     if (ingredientInfo.getId() == null) { // 새로운 엔티티라면 ID가 null일 것
+      // ingredientInfo에 대한 Nutrient 정보를 추가해야함
       ingredientInfoRepository.save(ingredientInfo);
+      // Elasctic Search index에 추가
+      ingredientDocumentRepository.save(IngredientDocument.fromEntity(ingredientInfo));
     }
 
-    // 저장: 새로운 냉장고거나 기존 냉장고에 item 추가된 상태 저장
+    // 미출고 재료의 개수 계산 (isReleased가 false인 것들만)
+    int validCount = (int) ingredients.stream()
+        .filter(ingredient -> !ingredient.isReleased())
+        .count();
+
+    // 저장: 새로운 재료거나 기존 재료에 item 추가된 상태 저장 후 응답
     return IngredientIncomingRes.builder()
         .name(request.getName())
         .storagePlace(request.getStoragePlace())
         .expirationDate(request.getExpirationDate())
         .incomingDate(request.getIncomingDate())
-        .amount(ingredients.size())
+        .amount(validCount)
         .build();
   }
 
@@ -97,19 +132,25 @@ public class IngredientServiceImpl implements IngredientService {
       throw new IngredientDeleteException("재료의 수량이 0개여서 삭제가 불가능합니다");
     }
 
-    int startIdx = ingredients.indexOf(remainIngredients.get(0));
+    // 요청한 수량과 남은 재료 수 중 작은 값을 사용
+    int validQuantity = Math.min(quantity, remainIngredients.size());
 
-    List<Long> releaseIds = remainIngredients.stream()
+    // 출고할 재료 목록: 가장 오래된 미출고 재료부터 validQuantity 개 선택
+    List<Ingredient> toRelease = remainIngredients.subList(0, validQuantity);
+    List<Long> releaseIds = toRelease.stream()
         .map(Ingredient::getId)
-        .limit(Math.min(quantity, remainIngredients.size())).toList();
+        .toList();
 
-    // 현재 시간을 기준으로 출고일을 지정함
+    // 현재 시간으로 출고 처리 (DB update)
     ingredientRepository.markReleasedByIds(releaseIds, LocalDateTime.now());
 
-    int endIndex = Math.min(quantity, ingredients.size());
-    int remainCount = ingredients.size() - endIndex;
+    // 출고된 재료들을 ingredients 컬렉션에서 제거
+    ingredients.removeAll(toRelease);
 
-    ingredients.subList(startIdx, endIndex).clear();
+    // 남은 미출고 재료의 수를 새로 계산
+    int remainCount = (int) ingredients.stream()
+        .filter(i -> !i.isReleased())
+        .count();
 
     return Map.of("remainCount", remainCount);
   }
@@ -118,5 +159,38 @@ public class IngredientServiceImpl implements IngredientService {
   public IngredientInfoDto getIngredient(Long ingredientId) {
     IngredientInfo ingredientInfo = ingredientInfoRepository.findWithIngredients(ingredientId);
     return IngredientInfoDto.fromEntity(ingredientInfo);
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public IngredientInfoWithNutrientDto getIngredientInfoWithNutrients(Long id) {
+    IngredientInfo ingredientInfo = ingredientInfoRepository.findWithIngredientsAndNutrients(id);
+    return IngredientInfoWithNutrientDto.fromEntity(ingredientInfo);
+  }
+
+  @Override
+  @Transactional
+  public Map<String, Integer> releaseMultipleItems(List<IngredientMultipleDeleteReq> requests) {
+    Map<String, Integer> remainCounts = new HashMap<>();
+
+    for (IngredientMultipleDeleteReq req : requests) {
+      // 이름으로 재료 조회
+      IngredientInfo ingredientInfo = ingredientInfoRepository.findByName(req.name())
+          .orElseThrow(() -> new IngredientDeleteException("재료 " + req.name() + " 가 존재하지 않습니다."));
+
+      // 기존 단일 출고 메서드 재활용
+      Map<String, Integer> result = releaseItems(ingredientInfo.getId(), req.quantity());
+      remainCounts.put(req.name(), result.get("remainCount"));
+    }
+    return remainCounts;
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public List<IngredientInfoWithNutrientDto> getAllExistingIngredientsWithNutrients() {
+    List<IngredientInfo> ingredientInfos = ingredientInfoRepository.findAllExistingWithIngredientsAndNutrients();
+    return ingredientInfos.stream()
+        .map(IngredientInfoWithNutrientDto::fromEntity)
+        .collect(Collectors.toList());
   }
 }

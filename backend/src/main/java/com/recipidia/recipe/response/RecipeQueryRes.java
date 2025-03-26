@@ -1,5 +1,6 @@
 package com.recipidia.recipe.response;
 
+import com.recipidia.recipe.dto.VideoInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,5 +17,4 @@ public class RecipeQueryRes {
 
   private List<String> dishes;
   private Map<String, List<VideoInfo>> videos;
-  private double execution_time; // 선택 사항
 }

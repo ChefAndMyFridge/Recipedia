@@ -2,9 +2,13 @@ server:
   port: 8080
 
 spring:
+  elasticsearch:
+    uris: http://my-elasticSearch:9200  # Docker Compose에서 설정한 컨테이너 이름 사용
+    username: elastic
+    password: ${ELASTIC_PASSWORD}
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://my-mysql:3306/recipidia
+    url: jdbc:mysql://my-mysql:3306/recipidia?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul
     username: root
     password: ${MYSQL_ROOT_PASSWORD}
 
@@ -19,8 +23,8 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
     open-in-view: false
 
-logging.level:
-  org.hibernate.SQL: DEBUG
+#logging.level:
+#  org.hibernate.SQL: DEBUG
 
 springdoc:
   swagger-ui:
@@ -28,4 +32,4 @@ springdoc:
 
 fastapi:
   base:
-    url: http://localhost:8000
+    url: http://my-fastapi:8000

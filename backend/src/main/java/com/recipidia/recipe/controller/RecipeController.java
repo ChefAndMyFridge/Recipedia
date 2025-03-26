@@ -1,7 +1,9 @@
 package com.recipidia.recipe.controller;
 
+import com.recipidia.recipe.dto.RecipeDetailDto;
 import com.recipidia.recipe.dto.RecipeDto;
 import com.recipidia.recipe.request.RecipeQueryReq;
+import com.recipidia.recipe.response.RecipeQueryCustomResponse;
 import com.recipidia.recipe.service.RecipeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -34,21 +36,29 @@ public class RecipeController {
                       name = "요청 데이터",
                       value = """
                           {
+                              "memberId" : 1,
                               "ingredients": ["돼지고기", "대파"]
                           }
                           """
                   )
               }
           )
-      )
+      ),
+      responses = {
+          @ApiResponse(responseCode = "200", description = "레시피 정보 조회 성공",
+              content = @Content(schema = @Schema(implementation = RecipeQueryCustomResponse.class))
+          )
+      }
   )
   @PostMapping
-  public Mono<ResponseEntity<String>> queryRecipe(@RequestBody RecipeQueryReq request) {
+  public Mono<ResponseEntity<RecipeQueryCustomResponse>> queryRecipe(@RequestBody RecipeQueryReq request) {
     return recipeService.handleRecipeQuery(request)
-        .flatMap(response ->
-            recipeService.saveRecipeResult(response)
-                .thenReturn(response)
-        );
+        .flatMap(responseEntity ->
+            recipeService.saveRecipeResult(responseEntity)
+                .thenReturn(responseEntity)
+        )
+        .flatMap(responseEntity -> recipeService.mapQueryResponse(responseEntity, request.getMemberId()))
+        .map(ResponseEntity::ok);
   }
 
   @Operation(
@@ -56,48 +66,33 @@ public class RecipeController {
       description = "FIGMA : 레시피 리스트 페이지?",
       responses = {
           @ApiResponse(responseCode = "200", description = "레시피 정보 조회 성공",
-              content = @Content(schema = @Schema(implementation = RecipeDto.class),
-                  examples = {
-                      @ExampleObject(
-                          name = "응답 데이터",
-                          value = """
-                              [
-                                {
-                                  "id": 1,
-                                  "name": "돼지고기 계란 볶음",
-                                  "youtubeUrl": "https://www.youtube.com/watch?v=MvxXe4gDjcI",
-                                  "textRecipe": null,
-                                  "ingredients": [
-                                    {
-                                      "id": 1,
-                                      "recipeId": 1,
-                                      "name": "돼지고기",
-                                      "quantity": "1근"
-                                    }
-                                  ]
-                                },
-                                {
-                                  "id": 2,
-                                  "name": "돼지고기 사과 조림",
-                                  "youtubeUrl": "https://www.youtube.com/watch?v=IzsOPD4Yh8Y",
-                                  "textRecipe": null,
-                                  "ingredients": [
-                                    {
-                                      "id": 2,
-                                      "recipeId": 2,
-                                      "name": "돼지고기",
-                                      "quantity": "1근"
-                                    }
-                                  ]
-                                }
-                              ]
-                              """
-                      )
-                  }))
+              content = @Content(schema = @Schema(implementation = RecipeDto[].class))
+          )
       }
   )
-  @GetMapping
+  @GetMapping("/check")
   public Mono<ResponseEntity<List<RecipeDto>>> getAllRecipes() {
     return recipeService.getAllRecipes();
+  }
+
+
+  @Operation(
+      summary = "특정 레시피 텍스트 추출",
+      description = "FIGMA : 레시피 ㅇㅇ ㅇㅇ",
+      responses = {
+          @ApiResponse(responseCode = "200", description = "텍스트 레시피 추출 성공",
+              content = @Content(schema = @Schema(implementation = RecipeDetailDto.class))
+          )
+      }
+  )
+  @GetMapping("/{recipeId}")
+  public Mono<ResponseEntity<RecipeDetailDto>> extractAndSaveRecipe(@PathVariable Long recipeId) {
+    return recipeService.extractRecipe(recipeId)
+        .flatMap(extractRes ->
+            recipeService.saveExtractResult(recipeId, extractRes)
+                .thenReturn(extractRes)
+        )
+        .flatMap(extractRes -> recipeService.getRecipeDetail(recipeId, extractRes))
+        .map(ResponseEntity::ok);
   }
 }
