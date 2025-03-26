@@ -22,6 +22,8 @@ async def get_recipe_summary(request: Request, data: YoutubeURL = docs.base["dat
     try:
         video_id = data.youtube_url.split("v=")[1].split("&")[0]
         summary = await recipe_summary.summarize_recipe(video_id)
+        # TODO: 만일 레시피 요약 정보가 아닌 경우 처리해주기
+        # 가령, 영상이 노래 영상이였다거나 등등
         return JSONResponse(status_code=200, content=summary)
     except HTTPException as e:
         raise e

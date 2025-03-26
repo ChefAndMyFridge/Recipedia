@@ -79,6 +79,9 @@ class RequestGPT:
                 print(delta_content, end="")
         else:
             ret_message = completion.choices[0].message.content
+            # 레시피 요약이 아닐 경우를 return messgae 길이로 처리
+            if len(ret_message) < 15:
+                return {"title": "None"}
             data = self.extract_json(ret_message)
             if type(data) is str:
                 data = json.loads(data)
