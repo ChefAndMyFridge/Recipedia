@@ -64,6 +64,10 @@ public class MemberServiceImpl implements MemberService {
   @Override
   @Transactional
   public void deleteMember(Long memberId) {
+    // memberId == 1 이면 삭제 불가
+    if (memberId == 1) {
+      throw new IllegalStateException("1번 Member는 삭제할 수 없습니다.");
+    }
     // 총 Member 수 조회
     long memberCount = memberRepository.count();
     if (memberCount <= 1) {
