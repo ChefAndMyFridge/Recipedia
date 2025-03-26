@@ -214,8 +214,7 @@ class RecipeValidator:
                 # 필수 재료에 포함된 주재료 (통계용)
                 main_in_essential_ingredients = normalized_main_ingredients.intersection(
                     essential_set)
-                main_in_essential_count = len(main_in_essential_ingredients)
-
+                
                 # 필수 재료에는 없지만 요리에 사용되는 주재료
                 main_in_nonessential = used_main_ingredients - essential_set
                 
@@ -236,42 +235,25 @@ class RecipeValidator:
                 missing_main_ingredients = set()
                 main_score = 100  # 주재료가 없으면 100% 점수
 
-            # 종합 점수 (가중치 적용 가능)
-            essential_weight = 0.7  # 필수재료 가중치
-            main_weight = 0.3      # 주재료 가중치
-            total_score = (essential_score * essential_weight) + \
-                (main_score * main_weight)
-
-            # 기존 O/X 결과 (호환성 유지)
-            all_essential_included = essential_set.issubset(
-                normalized_ingredients)
-            
-            # 수정된 부분: main_in_essential이 아닌 main_ingredients_used 사용
-            main_used = main_ingredients_used
-            
-            # 수정된 부분: 주재료가 필수 재료가 아니더라도 요리에 사용되는지 확인
-            is_valid = all_essential_included and main_used
+            # 간단한 유효성 검사: 필수 재료가 모두 있고 주재료가 요리에 사용되는지
+            all_essential_included = essential_set.issubset(normalized_ingredients)
+            is_valid = all_essential_included and main_ingredients_used
 
             # 검증 결과 저장
             self.validation_results[dish] = {
-                # 기존 필드 (수정)
-                'all_essential_included': all_essential_included,
-                'main_in_essential': len(main_in_essential_ingredients) > 0,  # 기존 필드 유지
-                'main_used': main_used,  # 새로운 필드 추가: 주재료가 요리에 사용되는지
-                'is_valid': is_valid,  # 수정된 로직 적용
+                'is_valid': is_valid,
                 'missing_ingredients': list(essential_set - normalized_ingredients),
                 'essential_ingredients': list(essential_ingrs.keys()),
                 'essential_count': {k: v for k, v in essential_ingrs.items()},
                 'normalized_user_ingredients': list(normalized_ingredients),
 
-                # 새로운 점수 필드
+                # 점수 관련 필드
                 'essential_score': round(essential_score, 1),
                 'main_score': round(main_score, 1),
-                'total_score': round(total_score, 1),
                 'matched_essential': matched_essential,
                 'total_essential': total_essential,
 
-                # 주재료 관련 추가 필드
+                # 주재료 관련 필드
                 'used_main_ingredients': list(used_main_ingredients),
                 'main_in_essential_ingredients': list(main_in_essential_ingredients),
                 'main_in_nonessential': list(main_in_nonessential),
@@ -286,8 +268,6 @@ class RecipeValidator:
                 f"  - 필수 재료 충족률: {self.validation_results[dish]['essential_score']}% ({matched_essential}/{total_essential})")
             print(
                 f"  - 주재료 사용률: {self.validation_results[dish]['main_score']}%")
-            print(
-                f"  - 종합 점수: {self.validation_results[dish]['total_score']}%")
 
             # 부족한 재료 출력
             if not all_essential_included:
