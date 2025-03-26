@@ -58,8 +58,15 @@ def _parse_dish_names(content: str) -> List[str]:
             return []
 
     items: List[str] = []
+    ignore_prefixes = ["냉장고 재료:", "주재료:", "출력:"]
+
     for line in content.split('\n'):
         line = line.strip()
+
+        # 무시할 문구 제거
+        if any(line.startswith(prefix) for prefix in ignore_prefixes):
+            continue
+        
         # 불릿('- ') 제거
         if line.startswith('- '):
             line = line[2:]
