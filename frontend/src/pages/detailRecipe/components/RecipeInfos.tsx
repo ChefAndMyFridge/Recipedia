@@ -17,7 +17,7 @@ const RecipeInfos = () => {
       />
       {/* 선택된 인덱스별 자세한 정보 표시
       추후 데이터 변경 필요 */}
-      <div className="w-full portrait:max-h-[210px] landscape:h-[50vh] overflow-y-auto p-4 bg-white rounded-b-2xl shadow-md">
+      <div className="w-full portrait:max-h-40 landscape:h-[50vh] overflow-y-auto p-4 bg-white rounded-b-2xl shadow-md">
         <div className="flex flex-wrap gap-2 h-fit">
           {selectedIndex === "ingredients" &&
             recipeTexts &&

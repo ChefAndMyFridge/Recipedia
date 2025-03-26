@@ -8,7 +8,7 @@ import Modal from "@components/common/modal/Modal";
 const HomePage = () => {
   return (
     <>
-      <div className="flex flex-col justify-between w-full h-[100vh]">
+      <div className="flex flex-col justify-between w-full h-full">
         <HomeHeader />
         <HomeFilter />
         <HomeIngredients />

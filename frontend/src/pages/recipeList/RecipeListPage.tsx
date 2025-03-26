@@ -40,7 +40,7 @@ const RecipeListPage = () => {
   if (isError) return <ErrorPage />;
 
   return (
-    <section className="flex flex-col h-screen p-3">
+    <section className="flex flex-col h-full p-3">
       {DISHES.length > 0 ? (
         <>
           <Header title={HeaderTitle} isIcon />

@@ -23,7 +23,7 @@ const DetailRecipePortraitPage = () => {
   const { detailRecipe } = recipeStore();
 
   return (
-    <section className={`w-full h-full flex flex-col justify-center items-center gap-2 p-3`}>
+    <section className={`w-full h-full flex flex-col justify-start items-center gap-2 p-3`}>
       <Header title="레시피" isIcon />
       <ReactPlayer
         url={detailRecipe.url}
@@ -44,7 +44,7 @@ const DetailRecipePortraitPage = () => {
       {isRecipeOpen ? (
         <RecipeTexts recipe={detailRecipe.textRecipe.cooking_sequence} />
       ) : (
-        <div className="flex-1 flex flex-col gap-4 items-center overflow-auto relative">
+        <div className="flex flex-col gap-4 items-center overflow-auto relative">
           <VideoInfos
             duration={detailRecipe.duration}
             viewCount={detailRecipe.viewCount}

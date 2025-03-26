@@ -24,7 +24,7 @@ const DetailRecipePage = () => {
     <>
       <ErrorBoundary FallbackComponent={ErrorPage}>
         {/* 세로모드 레이아웃 */}
-        <div className="portrait:block landscape:hidden h-screen">
+        <div className="portrait:block landscape:hidden h-full">
           <DetailRecipePortraitPage />
         </div>
         {/* 가로모드 레이아웃 */}

@@ -12,7 +12,7 @@ const MyRecipePage = () => {
   const TITLE = myRecipeType === "favorite" ? "즐겨찾는 레시피" : "이전 레시피";
 
   return (
-    <section className="flex flex-col h-screen p-3">
+    <section className="flex flex-col p-3 h-full">
       <Header title={TITLE} isIcon />
       <ErrorBoundary fallback={<ErrorPage />}>
         {myRecipeType === "favorite" ? <MyRecipeFavorite /> : <MyRecipeHistory />}

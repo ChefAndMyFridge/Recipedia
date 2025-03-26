@@ -64,7 +64,7 @@ const LoadingPlayer = () => {
   }, []);
 
   return (
-    <section className="flex flex-col py-20 px-10 gap-20 items-center justify-around h-screen bg-white rounded-2xl">
+    <section className="flex flex-col py-20 px-10 gap-20 items-center justify-around h-full bg-white rounded-2xl">
       <div className="flex flex-col gap-8 items-center justify-center bg-white">
         <img
           src={currentImage}
