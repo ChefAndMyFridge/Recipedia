@@ -55,13 +55,15 @@ const SettingMenus = () => {
           <p className={DESCRIPTION_CLASS}>과거에 요리했던 레시피를 모아볼 수 있어요.</p>
         </div>
       </button>
-      <button className={BUTTON_CLASS} onClick={handleDeleteUser}>
-        <IconUserRemove width={30} height={30} />
-        <div className={BANNER_CLASS}>
-          <p className={TITLE_CLASS}>유저 프로필 삭제</p>
-          <p className={DESCRIPTION_CLASS}>프로필 정보를 삭제할 수 있어요.</p>
-        </div>
-      </button>
+      {userId > 1 && (
+        <button className={BUTTON_CLASS} onClick={handleDeleteUser}>
+          <IconUserRemove width={30} height={30} />
+          <div className={BANNER_CLASS}>
+            <p className={TITLE_CLASS}>유저 프로필 삭제</p>
+            <p className={DESCRIPTION_CLASS}>프로필 정보를 삭제할 수 있어요.</p>
+          </div>
+        </button>
+      )}
     </div>
   );
 };
