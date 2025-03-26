@@ -98,8 +98,8 @@ def get_chef_prompt(ingredients_list, main_ingredients=None, preferred_ingredien
 
     Returns:
         str: 포맷팅된 프롬프트
-    """
-    # 주재료가 None이거나 빈 리스트인 경우 처리
+"""
+        # 주재료가 None이거나 빈 리스트인 경우 처리
     if not main_ingredients:
         main_ingredients = []
         main_ingredients_instruction = "주재료가 지정되지 않았으므로, 냉장고 재료를 활용한 실존하는 요리만 제안해주세요. 단순 재료 나열식 요리명은 허용하지 않습니다."
@@ -107,25 +107,25 @@ def get_chef_prompt(ingredients_list, main_ingredients=None, preferred_ingredien
         main_ingredients_instruction = "반드시 주재료(" + ", ".join(
             main_ingredients) + ")를 핵심 재료로 하는 실존 요리만 추천해주세요. 주재료와 요리 간의 전통적 관계를 엄격히 지켜야 합니다."
     
-    # 선호 재료 처리
+    # 선호 재료 처리 - 빈 리스트인 경우에도 기본 지시사항 제공
     if preferred_ingredients and len(preferred_ingredients) > 0:
         preferred_ingredients_section = f"선호재료: [{', '.join(preferred_ingredients)}]"
         preferred_ingredients_instruction = f"가능하다면 선호재료({', '.join(preferred_ingredients)})가 포함된 요리를 고려하되, 이에 지나치게 편중되지 않도록 균형 있게 추천해주세요."
     else:
         preferred_ingredients_section = ""
-        preferred_ingredients_instruction = ""
+        preferred_ingredients_instruction = "냉장고 재료를 활용한 다양한 요리를 추천해주세요."
     
-    # 비선호 재료 처리 - 비선호 재료는 중요하므로 항상 명확하게 지시
+    # 비선호 재료 처리
     if disliked_ingredients and len(disliked_ingredients) > 0:
         disliked_ingredients_section = f"비선호재료: [{', '.join(disliked_ingredients)}]"
         disliked_ingredients_instruction = f"비선호재료({', '.join(disliked_ingredients)})가 요리의 핵심 재료인 경우는 절대 추천하지 마세요. 전통적인 요리에서 해당 재료를 생략하거나 대체하기 어려운 경우 그 요리는 제외해주세요."
     else:
         disliked_ingredients_section = ""
-        disliked_ingredients_instruction = ""
-
+        disliked_ingredients_instruction = "모든 재료를 자유롭게 활용하여 추천해주세요."
+    
     ingredients_str = ', '.join(ingredients_list)
     main_ingredients_str = ', '.join(main_ingredients)
-
+    
     return FOOD_GENERATOR_PROMPT.format(
         ingredients=ingredients_str,
         main_ingredients=main_ingredients_str,
