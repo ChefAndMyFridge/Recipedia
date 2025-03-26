@@ -5,6 +5,7 @@ import com.recipidia.filter.entity.MemberFilter;
 import com.recipidia.filter.repository.MemberFilterRepository;
 import com.recipidia.member.dto.MemberDto;
 import com.recipidia.member.entity.Member;
+import com.recipidia.member.repository.MemberRecipeRepository;
 import com.recipidia.member.repository.MemberRepository;
 import com.recipidia.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 public class MemberServiceImpl implements MemberService {
 
   private final MemberRepository memberRepository;
+  private final MemberRecipeRepository memberRecipeRepository;
   private final MemberFilterRepository memberFilterRepository;
 
   @Override
@@ -62,12 +64,29 @@ public class MemberServiceImpl implements MemberService {
   @Override
   @Transactional
   public void deleteMember(Long memberId) {
-    memberRepository.deleteById(memberId);
+    // 총 Member 수 조회
+    long memberCount = memberRepository.count();
+    if (memberCount <= 1) {
+      throw new IllegalStateException("마지막 Member는 삭제할 수 없습니다.");
+    }
+
+    Member member = memberRepository.findById(memberId)
+        .orElseThrow(() -> new RuntimeException("Member not found with id: " + memberId));
+
+    // MemberRecipe 삭제
+    memberRecipeRepository.deleteAllByMember(member);
+
+    // MemberFilter 삭제
+    memberFilterRepository.deleteByMember(member);
+
+    // Member 삭제
+    memberRepository.delete(member);
   }
 
+  // Id 순으로 오름차순 정렬하여 반환합니다.
   @Override
   public List<MemberDto> getAllMembers() {
-    return memberRepository.findAll().stream()
+    return memberRepository.findAllByOrderByIdAsc().stream()
         .map(MemberDto::fromEntity)
         .collect(Collectors.toList());
   }

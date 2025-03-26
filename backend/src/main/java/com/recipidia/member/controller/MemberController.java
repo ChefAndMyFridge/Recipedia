@@ -93,9 +93,13 @@ public class MemberController {
       }
   )
   @DeleteMapping("/{memberId}")
-  public ResponseEntity<Void> deleteMember(@PathVariable Long memberId) {
-    memberService.deleteMember(memberId);
-    return ResponseEntity.noContent().build();
+  public ResponseEntity<String> deleteMember(@PathVariable Long memberId) {
+    try {
+      memberService.deleteMember(memberId);
+      return ResponseEntity.noContent().build();
+    } catch (IllegalStateException e) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
   }
 
   // 유저 목록 조회: 전체 사용자 목록을 반환
