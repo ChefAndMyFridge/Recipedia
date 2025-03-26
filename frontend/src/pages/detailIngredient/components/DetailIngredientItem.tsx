@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { Ingredient } from "@/types/ingredientsTypes.ts";
 
-import { formatDate } from "@utils/getFormattedDate";
+import { formatDate, calculateDaysRemaining } from "@utils/getFormattedDate";
 
 interface IngredientingredientProps {
   ingredient: Ingredient;
@@ -14,17 +14,12 @@ const DetailIngredientItem = ({ ingredient, index }: IngredientingredientProps) 
 
   const incomingDate = formatDate(new Date(ingredient.incomingDate));
   const expirationDate = formatDate(new Date(ingredient.expirationDate));
-  const [remaining, isImminent] = calculateDaysRemaining();
+  const [remaining, isImminent] = calculateIsImminient();
 
-  function calculateDaysRemaining(): [string, boolean] {
-    const today = new Date();
-    const expirationDate = new Date(ingredient.expirationDate);
-
-    const diffTime = expirationDate.getTime() - today.getTime();
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  function calculateIsImminient(): [string, boolean] {
+    const diffDays = calculateDaysRemaining(ingredient.expirationDate);
 
     let remaining = "";
-
     if (diffDays < 0) {
       remaining = "D+" + String(diffDays).slice(1);
     } else if (diffDays === 0) {
