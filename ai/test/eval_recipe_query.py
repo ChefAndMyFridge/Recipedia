@@ -20,6 +20,7 @@ class RecipeValidator:
     MAX_RECIPES_PER_DISH = 30       # 요리당 크롤링할 최대 레시피 수
     REGULARIZATION_MODE = "aggressive"  # 재료 정규화 모드
     ESSENTIAL_THRESHOLD_RATIO = 0.5  # 필수 재료 식별 기준 (N/2)
+    OPENAI_MODEL = "gpt-4o"
 
     def __init__(self, 
                  ingredients: List[str],
@@ -122,7 +123,7 @@ class RecipeValidator:
             }
             
             # 정규화 처리
-            regularizer = IngredientsRegularizer(mode=self.REGULARIZATION_MODE)
+            regularizer = IngredientsRegularizer(model=self.OPENAI_MODEL, mode=self.REGULARIZATION_MODE)
             norm_data = await regularizer.normalize_data(temp_data)
             
             self.normalized_ingredients[dish] = norm_data
@@ -159,7 +160,7 @@ class RecipeValidator:
         print("5단계: 사용자 입력 재료 정규화 중...")
         
         # 정규화기 초기화
-        regularizer = IngredientsRegularizer(mode=self.REGULARIZATION_MODE)
+        regularizer = IngredientsRegularizer(model=self.OPENAI_MODEL, mode=self.REGULARIZATION_MODE)
         
         # 모든 사용자 재료 정규화
         all_user_ingredients = self.ingredients + self.main_ingredients
