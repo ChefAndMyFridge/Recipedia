@@ -205,10 +205,10 @@ public class RecipeServiceImpl implements RecipeService {
                       .recipeId(recipeId)
                       .title(video.getTitle())
                       .url(video.getUrl())
-                      .channel_title(video.getChannel_title())
+                      .channelTitle(video.getChannel_title())
                       .duration(video.getDuration())
-                      .view_count(video.getView_count())
-                      .like_count(video.getLike_count())
+                      .viewCount(video.getView_count())
+                      .likeCount(video.getLike_count())
                       .favorite(favorite)
                       .rating(rating)
                       .build();

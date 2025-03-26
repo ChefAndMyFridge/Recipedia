@@ -15,10 +15,10 @@ public class VideoInfoCustomResponse {
   private long recipeId;
   private String title;
   private String url;
-  private String channel_title;
+  private String channelTitle;
   private String duration;
-  private long view_count;
-  private long like_count;
+  private long viewCount;
+  private long likeCount;
   private boolean favorite;
   private double rating;
 }

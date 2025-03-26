@@ -30,16 +30,16 @@ public class Recipe {
     private String youtubeUrl;
 
     @Column
-    private String channelTitle;   // VideoInfo의 channel_title
+    private String channelTitle;   // VideoInfo의 channelTitle
 
     @Column
     private String duration;       // VideoInfo의 duration
 
     @Column
-    private Long viewCount;        // VideoInfo의 view_count
+    private Long viewCount;        // VideoInfo의 viewCount
 
     @Column
-    private Long likeCount;        // VideoInfo의 like_count
+    private Long likeCount;        // VideoInfo의 likeCount
 
     // textRecipe를 RecipeExtractRes 타입으로 변경하고, JSON 직렬화를 위한 Converter 적용
     @Column(columnDefinition = "MEDIUMTEXT")
