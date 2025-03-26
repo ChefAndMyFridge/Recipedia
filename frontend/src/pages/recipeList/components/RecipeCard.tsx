@@ -22,7 +22,7 @@ interface RecipeCardProps {
 const RecipeCard = ({ video }: RecipeCardProps) => {
   const navigate = useNavigate();
   const { userId } = useUserStore();
-  const [isLiked, setIsLiked] = useState<boolean>(false);
+  const [isLiked, setIsLiked] = useState<boolean>(video.favorite);
   const thumbnailUrl = getYoutubeThumbnailUrl(video.url);
 
   const handleLike = () => {

@@ -10,6 +10,8 @@ const RECIPE_LIST = {
         duration: "11:39",
         viewCount: 4637494,
         likeCount: 47828,
+        favorite: true,
+        rating: 4.5,
       },
     ],
     "스파게티 볼로네제": [
@@ -21,6 +23,8 @@ const RECIPE_LIST = {
         duration: "6:05",
         viewCount: 733251,
         likeCount: 7341,
+        favorite: true,
+        rating: 0.0,
       },
     ],
     "치킨 커리": [
@@ -32,6 +36,8 @@ const RECIPE_LIST = {
         duration: "4:15",
         viewCount: 4511,
         likeCount: 69,
+        favorite: false,
+        rating: 0.0,
       },
     ],
     "해물 파전": [
@@ -43,6 +49,8 @@ const RECIPE_LIST = {
         duration: "7:36",
         viewCount: 175302,
         likeCount: 4108,
+        favorite: false,
+        rating: 0.0,
       },
     ],
     "야채 볶음밥": [
@@ -54,6 +62,8 @@ const RECIPE_LIST = {
         duration: "4:59",
         viewCount: 1911412,
         likeCount: 28154,
+        favorite: false,
+        rating: 0.0,
       },
     ],
   },
