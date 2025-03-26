@@ -53,7 +53,7 @@ const RecipeCard = ({ video }: RecipeCardProps) => {
             )}
           </button>
         </div>
-        <VideoInfos video={video} />
+        <VideoInfos duration={video.duration} viewCount={video.viewCount} likeCount={video.likeCount} />
         <div className="w-full flex justify-end items-center">
           <Button
             type="button"

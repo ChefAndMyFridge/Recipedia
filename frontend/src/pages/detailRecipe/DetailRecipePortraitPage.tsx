@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ReactPlayer from "react-player";
 
 import useModalStore from "@stores/modalStore";
@@ -20,16 +20,13 @@ const DetailRecipePortraitPage = () => {
   const navigate = useNavigate();
   const [isRecipeOpen, setIsRecipeOpen] = useState<boolean>(false);
 
-  const { recipeList, detailRecipe, findRecipeVideo } = recipeStore();
-  const { recipeId } = useParams();
-
-  const video = findRecipeVideo(recipeList, Number(recipeId));
+  const { detailRecipe } = recipeStore();
 
   return (
     <section className={`w-full h-full flex flex-col justify-center items-center gap-2 p-3`}>
       <Header title="레시피" isIcon />
       <ReactPlayer
-        url={video.url}
+        url={detailRecipe.url}
         width="100%"
         height="40%"
         playing={true}
@@ -38,12 +35,21 @@ const DetailRecipePortraitPage = () => {
         light={false}
         pip={true}
       />
-      <RecipeTitle video={video} isRecipeOpen={isRecipeOpen} setIsRecipeOpen={setIsRecipeOpen} />
+      <RecipeTitle
+        title={detailRecipe.title}
+        channelTitle={detailRecipe.channelTitle}
+        isRecipeOpen={isRecipeOpen}
+        setIsRecipeOpen={setIsRecipeOpen}
+      />
       {isRecipeOpen ? (
-        <RecipeTexts recipe={detailRecipe.cooking_sequence} />
+        <RecipeTexts recipe={detailRecipe.textRecipe.cooking_sequence} />
       ) : (
         <div className="flex-1 flex flex-col gap-4 items-center overflow-auto relative">
-          <VideoInfos video={video} />
+          <VideoInfos
+            duration={detailRecipe.duration}
+            viewCount={detailRecipe.viewCount}
+            likeCount={detailRecipe.likeCount}
+          />
           <RecipeInfos />
         </div>
       )}
