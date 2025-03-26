@@ -5,6 +5,7 @@ import com.recipidia.ingredient.entity.IngredientNutrient;
 import com.recipidia.ingredient.repository.IngredientInfoRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,9 @@ import java.nio.charset.StandardCharsets;
 @Component
 @RequiredArgsConstructor
 public class IngredientDataLoader implements CommandLineRunner {
+
+    @Value("${host.url}")
+    private String hostUrl;
 
     private final IngredientInfoRepository ingredientInfoRepository;
 
@@ -47,7 +51,7 @@ public class IngredientDataLoader implements CommandLineRunner {
                 String allergenInfo = tokens[11].trim();
 
                 if (!ingredientInfoRepository.existsByName(name)) {
-                    IngredientInfo ingredientInfo = new IngredientInfo(name, "/images/" + name + ".png");
+                    IngredientInfo ingredientInfo = new IngredientInfo(name, buildImgUrl(name));
 
                     IngredientNutrient nutrient = IngredientNutrient.builder()
                             .calories(calories)
@@ -76,6 +80,10 @@ public class IngredientDataLoader implements CommandLineRunner {
         } catch (Exception e) {
             return 0f; // 빈 값 또는 파싱 에러 시 0 반환
         }
+    }
+
+    private String buildImgUrl(String name) {
+        return String.format("%s/images/ingredients/%s.jpg", hostUrl, name);
     }
 }
 
