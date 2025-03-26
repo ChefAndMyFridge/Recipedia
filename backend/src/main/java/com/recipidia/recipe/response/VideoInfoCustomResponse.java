@@ -17,8 +17,8 @@ public class VideoInfoCustomResponse {
   private String url;
   private String channelTitle;
   private String duration;
-  private long viewCount;
-  private long likeCount;
-  private boolean favorite;
-  private double rating;
+  private Long viewCount;
+  private Long likeCount;
+  private Boolean favorite;
+  private Integer rating;
 }

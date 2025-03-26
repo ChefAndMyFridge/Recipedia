@@ -5,6 +5,7 @@ import com.recipidia.filter.repository.MemberFilterRepository;
 import com.recipidia.filter.service.IngredientFilterService;
 import com.recipidia.ingredient.dto.IngredientInfoDto;
 import com.recipidia.ingredient.service.IngredientService;
+import com.recipidia.member.entity.MemberRecipe;
 import com.recipidia.recipe.converter.RecipeQueryResConverter;
 import com.recipidia.recipe.dto.RecipeDetailDto;
 import com.recipidia.recipe.dto.RecipeDto;
@@ -195,11 +196,13 @@ public class RecipeServiceImpl implements RecipeService {
             Mono.fromCallable(() -> memberRecipeRepository.findByMemberIdAndRecipeId(memberId, recipeId))
                 .subscribeOn(Schedulers.boundedElastic())
                 .map(optionalMemberRecipe -> {
-                  boolean favorite = false;
-                  double rating = 0.0;
+                  Boolean favorite = false;
+                  Integer rating = 0;
                   if (optionalMemberRecipe.isPresent()) {
-                    favorite = optionalMemberRecipe.get().getFavorite();
-                    rating = optionalMemberRecipe.get().getRating();
+                    MemberRecipe memberRecipe = optionalMemberRecipe.get();
+
+                    favorite = Optional.ofNullable(memberRecipe.getFavorite()).orElse(false);
+                    rating = Optional.ofNullable(memberRecipe.getRating()).orElse(0);
                   }
                   return VideoInfoCustomResponse.builder()
                       .recipeId(recipeId)
@@ -298,5 +301,22 @@ public class RecipeServiceImpl implements RecipeService {
           return Mono.just(dto);
         });
   }
+
+  @Override
+  public Mono<RecipeDetailDto> getCurrentRecipeDetail(Long recipeId) {
+    return Mono.fromCallable(() -> recipeRepository.findByIdWithIngredients(recipeId))
+        .subscribeOn(Schedulers.boundedElastic())
+        .flatMap(optionalRecipe -> {
+          if (optionalRecipe.isEmpty()) {
+            return Mono.error(new NoRecipeException("Recipe not found"));
+          }
+          Recipe recipe = optionalRecipe.get();
+          // textRecipe가 없으면 빈 RecipeExtractRes를 생성하거나 null을 사용 (DTO 설계에 따라 선택)
+          RecipeExtractRes extractRes = recipe.getTextRecipe();
+          RecipeDetailDto dto = RecipeDetailDto.fromEntities(recipe, extractRes);
+          return Mono.just(dto);
+        });
+  }
+
 
 }
