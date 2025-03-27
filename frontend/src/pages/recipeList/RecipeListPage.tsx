@@ -12,7 +12,7 @@ import LoadingPlayer from "@components/common/loading/LoadingPlayer";
 
 import { usePostRecipeList } from "@hooks/useRecipeHooks";
 import useRecipeStore from "@stores/recipeStore";
-import useUserStore from "@/stores/userStore";
+import useUserStore from "@stores/userStore";
 
 const RecipeListPage = () => {
   const { recommendType } = useParams();

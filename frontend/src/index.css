@@ -63,7 +63,7 @@
   }
 
   #root {
-    @apply bg-offWhite w-full portrait:h-dvh landscape:h-full portrait:relative portrait:mx-auto portrait:min-w-[344px] portrait:max-w-[576px];
+    @apply bg-offWhite w-full portrait:h-dvh landscape:h-dvh portrait:relative portrait:mx-auto portrait:min-w-[344px] portrait:max-w-[576px];
   }
 }
 

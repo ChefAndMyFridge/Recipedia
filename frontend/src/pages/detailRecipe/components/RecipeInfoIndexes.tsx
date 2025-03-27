@@ -1,5 +1,5 @@
 import { RecipeInfoKeys } from "@/types/recipeListTypes";
-import RecipeInfoIndex from "./RecipeInfoIndex";
+import RecipeInfoIndex from "@pages/detailRecipe/components/RecipeInfoIndex";
 
 interface RecipeInfoIndexesProps {
   selectedIndex: RecipeInfoKeys;
@@ -9,6 +9,18 @@ interface RecipeInfoIndexesProps {
 const RecipeInfoIndexes = ({ selectedIndex, setSelectedIndex }: RecipeInfoIndexesProps) => {
   return (
     <div className="flex w-full">
+      <RecipeInfoIndex
+        selectedIndex={selectedIndex}
+        setSelectedIndex={setSelectedIndex}
+        text="영상 정보"
+        type="video_infos"
+      />
+      <RecipeInfoIndex
+        selectedIndex={selectedIndex}
+        setSelectedIndex={setSelectedIndex}
+        text="레시피"
+        type="cooking_sequence"
+      />
       <RecipeInfoIndex
         selectedIndex={selectedIndex}
         setSelectedIndex={setSelectedIndex}
