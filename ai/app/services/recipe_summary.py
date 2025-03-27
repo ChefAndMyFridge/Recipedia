@@ -31,7 +31,17 @@ class RecipeSummary:
         # 디버그 모드
         self.debug_mode = settings.DEBUG
 
-    def get_transcript_params(self, res: dict) -> str:
+    def fetch_and_format_transcript(self, video_id: str, lang):
+        transcript = Transcript.get(video_id, lang['params'])
+        scripts = " ".join([f"[{(int(item['startMs']) // 1000)}]" + item["text"].replace(
+            "\n", "").replace("\r", "") for item in transcript["segments"]])
+        if len(scripts) > settings.YOUTUBE_TRANSCRIPT_LEN_TH:
+            logger.info(
+                f"{settings.LOG_SUMMARY_PREFIX}_자막 언어 : {lang['title']}")
+            return scripts
+        return None
+
+    def get_transcript(self, video_id: str) -> str:
         """ Transcript 응답을 기반으로 우선 순위가 높은 언어의 Param을 반환합니다.
 
         Args:
@@ -40,28 +50,42 @@ class RecipeSummary:
         Returns:
             dict: 우선 순위가 가장 높은 언어 Param
         """
-        # 작성된 영어, 한국어의 자막이 있다면 가져오기
-        en_ko_manually_data = [
-            lang for lang in res["languages"] if lang['title'] in self.priority_lang]
+        # 영상 자막 데이터 가져오기
+        res = Transcript.get(video_id)
 
-        if len(en_ko_manually_data) > 0:
-            logger.info(
-                f"{settings.LOG_SUMMARY_PREFIX}_사용된 자막 : {en_ko_manually_data[0]['title']}")
-            return en_ko_manually_data[0]["params"]
+        visit_params = set()
 
-        # 자동 생성된 영어, 한국어의 자막이 있다면 가져오기
-        en_ko_generated_data = [lang for lang in res['languages'] if any(
-            keyword in lang['title'] for keyword in ['English', 'Korean'])]
+        # 우선 순위 1: 작성된 영어, 한국어의 자막 확인
+        for lang in res["languages"]:
+            if lang['title'] in self.priority_lang:
+                visit_params.add(lang['params'])
+                script = self.fetch_and_format_transcript(video_id, lang)
+                if script:
+                    return script
+        logger.info(f"{settings.LOG_SUMMARY_PREFIX}_매뉴얼 한국어/영어 자막 없음")
 
-        if len(en_ko_generated_data) > 0:
-            logger.info(
-                f"{settings.LOG_SUMMARY_PREFIX}_사용된 자막 : {en_ko_generated_data[0]['title']}")
-            return en_ko_generated_data[0]["params"]
+        # 우선 순위 2: 자동 생성된 영어, 한국어의 자막 확인
+        for lang in res["languages"]:
+            if lang['params'] in visit_params:
+                continue
 
-        # 없다면, 있는 자막 중 아무거나 가져오기
-        logger.info(
-            f"{settings.LOG_SUMMARY_PREFIX}_사용된 자막 : {res['languages'][-1]['title']}")
-        return res["languages"][-1]["params"]
+            if 'English' in lang['title'] or 'Korean' in lang['title']:
+                visit_params.add(lang['params'])
+                script = self.fetch_and_format_transcript(video_id, lang)
+                if script:
+                    return script
+        logger.info(f"{settings.LOG_SUMMARY_PREFIX}_자동 생성 한국어/영어 자막 없음")
+
+        # 우선 순위 3: 아무 자막이나 가져오기
+        for lang in res["languages"]:
+            if lang['params'] in visit_params:
+                continue
+            script = self.fetch_and_format_transcript(video_id, lang)
+            if script:
+                return script
+        logger.info(f"{settings.LOG_SUMMARY_PREFIX}_영상 자막 없음")
+
+        return settings.YOUTUBE_TRANSCRIPT_NO_VALID_STR
 
     async def summarize_recipe(self, video_id: str) -> str:
         """ 주어진 영상 ID를 기반으로 자막을 가져와 OpenAI API로 요약된 레시피를 반환합니다.
@@ -77,18 +101,7 @@ class RecipeSummary:
         scripts = ""
 
         try:
-            # 영상 자막 데이터 가져오기
-            res = Transcript.get(video_id)
-
-            # 영상에서 지원하는 자막 Param을 우선순위에 따라서 가져오기
-            param = self.get_transcript_params(res)
-
-            # 특정 언어에 대한 자막 가져오기
-            transcription = Transcript.get(video_id, param)
-
-            # 자막 텍스트를 모두 결합
-            scripts = " ".join([f"[{(int(item['startMs']) // 1000)}]" + item["text"].replace(
-                "\n", "").replace("\r", "") for item in transcription["segments"]])
+            scripts = self.get_transcript(video_id)
         except Exception as e:
             logger.error(f"{settings.LOG_SUMMARY_PREFIX}_유튜브 자막 추출 오류: {e}")
 
