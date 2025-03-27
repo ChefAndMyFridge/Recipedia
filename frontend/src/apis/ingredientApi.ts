@@ -1,6 +1,6 @@
 import {
   Ingredients,
-  IngredientsInfo,
+  IngredientsSearchInfo,
   StoreIngredient,
   StoreResponseIngredient,
   IngredientNutrition,
@@ -11,21 +11,22 @@ import {
 import instance from "./instance";
 
 // 고내에 저장된 재료 목록 조회
-export const getIngredientsApi = async (): Promise<Ingredients[]> => {
+export const getIngredientsApi = async (location: string, sort: string, order: string): Promise<Ingredients[]> => {
   try {
-    const response = await instance.get("v1/ingredient");
-    console.log("v1/ingredient", response.data);
+    const response = await instance.get(`v1/ingredient?storage=${location}&sort=${sort}&order=${order}`);
+    console.log(`v1/ingredient?storage=${location}&sort=${sort}&order=${order}`, response.data);
     return response.data;
   } catch (error: unknown) {
     throw new Error(error as string);
   }
 };
 
-// 전체 재료 목록 조회 (아직 릴리즈되지 않은 API)
-export const getIngredientsInfoApi = async (): Promise<IngredientsInfo[]> => {
+// 재료 자동완성 검색
+export const searchIngredientsApi = async (inputValue: string): Promise<IngredientsSearchInfo[]> => {
+  console.log(`v1/ingredient/search?req=${inputValue}`);
   try {
-    const response = await instance.get("v1/ingredient/info");
-    console.log("v1/ingredient/info", response.data);
+    const response = await instance.get(`v1/ingredient/search?req=${inputValue}`);
+    console.log("v1/ingredient/search", response.data);
     return response.data;
   } catch (error: unknown) {
     throw new Error(error as string);

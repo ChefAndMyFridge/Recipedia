@@ -11,8 +11,7 @@ CHEF_SYSTEM_MESSAGE = """
 6. 비선호 재료가 있다면, 해당 재료가 중요한 역할을 하는 요리는 추천하지 마세요. 전통적인 요리에서 그 재료를 대체하거나 생략할 수 없는 경우 해당 요리는 추천 목록에서 제외하세요.
 7. 선호 재료는 참고만 하고, 그것에 지나치게 치우치지 마세요. 전체적인 요리 추천이 선호 재료만으로 구성되면 안됩니다.
 8. 비선호 재료가 포함된 요리는 반드시 제외하세요. 예를 들어, 고수를 비선호한다면 고수가 핵심인 쌀국수는 추천하지 마세요.
-9. 음식으로 사용하지 않는 재료(기린, 코끼리 등) 또는 비현실적인 주재료가 있으면 음식 추천 없이 다음과 같이 정확히 응답하세요: "NO_VALID_DISHES"
-10. 주재료가 전통적으로 요리의 주재료로 사용되지 않거나, 그 주재료로 만드는 전통적인 요리가 없는 경우에도 "NO_VALID_DISHES"로 응답하세요.
+9. 주재료가 전통적으로 요리의 주재료로 사용되지 않거나, 그 주재료로 만드는 전통적인 요리가 없는 경우에도 "NO_VALID_DISHES"로 응답하세요.
 
 잘못된 요리 추천의 예:
 - "소고기 파전" (X) → 전통적으로 함께 사용되는 주재료 조합이 아님
@@ -23,6 +22,7 @@ CHEF_SYSTEM_MESSAGE = """
 - "닭고기 감자탕" (X) → 감자탕은 돼지뼈가 주재료인 요리
 - "비프 스튜", "비프 스트로가노프", "비프 부르기뇽" (X) → 모두 서양식만 추천함
 - 비선호재료가 양파인데 "프렌치 어니언 스프" 추천 (X) → 양파가 대체 불가능한 핵심 재료임
+- 비선호재료가 마늘인데 "감바스 알 아히요" 추천 (X) → 마늘이 대체 불가능한 핵심 재료임
 - "메추리알 스튜" (X) → 실제로 존재하지 않는 요리
 
 올바른 요리 추천의 예:
@@ -74,6 +74,8 @@ FOOD_GENERATOR_PROMPT = """
 주재료: [{main_ingredients}]
 {preferred_ingredients_section}
 {disliked_ingredients_section}
+{categories_section}
+{dietaries_section}
 제안할 음식 이름 개수: 최대 {num_dishes}개
 
 위 냉장고 재료를 활용하여, 다음 조건을 만족하는 요리 이름을 제안해주세요:
@@ -81,13 +83,34 @@ FOOD_GENERATOR_PROMPT = """
 1. 주재료 조건: {main_ingredients_instruction}
 2. {disliked_ingredients_instruction}
 3. {preferred_ingredients_instruction}
-4. 한식, 중식, 일식, 양식 등 다양한 국가/스타일의 요리를 균형있게 추천해주세요.
-5. 각 요리 이름 뒤에 괄호로 해당 요리의 국가/스타일을 표시해주세요.
-6. 음식 이름만 간결하게 불릿 포인트로 나열해주세요.
+4. {categories_instruction}
+5. {dietaries_instruction}
+6. 각 요리 이름 뒤에 괄호로 해당 요리의 국가/스타일을 표시해주세요.
+7. 음식 이름만 간결하게 불릿 포인트로 나열해주세요.
+
+요청 예시와 응답 형식:
+냉장고 재료: [닭고기, 감자, 당근, 양파, 간장]
+주재료: [닭고기, 감자]
+카테고리: [한식]
+출력:
+- 안동찜닭 (한식)
+- 닭볶음탕 (한식)
+
+냉장고 재료: [소고기, 파, 간장, 마늘, 양파]
+주재료: [소고기, 파]
+선호식단: [저염식]
+출력:
+- 소고기 샐러드 (양식)
+- 소고기 야채찜 (한식)
+
+최종 출력에서는 음식 이름을 불릿 리스트로 나열하고, 괄호 안에 해당 요리의 국가/스타일을 표시합니다.
+요리명이 불분명하거나 주재료 조합이 전통적이지 않은 경우는 추천하지 말고, 확실한 요리만 추천하세요.
+음식으로 사용되지 않는 재료나 비현실적인 주재료인 경우 "NO_VALID_DISHES"로만 응답하세요.
 """
 
 
-def get_chef_prompt(ingredients_list, main_ingredients=None, preferred_ingredients=None, disliked_ingredients=None, num_dishes=5):
+def get_chef_prompt(ingredients_list, main_ingredients=None, preferred_ingredients=None, 
+                    disliked_ingredients=None, categories=None, dietaries=None, num_dishes=5):
     """요리사 AI에게 전달할 프롬프트를 생성합니다.
 
     Args:
@@ -95,6 +118,8 @@ def get_chef_prompt(ingredients_list, main_ingredients=None, preferred_ingredien
         main_ingredients (list, optional): 주재료 목록. 기본값은 None
         preferred_ingredients (list, optional): 선호하는 재료 목록. 기본값은 None
         disliked_ingredients (list, optional): 비선호하는 재료 목록. 기본값은 None
+        categories (list, optional): 요리 카테고리 목록 (예: 한식, 양식, 일식 등). 기본값은 None
+        dietaries (list, optional): 선호 식단 목록 (예: 저염식, 저칼로리, 고단백 등). 기본값은 None
         num_dishes (int, optional): 생성할 요리 개수. 기본값은 5
 
     Returns:
@@ -107,22 +132,45 @@ def get_chef_prompt(ingredients_list, main_ingredients=None, preferred_ingredien
     else:
         main_ingredients_instruction = "반드시 주재료(" + ", ".join(
             main_ingredients) + ")를 핵심 재료로 하는 실존 요리만 추천해주세요. 주재료와 요리 간의 전통적 관계를 엄격히 지켜야 합니다."
-    
-    # 선호 재료 처리
+
+    # 선호 재료 처리 - 빈 리스트인 경우에도 기본 지시사항 제공
     if preferred_ingredients and len(preferred_ingredients) > 0:
-        preferred_ingredients_section = f"선호재료: [{', '.join(preferred_ingredients)}]"
-        preferred_ingredients_instruction = f"가능하다면 선호재료({', '.join(preferred_ingredients)})가 포함된 요리를 고려하되, 이에 지나치게 편중되지 않도록 균형 있게 추천해주세요."
+        # 냉장고 재료에 있는 선호 재료만 필터링
+        valid_preferred = [
+            p for p in preferred_ingredients if p in ingredients_list]
+        if valid_preferred:
+            preferred_ingredients_section = f"선호재료: [{', '.join(valid_preferred)}]"
+            preferred_ingredients_instruction = f"가능하다면 선호재료({', '.join(valid_preferred)})가 포함된 요리를 고려하되, 이에 지나치게 편중되지 않도록 균형 있게 추천해주세요."
+        else:
+            preferred_ingredients_section = ""
+            preferred_ingredients_instruction = "냉장고 재료를 활용한 다양한 요리를 추천해주세요."
     else:
         preferred_ingredients_section = ""
-        preferred_ingredients_instruction = "다양한 재료를 균형 있게 활용한 요리를 추천해주세요."
-    
-    # 비선호 재료 처리 - 비선호 재료는 중요하므로 항상 명확하게 지시
+        preferred_ingredients_instruction = "냉장고 재료를 활용한 다양한 요리를 추천해주세요."
+
+    # 비선호 재료 처리
     if disliked_ingredients and len(disliked_ingredients) > 0:
         disliked_ingredients_section = f"비선호재료: [{', '.join(disliked_ingredients)}]"
         disliked_ingredients_instruction = f"비선호재료({', '.join(disliked_ingredients)})가 요리의 핵심 재료인 경우는 절대 추천하지 마세요. 전통적인 요리에서 해당 재료를 생략하거나 대체하기 어려운 경우 그 요리는 제외해주세요."
     else:
         disliked_ingredients_section = ""
-        disliked_ingredients_instruction = "모든 냉장고 재료를 활용할 수 있는 요리를 추천해주세요."
+        disliked_ingredients_instruction = "냉장고 재료를 활용한 다양한 요리를 추천해주세요."
+    
+    # 카테고리 처리 (수정된 부분)
+    if categories and len(categories) > 0:
+        categories_section = f"카테고리: [{', '.join(categories)}]"
+        categories_instruction = f"요청한 카테고리({', '.join(categories)})에 속하는 요리를 약 50~80% 정도 추천하고, 나머지는 다른 국가/스타일의 요리를 균형있게 추천해주세요. 너무 한 가지 카테고리에만 치우치지 마세요."
+    else:
+        categories_section = ""
+        categories_instruction = "한식, 중식, 일식, 양식 등 다양한 국가/스타일의 요리를 균형있게 추천해주세요."
+    
+    # 식단 처리 (기존과 동일)
+    if dietaries and len(dietaries) > 0:
+        dietaries_section = f"선호식단: [{', '.join(dietaries)}]"
+        dietaries_instruction = f"선호하는 식단({', '.join(dietaries)})에 맞는 요리를 추천해주세요. 식단 제한사항을 최대한 존중하여 추천해주세요."
+    else:
+        dietaries_section = ""
+        dietaries_instruction = "특별한 식단 제한 없이 다양한 요리를 추천해주세요."
 
     ingredients_str = ', '.join(ingredients_list)
     main_ingredients_str = ', '.join(main_ingredients)
@@ -132,8 +180,12 @@ def get_chef_prompt(ingredients_list, main_ingredients=None, preferred_ingredien
         main_ingredients=main_ingredients_str,
         preferred_ingredients_section=preferred_ingredients_section,
         disliked_ingredients_section=disliked_ingredients_section,
+        categories_section=categories_section,
+        dietaries_section=dietaries_section,
         main_ingredients_instruction=main_ingredients_instruction,
         preferred_ingredients_instruction=preferred_ingredients_instruction,
         disliked_ingredients_instruction=disliked_ingredients_instruction,
+        categories_instruction=categories_instruction,
+        dietaries_instruction=dietaries_instruction,
         num_dishes=num_dishes
     )

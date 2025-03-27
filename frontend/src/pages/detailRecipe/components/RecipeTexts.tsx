@@ -1,12 +1,12 @@
-import { RecipeText } from "@/types/recipeListTypes";
+import { recipeCookingSequenceInfo } from "@/types/recipeListTypes";
 
 interface RecipeTextsProps {
-  recipe: RecipeText;
+  recipe: recipeCookingSequenceInfo;
 }
 
 const RecipeTexts = ({ recipe }: RecipeTextsProps) => {
   return (
-    <section className="flex flex-col items-center gap-6 w-full portrait:max-h-[40%] landscape:max-h-[90%] px-3 py-4 bg-white rounded-xl shadow-md overflow-y-auto">
+    <section className="flex flex-col items-center gap-6 w-full portrait:max-h-[40%] landscape:max-h-[90%] px-3 py-4 overflow-y-auto">
       {recipe &&
         Object.entries(recipe).map(([step, instructions], index) => (
           <div key={step} className="w-full flex flex-col justify-start items-start gap-2">
@@ -15,7 +15,7 @@ const RecipeTexts = ({ recipe }: RecipeTextsProps) => {
             </h3>
             <ul className="flex flex-col">
               {instructions &&
-                instructions.map((instruction, i) => (
+                instructions.sequence.map((instruction, i) => (
                   <li key={i} className="text-sm font-preMedium break-keep">
                     {instruction}
                   </li>

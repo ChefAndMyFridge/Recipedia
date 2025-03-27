@@ -1,39 +1,119 @@
 import { RecipeInfo } from "@/types/recipeListTypes";
 
-const DETAIL_RECIPE: RecipeInfo = {
-  title: "매콤 달콤 소고기 볶음",
-  cooking_info: {
-    cooking_time: "30",
-    kcal: 600,
-  },
-  ingredients: [
-    "소고기 600g",
-    "후추 약간",
-    "소금 약간",
-    "콜라 적당량",
-    "양파 1개",
-    "땡초 2개",
-    "마늘 3쪽",
-    "물 4큰술",
-    "간장 4큰술",
-    "설탕 1큰술",
-  ],
-  cooking_tools: ["도마", "칼", "볼 (재료 재우기용)", "후라이팬", "나무 주걱"],
-  cooking_tips: [
-    "콜라에 재우면 고기가 부드러워집니다.",
-    "양파는 채 썰어야 볶을 때 잘 익습니다.",
-    "소스를 넣은 후에는 국물이 자작해질 때까지 졸아야 맛이 잘 배입니다.",
-  ],
-  cooking_sequence: {
-    "재료 손질 및 재우기": [
-      "소고기를 후추와 소금으로 간을 하고 콜라에 15분간 재웁니다.",
-      "양파는 채 썰고, 땡초와 마늘을 준비합니다.",
+export const DETAIL_RECIPE: RecipeInfo = {
+  recipeId: 1,
+  name: "제육볶음",
+  title:
+    "[제육볶음] 이 영상을 본다면 앞으로 당신의 대표요리는 '제육볶음' / 돼지고기요리, 두루치기 stir-fried spicy pork",
+  url: "https://www.youtube.com/watch?v=chnArCaEpqA",
+  channelTitle: "이 남자의 cook",
+  duration: "4:16",
+  viewCount: 8556390,
+  likeCount: 98385,
+  textRecipe: {
+    title: "매콤한 돼지고기 김치 볶음",
+    cooking_info: {
+      cooking_time: "30분",
+      kcal: 450,
+    },
+    ingredients: [
+      {
+        name: "돼지고기",
+        quantity: "600g",
+      },
+      {
+        name: "간장",
+        quantity: "30g",
+      },
+      {
+        name: "설탕",
+        quantity: "22g",
+      },
+      {
+        name: "후추",
+        quantity: "1/2작은술",
+      },
+      {
+        name: "고추장",
+        quantity: "100g",
+      },
+      {
+        name: "고춧가루",
+        quantity: "21g",
+      },
+      {
+        name: "물엿",
+        quantity: "30g",
+      },
+      {
+        name: "다진 마늘",
+        quantity: "44g",
+      },
+      {
+        name: "맛술",
+        quantity: "50g",
+      },
+      {
+        name: "김치",
+        quantity: "200g",
+      },
+      {
+        name: "양파",
+        quantity: "1/2개",
+      },
+      {
+        name: "대파",
+        quantity: "1대",
+      },
+      {
+        name: "고추",
+        quantity: "2개",
+      },
+      {
+        name: "들기름",
+        quantity: "4g",
+      },
     ],
-    "소스 준비": ["물 4큰술, 간장 4큰술, 설탕 1큰술, 후추, 돈가스 소스 1/2큰술을 섞어 소스를 만듭니다."],
-    "고기 준비": ["재운 소고기를 건져 물기를 빼고 한입 크기로 자릅니다.", "소금, 후추, 참기름을 넣고 잘 섞습니다."],
-    볶기: ["팬에 기름을 두르고 채 썬 양파를 볶습니다.", "소고기와 마늘을 넣고 고기 겉면이 익을 때까지 구워줍니다."],
-    "소스 넣기 및 마무리": ["준비한 소스를 넣고 땡초 두 개를 넣어 볶듯이 끓입니다.", "국물이 자작해지면 완성입니다."],
+    cooking_tips: [
+      "김치는 물에 가볍게 씻어내면 너무 짜지 않게 조리할 수 있습니다.",
+      "고기를 미리 양념에 재워두면 맛이 더 깊어집니다.",
+    ],
+    cooking_sequence: {
+      "재료 손질 및 양념 준비": {
+        sequence: [
+          "돼지고기는 두께를 얇게 하고 5~6cm 크기로 자릅니다.",
+          "간장, 설탕, 후추를 넣고 섞어 30분간 재워둡니다.",
+          "고추장, 고춧가루, 물엿, 다진 마늘, 맛술을 섞어 양념장을 만듭니다.",
+          "김치는 물에 가볍게 씻어내고 돼지고기와 비슷한 크기로 자릅니다.",
+          "양파는 채 썰고, 대파와 고추는 어슷하게 썹니다.",
+        ],
+        timestamp: 0,
+      },
+      "김치 볶기": {
+        sequence: ["중불에서 들기름을 두르고 김치를 볶습니다."],
+        timestamp: 154,
+      },
+      "돼지고기 볶기": {
+        sequence: ["김치를 한쪽으로 밀어두고 돼지고기를 볶습니다.", "돼지고기와 김치를 함께 볶습니다."],
+        timestamp: 176,
+      },
+      "양념장 추가 및 야채 볶기": {
+        sequence: ["양념장을 넣고 2~3분간 볶습니다.", "모든 야채를 넣고 2분간 더 볶습니다."],
+        timestamp: 200,
+      },
+    },
   },
 };
 
-export default DETAIL_RECIPE;
+export const DETAIL_RECIPE_CHECK: RecipeInfo = {
+  recipeId: 1,
+  name: "제육볶음",
+  title:
+    "[제육볶음] 이 영상을 본다면 앞으로 당신의 대표요리는 '제육볶음' / 돼지고기요리, 두루치기 stir-fried spicy pork",
+  url: "https://www.youtube.com/watch?v=chnArCaEpqA",
+  channelTitle: "이 남자의 cook",
+  duration: "4:16",
+  viewCount: 8556390,
+  likeCount: 98385,
+  textRecipe: null,
+};

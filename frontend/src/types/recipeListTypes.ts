@@ -2,10 +2,12 @@ export interface Video {
   recipeId: number;
   title: string;
   url: string;
-  channel_title: string;
+  channelTitle: string;
   duration: string;
-  view_count: number;
-  like_count: number;
+  viewCount: number;
+  likeCount: number;
+  favorite: boolean;
+  rating: number;
 }
 
 export interface VideoList {
@@ -17,24 +19,39 @@ export interface RecipeList {
   videos: VideoList;
 }
 
-export interface RecipeInfo {
-  // recipeId: number; //추후 api 구조 변경 시 사용
-  title: string;
+export interface recipeIngredientsInfo {
+  name: string;
+  quantity: string;
+}
+
+export interface recipeCookingSequenceInfo {
+  [step: string]: {
+    sequence: string[];
+    timestamp: number;
+  };
+}
+
+export interface textRecipeType {
+  title: string | null;
   cooking_info: {
     cooking_time: string;
     kcal: number;
-  };
-  ingredients: string[];
-  cooking_tools: string[];
-  cooking_tips: string[];
-  cooking_sequence: {
-    [step: string]: string[];
-  };
+  } | null;
+  ingredients: recipeIngredientsInfo[] | null;
+  cooking_tips: string[] | null;
+  cooking_sequence: recipeCookingSequenceInfo | null;
 }
 
-//레시피 텍스트 타입
-export interface RecipeText {
-  [key: string]: string[];
+export interface RecipeInfo {
+  recipeId: number;
+  name: string;
+  title: string;
+  url: string;
+  channelTitle: string;
+  duration: string;
+  viewCount: number;
+  likeCount: number;
+  textRecipe: textRecipeType | null;
 }
 
-export type RecipeInfoKeys = "ingredients" | "cooking_tools" | "cooking_tips";
+export type RecipeInfoKeys = "video_infos" | "cooking_sequence" | "ingredients" | "cooking_tips";

@@ -23,6 +23,7 @@ services:
     container_name: my-springboot
     environment:
       - TZ=Asia/Seoul
+      - HOST_URL=${HOST_URL} 
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}  # .env에서 가져옴
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
     build:

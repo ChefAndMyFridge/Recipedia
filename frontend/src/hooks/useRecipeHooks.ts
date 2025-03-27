@@ -1,18 +1,21 @@
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getRecipeDetailApi, makeRecipeApi } from "@apis/recipeApi";
-import recipeStore from "@stores/recipeStore";
+import useRecipeStore from "@stores/recipeStore";
 import { RecipeInfo, RecipeList } from "@/types/recipeListTypes";
 
 //선택 재료 기반 레시피 리스트 조회 API 호출
-export const usePostRecipeList = (ingredients: string[]) => {
-  const { setRecipeList } = recipeStore();
+export const usePostRecipeList = (userId: number, ingredients: string[]) => {
+  const { setRecipeList } = useRecipeStore();
+
+  // ingredients를 정렬하고 문자열로 변환하여 일관된 queryKey 생성
+  const ingredientsKey = ingredients.length > 0 ? ingredients.sort().join(",") : "empty";
 
   const query = useQuery<RecipeList>({
-    queryKey: ["recipeList", ingredients],
-    queryFn: () => makeRecipeApi(ingredients),
-    staleTime: 1000 * 60 * 60 * 24, // 1일, 추후 줄일 필요 O
-    throwOnError: true,
+    queryKey: ["recipeList", ingredientsKey],
+    queryFn: () => makeRecipeApi(userId, ingredients),
+    // staleTime: 1000 * 60 * 60, // 1시간
+    retry: 1,
   });
 
   //query 호출 후 데이터 저장
@@ -27,13 +30,13 @@ export const usePostRecipeList = (ingredients: string[]) => {
 
 //레시피 상세 및 텍스트 추출 API
 export const useGetRecipeDetail = (recipeId: number) => {
-  const { setDetailRecipe } = recipeStore();
+  const { setDetailRecipe } = useRecipeStore();
 
   const query = useQuery<RecipeInfo>({
     queryKey: ["recipeDetail", recipeId],
     queryFn: () => getRecipeDetailApi(recipeId),
-    staleTime: 1000 * 60 * 60 * 24,
-    throwOnError: true,
+    // staleTime: 1000 * 60 * 60 * 24,
+    retry: 1,
   });
 
   // useEffect로 data 변화 관찰

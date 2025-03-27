@@ -1,19 +1,23 @@
+import { useState } from "react";
+
 import { Ingredient } from "@/types/ingredientsTypes.ts";
 
-interface IngredientItemProps {
+import { formatDate, calculateDaysRemaining } from "@utils/getFormattedDate";
+
+interface IngredientingredientProps {
   ingredient: Ingredient;
-  imgSrc: string;
+  index: number;
 }
 
-const DetailIngredientItem = ({ ingredient, imgSrc }: IngredientItemProps) => {
-  // 남은 만료일 계산
-  function calculateDaysRemaining() {
-    const today = new Date();
-    const expirationDate = new Date(ingredient.expirationDate);
+const DetailIngredientItem = ({ ingredient, index }: IngredientingredientProps) => {
+  const [isClicked, setIsClicked] = useState(false);
 
-    const diffTime = expirationDate.getTime() - today.getTime();
+  const incomingDate = formatDate(new Date(ingredient.incomingDate));
+  const expirationDate = formatDate(new Date(ingredient.expirationDate));
+  const [remaining, isImminent] = calculateIsImminient();
 
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  function calculateIsImminient(): [string, boolean] {
+    const diffDays = calculateDaysRemaining(ingredient.expirationDate);
 
     let remaining = "";
     if (diffDays < 0) {
@@ -24,20 +28,34 @@ const DetailIngredientItem = ({ ingredient, imgSrc }: IngredientItemProps) => {
       remaining = "D-" + String(diffDays);
     }
 
-    return remaining;
+    let isImminent = false;
+    if (diffDays <= 2) {
+      isImminent = true;
+    }
+
+    return [remaining, isImminent];
   }
 
-  const daysRemaining = calculateDaysRemaining();
-
   return (
-    <div className="flex flex-col w-1/5 h-fit p-1 justify-center items-center ">
-      <div className="relative w-full p-1 aspect-[1/1] rounded-3xl">
-        <img src={imgSrc} alt={imgSrc} className="w-full h-full object-cover rounded-3xl" />
-        <span className="absolute right-0 top-0 bg-error text-white text-xs px-2 py-1 rounded-3xl">
-          {daysRemaining}
-        </span>
-      </div>
-    </div>
+    <>
+      <tr
+        key={ingredient.ingredientId}
+        className={`h-8 font-preRegular ${index > 0 ? "border-t border-gray-300" : ""}`}
+        onClick={() => setIsClicked(!isClicked)}
+        onBlur={() => setIsClicked(false)}
+      >
+        <td className={`font-preBold ${isImminent ? "text-error" : "text-primaryDark"}`}>{remaining}</td>
+        <td className="font-preMedium">{expirationDate}</td>
+        <td className="text-primaryDark font-preBold">{ingredient.storagePlace === "fridge" ? "냉장실" : "냉동실"}</td>
+      </tr>
+      {isClicked && (
+        <tr className="h-8 bg-black/5 font-preRegular text-xs">
+          <td className="font-preMedium">입고</td>
+          <td className="font-preMedium">{incomingDate}</td>
+          <td />
+        </tr>
+      )}
+    </>
   );
 };
 

@@ -2,6 +2,7 @@ pipeline {
     agent any  // 어떤 Jenkins 에이전트에서도 실행 가능
 
     environment {
+        HOST_URL = credentials('HOST_URL')
         MYSQL_ROOT_PASSWORD = credentials('MYSQL_ROOT_PASSWORD')
         MYSQL_DATABASE = credentials('MYSQL_DATABASE')
         ELASTIC_PASSWORD = credentials('ELASTIC_PASSWORD')
@@ -43,6 +44,7 @@ pipeline {
                 script {
                     sh """
                     cd ${env.WORKSPACE}
+                    HOST_URL=${env.HOST_URL} \
                     MYSQL_ROOT_PASSWORD=${env.MYSQL_ROOT_PASSWORD} \
                     MYSQL_DATABASE=${env.MYSQL_DATABASE} \
                     VITE_API_URL=${env.VITE_API_URL} \

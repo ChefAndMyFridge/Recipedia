@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 
 import useModalStore from "@stores/modalStore";
-import Button from "@components/common/button/Button.tsx";
+
+import Button from "@components/common/button/Button";
 
 const StoreConfirmMessage = () => {
   const { closeModal } = useModalStore();

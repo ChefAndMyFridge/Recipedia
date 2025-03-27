@@ -1,20 +1,4 @@
-@keyframes slideDown {
-  from {
-    transform: translateY(-50vh);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideUp {
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(-50vh);
-  }
-}
+@import url("../../../styles/animations.css");
 
 dialog[open] {
   position: fixed !important;

@@ -30,6 +30,9 @@ springdoc:
   swagger-ui:
     path: /index.html
 
+host:
+  url: ${HOST_URL}
+
 fastapi:
   base:
     url: http://my-fastapi:8000

@@ -1,5 +1,5 @@
 import { RecipeInfoKeys } from "@/types/recipeListTypes";
-import RecipeInfoIndex from "./RecipeInfoIndex";
+import RecipeInfoIndex from "@pages/detailRecipe/components/RecipeInfoIndex";
 
 interface RecipeInfoIndexesProps {
   selectedIndex: RecipeInfoKeys;
@@ -12,6 +12,18 @@ const RecipeInfoIndexes = ({ selectedIndex, setSelectedIndex }: RecipeInfoIndexe
       <RecipeInfoIndex
         selectedIndex={selectedIndex}
         setSelectedIndex={setSelectedIndex}
+        text="영상 정보"
+        type="video_infos"
+      />
+      <RecipeInfoIndex
+        selectedIndex={selectedIndex}
+        setSelectedIndex={setSelectedIndex}
+        text="레시피"
+        type="cooking_sequence"
+      />
+      <RecipeInfoIndex
+        selectedIndex={selectedIndex}
+        setSelectedIndex={setSelectedIndex}
         text="재료 정보"
         type="ingredients"
       />
@@ -20,12 +32,6 @@ const RecipeInfoIndexes = ({ selectedIndex, setSelectedIndex }: RecipeInfoIndexe
         setSelectedIndex={setSelectedIndex}
         text="요리 꿀팁"
         type="cooking_tips"
-      />
-      <RecipeInfoIndex
-        selectedIndex={selectedIndex}
-        setSelectedIndex={setSelectedIndex}
-        text="도구 정보"
-        type="cooking_tools"
       />
     </div>
   );

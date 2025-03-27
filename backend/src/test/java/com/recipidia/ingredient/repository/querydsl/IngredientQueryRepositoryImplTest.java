@@ -3,7 +3,6 @@ package com.recipidia.ingredient.repository.querydsl;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.recipidia.config.QueryDslConfig;
-import com.recipidia.ingredient.dto.IngredientDto;
 import com.recipidia.ingredient.dto.IngredientInfoDto;
 import com.recipidia.ingredient.entity.Ingredient;
 import com.recipidia.ingredient.entity.IngredientInfo;
@@ -58,10 +57,7 @@ class IngredientQueryRepositoryImplTest {
     List<IngredientInfoDto> result = ingredientQueryRepository.findAllExistingIngredients(params);
 
     assertThat(result).hasSize(1);
-    assertThat(result.get(0).getIngredients()).hasSize(2);
-    for (IngredientDto dto : result.get(0).getIngredients()) {
-      assertThat(dto.storagePlace()).isEqualTo("fridge");
-    }
+    assertThat(result.get(0).getTotalCount()).isEqualTo(2);
   }
 
   @Test
@@ -70,10 +66,8 @@ class IngredientQueryRepositoryImplTest {
     List<IngredientInfoDto> result = ingredientQueryRepository.findAllExistingIngredients(params);
 
     assertThat(result).hasSize(1);
-    assertThat(result.get(0).getIngredients()).hasSize(3);
-    for (IngredientDto dto : result.get(0).getIngredients()) {
-      assertThat(dto.storagePlace()).isEqualTo("freezer");
-    }
+    assertThat(result.get(0).getTotalCount()).isEqualTo(3);
+
   }
 
   @Test
@@ -82,6 +76,6 @@ class IngredientQueryRepositoryImplTest {
     List<IngredientInfoDto> result = ingredientQueryRepository.findAllExistingIngredients(params);
 
     assertThat(result).hasSize(1);
-    assertThat(result.get(0).getIngredients()).hasSize(5);
+    assertThat(result.get(0).getTotalCount()).isEqualTo(5);
   }
 }

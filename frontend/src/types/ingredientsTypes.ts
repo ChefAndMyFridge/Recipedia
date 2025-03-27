@@ -1,24 +1,24 @@
+export interface Ingredients {
+  ingredientInfoId: number;
+  name: string;
+  imageUrl: string;
+  totalCount: number;
+  earliestExpiration: string;
+  latestExpiration: string;
+}
+
+export interface IngredientsSearchInfo {
+  id: number;
+  name: string;
+  imageUrl: string;
+}
+
 export interface Ingredient {
   ingredientId: number;
   storagePlace: string;
   expirationDate: string;
   incomingDate: string;
   releasingDate: string | null;
-}
-
-export interface Ingredients {
-  ingredientInfoId: number;
-  name: string;
-  imageUrl: string;
-  totalCount: number;
-  ingredients: Ingredient[];
-}
-
-export interface IngredientsInfo {
-  ingredientInfoId: number;
-  name: string;
-  imageUrl: string;
-  totalCount: number;
 }
 
 export interface Nutritions {
@@ -41,7 +41,7 @@ export interface IngredientNutrition {
   imageUrl: string;
   totalCount: number;
   ingredients: Ingredient[];
-  nutrients: Nutritions;
+  nutrients: Nutritions | null;
 }
 
 export interface StoreIngredient {
@@ -75,10 +75,4 @@ export interface DeleteIngredient {
 
 export interface DeleteIngredientResponse {
   [key: string]: number;
-}
-
-export interface filteredInfomations {
-  type: string[];
-  preference: string[];
-  dislike: string[];
 }

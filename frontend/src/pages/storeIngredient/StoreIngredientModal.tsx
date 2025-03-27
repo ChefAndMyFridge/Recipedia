@@ -3,7 +3,7 @@ import StoreIngredientForm from "@pages/storeIngredient/components/StoreIngredie
 
 const StoreIngredientModal = () => {
   return (
-    <div>
+    <div className="w-full">
       <ModalHeader title="재료 입고" />
       <StoreIngredientForm />
     </div>

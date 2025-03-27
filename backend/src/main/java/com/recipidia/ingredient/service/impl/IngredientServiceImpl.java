@@ -88,7 +88,7 @@ public class IngredientServiceImpl implements IngredientService {
           .build();
       ingredients.add(ingredient);
     }
-
+    ingredientInfo.setEarliestExpiration();
     // 만약 ingredientInfo가 새로 생성된 객체라면 save 호출
     if (ingredientInfo.getId() == null) { // 새로운 엔티티라면 ID가 null일 것
       // ingredientInfo에 대한 Nutrient 정보를 추가해야함

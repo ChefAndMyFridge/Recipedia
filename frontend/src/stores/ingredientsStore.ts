@@ -1,15 +1,18 @@
 import { create } from "zustand";
 
-import { Ingredients, SelectedIngredients, filteredInfomations } from "@/types/ingredientsTypes.ts";
+import { Ingredients, SelectedIngredients } from "@/types/ingredientsTypes.ts";
+import { filteringInformationKeys, filteredInfomations } from "@/types/filterTypes.ts";
 
 interface IngredientsState {
   ingredients: Ingredients[] | []; // 고내에 저장된 재료 목록
   selectedIngredients: Record<number, SelectedIngredients>; // { ingredientInfoId: selectedCount } 선택된 재료 목록
-  filteringInfomationKeys: filteredInfomations;
+  filteringInfomationKeys: filteringInformationKeys;
   filteredInfomations: filteredInfomations;
   setIngredients: (ingredients: Ingredients[]) => void;
   setSelectedCount: (ingredientInfoId: number, ingredientInfo: SelectedIngredients) => void;
+  setRemoveSelectedIngredients: (ingredientInfoId: number) => void;
   setClearSelectedIngredients: () => void;
+  setInitFilteredInfomations: (filterInfo: filteredInfomations) => void;
   setFilteredInfomations: (filterKey: keyof filteredInfomations, filterValue: string) => void;
   setClearFilteredInfomations: (filterKey: keyof filteredInfomations) => void;
 }
@@ -18,14 +21,16 @@ const useIngredientsStore = create<IngredientsState>((set) => ({
   ingredients: [],
   selectedIngredients: {},
   filteringInfomationKeys: {
-    type: ["한식", "중식", "일식", "양식"],
-    preference: ["고단백식", "고열량식", "저염식", "저당식", "저지방식", "저열량식", "비건식", "무가공식", "육식"],
-    dislike: ["고단백식", "고열량식", "저염식", "저당식", "저지방식", "저열량식", "비건식", "무가공식", "육식"],
+    categories: ["한식", "중식", "일식", "양식"],
+    dietaries: ["고단백식", "고열량식", "저염식", "저당식", "저지방식", "저열량식", "비건식", "무가공식", "육식"],
+    allergies: ["갑각류", "견과류", "계란", "땅콩", "대두", "밀", "생선", "유제품", "조개류"],
   },
   filteredInfomations: {
-    type: [],
-    preference: [],
-    dislike: [],
+    categories: [],
+    dietaries: [],
+    preferredIngredients: [],
+    dislikedIngredients: [],
+    allergies: [],
   },
   setIngredients: (ingredients) => set({ ingredients }),
   setSelectedCount: (ingredientInfoId, ingredientInfo) => {
@@ -43,6 +48,9 @@ const useIngredientsStore = create<IngredientsState>((set) => ({
     });
   },
   setClearSelectedIngredients: () => set({ selectedIngredients: {} }),
+  setInitFilteredInfomations: (filterInfo: filteredInfomations) => {
+    set({ filteredInfomations: filterInfo });
+  },
   setFilteredInfomations: (filterKey, filterValue) => {
     set((state) => {
       const newSelected = { ...state.filteredInfomations };
@@ -56,6 +64,13 @@ const useIngredientsStore = create<IngredientsState>((set) => ({
       return { filteredInfomations: newSelected };
     });
   },
+  setRemoveSelectedIngredients: (ingredientInfoId) =>
+    set((state) => {
+      const newSelected = { ...state.selectedIngredients };
+      delete newSelected[ingredientInfoId];
+
+      return { selectedIngredients: newSelected };
+    }),
   setClearFilteredInfomations: (filterKey) =>
     set((state) => {
       return { filteredInfomations: { ...state.filteredInfomations, [filterKey]: [] } };

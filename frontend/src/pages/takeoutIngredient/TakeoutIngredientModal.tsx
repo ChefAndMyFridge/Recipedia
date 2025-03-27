@@ -26,9 +26,8 @@ const TakeoutIngredientModal = () => {
     console.log(ingredients);
 
     deleteIngredientRequest(ingredients, {
-      onSuccess: (data) => {
-        console.log(data);
-        openModal(<TakeoutConfirmModal deleteIngredients={data} />);
+      onSuccess: () => {
+        openModal(<TakeoutConfirmModal />);
       },
       onError: (error) => {
         console.error(error);
@@ -45,7 +44,7 @@ const TakeoutIngredientModal = () => {
 
       {/* 선택한 재료 목록 확인 */}
       <div className="w-full h-fit px-2">
-        <div className="flex h-[40vh] items-start content-start py-1 px-5 gap-y-5 shrink-0 flex-wrap font-preMedium bg-[#EEE] rounded-xl">
+        <div className="flex h-[40vh] max-h-[40vh] items-start content-start py-1 px-5 gap-y-5 shrink-0 flex-wrap font-preMedium bg-[#EEE] rounded-xl overflow-y-auto">
           {selectedIngredients &&
             Object.values(selectedIngredients).map((ingredient) => (
               <TakeoutIngredient key={ingredient.ingredientInfoId} ingredient={ingredient} />
