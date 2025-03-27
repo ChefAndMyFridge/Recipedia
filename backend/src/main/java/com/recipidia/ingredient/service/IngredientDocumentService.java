@@ -6,4 +6,6 @@ import java.util.List;
 public interface IngredientDocumentService {
 
   List<IngredientDocument> findByMorpheme(String morpheme); // morpheme은 형태소
+
+  void deleteIngredientDocumentById(Long id);
 }
