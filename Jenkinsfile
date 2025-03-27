@@ -43,14 +43,17 @@ pipeline {
             steps {
                 script {
                     def viteApiUrl = "https://j12s003.p.ssafy.io/api"
+                    def baseUrl = "/"
+
                     if (env.BRANCH_NAME == "master") {
                         viteApiUrl = "https://j12s003.p.ssafy.io/master/api"
-                    }
-
-                    def baseUrl = "/"
-                    if (env.BRANCH_NAME == "master") {
                         baseUrl = "/${env.BRANCH_NAME}"
                     } 
+
+                    echo "✅ BRANCH_NAME: ${env.BRANCH_NAME}"
+                    echo "🌐 VITE_API_URL: ${viteApiUrl}"
+                    echo "📁 VITE_BASE_URL: ${baseUrl}"
+
 
                     sh """
                     cd ${env.WORKSPACE}/frontend
