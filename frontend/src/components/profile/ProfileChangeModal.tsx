@@ -29,7 +29,7 @@ const ProfileChangeModal = () => {
     <>
       <ModalHeader title="프로필 전환" />
       <div className="pb-10 flex flex-col items-center justify-center gap-4">
-        <div className="grid grid-cols-2 gap-8">
+        <div className="grid grid-cols-2 gap-x-14 gap-y-6">
           {profiles &&
             profiles.map((profile) => (
               <button
@@ -40,7 +40,7 @@ const ProfileChangeModal = () => {
                 <img
                   src={defaultProfile}
                   alt={profile.membername}
-                  className="w-32 aspect-[1/1] rounded-full object-cover"
+                  className="w-28 aspect-[1/1] rounded-full object-cover"
                 />
                 <p className="font-preSemiBold text-lg">{profile.membername}</p>
               </button>
@@ -52,7 +52,7 @@ const ProfileChangeModal = () => {
               className="flex flex-col items-center justify-center gap-4"
               onClick={() => openModal(<ProfileAddModal />)}
             >
-              <div className="w-32 h-32 flex items-center justify-center bg-gray-200 rounded-full">
+              <div className="w-28 h-28 flex items-center justify-center bg-gray-200 rounded-full">
                 <IconIncrease width={30} height={30} strokeColor="white" />
               </div>
               <p className="font-preSemiBold text-lg">구성원 추가</p>

@@ -14,7 +14,8 @@ export const usePostRecipeList = (userId: number, ingredients: string[]) => {
   const query = useQuery<RecipeList>({
     queryKey: ["recipeList", ingredientsKey],
     queryFn: () => makeRecipeApi(userId, ingredients),
-    staleTime: 1000 * 60 * 60, // 1시간
+    // staleTime: 1000 * 60 * 60, // 1시간
+    retry: 1,
   });
 
   //query 호출 후 데이터 저장
@@ -34,8 +35,8 @@ export const useGetRecipeDetail = (recipeId: number) => {
   const query = useQuery<RecipeInfo>({
     queryKey: ["recipeDetail", recipeId],
     queryFn: () => getRecipeDetailApi(recipeId),
-    staleTime: 1000 * 60 * 60 * 24,
-    retry: false,
+    // staleTime: 1000 * 60 * 60 * 24,
+    retry: 1,
   });
 
   // useEffect로 data 변화 관찰

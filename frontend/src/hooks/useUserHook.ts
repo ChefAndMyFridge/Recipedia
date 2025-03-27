@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { User } from "@/types/userTypes";
-import { filteredInfomations } from "@/types/ingredientsTypes";
+import { User } from "@/types/userTypes.ts";
+import { filteredInfomations } from "@/types/filterTypes.ts";
 
 import {
   getMemberListApi,
@@ -62,6 +62,7 @@ export const useDeleteMember = () => {
   return mutation;
 };
 
+// 필터 조회
 export const useGetFilteredInfomations = () => {
   const { userId } = useUserStore();
   const { setInitFilteredInfomations } = useIngredientsStore();
@@ -81,6 +82,7 @@ export const useGetFilteredInfomations = () => {
   return query;
 };
 
+// 필터 저장
 export const useSaveFilteredInfomations = () => {
   const { userId } = useUserStore();
 
@@ -94,7 +96,7 @@ export const useSaveFilteredInfomations = () => {
     mutationFn: saveMemberFilterApi,
     onSuccess: () => {
       console.log("필터 저장 성공");
-      queryClient.invalidateQueries({ queryKey: ["filteredInfomations", userId] }); // 🔥 캐시 무효화하여 refetch 실행
+      queryClient.invalidateQueries({ queryKey: ["filteredInfomations", userId] }); // 캐시 무효화하여 refetch 실행
     },
     onError: (error) => {
       console.log("필터 저장 실패", error);

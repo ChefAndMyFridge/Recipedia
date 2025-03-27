@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 
 import useModalStore from "@stores/modalStore.ts";
-import useUserStore from "@stores/userStore";
+import useUserStore from "@stores/userStore.ts";
 
 import { useGetMemberList } from "@hooks/useUserHook";
 
-import Button from "@components/common/button/Button.tsx";
+import Button from "@components/common/button/Button";
 
 import StoreIngredientModal from "@pages/storeIngredient/StoreIngredientModal";
 
