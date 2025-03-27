@@ -37,7 +37,6 @@ public class IngredientInfoDto implements Serializable {
         ingredientInfo.getName(),
         ingredientInfo.getImageUrl()
     );
-    ingredientInfoDto.ingredients.addAll(IngredientDto.fromEntity(ingredientInfo.getIngredients()));
     ingredientInfoDto.totalCount = ingredientInfo.getIngredients().size();
     ingredientInfoDto.earliestExpiration = ingredientInfo.getEarliestExpiration();
     ingredientInfoDto.latestExpiration = ingredientInfo.getLatestExpiration();
