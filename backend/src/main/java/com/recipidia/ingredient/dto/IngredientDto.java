@@ -9,7 +9,7 @@ import java.util.List;
  * DTO for {@link Ingredient}
  */
 public record IngredientDto(Long ingredientId, String storagePlace, LocalDateTime expirationDate,
-                            LocalDateTime incomingDate, LocalDateTime releasingDate) implements
+                            LocalDateTime incomingDate) implements
     Serializable {
 
   public static IngredientDto fromEntity(Ingredient ingredient) {
@@ -17,8 +17,7 @@ public record IngredientDto(Long ingredientId, String storagePlace, LocalDateTim
         ingredient.getId(),
         ingredient.getStoragePlace(),
         ingredient.getExpirationDate(),
-        ingredient.getIncomingDate(),
-        ingredient.getReleasingDate()
+        ingredient.getIncomingDate()
     );
   }
 

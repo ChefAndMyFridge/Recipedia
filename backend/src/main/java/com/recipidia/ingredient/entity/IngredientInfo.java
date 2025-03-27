@@ -58,7 +58,6 @@ public class IngredientInfo {
 
   public void setEarliestExpiration() {
     List<LocalDateTime> expirationList = ingredients.stream()
-        .filter(ingredient -> !ingredient.isReleased())
         .map(Ingredient::getExpirationDate)
         .sorted()
         .toList();
