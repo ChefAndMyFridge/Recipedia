@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 
+import VideoInfos from "@components/common/videoInfo/VideoInfos";
+
 import RecipeInfoIndexes from "@pages/detailRecipe/components/RecipeInfoIndexes";
 import RecipeTexts from "@pages/detailRecipe/components/RecipeTexts";
 
@@ -8,7 +10,6 @@ import { recipeIngredientsInfo, RecipeInfoKeys } from "@/types/recipeListTypes";
 import recipeStore from "@stores/recipeStore";
 
 import { getRecipeTextApi } from "@apis/recipeApi";
-import VideoInfos from "@/components/common/videoInfo/VideoInfos";
 
 const RecipeInfos = () => {
   const [selectedIndex, setSelectedIndex] = useState<RecipeInfoKeys>("video_infos");
