@@ -96,13 +96,14 @@ class RecipeSummary:
         system_input = SUMMARY_SYSTEM_INPUT
         user_input = copy.deepcopy(SUMMARY_USER_INPUT)
 
-        # youtube api 키 라운드 로빈
-        await rotate_youtube_api_key()
-
-        # 유튜브 API 객체
-        youtube = build("youtube", "v3", developerKey=settings.YOUTUBE_API_KEY)
-
         try:
+            # youtube api 키 라운드 로빈
+            await rotate_youtube_api_key()
+
+            # 유튜브 API 객체
+            youtube = build("youtube", "v3",
+                            developerKey=settings.YOUTUBE_API_KEY)
+
             # video_id에 해당하는 영상 가져오기
             response = youtube.videos().list(
                 part='snippet',
