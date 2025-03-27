@@ -112,10 +112,14 @@ class RecipeSummary:
             # 데이터에서 description만 추출
             video_description = response['items'][0]['snippet']['description']
 
-            # GPT API 입력 프롬프트에 추가
-            user_input += SUMMARY_DESCRIPTION_INPUT
-            user_input.append(
-                {"role": "user", "content": video_description})
+            # 예외 처리
+            # 영상 설명 데이터가 정해놓은 글자 수보다 적다면, 레시피 데이터가 아니라고 가정
+            if len(video_description) >= settings.YOUTUBE_DESCRIPTION_LEN_TH:
+                # GPT API 입력 프롬프트에 추가
+                user_input += SUMMARY_DESCRIPTION_INPUT
+                user_input.append(
+                    {"role": "user", "content": video_description})
+                logger.info(f"{settings.LOG_SUMMARY_PREFIX}_영상 설명 데이터 추가")
 
         except Exception as e:
             logger.error(
