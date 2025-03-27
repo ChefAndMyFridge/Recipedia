@@ -36,6 +36,8 @@ class Settings(BaseSettings):
     SUMMARY_OPENAI_FREQUENCY_PENALTY: float = 0.1  # 중복 방지
     SUMMARY_OPENAI_STREAM: bool = False  # 스트리밍 사용 여부
 
+    SUMMARY_NOT_COOKCING_VIDEO: int = 410
+
     # YouTube 설정
     YOUTUBE_MAX_RESULTS: int = 5
     YOUTUBE_DESCRIPTION_LEN_TH: int = 200

@@ -83,6 +83,40 @@ FOOD_GENERATOR_PROMPT = """
 4. 한식, 중식, 일식, 양식 등 다양한 국가/스타일의 요리를 균형있게 추천해주세요.
 5. 각 요리 이름 뒤에 괄호로 해당 요리의 국가/스타일을 표시해주세요.
 6. 음식 이름만 간결하게 불릿 포인트로 나열해주세요.
+
+요청 예시와 응답 형식:
+냉장고 재료: [닭고기, 감자, 당근, 양파, 간장]
+주재료: [닭고기, 감자]
+출력:
+- 안동찜닭 (한식)
+- 닭볶음탕 (한식)
+- 치킨 스튜 (양식)
+- 카레라이스 (일식)
+
+냉장고 재료: [소고기, 파, 간장, 마늘, 양파]
+주재료: [소고기, 파]
+출력:
+- 불고기 (한식)
+- 소고기 칠리 (중식/멕시코)
+- 소고기 볶음밥 (중식)
+- 페퍼 스테이크 (양식)
+
+냉장고 재료: [돼지고기, 양배추, 당근, 양파, 마늘]
+주재료: [돼지고기]
+비선호재료: [당근]
+출력:
+- 제육볶음 (한식) - 당근 없이 조리 가능
+- 돈까스 (일식)
+- 탕수육 (중식) - 당근 제외 가능
+
+냉장고 재료: [기린고기, 양파, 마늘, 소금]
+주재료: [기린고기]
+출력:
+NO_VALID_DISHES
+
+최종 출력에서는 음식 이름을 불릿 리스트로 나열하고, 괄호 안에 해당 요리의 국가/스타일을 표시합니다.
+요리명이 불분명하거나 주재료 조합이 전통적이지 않은 경우는 추천하지 말고, 확실한 요리만 추천하세요.
+음식으로 사용되지 않는 재료나 비현실적인 주재료인 경우 "NO_VALID_DISHES"로만 응답하세요.
 """
 
 
@@ -99,18 +133,19 @@ def get_chef_prompt(ingredients_list, main_ingredients=None, preferred_ingredien
     Returns:
         str: 포맷팅된 프롬프트
 """
-        # 주재료가 None이거나 빈 리스트인 경우 처리
+    # 주재료가 None이거나 빈 리스트인 경우 처리
     if not main_ingredients:
         main_ingredients = []
         main_ingredients_instruction = "주재료가 지정되지 않았으므로, 냉장고 재료를 활용한 실존하는 요리만 제안해주세요. 단순 재료 나열식 요리명은 허용하지 않습니다."
     else:
         main_ingredients_instruction = "반드시 주재료(" + ", ".join(
             main_ingredients) + ")를 핵심 재료로 하는 실존 요리만 추천해주세요. 주재료와 요리 간의 전통적 관계를 엄격히 지켜야 합니다."
-    
+
     # 선호 재료 처리 - 빈 리스트인 경우에도 기본 지시사항 제공
     if preferred_ingredients and len(preferred_ingredients) > 0:
         # 냉장고 재료에 있는 선호 재료만 필터링
-        valid_preferred = [p for p in preferred_ingredients if p in ingredients_list]
+        valid_preferred = [
+            p for p in preferred_ingredients if p in ingredients_list]
         if valid_preferred:
             preferred_ingredients_section = f"선호재료: [{', '.join(valid_preferred)}]"
             preferred_ingredients_instruction = f"가능하다면 선호재료({', '.join(valid_preferred)})가 포함된 요리를 고려하되, 이에 지나치게 편중되지 않도록 균형 있게 추천해주세요."
@@ -120,7 +155,7 @@ def get_chef_prompt(ingredients_list, main_ingredients=None, preferred_ingredien
     else:
         preferred_ingredients_section = ""
         preferred_ingredients_instruction = "냉장고 재료를 활용한 다양한 요리를 추천해주세요."
-    
+
     # 비선호 재료 처리
     if disliked_ingredients and len(disliked_ingredients) > 0:
         disliked_ingredients_section = f"비선호재료: [{', '.join(disliked_ingredients)}]"
@@ -128,10 +163,10 @@ def get_chef_prompt(ingredients_list, main_ingredients=None, preferred_ingredien
     else:
         disliked_ingredients_section = ""
         disliked_ingredients_instruction = "모든 재료를 자유롭게 활용하여 추천해주세요."
-    
+
     ingredients_str = ', '.join(ingredients_list)
     main_ingredients_str = ', '.join(main_ingredients)
-    
+
     return FOOD_GENERATOR_PROMPT.format(
         ingredients=ingredients_str,
         main_ingredients=main_ingredients_str,

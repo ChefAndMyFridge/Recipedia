@@ -7,6 +7,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 async def search_youtube_recipe(dish: str, max_results=None) -> list:
     """
     입력: 요리 이름, 최대 결과 수(선택)
@@ -29,24 +30,24 @@ def _sync_search_youtube_recipe(dish: str, max_results) -> list:
     기능: youtubesearchpython을 사용한 동기식 YouTube 검색 수행
     """
     query = f"{dish} 레시피"
-    
+
     # VideosSearch 객체 생성 및 검색 수행 (필터링 추가 : 4-20분 자막 포함)
     videos_search = CustomSearch(query, 'EgYQARgDKAE', limit=max_results)
     search_response = videos_search.result()
-    
+
     if not search_response or 'result' not in search_response:
         return []
 
     # 비디오 ID 추출
     video_ids = []
     video_info = {}
-    
+
     for item in search_response['result']:
         # URL에서 비디오 ID 추출
         video_url = item["link"]
         video_id = video_url.split("v=")[-1].split("&")[0]
         video_ids.append(video_id)
-        
+
         # 기본 정보 저장 - 검색에서 얻을 수 있는 정보만 저장
         video_info[video_id] = {
             "title": item["title"],
@@ -54,7 +55,7 @@ def _sync_search_youtube_recipe(dish: str, max_results) -> list:
             "channel_title": item["channel"]["name"],
             "duration": item.get("duration", "")
         }
-    
+
     ########################################################################
     # YouTube Data API를 사용하여 상세 통계 정보(조회수, 좋아요 수) 가져오기
     youtube = build("youtube", "v3", developerKey=settings.YOUTUBE_API_KEY)
@@ -73,19 +74,22 @@ def _sync_search_youtube_recipe(dish: str, max_results) -> list:
                 id=",".join(video_ids)
             )
             videos_response = videos_request.execute()
-            
+
             # 통계 정보 업데이트
             for item in videos_response.get("items", []):
                 video_id = item["id"]
                 if video_id in video_info and "statistics" in item:
                     stats = item["statistics"]
-                    video_info[video_id]["view_count"] = int(stats.get("viewCount", 0))
-                    video_info[video_id]["like_count"] = int(stats.get("likeCount", 0))
+                    video_info[video_id]["view_count"] = int(
+                        stats.get("viewCount", 0))
+                    video_info[video_id]["like_count"] = int(
+                        stats.get("likeCount", 0))
     except Exception as e:
         print(f"⚠️ YouTube API 호출 중 오류 발생: {e}")
-        
+
     # 최종 결과 구성
-    results = [video_info[video_id] for video_id in video_ids if video_id in video_info]
+    results = [video_info[video_id]
+               for video_id in video_ids if video_id in video_info]
     return results
 
 
@@ -98,20 +102,20 @@ def _parse_duration(duration):
     try:
         # 시간:분:초 형식 처리
         parts = duration.split(':')
-        
+
         if len(parts) == 3:  # 시:분:초 형식
             hours, minutes, seconds = map(int, parts)
             if hours > 0:
                 return "1시간 이상"
             return f"{minutes}:{seconds:02d}"
-        
+
         elif len(parts) == 2:  # 분:초 형식
             minutes, seconds = map(int, parts)
             return f"{minutes}:{seconds:02d}"
-        
+
         else:  # 그 외 형식
             return duration
-            
+
     except:
         # 파싱에 실패한 경우 원래 값 반환
         return duration or "알 수 없음"
