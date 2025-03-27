@@ -84,8 +84,8 @@ def _sync_search_youtube_recipe(dish: str, max_results) -> list:
 
                     video_info[video_id]["title"] = snippet.get(
                         "title", video_info[video_id]["title"])  # API에서 갸져온거로 제목 덮어쓰기
-                    video_info[video_id]["description"] = snippet.get(
-                        "description", "")  # API에서  설명 가져오기쓰기
+                    # video_info[video_id]["description"] = snippet.get(
+                    #     "description", "")  # API에서  설명 가져오기쓰기
                     video_info[video_id]["view_count"] = int(
                         stats.get("viewCount", 0))
                     video_info[video_id]["like_count"] = int(
