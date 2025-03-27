@@ -19,7 +19,7 @@ const DetailRecipePortraitPage = () => {
   const { detailRecipe } = recipeStore();
 
   return (
-    <section className={`w-full h-full flex flex-col justify-start items-center gap-2 p-3`}>
+    <section className={`w-full h-full flex flex-col justify-between items-center gap-2 p-3`}>
       <Header title="레시피" isIcon />
       <ReactPlayer
         url={detailRecipe.url}

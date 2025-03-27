@@ -7,9 +7,8 @@ import { recipeIngredientsInfo, RecipeInfoKeys } from "@/types/recipeListTypes";
 
 import recipeStore from "@stores/recipeStore";
 
-import VideoInfoRows from "@components/common/videoInfo/VideoInfoRows";
-
 import { getRecipeTextApi } from "@apis/recipeApi";
+import VideoInfos from "@/components/common/videoInfo/VideoInfos";
 
 const RecipeInfos = () => {
   const [selectedIndex, setSelectedIndex] = useState<RecipeInfoKeys>("video_infos");
@@ -49,17 +48,17 @@ const RecipeInfos = () => {
   }, [detailRecipe.textRecipe]);
 
   return (
-    <section className="w-full flex flex-col items-center justify-center">
+    <section className="w-full landscape:h-[85%] portrait:h-[30%] flex flex-col items-center justify-start">
       <RecipeInfoIndexes
         selectedIndex={selectedIndex}
         setSelectedIndex={(index: RecipeInfoKeys) => setSelectedIndex(index)}
       />
       {/* 선택된 인덱스별 자세한 정보 표시
       추후 데이터 변경 필요 */}
-      <div className="w-full portrait:min-h-40 portrait:max-h-60 landscape:h-[50vh] overflow-y-auto p-4 bg-white rounded-b-2xl shadow-md">
+      <div className="w-full portrait:min-h-40 portrait:max-h-60 landscape:max-h-[80%] overflow-y-auto p-4 bg-white rounded-b-2xl shadow-md">
         <div className="flex flex-wrap gap-2 h-fit">
           {selectedIndex === "video_infos" && (
-            <VideoInfoRows
+            <VideoInfos
               duration={detailRecipe.duration}
               likeCount={detailRecipe.likeCount}
               viewCount={detailRecipe.viewCount}
