@@ -32,9 +32,23 @@ class RecipeSummary:
         self.debug_mode = settings.DEBUG
 
     def fetch_and_format_transcript(self, video_id: str, lang):
+        """ video id에 대한 영상에서 자막 언어 데이터를 받고 적절한 형태의 자막을 추출하거나 그럴 수 없다면 None을 리턴합니다.
+
+        Args:
+            video_id: 비디오 id
+            lang: 비디오 자막 언어 데이터
+
+        Returns:
+            str: 영상 자막 데이터
+        """
+        # 인자 언어에 대한 자막 추출
         transcript = Transcript.get(video_id, lang['params'])
+
+        # transcript 데이터를 하나의 문자열로 통합
         scripts = " ".join([f"[{(int(item['startMs']) // 1000)}]" + item["text"].replace(
             "\n", "").replace("\r", "") for item in transcript["segments"]])
+
+        # 자막 데이터 유효성 검사: 특정 길이보다 길 때 유효하다고 판단
         if len(scripts) > settings.YOUTUBE_TRANSCRIPT_LEN_TH:
             logger.info(
                 f"{settings.LOG_SUMMARY_PREFIX}_자막 언어 : {lang['title']}")
@@ -42,17 +56,16 @@ class RecipeSummary:
         return None
 
     def get_transcript(self, video_id: str) -> str:
-        """ Transcript 응답을 기반으로 우선 순위가 높은 언어의 Param을 반환합니다.
+        """ Transcript 응답을 기반으로 우선 순위가 높은 언어의 자막을 반환합니다.
 
         Args:
-            res: 자막, 자막 언어 데이터
+            video_id: 비디오 id
 
         Returns:
-            dict: 우선 순위가 가장 높은 언어 Param
+            str: 적절한 자막이 있다면 해당 자막 데이터, 그렇지 않다면 에러 문자열 데이터
         """
         # 영상 자막 데이터 가져오기
         res = Transcript.get(video_id)
-
         visit_params = set()
 
         # 우선 순위 1: 작성된 영어, 한국어의 자막 확인
@@ -98,10 +111,11 @@ class RecipeSummary:
         """
         start = time.time()
 
-        # OpenAI 요청을 위한 메시지 구성
+        # OpenAI 요청을 위한 기본 메시지 구성
         system_input = SUMMARY_SYSTEM_INPUT
         user_input = copy.deepcopy(SUMMARY_USER_INPUT)
 
+        # 순서 1 : 유튜브 영상 설명이 있다면 User Input에 반영
         try:
             # youtube api 키 라운드 로빈
             await rotate_youtube_api_key()
@@ -132,10 +146,10 @@ class RecipeSummary:
             logger.error(
                 f"{settings.LOG_SUMMARY_PREFIX}_유튜브 영상 설명 추가 중 오류: {e}")
 
-        # Few shot 데이터 적용
+        # 순서 2 : Few shot 데이터 적용
         user_input += SUMMARY_FEW_SHOT_DATA
 
-        # 마지막 입력에 자막 스크립트 삽입
+        # 순서 3 : 자막 스크립트 삽입
         try:
             scripts = self.get_transcript(video_id)
             # 적절하지 않은 자막 추출 시 에러 코드 반환
@@ -147,6 +161,7 @@ class RecipeSummary:
         except Exception as e:
             logger.error(f"{settings.LOG_SUMMARY_PREFIX}_유튜브 자막 추출 오류: {e}")
 
+        # 순서 4 : GPT API를 통해 요약 데이터 추출
         try:
             # OpenAI API 호출 (RequestGPT.run이 비동기 함수라고 가정)
             summary = await self.request_gpt.run(system_input, user_input)
