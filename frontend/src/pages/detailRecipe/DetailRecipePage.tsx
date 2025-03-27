@@ -1,23 +1,35 @@
 import { useParams } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
+import { useEffect, useState } from "react";
 
 import ErrorPage from "@components/common/error/ErrorPage";
 import LoadingPlayer from "@components/common/loading/LoadingPlayer";
 import Modal from "@components/common/modal/Modal";
 
 import { useGetRecipeDetail } from "@hooks/useRecipeHooks";
+import useRecipeStore from "@stores/recipeStore";
 
 import DetailRecipeLandscapePage from "@pages/detailRecipe/DetailRecipeLandscapePage";
 import DetailRecipePortraitPage from "@pages/detailRecipe/DetailRecipePortraitPage";
 
 const DetailRecipePage = () => {
-  //detailRecipe 페이지 진입 시, 해당 레시피 정보 get api 호출 예정
   const { recipeId } = useParams();
+  const [isStoreReady, setIsStoreReady] = useState(false);
+  const { detailRecipe } = useRecipeStore();
 
   // API 호출로 상세 정보 가져오기
-  const { isLoading, isFetching, isError } = useGetRecipeDetail(Number(recipeId));
+  const { isLoading, isFetching, isError, data } = useGetRecipeDetail(Number(recipeId));
 
-  if (isLoading || isFetching) return <LoadingPlayer />;
+  // 스토어 값이 API 응답으로 업데이트되었는지 확인
+  useEffect(() => {
+    if (data && detailRecipe.recipeId === Number(recipeId) && detailRecipe.recipeId !== 0) {
+      setIsStoreReady(true);
+    } else {
+      setIsStoreReady(false);
+    }
+  }, [data, detailRecipe, recipeId]);
+
+  if (isLoading || isFetching || !data || !isStoreReady) return <LoadingPlayer />;
   if (isError) return <ErrorPage />;
 
   return (

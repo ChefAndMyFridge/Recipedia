@@ -35,8 +35,16 @@ const RecipeInfos = () => {
 
   useEffect(() => {
     //텍스트 레시피 추가 추출
-    console.log("recipeText 체크", !detailRecipe.textRecipe, !detailRecipe.textRecipe?.title);
-    if (!detailRecipe.textRecipe || !detailRecipe.textRecipe?.title) {
+    const detailRecipeCheck =
+      detailRecipe.textRecipe &&
+      detailRecipe.textRecipe.title &&
+      detailRecipe.textRecipe.cooking_sequence &&
+      detailRecipe.textRecipe.ingredients &&
+      detailRecipe.textRecipe.cooking_tips;
+
+    console.log("recipeText 체크", !detailRecipeCheck);
+
+    if (!detailRecipeCheck) {
       getRecipeText();
     }
   }, []);
