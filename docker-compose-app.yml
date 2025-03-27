@@ -28,6 +28,7 @@ services:
       - HOST_URL=${HOST_URL} 
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}  # .env에서 가져옴
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - FASTAPI_API_URL=${FASTAPI_API_URL}
     build:
       context: ./backend   # server 폴더를 빌드 컨텍스트로 지정
       dockerfile: Dockerfile  # 서버용 Dockerfile 경로
