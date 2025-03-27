@@ -29,10 +29,7 @@ public class IngredientSimpleInfoDto implements Serializable {
   }
 
   public static IngredientSimpleInfoDto fromEntity(IngredientInfo ingredientInfo) {
-    // 출고되지 않은(released가 false) 재료만 카운트
-    int count = (int) ingredientInfo.getIngredients().stream()
-        .filter(ingredient -> !ingredient.isReleased())
-        .count();
+    int count = ingredientInfo.getIngredients().size();
     return new IngredientSimpleInfoDto(
         ingredientInfo.getId(),
         ingredientInfo.getName(),
