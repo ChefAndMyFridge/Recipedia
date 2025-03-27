@@ -4,7 +4,7 @@ import asyncio
 import copy
 
 from typing import Optional
-from youtubesearchpython import Transcript, Video
+from youtubesearchpython import Transcript
 from app.services.LLM.recipe_generator import RequestGPT
 from fastapi import HTTPException
 from app.utils.prompts.few_shot import SUMMARY_FEW_SHOT_DATA
