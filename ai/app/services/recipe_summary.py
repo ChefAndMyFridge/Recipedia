@@ -3,6 +3,7 @@ import time
 import asyncio
 import copy
 
+from typing import Optional
 from youtubesearchpython import Transcript, Video
 from app.services.LLM.recipe_generator import RequestGPT
 from fastapi import HTTPException
@@ -31,7 +32,7 @@ class RecipeSummary:
         # 디버그 모드
         self.debug_mode = settings.DEBUG
 
-    def fetch_and_format_transcript(self, video_id: str, lang):
+    def fetch_and_format_transcript(self, video_id: str, lang) -> Optional[str]:
         """ video id에 대한 영상에서 자막 언어 데이터를 받고 적절한 형태의 자막을 추출하거나 그럴 수 없다면 None을 리턴합니다.
 
         Args:
