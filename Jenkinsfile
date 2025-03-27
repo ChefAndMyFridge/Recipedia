@@ -42,16 +42,20 @@ pipeline {
         stage('serving frontend build file to nginx') {
             steps {
                 script {
-                    def viteApiUrl = ""
-                    if (env.BRANCH_NAME == "release") {
-                        viteApiUrl = "https://j12s003.p.ssafy.io/api"
-                    } else if (env.BRANCH_NAME == "master") {
+                    def viteApiUrl = "https://j12s003.p.ssafy.io/api"
+                    if (env.BRANCH_NAME == "master") {
                         viteApiUrl = "https://j12s003.p.ssafy.io/master/api"
                     }
+
+                    def baseUrl = "/"
+                    if (env.BRANCH_NAME == "master") {
+                        baseUrl = "/${env.BRANCH_NAME}"
+                    } 
 
                     sh """
                     cd ${env.WORKSPACE}/frontend
                     echo "VITE_API_URL=${viteApiUrl}" > .env
+                    echo "VITE_BASE_URL=${baseUrl}" >> .env
 
                     yarn install --frozen-lockfile
                     yarn build
