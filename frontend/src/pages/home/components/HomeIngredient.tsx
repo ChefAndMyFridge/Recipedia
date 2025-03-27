@@ -69,7 +69,7 @@ const HomeIngredient = ({ ingredient }: HomeIngredientProps) => {
       {/* 아이콘 부분 */}
       <div
         className={`relative w-full aspect-[1/1] rounded-3xl cursor-pointer ${isShaking ? "shake" : ""}`}
-        onClick={() => openModal(<DetailIngredientModal ingredient={ingredient} />)}
+        onClick={() => openModal(<DetailIngredientModal ingredientId={ingredient.ingredientInfoId} />)}
       >
         {/* 재료 이미지 */}
         <img
