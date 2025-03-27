@@ -23,12 +23,12 @@ public class IngredientFilterServiceImpl implements IngredientFilterService {
   private final IngredientService ingredientService;
 
   @Override
-  public FilteredIngredientResult filterIngredientsByDietaries(List<String> dietaries, List<String> mainIngredients) {
+  public FilteredIngredientResult filterIngredientsByDietaries(List<String> dietaries, List<String> mainIngredients, List<String> allergies) {
     Set<String> preferredIngredients = new HashSet<>();
     Set<String> mainIngredientsSet = new HashSet<>(mainIngredients); // 빠른 조회를 위해 Set으로 전환
 
     List<String> filteredIngredients = ingredientService.getAllExistingIngredientsWithNutrients().stream()
-        .filter(ingredient -> isIngredientSuitable(ingredient, dietaries, preferredIngredients, mainIngredientsSet))
+        .filter(ingredient -> isIngredientSuitable(ingredient, dietaries, preferredIngredients, mainIngredientsSet, allergies))
         .map(IngredientInfoWithNutrientDto::name)
         .collect(Collectors.toList());
 
@@ -39,8 +39,9 @@ public class IngredientFilterServiceImpl implements IngredientFilterService {
       IngredientInfoWithNutrientDto ingredient,
       List<String> dietaries,
       Set<String> preferredIngredients,
-      Set<String> mainIngredients
-  ) {
+      Set<String> mainIngredients,
+      List<String> allergies
+      ) {
     IngredientNutrientDto nutrients = ingredient.nutrients();
     String name = ingredient.name();
 
@@ -53,6 +54,17 @@ public class IngredientFilterServiceImpl implements IngredientFilterService {
     if (nutrients == null) {
       log.warn("⚠️ '{}' 통과: nutrients 데이터가 없습니다 (null)", name);
       return true;
+    }
+
+    // 🔍 알레르기 필터링 로직 추가
+    String allergenInfo = nutrients.allergenInfo();
+    if (allergenInfo != null && !allergenInfo.isBlank()) {
+      for (String allergen : allergies) {
+        if (allergenInfo.contains(allergen)) {
+          log.info("❌ '{}' 제외 (알레르기 필터 '{}')", name, allergen);
+          return false;
+        }
+      }
     }
 
     double calories = nutrients.calories();
