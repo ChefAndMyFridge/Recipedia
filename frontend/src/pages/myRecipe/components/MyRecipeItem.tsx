@@ -21,7 +21,7 @@ const MyRecipeItem = ({ recipe }: { recipe: Video }) => {
           className="px-3 py-1"
         />
       </div>
-      <VideoInfoRows video={recipe} />
+      <VideoInfoRows duration={recipe.duration} likeCount={recipe.likeCount} viewCount={recipe.viewCount} />
     </div>
   );
 };

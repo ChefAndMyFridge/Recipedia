@@ -51,7 +51,7 @@ export interface RecipeInfo {
   duration: string;
   viewCount: number;
   likeCount: number;
-  textRecipe: textRecipeType;
+  textRecipe: textRecipeType | null;
 }
 
 export type RecipeInfoKeys = "video_infos" | "cooking_sequence" | "ingredients" | "cooking_tips";

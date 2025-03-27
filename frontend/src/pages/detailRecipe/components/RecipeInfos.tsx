@@ -1,3 +1,4 @@
+import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 import VideoInfos from "@components/common/videoInfo/VideoInfos";
@@ -12,23 +13,19 @@ import recipeStore from "@stores/recipeStore";
 import { getRecipeTextApi } from "@apis/recipeApi";
 
 const RecipeInfos = () => {
+  const { recipeId } = useParams();
   const [selectedIndex, setSelectedIndex] = useState<RecipeInfoKeys>("video_infos");
-  // 로컬 상태로 텍스트 레시피 데이터를 관리하여 변경 감지
-  const [textRecipeData, setTextRecipeData] = useState(recipeStore().detailRecipe.textRecipe);
 
   // recipeStore 구독
   const { detailRecipe, setDetailRecipe } = recipeStore();
+  // 로컬 상태로 텍스트 레시피 데이터를 관리하여 변경 감지
+  const [textRecipeData, setTextRecipeData] = useState(detailRecipe.textRecipe);
 
   async function getRecipeText() {
     try {
-      const response = await getRecipeTextApi(detailRecipe.recipeId);
+      const response = await getRecipeTextApi(Number(recipeId));
 
-      setDetailRecipe({
-        ...detailRecipe,
-        textRecipe: {
-          ...response.textRecipe,
-        },
-      });
+      setDetailRecipe(response);
 
       return response;
     } catch (error: unknown) {
@@ -38,7 +35,8 @@ const RecipeInfos = () => {
 
   useEffect(() => {
     //텍스트 레시피 추가 추출
-    if (!detailRecipe.textRecipe) {
+    console.log("recipeText 체크", !detailRecipe.textRecipe, !detailRecipe.textRecipe?.title);
+    if (!detailRecipe.textRecipe || !detailRecipe.textRecipe?.title) {
       getRecipeText();
     }
   }, []);
