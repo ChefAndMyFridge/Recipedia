@@ -39,6 +39,31 @@ pipeline {
             }
         }
 
+        stage('serving frontend build file to nginx') {
+            steps {
+                script {
+                    def viteApiUrl = ""
+                    if (env.BRANCH_NAME == "release") {
+                        viteApiUrl = "https://j12s003.p.ssafy.io/api"
+                    } else if (env.BRANCH_NAME == "master") {
+                        viteApiUrl = "https://j12s003.p.ssafy.io/master/api"
+                    }
+
+                    sh """
+                    cd ${env.WORKSPACE}/frontend
+                    echo "VITE_API_URL=${viteApiUrl}" > .env
+
+                    yarn install --frozen-lockfile
+                    yarn build
+
+                    rm -rf /front_build/${env.BRANCH_NAME}/html
+                    mkdir -p /front_build/${env.BRANCH_NAME}/html
+                    cp -r dist/* /front_build/${env.BRANCH_NAME}/html/
+                    """
+                }
+            }
+        }
+
         stage('Build & Start New App Containers') {
             steps {
                 script {

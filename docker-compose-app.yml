@@ -1,25 +1,25 @@
 services:
-  client:
-    container_name: my-react-${BRANCH_NAME}
-    environment:
-      - TZ=Asia/Seoul
-      - VITE_API_URL=${VITE_API_URL}  # ec2 URL
-    build:
-      context: ./frontend   # client 폴더를 빌드 컨텍스트로 지정
-      dockerfile: Dockerfile  # 클라이언트용 Dockerfile 경로 (디폴트는 'Dockerfile')
-      args:
-        BRANCH_NAME: ${BRANCH_NAME}
-        VITE_API_URL: ${VITE_API_URL}
-    ports:
-      - "80:80"        # ec2 url은 80번 포트만 열려있음
-      - "443:443"
-    depends_on:
-      - server
-    volumes:
-      - /home/ubuntu/front_build:/usr/share/nginx
-      - /etc/letsencrypt:/etc/letsencrypt:ro
-    networks:
-      - app-network
+  # client:
+  #   container_name: my-react-${BRANCH_NAME}
+  #   environment:
+  #     - TZ=Asia/Seoul
+  #     - VITE_API_URL=${VITE_API_URL}  # ec2 URL
+  #   build:
+  #     context: ./frontend   # client 폴더를 빌드 컨텍스트로 지정
+  #     dockerfile: Dockerfile  # 클라이언트용 Dockerfile 경로 (디폴트는 'Dockerfile')
+  #     args:
+  #       BRANCH_NAME: ${BRANCH_NAME}
+  #       VITE_API_URL: ${VITE_API_URL}
+  #   ports:
+  #     - "80:80"        # ec2 url은 80번 포트만 열려있음
+  #     - "443:443"
+  #   depends_on:
+  #     - server
+  #   volumes:
+  #     - /home/ubuntu/front_build:/usr/share/nginx
+  #     - /etc/letsencrypt:/etc/letsencrypt:ro
+  #   networks:
+  #     - app-network
 
   server:
     container_name: my-springboot-${BRANCH_NAME}
