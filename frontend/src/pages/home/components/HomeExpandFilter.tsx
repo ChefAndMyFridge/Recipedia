@@ -108,7 +108,7 @@ const HomeExpandFilter = () => {
     useIngredientsStore();
 
   return (
-    <div className="absolute top-10 left-0 w-full bg-white shadow-md z-10 px-4 py-3 font-preMedium">
+    <div className="absolute top-10 left-0 w-full bg-white shadow-md z-30 px-4 py-3 font-preMedium">
       <FilterElement
         type={"categories"}
         content="카테고리"
