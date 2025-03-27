@@ -99,34 +99,6 @@ def _sync_search_youtube_recipe(dish: str, max_results) -> list:
     return results
 
 
-def _parse_duration(duration):
-    """
-    입력: 문자열 형식의 시간 (예: "5:30")
-    반환: 분:초 형식의 영상 길이 문자열
-    기능: 시간 형식을 일관된 형태로 변환
-    """
-    try:
-        # 시간:분:초 형식 처리
-        parts = duration.split(':')
-
-        if len(parts) == 3:  # 시:분:초 형식
-            hours, minutes, seconds = map(int, parts)
-            if hours > 0:
-                return "1시간 이상"
-            return f"{minutes}:{seconds:02d}"
-
-        elif len(parts) == 2:  # 분:초 형식
-            minutes, seconds = map(int, parts)
-            return f"{minutes}:{seconds:02d}"
-
-        else:  # 그 외 형식
-            return duration
-
-    except:
-        # 파싱에 실패한 경우 원래 값 반환
-        return duration or "알 수 없음"
-
-
 async def get_youtube_videos(dish):
     """
     입력: 요리 이름
