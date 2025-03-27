@@ -1,0 +1,28 @@
+import React, { useEffect, useState } from "react";
+
+interface VideoInfoRowProps {
+  IconName: React.ElementType;
+  InfoData: string;
+  InfoType: string;
+}
+
+const VideoInfoRow = ({ IconName, InfoData, InfoType }: VideoInfoRowProps) => {
+  const [renderInfoData, setRenderInfoData] = useState(InfoData);
+
+  useEffect(() => {
+    //1만 이상 값 렌더링용 데이터
+    if (Number(InfoData) >= 10000) {
+      setRenderInfoData(`${(Number(InfoData) / 10000).toFixed(0)}만`);
+    }
+  }, [InfoData]);
+
+  return (
+    <div className="flex gap-1 justify-center items-center text-sm">
+      <IconName width={25} height={25} strokeColor="black" />
+      <p className="font-preBold">{renderInfoData}</p>
+      <p className="font-preRegular">{InfoType}</p>
+    </div>
+  );
+};
+
+export default VideoInfoRow;

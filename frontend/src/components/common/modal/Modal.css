@@ -1,0 +1,12 @@
+@import url("../../../styles/animations.css");
+
+dialog[open] {
+  position: fixed !important;
+  top: 0 !important;
+  margin-top: 0 !important;
+  animation: slideDown 0.5s forwards;
+}
+
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.2);
+}

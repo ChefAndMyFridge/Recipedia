@@ -9,11 +9,29 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IngredientInfoRepository extends JpaRepository<IngredientInfo, Long> {
+    boolean existsByName(String name);
+
     Optional<IngredientInfo> findByName(String name);
 
-    @Query("select if from IngredientInfo if left join fetch if.ingredients")
+    @Query("SELECT distinct i FROM IngredientInfo i "
+        + "JOIN FETCH i.ingredients ing "
+        + "WHERE ing.isReleased = false")
     List<IngredientInfo> findAllWithIngredients();
 
     @Query("select if from IngredientInfo if left join fetch if.ingredients where if.id = :ingredientId")
     IngredientInfo findWithIngredients(Long ingredientId);
+
+    @Query("SELECT i FROM IngredientInfo i "
+            + "LEFT JOIN FETCH i.ingredients "
+            + "LEFT JOIN FETCH i.ingredientNutrients "
+            + "WHERE i.id = :ingredientId")
+    IngredientInfo findWithIngredientsAndNutrients(Long ingredientId);
+
+    List<IngredientInfo> findByIngredientNutrientsIsNull();
+
+    @Query("SELECT DISTINCT i FROM IngredientInfo i " +
+        "JOIN FETCH i.ingredients ing " +
+        "LEFT JOIN FETCH i.ingredientNutrients nut " +
+        "WHERE ing.isReleased = false")
+    List<IngredientInfo> findAllExistingWithIngredientsAndNutrients();
 }

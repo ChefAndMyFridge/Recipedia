@@ -1,6 +1,8 @@
 package com.recipidia.ingredient.request;
 
 import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,11 +11,10 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class IngredientIncomingReq {
     // 재료 이름 (냉장고 엔티티의 기준)
     private String name;
-    // 재료 이미지 URL (신규 생성 시 사용)
-    private String imageUrl;
     // 입고된 재료 개수
     private Integer amount;
     // 해당 입고된 재료의 세부 정보

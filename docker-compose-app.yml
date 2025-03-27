@@ -1,0 +1,57 @@
+services:
+  client:
+    container_name: my-react-${BRANCH_NAME}
+    environment:
+      - TZ=Asia/Seoul
+      - VITE_API_URL=${VITE_API_URL}  # ec2 URL
+    build:
+      context: ./frontend   # client 폴더를 빌드 컨텍스트로 지정
+      dockerfile: Dockerfile  # 클라이언트용 Dockerfile 경로 (디폴트는 'Dockerfile')
+      args:
+        BRANCH_NAME: ${BRANCH_NAME}
+        VITE_API_URL: ${VITE_API_URL}
+    ports:
+      - "${NGINX_HTTP_PORT}:80"        # ec2 url은 80번 포트만 열려있음
+      - "${NGINX_HTTPS_PORT}:443"
+    depends_on:
+      - server
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    networks:
+      - app-network
+
+  server:
+    container_name: my-springboot-${BRANCH_NAME}
+    environment:
+      - TZ=Asia/Seoul
+      - HOST_URL=${HOST_URL} 
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}  # .env에서 가져옴
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+    build:
+      context: ./backend   # server 폴더를 빌드 컨텍스트로 지정
+      dockerfile: Dockerfile  # 서버용 Dockerfile 경로
+    ports:
+      - "${SPRING_BOOT_PORT}:8080"        # 서버 포트 연결
+    networks:
+      - app-network
+  
+  fastapi:  # FastAPI 서비스 추가! 🚀
+    container_name: my-fastapi-${BRANCH_NAME}
+    environment:
+      - TZ=Asia/Seoul
+      - YOUTUBE_API_KEY=${YOUTUBE_API_KEY}
+      - YOUTUBE_API_KEYS=${YOUTUBE_API_KEYS}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - USDA_API_KEY=${USDA_API_KEY}
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
+    build:
+      context: ./ai  # FastAPI 코드가 있는 폴더
+      dockerfile: Dockerfile  # FastAPI용 Dockerfile
+    ports:
+      - "${FASTAPI_PORT}:8000"  # FastAPI는 기본적으로 8000번 포트 사용
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    external: true

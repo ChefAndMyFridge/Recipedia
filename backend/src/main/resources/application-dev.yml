@@ -5,6 +5,10 @@ spring:
   config:
     activate:
       on-profile: dev
+  elasticsearch:
+    uris: http://localhost:9200  # Docker Compose에서 설정한 컨테이너 이름 사용
+    username: elastic
+    password: 123456
   datasource:
     url: jdbc:h2:tcp://localhost/~/recipidia
     username: sa
@@ -27,7 +31,16 @@ logging.level:
     security: DEBUG
     web.socket: DEBUG
     messaging: DEBUG
+  org.elasticsearch.client: DEBUG
+  org.springframework.data.elasticsearch: DEBUG
 
 springdoc:
   swagger-ui:
     path: /index.html
+
+fastapi:
+  base:
+    url: http://localhost:8000
+
+host:
+  url: http://localhost:3000
