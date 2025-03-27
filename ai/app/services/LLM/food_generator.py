@@ -83,6 +83,8 @@ def generate_dish_names(
     main_ingredients: List[str] = None,
     preferred_ingredients: List[str] = None,
     disliked_ingredients: List[str] = None,
+    categories: List[str] = None,
+    dietaries: List[str] = None,
     num_dishes: Optional[int] = None
 ) -> List[str]:
     """
@@ -91,11 +93,13 @@ def generate_dish_names(
         - main_ingredients: 주재료 (기본값 None)
         - preferred_ingredients: 선호하는 재료 목록 (기본값 None)
         - disliked_ingredients: 비선호하는 재료 목록 (기본값 None)
+        - categories: 요리 카테고리 목록 (예: 한식, 양식, 일식 등) (기본값 None)
+        - dietaries: 선호 식단 목록 (예: 저염식, 저칼로리, 고단백 등) (기본값 None)
         - num_dishes: 생성할 요리 이름 개수 (기본값 None)
     반환:
         - list: 생성된 요리 이름 문자열의 리스트
     기능:
-        - 재료, 주재료, 선호/비선호 재료 정보를 바탕으로 프롬프트를 생성하고,
+        - 재료, 주재료, 선호/비선호 재료, 카테고리, 선호 식단 정보를 바탕으로 프롬프트를 생성하고,
           OpenAI API에 전송해 받은 결과를 파싱해 음식 이름을 추출한다.
     """
     # 타입 변환 및 기본값 설정
@@ -103,6 +107,8 @@ def generate_dish_names(
     main_ingredients: List[str] = main_ingredients or []
     preferred_ingredients: List[str] = preferred_ingredients or []
     disliked_ingredients: List[str] = disliked_ingredients or []
+    categories: List[str] = categories or []
+    dietaries: List[str] = dietaries or []
     num_dishes: Optional[int] = num_dishes or settings.NUM_DISHES_TO_GENERATE
 
     # 프롬프트 생성
@@ -111,6 +117,8 @@ def generate_dish_names(
         main_ingredients=main_ingredients,
         preferred_ingredients=preferred_ingredients,
         disliked_ingredients=disliked_ingredients,
+        categories=categories,
+        dietaries=dietaries,
         num_dishes=num_dishes
     )
 
