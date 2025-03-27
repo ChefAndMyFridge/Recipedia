@@ -21,13 +21,18 @@ USER root
 RUN mkdir -p /usr/share/nginx/html /etc/nginx/conf.d
 # 이미지 저장 디렉토리 생성
 RUN mkdir -p /var/www/images 
+
 # 브랜치별 디렉토리 생성
-RUN mkdir -p /nginx/${BRANCH_NAME}/html
+RUN mkdir -p /usr/share/nginx/${BRANCH_NAME}/html
+COPY --from=builder /app/dist /usr/share/nginx/${BRANCH_NAME}/html
 
 # 빌드 단계에서 생성된 파일을 임시 저장
-COPY --from=builder /app/dist /temp-dist
+# COPY --from=builder /app/dist /temp-dist
+# 임시 저장된 파일 확인
+# RUN ls -al /temp-dist
 # 이후에 RUN 명령어로 디렉토리 이동 (변수 사용 가능)
-RUN mv /temp-dist/* /usr/share/nginx/${BRANCH_NAME}/html/
+# RUN mkdir -p /nginx/${BRANCH_NAME}/html && \
+#     cp /temp-dist /usr/share/nginx/${BRANCH_NAME}/html 
 # COPY --from=builder /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY ./images /var/www/images

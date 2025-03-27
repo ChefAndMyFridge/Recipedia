@@ -42,12 +42,21 @@ pipeline {
         stage('Build & Start New App Containers') {
             steps {
                 script {
+                    def viteApiUrl = ""
+                    if (env.BRANCH_NAME == "release") {
+                        viteApiUrl = "https://j12s003.p.ssafy.io/api"
+                    } else if (env.BRANCH_NAME == "master") {
+                        viteApiUrl = "https://j12s003.p.ssafy.io/master/api"
+                    } else {
+                        viteApiUrl = "https://j12s003.p.ssafy.io/api"
+                    }
+
                     sh """
                     cd ${env.WORKSPACE}
                     HOST_URL=${env.HOST_URL} \
                     MYSQL_ROOT_PASSWORD=${env.MYSQL_ROOT_PASSWORD} \
                     MYSQL_DATABASE=${env.MYSQL_DATABASE} \
-                    VITE_API_URL=${env.VITE_API_URL} \
+                    VITE_API_URL=${viteApiUrl} \
                     YOUTUBE_API_KEY='${env.YOUTUBE_API_KEY}' \
                     YOUTUBE_API_KEYS='${env.YOUTUBE_API_KEYS}' \
                     OPENAI_API_KEY=${env.OPENAI_API_KEY} \
@@ -55,7 +64,8 @@ pipeline {
                     ELASTIC_PASSWORD=${env.ELASTIC_PASSWORD} \
                     ALLOWED_ORIGINS='${env.ALLOWED_ORIGINS}' \
                     BRANCH_NAME=${env.BRANCH_NAME} \
-                    docker-compose -f docker-compose-app.yml up --env-file .env.${env.BRANCH_NAME} -d --build
+                    cp .env.${env.BRANCH_NAME} .env
+                    docker-compose -f docker-compose-app.yml up -d --build
                     """
                 }
             }
