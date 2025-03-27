@@ -31,7 +31,7 @@ class QueryMaker:
         self.dietaries: List[str] = dietaries or []
 
         self.dishes: List[str] = []
-        self.a ll_videos: Dict[str, List[Dict[str, Any]]] = {}
+        self.all_videos: Dict[str, List[Dict[str, Any]]] = {}
         self.openai_time: float = 0  # OpenAI API 호출 시간
         self.youtube_time: float = 0  # YouTube API 호출 시간
         self.execution_time: float = 0  # 전체 실행 시간
