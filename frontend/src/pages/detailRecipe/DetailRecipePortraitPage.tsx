@@ -1,24 +1,20 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ReactPlayer from "react-player";
 
 import useModalStore from "@stores/modalStore";
 import recipeStore from "@stores/recipeStore";
 
-import VideoInfos from "@components/common/videoInfo/VideoInfos";
 import Header from "@components/Layout/Header";
 import Button from "@components/common/button/Button";
 import RecipeRatingModal from "@components/recipeRating/RecipeRatingModal";
 
 import RecipeInfos from "@pages/detailRecipe/components/RecipeInfos";
 import RecipeTitle from "@pages/detailRecipe/components/RecipeTitle";
-import RecipeTexts from "@pages/detailRecipe/components/RecipeTexts";
 
 //세로모드 레이아웃
 const DetailRecipePortraitPage = () => {
   const { openModal } = useModalStore();
   const navigate = useNavigate();
-  const [isRecipeOpen, setIsRecipeOpen] = useState<boolean>(false);
 
   const { detailRecipe } = recipeStore();
 
@@ -35,24 +31,9 @@ const DetailRecipePortraitPage = () => {
         light={false}
         pip={true}
       />
-      <RecipeTitle
-        title={detailRecipe.title}
-        channelTitle={detailRecipe.channelTitle}
-        isRecipeOpen={isRecipeOpen}
-        setIsRecipeOpen={setIsRecipeOpen}
-      />
-      {isRecipeOpen ? (
-        <RecipeTexts recipe={detailRecipe.textRecipe.cooking_sequence} />
-      ) : (
-        <div className="flex flex-col gap-4 items-center overflow-auto relative">
-          <VideoInfos
-            duration={detailRecipe.duration}
-            viewCount={detailRecipe.viewCount}
-            likeCount={detailRecipe.likeCount}
-          />
-          <RecipeInfos />
-        </div>
-      )}
+      <RecipeTitle title={detailRecipe.title} channelTitle={detailRecipe.channelTitle} />
+
+      <RecipeInfos />
 
       {/* 버튼 컨테이너 */}
       <div className="w-full flex justify-end items-center gap-2">
