@@ -54,7 +54,8 @@ pipeline {
                     USDA_API_KEY=${env.USDA_API_KEY} \
                     ELASTIC_PASSWORD=${env.ELASTIC_PASSWORD} \
                     ALLOWED_ORIGINS='${env.ALLOWED_ORIGINS}' \
-                    docker-compose -f docker-compose-app.yml up -d --build
+                    BRANCH_NAME=${env.BRANCH_NAME} \
+                    docker-compose -f docker-compose-app.yml up --env-file .env.${env.BRANCH_NAME} -d --build
                     """
                 }
             }

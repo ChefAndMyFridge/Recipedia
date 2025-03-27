@@ -13,13 +13,22 @@ RUN yarn build
 
 # 서빙 단계
 FROM nginx:stable-alpine
+ARG BRANCH_NAME
+ENV BRANCH_NAME=$BRANCH_NAME
 # root 권한으로 실행
 USER root
 # Nginx 관련 디렉토리 강제 생성
 RUN mkdir -p /usr/share/nginx/html /etc/nginx/conf.d
 # 이미지 저장 디렉토리 생성
 RUN mkdir -p /var/www/images 
-COPY --from=builder /app/dist /usr/share/nginx/html
+# 브랜치별 디렉토리 생성
+RUN mkdir -p /nginx/${BRANCH_NAME}/html
+
+# 빌드 단계에서 생성된 파일을 임시 저장
+COPY --from=builder /app/dist /temp-dist
+# 이후에 RUN 명령어로 디렉토리 이동 (변수 사용 가능)
+RUN mv /temp-dist/* /usr/share/nginx/${BRANCH_NAME}/html/
+# COPY --from=builder /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY ./images /var/www/images
 ENV TZ=Asia/Seoul
