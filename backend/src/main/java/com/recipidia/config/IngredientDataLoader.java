@@ -44,7 +44,20 @@ public class IngredientDataLoader implements CommandLineRunner {
                 float saturatedFat = parseFloat(tokens[8]);
                 float unsaturatedFat = parseFloat(tokens[9]);
                 float transFat = parseFloat(tokens[10]);
-                String allergenInfo = tokens[11].trim();
+                // allergen_info는 마지막 컬럼이므로, 11번 인덱스 이후의 모든 토큰을 합칩니다.
+                StringBuilder allergenInfoBuilder = new StringBuilder();
+                for (int i = 11; i < tokens.length; i++) {
+                    if (i > 11) {
+                        allergenInfoBuilder.append(",");
+                    }
+                    allergenInfoBuilder.append(tokens[i]);
+                }
+                String allergenInfo = allergenInfoBuilder.toString().trim();
+
+// 큰따옴표로 감싸져 있다면 제거합니다.
+                if (allergenInfo.startsWith("\"") && allergenInfo.endsWith("\"")) {
+                    allergenInfo = allergenInfo.substring(1, allergenInfo.length() - 1);
+                }
 
                 if (!ingredientInfoRepository.existsByName(name)) {
                     IngredientInfo ingredientInfo = new IngredientInfo(name, "/images/" + name + ".png");

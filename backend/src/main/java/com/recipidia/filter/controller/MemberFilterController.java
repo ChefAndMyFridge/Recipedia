@@ -60,7 +60,8 @@ public class MemberFilterController {
                   "categories": ["한식", "일식"],
                   "dietaries": ["저당식"],
                   "preferredIngredients": ["토마토", "바질"],
-                  "dislikedIngredients": ["마늘"]
+                  "dislikedIngredients": ["마늘"],
+                  "allergies" : ["유제품"]
                 }
                 """)
           )

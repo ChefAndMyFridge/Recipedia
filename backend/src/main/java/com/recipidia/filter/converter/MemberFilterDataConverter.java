@@ -33,6 +33,7 @@ public class MemberFilterDataConverter implements AttributeConverter<MemberFilte
           .dietaries(List.of())
           .preferredIngredients(List.of())
           .dislikedIngredients(List.of())
+          .allergies(List.of())
           .build();
     }
     try {
