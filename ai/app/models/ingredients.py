@@ -9,3 +9,5 @@ class Ingredients(BaseModel):
     main_ingredients: List[str] = None
     preferred_ingredients: List[str] = None
     disliked_ingredients: List[str] = None
+    categories: List[str] = None
+    dietaries: List[str] = None
