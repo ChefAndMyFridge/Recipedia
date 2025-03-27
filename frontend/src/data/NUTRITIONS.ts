@@ -17,6 +17,21 @@ export const INGREDIENT_WITH_NUTRITIONS = {
   name: "",
   imageUrl: "",
   totalCount: 0,
-  ingredients: [],
-  nutrients: null,
+  ingredients: [
+    {
+      ingredientId: 4093199254740998,
+      storagePlace: "냉장고",
+      expirationDate: "2025-04-10T05:08:48.903Z",
+      incomingDate: "2025-04-10T05:08:48.903Z",
+      releasingDate: "2025-04-10T05:08:48.903Z",
+    },
+    {
+      ingredientId: 4092199254740998,
+      storagePlace: "냉장고",
+      expirationDate: "2025-04-12T05:08:48.903Z",
+      incomingDate: "2025-04-12T05:08:48.903Z",
+      releasingDate: "2025-04-12T05:08:48.903Z",
+    },
+  ],
+  nutrients: NUTRITIONS,
 };

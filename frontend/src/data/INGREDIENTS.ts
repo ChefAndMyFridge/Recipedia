@@ -6,15 +6,6 @@ export const INGREDIENTS = [
     totalCount: 1,
     earliestExpiration: "2025-03-08T11:00:00",
     latestExpiration: "2025-03-08T11:00:00",
-    ingredients: [
-      {
-        ingredientId: 9007199254740991,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-05T05:08:48.903Z",
-        incomingDate: "2025-03-05T05:08:48.903Z",
-        releasingDate: "2025-03-05T05:08:48.903Z",
-      },
-    ],
   },
   {
     ingredientInfoId: 1007199254740992,
@@ -23,162 +14,6 @@ export const INGREDIENTS = [
     totalCount: 22,
     earliestExpiration: "2025-03-08T11:00:00",
     latestExpiration: "2025-03-08T11:00:00",
-    ingredients: [
-      {
-        ingredientId: 9007,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-10T05:08:48.903Z",
-        incomingDate: "2025-03-10T05:08:48.903Z",
-        releasingDate: "2025-03-10T05:08:48.903Z",
-      },
-      {
-        ingredientId: 5550192,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-12T05:08:48.903Z",
-        incomingDate: "2025-03-12T05:08:48.903Z",
-        releasingDate: "2025-03-12T05:08:48.903Z",
-      },
-      {
-        ingredientId: 90071192,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-10T05:08:48.903Z",
-        incomingDate: "2025-03-10T05:08:48.903Z",
-        releasingDate: "2025-03-10T05:08:48.903Z",
-      },
-      {
-        ingredientId: 9005592,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-12T05:08:48.903Z",
-        incomingDate: "2025-03-12T05:08:48.903Z",
-        releasingDate: "2025-03-12T05:08:48.903Z",
-      },
-      {
-        ingredientId: 9002122,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-10T05:08:48.903Z",
-        incomingDate: "2025-03-10T05:08:48.903Z",
-        releasingDate: "2025-03-10T05:08:48.903Z",
-      },
-      {
-        ingredientId: 900552,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-12T05:08:48.903Z",
-        incomingDate: "2025-03-12T05:08:48.903Z",
-        releasingDate: "2025-03-12T05:08:48.903Z",
-      },
-      {
-        ingredientId: 90071120392,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-10T05:08:48.903Z",
-        incomingDate: "2025-03-10T05:08:48.903Z",
-        releasingDate: "2025-03-10T05:08:48.903Z",
-      },
-      {
-        ingredientId: 90071552,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-12T05:08:48.903Z",
-        incomingDate: "2025-03-12T05:08:48.903Z",
-        releasingDate: "2025-03-12T05:08:48.903Z",
-      },
-      {
-        ingredientId: 902292,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-10T05:08:48.903Z",
-        incomingDate: "2025-03-10T05:08:48.903Z",
-        releasingDate: "2025-03-10T05:08:48.903Z",
-      },
-      {
-        ingredientId: 9007199662,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-12T05:08:48.903Z",
-        incomingDate: "2025-03-12T05:08:48.903Z",
-        releasingDate: "2025-03-12T05:08:48.903Z",
-      },
-      {
-        ingredientId: 900110392,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-10T05:08:48.903Z",
-        incomingDate: "2025-03-10T05:08:48.903Z",
-        releasingDate: "2025-03-10T05:08:48.903Z",
-      },
-      {
-        ingredientId: 90044192,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-12T05:08:48.903Z",
-        incomingDate: "2025-03-12T05:08:48.903Z",
-        releasingDate: "2025-03-12T05:08:48.903Z",
-      },
-      {
-        ingredientId: 9002240392,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-10T05:08:48.903Z",
-        incomingDate: "2025-03-10T05:08:48.903Z",
-        releasingDate: "2025-03-10T05:08:48.903Z",
-      },
-      {
-        ingredientId: 9066192,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-12T05:08:48.903Z",
-        incomingDate: "2025-03-12T05:08:48.903Z",
-        releasingDate: "2025-03-12T05:08:48.903Z",
-      },
-      {
-        ingredientId: 9007110392,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-10T05:08:48.903Z",
-        incomingDate: "2025-03-10T05:08:48.903Z",
-        releasingDate: "2025-03-10T05:08:48.903Z",
-      },
-      {
-        ingredientId: 90071770192,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-12T05:08:48.903Z",
-        incomingDate: "2025-03-12T05:08:48.903Z",
-        releasingDate: "2025-03-12T05:08:48.903Z",
-      },
-      {
-        ingredientId: 900755392,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-10T05:08:48.903Z",
-        incomingDate: "2025-03-10T05:08:48.903Z",
-        releasingDate: "2025-03-10T05:08:48.903Z",
-      },
-      {
-        ingredientId: 90220192,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-12T05:08:48.903Z",
-        incomingDate: "2025-03-12T05:08:48.903Z",
-        releasingDate: "2025-03-12T05:08:48.903Z",
-      },
-      {
-        ingredientId: 900719925692,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-10T05:08:48.903Z",
-        incomingDate: "2025-03-10T05:08:48.903Z",
-        releasingDate: "2025-03-10T05:08:48.903Z",
-      },
-      {
-        ingredientId: 900154740192,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-12T05:08:48.903Z",
-        incomingDate: "2025-03-12T05:08:48.903Z",
-        releasingDate: "2025-03-12T05:08:48.903Z",
-      },
-      {
-        ingredientId: 900254740392,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-10T05:08:48.903Z",
-        incomingDate: "2025-03-10T05:08:48.903Z",
-        releasingDate: "2025-03-10T05:08:48.903Z",
-      },
-      {
-        ingredientId: 90071992512192,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-12T05:08:48.903Z",
-        incomingDate: "2025-03-12T05:08:48.903Z",
-        releasingDate: "2025-03-12T05:08:48.903Z",
-      },
-    ],
   },
   {
     ingredientInfoId: 9007199254740990,
@@ -187,29 +22,6 @@ export const INGREDIENTS = [
     totalCount: 3,
     earliestExpiration: "2025-03-08T11:00:00",
     latestExpiration: "2025-03-08T11:00:00",
-    ingredients: [
-      {
-        ingredientId: 9007199254740990,
-        storagePlace: "냉동고",
-        expirationDate: "2025-03-15T05:08:48.903Z",
-        incomingDate: "2025-03-15T05:08:48.903Z",
-        releasingDate: "2025-03-15T05:08:48.903Z",
-      },
-      {
-        ingredientId: 9007199254740920,
-        storagePlace: "냉동고",
-        expirationDate: "2025-03-18T05:08:48.903Z",
-        incomingDate: "2025-03-18T05:08:48.903Z",
-        releasingDate: "2025-03-18T05:08:48.903Z",
-      },
-      {
-        ingredientId: 9007199254740930,
-        storagePlace: "냉동고",
-        expirationDate: "2025-03-20T05:08:48.903Z",
-        incomingDate: "2025-03-20T05:08:48.903Z",
-        releasingDate: "2025-03-20T05:08:48.903Z",
-      },
-    ],
   },
   {
     ingredientInfoId: 9007199254240994,
@@ -218,15 +30,6 @@ export const INGREDIENTS = [
     totalCount: 1,
     earliestExpiration: "2025-03-08T11:00:00",
     latestExpiration: "2025-03-08T11:00:00",
-    ingredients: [
-      {
-        ingredientId: 9007199254710994,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-22T05:08:48.903Z",
-        incomingDate: "2025-03-22T05:08:48.903Z",
-        releasingDate: "2025-03-22T05:08:48.903Z",
-      },
-    ],
   },
   {
     ingredientInfoId: 9007199254730925,
@@ -235,22 +38,6 @@ export const INGREDIENTS = [
     totalCount: 2,
     earliestExpiration: "2025-03-08T11:00:00",
     latestExpiration: "2025-03-08T11:00:00",
-    ingredients: [
-      {
-        ingredientId: 9007199254640925,
-        storagePlace: "냉동고",
-        expirationDate: "2025-03-25T05:08:48.903Z",
-        incomingDate: "2025-03-25T05:08:48.903Z",
-        releasingDate: "2025-03-25T05:08:48.903Z",
-      },
-      {
-        ingredientId: 9007199254710915,
-        storagePlace: "냉동고",
-        expirationDate: "2025-03-28T05:08:48.903Z",
-        incomingDate: "2025-03-28T05:08:48.903Z",
-        releasingDate: "2025-03-28T05:08:48.903Z",
-      },
-    ],
   },
   {
     ingredientInfoId: 9007199252740996,
@@ -259,15 +46,6 @@ export const INGREDIENTS = [
     totalCount: 1,
     earliestExpiration: "2025-03-08T11:00:00",
     latestExpiration: "2025-03-08T11:00:00",
-    ingredients: [
-      {
-        ingredientId: 9007199154740996,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-30T05:08:48.903Z",
-        incomingDate: "2025-03-30T05:08:48.903Z",
-        releasingDate: "2025-03-30T05:08:48.903Z",
-      },
-    ],
   },
   {
     ingredientInfoId: 9007129254740997,
@@ -276,29 +54,6 @@ export const INGREDIENTS = [
     totalCount: 3,
     earliestExpiration: "2025-03-08T11:00:00",
     latestExpiration: "2025-03-08T11:00:00",
-    ingredients: [
-      {
-        ingredientId: 9007099254740997,
-        storagePlace: "냉장고",
-        expirationDate: "2025-04-02T05:08:48.903Z",
-        incomingDate: "2025-04-02T05:08:48.903Z",
-        releasingDate: "2025-04-02T05:08:48.903Z",
-      },
-      {
-        ingredientId: 9006099254740997,
-        storagePlace: "냉장고",
-        expirationDate: "2025-04-05T05:08:48.903Z",
-        incomingDate: "2025-04-05T05:08:48.903Z",
-        releasingDate: "2025-04-05T05:08:48.903Z",
-      },
-      {
-        ingredientId: 9001199254740997,
-        storagePlace: "냉장고",
-        expirationDate: "2025-04-07T05:08:48.903Z",
-        incomingDate: "2025-04-07T05:08:48.903Z",
-        releasingDate: "2025-04-07T05:08:48.903Z",
-      },
-    ],
   },
   {
     ingredientInfoId: 2007199254740998,
@@ -307,22 +62,6 @@ export const INGREDIENTS = [
     totalCount: 2,
     earliestExpiration: "2025-03-08T11:00:00",
     latestExpiration: "2025-03-08T11:00:00",
-    ingredients: [
-      {
-        ingredientId: 9002199254740998,
-        storagePlace: "냉장고",
-        expirationDate: "2025-04-10T05:08:48.903Z",
-        incomingDate: "2025-04-10T05:08:48.903Z",
-        releasingDate: "2025-04-10T05:08:48.903Z",
-      },
-      {
-        ingredientId: 9003199254740998,
-        storagePlace: "냉장고",
-        expirationDate: "2025-04-12T05:08:48.903Z",
-        incomingDate: "2025-04-12T05:08:48.903Z",
-        releasingDate: "2025-04-12T05:08:48.903Z",
-      },
-    ],
   },
   {
     ingredientInfoId: 9004299254740999,
@@ -332,15 +71,6 @@ export const INGREDIENTS = [
     totalCount: 1,
     earliestExpiration: "2025-03-08T11:00:00",
     latestExpiration: "2025-03-08T11:00:00",
-    ingredients: [
-      {
-        ingredientId: 9007143254740999,
-        storagePlace: "냉동고",
-        expirationDate: "2025-04-15T05:08:48.903Z",
-        incomingDate: "2025-04-15T05:08:48.903Z",
-        releasingDate: "2025-04-15T05:08:48.903Z",
-      },
-    ],
   },
   {
     ingredientInfoId: 8012199254740991,
@@ -350,15 +80,6 @@ export const INGREDIENTS = [
     totalCount: 1,
     earliestExpiration: "2025-03-08T11:00:00",
     latestExpiration: "2025-03-08T11:00:00",
-    ingredients: [
-      {
-        ingredientId: 8013199254740991,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-05T05:08:48.903Z",
-        incomingDate: "2025-03-05T05:08:48.903Z",
-        releasingDate: "2025-03-05T05:08:48.903Z",
-      },
-    ],
   },
   {
     ingredientInfoId: 8207199254740992,
@@ -368,22 +89,6 @@ export const INGREDIENTS = [
     totalCount: 2,
     earliestExpiration: "2025-03-08T11:00:00",
     latestExpiration: "2025-03-08T11:00:00",
-    ingredients: [
-      {
-        ingredientId: 8107199254740392,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-10T05:08:48.903Z",
-        incomingDate: "2025-03-10T05:08:48.903Z",
-        releasingDate: "2025-03-10T05:08:48.903Z",
-      },
-      {
-        ingredientId: 8117199254740192,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-12T05:08:48.903Z",
-        incomingDate: "2025-03-12T05:08:48.903Z",
-        releasingDate: "2025-03-12T05:08:48.903Z",
-      },
-    ],
   },
   {
     ingredientInfoId: 8127199254740990,
@@ -393,29 +98,6 @@ export const INGREDIENTS = [
     totalCount: 3,
     earliestExpiration: "2025-03-08T11:00:00",
     latestExpiration: "2025-03-08T11:00:00",
-    ingredients: [
-      {
-        ingredientId: 8027199254740990,
-        storagePlace: "냉동고",
-        expirationDate: "2025-03-15T05:08:48.903Z",
-        incomingDate: "2025-03-15T05:08:48.903Z",
-        releasingDate: "2025-03-15T05:08:48.903Z",
-      },
-      {
-        ingredientId: 8017199254740920,
-        storagePlace: "냉동고",
-        expirationDate: "2025-03-18T05:08:48.903Z",
-        incomingDate: "2025-03-18T05:08:48.903Z",
-        releasingDate: "2025-03-18T05:08:48.903Z",
-      },
-      {
-        ingredientId: 8007199254740930,
-        storagePlace: "냉동고",
-        expirationDate: "2025-03-20T05:08:48.903Z",
-        incomingDate: "2025-03-20T05:08:48.903Z",
-        releasingDate: "2025-03-20T05:08:48.903Z",
-      },
-    ],
   },
   {
     ingredientInfoId: 8054199254240994,
@@ -424,15 +106,6 @@ export const INGREDIENTS = [
     totalCount: 1,
     earliestExpiration: "2025-03-08T11:00:00",
     latestExpiration: "2025-03-08T11:00:00",
-    ingredients: [
-      {
-        ingredientId: 8055199254710994,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-22T05:08:48.903Z",
-        incomingDate: "2025-03-22T05:08:48.903Z",
-        releasingDate: "2025-03-22T05:08:48.903Z",
-      },
-    ],
   },
   {
     ingredientInfoId: 8056199254730925,
@@ -441,22 +114,6 @@ export const INGREDIENTS = [
     totalCount: 2,
     earliestExpiration: "2025-03-08T11:00:00",
     latestExpiration: "2025-03-08T11:00:00",
-    ingredients: [
-      {
-        ingredientId: 8057199254640925,
-        storagePlace: "냉동고",
-        expirationDate: "2025-03-25T05:08:48.903Z",
-        incomingDate: "2025-03-25T05:08:48.903Z",
-        releasingDate: "2025-03-25T05:08:48.903Z",
-      },
-      {
-        ingredientId: 8058199254710915,
-        storagePlace: "냉동고",
-        expirationDate: "2025-03-28T05:08:48.903Z",
-        incomingDate: "2025-03-28T05:08:48.903Z",
-        releasingDate: "2025-03-28T05:08:48.903Z",
-      },
-    ],
   },
   {
     ingredientInfoId: 8099199252740996,
@@ -465,15 +122,6 @@ export const INGREDIENTS = [
     totalCount: 1,
     earliestExpiration: "2025-03-08T11:00:00",
     latestExpiration: "2025-03-08T11:00:00",
-    ingredients: [
-      {
-        ingredientId: 8095199154740996,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-30T05:08:48.903Z",
-        incomingDate: "2025-03-30T05:08:48.903Z",
-        releasingDate: "2025-03-30T05:08:48.903Z",
-      },
-    ],
   },
   {
     ingredientInfoId: 8098129254740997,
@@ -482,29 +130,6 @@ export const INGREDIENTS = [
     totalCount: 3,
     earliestExpiration: "2025-03-08T11:00:00",
     latestExpiration: "2025-03-08T11:00:00",
-    ingredients: [
-      {
-        ingredientId: 8097099254740997,
-        storagePlace: "냉장고",
-        expirationDate: "2025-04-02T05:08:48.903Z",
-        incomingDate: "2025-04-02T05:08:48.903Z",
-        releasingDate: "2025-04-02T05:08:48.903Z",
-      },
-      {
-        ingredientId: 8096099254740997,
-        storagePlace: "냉장고",
-        expirationDate: "2025-04-05T05:08:48.903Z",
-        incomingDate: "2025-04-05T05:08:48.903Z",
-        releasingDate: "2025-04-05T05:08:48.903Z",
-      },
-      {
-        ingredientId: 8095199254740997,
-        storagePlace: "냉장고",
-        expirationDate: "2025-04-07T05:08:48.903Z",
-        incomingDate: "2025-04-07T05:08:48.903Z",
-        releasingDate: "2025-04-07T05:08:48.903Z",
-      },
-    ],
   },
   {
     ingredientInfoId: 8094199254740998,
@@ -513,22 +138,6 @@ export const INGREDIENTS = [
     totalCount: 2,
     earliestExpiration: "2025-03-08T11:00:00",
     latestExpiration: "2025-03-08T11:00:00",
-    ingredients: [
-      {
-        ingredientId: 8093199254740998,
-        storagePlace: "냉장고",
-        expirationDate: "2025-04-10T05:08:48.903Z",
-        incomingDate: "2025-04-10T05:08:48.903Z",
-        releasingDate: "2025-04-10T05:08:48.903Z",
-      },
-      {
-        ingredientId: 8092199254740998,
-        storagePlace: "냉장고",
-        expirationDate: "2025-04-12T05:08:48.903Z",
-        incomingDate: "2025-04-12T05:08:48.903Z",
-        releasingDate: "2025-04-12T05:08:48.903Z",
-      },
-    ],
   },
   {
     ingredientInfoId: 8091299254740999,
@@ -538,15 +147,6 @@ export const INGREDIENTS = [
     totalCount: 1,
     earliestExpiration: "2025-03-08T11:00:00",
     latestExpiration: "2025-03-08T11:00:00",
-    ingredients: [
-      {
-        ingredientId: 8090143254740999,
-        storagePlace: "냉동고",
-        expirationDate: "2025-04-15T05:08:48.903Z",
-        incomingDate: "2025-04-15T05:08:48.903Z",
-        releasingDate: "2025-04-15T05:08:48.903Z",
-      },
-    ],
   },
   {
     ingredientInfoId: 6012199254740991,
@@ -555,15 +155,6 @@ export const INGREDIENTS = [
     totalCount: 1,
     earliestExpiration: "2025-03-08T11:00:00",
     latestExpiration: "2025-03-08T11:00:00",
-    ingredients: [
-      {
-        ingredientId: 6013199254740991,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-05T05:08:48.903Z",
-        incomingDate: "2025-03-05T05:08:48.903Z",
-        releasingDate: "2025-03-05T05:08:48.903Z",
-      },
-    ],
   },
   {
     ingredientInfoId: 6207199254740992,
@@ -573,22 +164,6 @@ export const INGREDIENTS = [
     totalCount: 2,
     earliestExpiration: "2025-03-08T11:00:00",
     latestExpiration: "2025-03-08T11:00:00",
-    ingredients: [
-      {
-        ingredientId: 6107199254740392,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-10T05:08:48.903Z",
-        incomingDate: "2025-03-10T05:08:48.903Z",
-        releasingDate: "2025-03-10T05:08:48.903Z",
-      },
-      {
-        ingredientId: 6117199254740192,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-12T05:08:48.903Z",
-        incomingDate: "2025-03-12T05:08:48.903Z",
-        releasingDate: "2025-03-12T05:08:48.903Z",
-      },
-    ],
   },
   {
     ingredientInfoId: 6127199254740990,
@@ -598,29 +173,6 @@ export const INGREDIENTS = [
     totalCount: 3,
     earliestExpiration: "2025-03-08T11:00:00",
     latestExpiration: "2025-03-08T11:00:00",
-    ingredients: [
-      {
-        ingredientId: 6027199254740990,
-        storagePlace: "냉동고",
-        expirationDate: "2025-03-15T05:08:48.903Z",
-        incomingDate: "2025-03-15T05:08:48.903Z",
-        releasingDate: "2025-03-15T05:08:48.903Z",
-      },
-      {
-        ingredientId: 6017199254740920,
-        storagePlace: "냉동고",
-        expirationDate: "2025-03-18T05:08:48.903Z",
-        incomingDate: "2025-03-18T05:08:48.903Z",
-        releasingDate: "2025-03-18T05:08:48.903Z",
-      },
-      {
-        ingredientId: 6007199254740930,
-        storagePlace: "냉동고",
-        expirationDate: "2025-03-20T05:08:48.903Z",
-        incomingDate: "2025-03-20T05:08:48.903Z",
-        releasingDate: "2025-03-20T05:08:48.903Z",
-      },
-    ],
   },
   {
     ingredientInfoId: 6054199254240994,
@@ -629,15 +181,6 @@ export const INGREDIENTS = [
     totalCount: 1,
     earliestExpiration: "2025-03-08T11:00:00",
     latestExpiration: "2025-03-08T11:00:00",
-    ingredients: [
-      {
-        ingredientId: 6055199254710994,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-22T05:08:48.903Z",
-        incomingDate: "2025-03-22T05:08:48.903Z",
-        releasingDate: "2025-03-22T05:08:48.903Z",
-      },
-    ],
   },
   {
     ingredientInfoId: 7056199254730925,
@@ -647,22 +190,6 @@ export const INGREDIENTS = [
     totalCount: 2,
     earliestExpiration: "2025-03-08T11:00:00",
     latestExpiration: "2025-03-08T11:00:00",
-    ingredients: [
-      {
-        ingredientId: 7057199254640925,
-        storagePlace: "냉동고",
-        expirationDate: "2025-03-25T05:08:48.903Z",
-        incomingDate: "2025-03-25T05:08:48.903Z",
-        releasingDate: "2025-03-25T05:08:48.903Z",
-      },
-      {
-        ingredientId: 7058199254710915,
-        storagePlace: "냉동고",
-        expirationDate: "2025-03-28T05:08:48.903Z",
-        incomingDate: "2025-03-28T05:08:48.903Z",
-        releasingDate: "2025-03-28T05:08:48.903Z",
-      },
-    ],
   },
   {
     ingredientInfoId: 7099199252740996,
@@ -671,15 +198,6 @@ export const INGREDIENTS = [
     totalCount: 1,
     earliestExpiration: "2025-03-08T11:00:00",
     latestExpiration: "2025-03-08T11:00:00",
-    ingredients: [
-      {
-        ingredientId: 7095199154740996,
-        storagePlace: "냉장고",
-        expirationDate: "2025-03-30T05:08:48.903Z",
-        incomingDate: "2025-03-30T05:08:48.903Z",
-        releasingDate: "2025-03-30T05:08:48.903Z",
-      },
-    ],
   },
   {
     ingredientInfoId: 7098129254740997,
@@ -689,29 +207,6 @@ export const INGREDIENTS = [
     totalCount: 3,
     earliestExpiration: "2025-03-08T11:00:00",
     latestExpiration: "2025-03-08T11:00:00",
-    ingredients: [
-      {
-        ingredientId: 7097099254740997,
-        storagePlace: "냉장고",
-        expirationDate: "2025-04-02T05:08:48.903Z",
-        incomingDate: "2025-04-02T05:08:48.903Z",
-        releasingDate: "2025-04-02T05:08:48.903Z",
-      },
-      {
-        ingredientId: 7096099254740997,
-        storagePlace: "냉장고",
-        expirationDate: "2025-04-05T05:08:48.903Z",
-        incomingDate: "2025-04-05T05:08:48.903Z",
-        releasingDate: "2025-04-05T05:08:48.903Z",
-      },
-      {
-        ingredientId: 7095199254740997,
-        storagePlace: "냉장고",
-        expirationDate: "2025-04-07T05:08:48.903Z",
-        incomingDate: "2025-04-07T05:08:48.903Z",
-        releasingDate: "2025-04-07T05:08:48.903Z",
-      },
-    ],
   },
   {
     ingredientInfoId: 7094199254740998,
@@ -720,22 +215,6 @@ export const INGREDIENTS = [
     totalCount: 2,
     earliestExpiration: "2025-03-08T11:00:00",
     latestExpiration: "2025-03-08T11:00:00",
-    ingredients: [
-      {
-        ingredientId: 7093199254740998,
-        storagePlace: "냉장고",
-        expirationDate: "2025-04-10T05:08:48.903Z",
-        incomingDate: "2025-04-10T05:08:48.903Z",
-        releasingDate: "2025-04-10T05:08:48.903Z",
-      },
-      {
-        ingredientId: 7092199254740998,
-        storagePlace: "냉장고",
-        expirationDate: "2025-04-12T05:08:48.903Z",
-        incomingDate: "2025-04-12T05:08:48.903Z",
-        releasingDate: "2025-04-12T05:08:48.903Z",
-      },
-    ],
   },
   {
     ingredientInfoId: 7091299254740999,
@@ -744,15 +223,6 @@ export const INGREDIENTS = [
     totalCount: 1,
     earliestExpiration: "2025-03-08T11:00:00",
     latestExpiration: "2025-03-08T11:00:00",
-    ingredients: [
-      {
-        ingredientId: 7090143254740999,
-        storagePlace: "냉동고",
-        expirationDate: "2025-04-15T05:08:48.903Z",
-        incomingDate: "2025-04-15T05:08:48.903Z",
-        releasingDate: "2025-04-15T05:08:48.903Z",
-      },
-    ],
   },
   {
     ingredientInfoId: 4094199254740998,
@@ -762,22 +232,6 @@ export const INGREDIENTS = [
     totalCount: 2,
     earliestExpiration: "2025-03-08T11:00:00",
     latestExpiration: "2025-03-08T11:00:00",
-    ingredients: [
-      {
-        ingredientId: 4093199254740998,
-        storagePlace: "냉장고",
-        expirationDate: "2025-04-10T05:08:48.903Z",
-        incomingDate: "2025-04-10T05:08:48.903Z",
-        releasingDate: "2025-04-10T05:08:48.903Z",
-      },
-      {
-        ingredientId: 4092199254740998,
-        storagePlace: "냉장고",
-        expirationDate: "2025-04-12T05:08:48.903Z",
-        incomingDate: "2025-04-12T05:08:48.903Z",
-        releasingDate: "2025-04-12T05:08:48.903Z",
-      },
-    ],
   },
   {
     ingredientInfoId: 4091299254742999,
@@ -787,15 +241,6 @@ export const INGREDIENTS = [
     totalCount: 1,
     earliestExpiration: "2025-03-08T11:00:00",
     latestExpiration: "2025-03-08T11:00:00",
-    ingredients: [
-      {
-        ingredientId: 4090143254740999,
-        storagePlace: "냉동고",
-        expirationDate: "2025-04-15T05:08:48.903Z",
-        incomingDate: "2025-04-15T05:08:48.903Z",
-        releasingDate: "2025-04-15T05:08:48.903Z",
-      },
-    ],
   },
   {
     ingredientInfoId: 4094199252740998,
@@ -805,22 +250,6 @@ export const INGREDIENTS = [
     totalCount: 2,
     earliestExpiration: "2025-03-08T11:00:00",
     latestExpiration: "2025-03-08T11:00:00",
-    ingredients: [
-      {
-        ingredientId: 4093199254740998,
-        storagePlace: "냉장고",
-        expirationDate: "2025-04-10T05:08:48.903Z",
-        incomingDate: "2025-04-10T05:08:48.903Z",
-        releasingDate: "2025-04-10T05:08:48.903Z",
-      },
-      {
-        ingredientId: 4092199254740998,
-        storagePlace: "냉장고",
-        expirationDate: "2025-04-12T05:08:48.903Z",
-        incomingDate: "2025-04-12T05:08:48.903Z",
-        releasingDate: "2025-04-12T05:08:48.903Z",
-      },
-    ],
   },
   {
     ingredientInfoId: 4091299254740999,
@@ -829,15 +258,6 @@ export const INGREDIENTS = [
     totalCount: 1,
     earliestExpiration: "2025-03-08T11:00:00",
     latestExpiration: "2025-03-08T11:00:00",
-    ingredients: [
-      {
-        ingredientId: 4090143254740999,
-        storagePlace: "냉동고",
-        expirationDate: "2025-04-15T05:08:48.903Z",
-        incomingDate: "2025-04-15T05:08:48.903Z",
-        releasingDate: "2025-04-15T05:08:48.903Z",
-      },
-    ],
   },
 ];
 
