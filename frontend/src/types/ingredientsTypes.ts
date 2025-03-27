@@ -1,11 +1,3 @@
-export interface Ingredient {
-  ingredientId: number;
-  storagePlace: string;
-  expirationDate: string;
-  incomingDate: string;
-  releasingDate: string | null;
-}
-
 export interface Ingredients {
   ingredientInfoId: number;
   name: string;
@@ -13,13 +5,20 @@ export interface Ingredients {
   totalCount: number;
   earliestExpiration: string;
   latestExpiration: string;
-  ingredients: Ingredient[];
 }
 
 export interface IngredientsSearchInfo {
   id: number;
   name: string;
   imageUrl: string;
+}
+
+export interface Ingredient {
+  ingredientId: number;
+  storagePlace: string;
+  expirationDate: string;
+  incomingDate: string;
+  releasingDate: string | null;
 }
 
 export interface Nutritions {

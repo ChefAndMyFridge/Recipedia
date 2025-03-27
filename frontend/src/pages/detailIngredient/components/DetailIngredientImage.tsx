@@ -1,8 +1,6 @@
-import { useState, useEffect } from "react";
-import { useGetIngredientNutrition } from "@hooks/useIngredientsHooks";
+import { useState } from "react";
 
 import { Nutritions } from "@/types/ingredientsTypes";
-import { NUTRITIONS } from "@/data/NUTRITIONS";
 
 import IconCloseCircle from "@assets/icons/IconCloseCircle";
 import IconInfomation from "@assets/icons/IconInfomation";
@@ -66,17 +64,8 @@ const NutritionsInfo = ({ detailInfo }: { detailInfo: Nutritions }) => {
   );
 };
 
-const DetailIngredientImage = ({ imgSrc, ingredientId }: { imgSrc: string; ingredientId: number }) => {
+const DetailIngredientImage = ({ imgSrc, detailInfo }: { imgSrc: string; detailInfo: Nutritions | null }) => {
   const [isOpenDetailInfo, setIsOpenDetailInfo] = useState<boolean>(false);
-  const [detailInfo, setDetailInfo] = useState<Nutritions>(NUTRITIONS); // 일단 빈 값 할당
-
-  const { data } = useGetIngredientNutrition(ingredientId);
-
-  useEffect(() => {
-    if (data) {
-      setDetailInfo(data.nutrients as Nutritions);
-    }
-  }, [data]);
 
   function handleDetailInfo() {
     setIsOpenDetailInfo(!isOpenDetailInfo);
