@@ -39,6 +39,7 @@ class IngredientSortTest {
       em.persist(ingredient);
       info.getIngredients().add(ingredient);
     }
+    info.setEarliestExpiration();
   }
 
   @BeforeEach
@@ -64,7 +65,7 @@ class IngredientSortTest {
     Map<String, String> params = Map.of("sort", "expire", "order", "desc");
     List<IngredientInfoDto> result = ingredientQueryRepository.findAllExistingIngredients(params);
     assertThat(result).isSortedAccordingTo(
-        Comparator.comparing(IngredientInfoDto::getLatestExpiration));
+        Comparator.comparing(IngredientInfoDto::getLatestExpiration).reversed());
   }
 
   @Test
