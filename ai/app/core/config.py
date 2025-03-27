@@ -43,7 +43,7 @@ class Settings(BaseSettings):
     YOUTUBE_DESCRIPTION_LEN_TH: int = 200
 
     # 생성할 음식 이름 개수
-    NUM_DISHES_TO_GENERATE: int = 3
+    NUM_DISHES_TO_GENERATE: int = 7
 
     # 로그 파일 관련 설정
     LOG_INTERVAL_UNIT: str = "midnight"
