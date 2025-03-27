@@ -70,7 +70,7 @@ def _sync_search_youtube_recipe(dish: str, max_results) -> list:
     try:
         if video_ids:
             videos_request = youtube.videos().list(
-                part="statistics",
+                part="snippet,statistics",
                 id=",".join(video_ids)
             )
             videos_response = videos_request.execute()
@@ -78,8 +78,14 @@ def _sync_search_youtube_recipe(dish: str, max_results) -> list:
             # 통계 정보 업데이트
             for item in videos_response.get("items", []):
                 video_id = item["id"]
-                if video_id in video_info and "statistics" in item:
-                    stats = item["statistics"]
+                if video_id in video_info:
+                    snippet = item.get("snippet", {})
+                    stats = item.get("statistics", {})
+
+                    video_info[video_id]["title"] = snippet.get(
+                        "title", video_info[video_id]["title"])  # API에서 갸져온거로 제목 덮어쓰기
+                    video_info[video_id]["description"] = snippet.get(
+                        "description", "")  # API에서  설명 가져오기쓰기
                     video_info[video_id]["view_count"] = int(
                         stats.get("viewCount", 0))
                     video_info[video_id]["like_count"] = int(
