@@ -3,8 +3,8 @@ import { http, HttpResponse } from "msw";
 import { INGREDIENTS, SEARCH_INGREDIENTS_INFO } from "@/data/INGREDIENTS";
 import { INGREDIENT_WITH_NUTRITIONS } from "@/data/NUTRITIONS";
 import { USERS } from "@/data/USERS";
-import RECIPE_LIST from "@/data/RECIPE_LIST";
-import DETAIL_RECIPE from "@/data/DETAIL_RECIPE";
+// import RECIPE_LIST from "@/data/RECIPE_LIST";
+// import { DETAIL_RECIPE, DETAIL_RECIPE_CHECK } from "@/data/DETAIL_RECIPE";
 
 const { VITE_API_URL } = import.meta.env;
 
@@ -38,14 +38,19 @@ const handlers = [
   }),
 
   //레시피 목록 조회
-  http.post(VITE_API_URL + "/v1/recipe", () => {
-    return HttpResponse.json(RECIPE_LIST);
-  }),
+  // http.post(VITE_API_URL + "/v1/recipe", () => {
+  //   return HttpResponse.json(RECIPE_LIST);
+  // }),
 
-  //레시피 추출
-  http.get(VITE_API_URL + "/v1/recipe/:recipeId", () => {
-    return HttpResponse.json(DETAIL_RECIPE);
-  }),
+  // //레시피 추출
+  // http.get(VITE_API_URL + "/v1/recipe/:recipeId", () => {
+  //   return HttpResponse.json(DETAIL_RECIPE);
+  // }),
+
+  // //단일 레시피 조회
+  // http.get(VITE_API_URL + "/v1/recipe/:recipeId/check", () => {
+  //   return HttpResponse.json(DETAIL_RECIPE_CHECK);
+  // }),
 
   //사용자 목록 조회
   http.get(VITE_API_URL + "/v1/member", () => {

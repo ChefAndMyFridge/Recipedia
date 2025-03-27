@@ -15,8 +15,18 @@ export const makeRecipeApi = async (userId: number, ingredients: string[]): Prom
   }
 };
 
-//레시피 추출 API
+//단일 레시피 조회 API
 export const getRecipeDetailApi = async (recipeId: number): Promise<RecipeInfo> => {
+  try {
+    const response = await instance.get(`/v1/recipe/${recipeId}/check`);
+    return response.data;
+  } catch (error: unknown) {
+    throw new Error(error as string);
+  }
+};
+
+//특정 레시피 텍스트 추출 API
+export const getRecipeTextApi = async (recipeId: number): Promise<RecipeInfo> => {
   try {
     const response = await instance.get(`/v1/recipe/${recipeId}`);
     return response.data;
@@ -24,7 +34,6 @@ export const getRecipeDetailApi = async (recipeId: number): Promise<RecipeInfo> 
     throw new Error(error as string);
   }
 };
-
 //레시피 평가 및 즐겨찾기 API
 export const patchRecipeApi = async (memberId: number, recipeId: number, rating?: number, favorite?: boolean) => {
   const reqBody =
