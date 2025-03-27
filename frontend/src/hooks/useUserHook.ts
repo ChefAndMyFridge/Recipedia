@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { User } from "@/types/userTypes";
-import { filteredInfomations } from "@/types/ingredientsTypes";
+import { User } from "@/types/userTypes.ts";
+import { filteredInfomations } from "@/types/filterTypes.ts";
 
 import {
   getMemberListApi,

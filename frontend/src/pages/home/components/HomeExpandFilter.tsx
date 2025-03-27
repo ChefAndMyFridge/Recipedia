@@ -1,31 +1,13 @@
 import React from "react";
 
-import { filteredInfomations } from "@/types/ingredientsTypes";
+import { FilterElementProps, IngredientsPreferenceProps } from "@/types/filterTypes.ts";
+
+import useIngredientsStore from "@stores/ingredientsStore";
 
 import IngredientInput from "@components/common/input/IngredientInput";
 import Button from "@components/common/button/Button";
 import FilterButton from "@components/common/button/FilterButton";
 import IngredientButton from "@components/common/button/IngredientButton";
-
-import useIngredientsStore from "@stores/ingredientsStore";
-
-interface FilterElementProps {
-  type: "categories" | "dietaries";
-  content: string;
-  keys: string[];
-  elements: string[];
-  onSetFilter: (type: "categories" | "dietaries", value: string) => void;
-  onClear: (type: "categories" | "dietaries") => void;
-}
-
-interface IngredientsPreferenceProps {
-  type: "preferredIngredients" | "dislikedIngredients";
-  label: string;
-  placeHolder: string;
-  selectedList: filteredInfomations;
-  onSetFilter: (type: "preferredIngredients" | "dislikedIngredients", value: string) => void;
-  onClear: (type: "preferredIngredients" | "dislikedIngredients") => void;
-}
 
 const FilterElement = ({ type, content, keys, elements, onSetFilter, onClear }: FilterElementProps) => {
   return (
@@ -99,9 +81,9 @@ const IngredientsPreference = ({
             초기화
           </button>
         </div>
-        <form onSubmit={handleAddItem} className="w-full flex gap-2 justify-center items-center">
+        <form onSubmit={handleAddItem} className="w-full flex gap-4 justify-center items-center">
           <IngredientInput name="ingredient" type="text" placeHolder={placeHolder} labelTextSize="text-lg" />
-          <Button type="submit" design="confirm" content="추가" className="w-12 aspect-[1/1]" />
+          <Button type="submit" design="confirm" content="추가" className="w-1/5 h-12" />
         </form>
       </div>
 

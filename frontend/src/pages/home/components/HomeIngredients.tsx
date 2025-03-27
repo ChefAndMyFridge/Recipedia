@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
+
 import useIngredientsStore from "@stores/ingredientsStore.ts";
+
 import HomeIngredient from "@pages/home/components/HomeIngredient.tsx";
 
 const ITEM_PER_PAGE = 25;

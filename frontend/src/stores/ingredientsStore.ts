@@ -1,11 +1,7 @@
 import { create } from "zustand";
 
-import {
-  Ingredients,
-  SelectedIngredients,
-  filteringInformationKeys,
-  filteredInfomations,
-} from "@/types/ingredientsTypes.ts";
+import { Ingredients, SelectedIngredients } from "@/types/ingredientsTypes.ts";
+import { filteringInformationKeys, filteredInfomations } from "@/types/filterTypes.ts";
 
 interface IngredientsState {
   ingredients: Ingredients[] | []; // 고내에 저장된 재료 목록

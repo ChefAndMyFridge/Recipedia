@@ -16,11 +16,7 @@ import IconIncrease from "@assets/icons/IconIncrease";
 
 import noImg from "@assets/images/noIngredient/carrot.png";
 
-interface HomeIngredientProps {
-  ingredient: Ingredients;
-}
-
-const HomeIngredient = ({ ingredient }: HomeIngredientProps) => {
+const HomeIngredient = ({ ingredient }: { ingredient: Ingredients }) => {
   const { selectedIngredients, setSelectedCount } = useIngredientsStore();
   const { openModal } = useModalStore();
 
