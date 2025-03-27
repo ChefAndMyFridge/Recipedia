@@ -98,16 +98,6 @@ class RecipeSummary:
         """
         start = time.time()
 
-        scripts = ""
-
-        try:
-            scripts = self.get_transcript(video_id)
-            # 적절하지 않은 자막 추출 시 에러 코드 반환
-            if scripts == settings.YOUTUBE_TRANSCRIPT_NO_VALID_STR:
-                return settings.YOUTUBE_NOT_VALID_TRANSCRIPT_CDOE
-        except Exception as e:
-            logger.error(f"{settings.LOG_SUMMARY_PREFIX}_유튜브 자막 추출 오류: {e}")
-
         # OpenAI 요청을 위한 메시지 구성
         system_input = SUMMARY_SYSTEM_INPUT
         user_input = copy.deepcopy(SUMMARY_USER_INPUT)
@@ -146,8 +136,16 @@ class RecipeSummary:
         user_input += SUMMARY_FEW_SHOT_DATA
 
         # 마지막 입력에 자막 스크립트 삽입
-        user_input.append({"role": "user", "content": ""})
-        user_input[-1]["content"] = scripts
+        try:
+            scripts = self.get_transcript(video_id)
+            # 적절하지 않은 자막 추출 시 에러 코드 반환
+            if scripts == settings.YOUTUBE_TRANSCRIPT_NO_VALID_STR:
+                return settings.YOUTUBE_NOT_VALID_TRANSCRIPT_CDOE
+
+            user_input.append({"role": "user", "content": ""})
+            user_input[-1]["content"] = scripts
+        except Exception as e:
+            logger.error(f"{settings.LOG_SUMMARY_PREFIX}_유튜브 자막 추출 오류: {e}")
 
         try:
             # OpenAI API 호출 (RequestGPT.run이 비동기 함수라고 가정)
