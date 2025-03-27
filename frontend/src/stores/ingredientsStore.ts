@@ -23,12 +23,14 @@ const useIngredientsStore = create<IngredientsState>((set) => ({
   filteringInfomationKeys: {
     categories: ["한식", "중식", "일식", "양식"],
     dietaries: ["고단백식", "고열량식", "저염식", "저당식", "저지방식", "저열량식", "비건식", "무가공식", "육식"],
+    allergies: ["갑각류", "견과류", "계란", "땅콩", "대두", "밀", "생선", "유제품", "조개류"],
   },
   filteredInfomations: {
     categories: [],
     dietaries: [],
     preferredIngredients: [],
     dislikedIngredients: [],
+    allergies: [],
   },
   setIngredients: (ingredients) => set({ ingredients }),
   setSelectedCount: (ingredientInfoId, ingredientInfo) => {
