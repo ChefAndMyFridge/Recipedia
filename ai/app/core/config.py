@@ -42,6 +42,7 @@ class Settings(BaseSettings):
     YOUTUBE_MAX_RESULTS: int = 5
     YOUTUBE_DESCRIPTION_LEN_TH: int = 200
     YOUTUBE_TRANSCRIPT_LEN_TH: int = 200
+    YOUTUBE_NOT_VALID_TRANSCRIPT_CDOE: int = 409
     YOUTUBE_TRANSCRIPT_NO_VALID_STR: str = "NO VALID TRANSCRIPT"
 
     # YouTube 비디오 필터링 설정 (관련성 검증)

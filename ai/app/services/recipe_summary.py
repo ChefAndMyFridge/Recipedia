@@ -102,6 +102,9 @@ class RecipeSummary:
 
         try:
             scripts = self.get_transcript(video_id)
+            # 적절하지 않은 자막 추출 시 에러 코드 반환
+            if scripts == settings.YOUTUBE_TRANSCRIPT_NO_VALID_STR:
+                return settings.YOUTUBE_NOT_VALID_TRANSCRIPT_CDOE
         except Exception as e:
             logger.error(f"{settings.LOG_SUMMARY_PREFIX}_유튜브 자막 추출 오류: {e}")
 
