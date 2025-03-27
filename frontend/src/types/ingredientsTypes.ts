@@ -76,15 +76,3 @@ export interface DeleteIngredient {
 export interface DeleteIngredientResponse {
   [key: string]: number;
 }
-
-export interface filteringInformationKeys {
-  categories: string[];
-  dietaries: string[];
-}
-
-export interface filteredInfomations {
-  categories: string[];
-  dietaries: string[];
-  preferredIngredients: string[];
-  dislikedIngredients: string[];
-}

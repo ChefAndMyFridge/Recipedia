@@ -1,7 +1,7 @@
 import instance from "./instance";
 
 import { User } from "@/types/userTypes";
-import { filteredInfomations } from "@/types/ingredientsTypes";
+import { filteredInfomations } from "@/types/filterTypes.ts";
 
 export const getMemberListApi = async (): Promise<User[]> => {
   try {
