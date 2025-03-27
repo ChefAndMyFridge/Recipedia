@@ -17,11 +17,16 @@ import useUserStore from "@stores/userStore";
 const RecipeListPage = () => {
   const { recommendType } = useParams();
   const { userId } = useUserStore();
-  const { recipeSelectedIngredients, recipeList } = useRecipeStore();
+  const { recipeSelectedIngredients, recipeList, resetRecipeStore } = useRecipeStore();
 
   const [DISHES, setDISHES] = useState<string[]>([]);
 
   const HeaderTitle = recommendType === "AI" ? "AI 레시피" : "레시피";
+
+  // 컴포넌트 마운트 시 detailRecipe 초기화
+  useEffect(() => {
+    resetRecipeStore();
+  }, []); // 의존성 배열을 비워서 마운트 시 한 번만 실행되도록 함
 
   //선택된 재료 기반 레시피 조회 Hook 호출
   const selectedIngredientsNames = recipeSelectedIngredients.map((ingredient) => ingredient.name);
