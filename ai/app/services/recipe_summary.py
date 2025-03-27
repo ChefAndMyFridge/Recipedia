@@ -10,6 +10,8 @@ from app.utils.prompts.few_shot import SUMMARY_FEW_SHOT_DATA
 from app.utils.prompts.recipe_summary_prompts import SUMMARY_SYSTEM_INPUT, SUMMARY_USER_INPUT, SUMMARY_DESCRIPTION_INPUT
 from app.core.config import settings
 from app.core.logging_config import logger
+from googleapiclient.discovery import build
+from app.utils.youtube_change_key import rotate_youtube_api_key
 
 
 class RecipeSummary:
@@ -94,18 +96,30 @@ class RecipeSummary:
         system_input = SUMMARY_SYSTEM_INPUT
         user_input = copy.deepcopy(SUMMARY_USER_INPUT)
 
-        # try:
-        #     # 비디오 설명이 있다면, 이를 프롬프트에 추가
-        #     video_info = Video.getInfo(video_id)
-        #     logger.info(
-        #         f"{settings.LOG_SUMMARY_PREFIX}_video_info\n {video_info}")
-        #     if 'description' in video_info and video_info['description'] and (len(video_info['description']) > settings.YOUTUBE_DESCRIPTION_LEN_TH):
-        #         user_input += SUMMARY_DESCRIPTION_INPUT
-        #         user_input.append(
-        #             {"role": "user", "content": video_info['description']})
-        # except Exception as e:
-        #     logger.error(
-        #         f"{settings.LOG_SUMMARY_PREFIX}_유튜브 영상 설명 추가 중 오류: {e}")
+        # youtube api 키 라운드 로빈
+        await rotate_youtube_api_key()
+
+        # 유튜브 API 객체
+        youtube = build("youtube", "v3", developerKey=settings.YOUTUBE_API_KEY)
+
+        try:
+            # video_id에 해당하는 영상 가져오기
+            response = youtube.videos().list(
+                part='snippet',
+                id=video_id
+            ).execute()
+
+            # 데이터에서 description만 추출
+            video_description = response['items'][0]['snippet']['description']
+
+            # GPT API 입력 프롬프트에 추가
+            user_input += SUMMARY_DESCRIPTION_INPUT
+            user_input.append(
+                {"role": "user", "content": video_description})
+
+        except Exception as e:
+            logger.error(
+                f"{settings.LOG_SUMMARY_PREFIX}_유튜브 영상 설명 추가 중 오류: {e}")
 
         # Few shot 데이터 적용
         user_input += SUMMARY_FEW_SHOT_DATA
@@ -142,7 +156,7 @@ if __name__ == "__main__":
     async def main():
         try:
             recipe_summary = RecipeSummary()
-            summary = await recipe_summary.summarize_recipe("BBy9iBzZanw")
+            summary = await recipe_summary.summarize_recipe("qWbHSOplcvY")
             print(summary)
         except HTTPException as e:
             raise e
