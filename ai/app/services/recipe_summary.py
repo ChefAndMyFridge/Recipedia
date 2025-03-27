@@ -1,6 +1,7 @@
 # app/services/recipe_summary.py
 import time
 import asyncio
+import copy
 
 from youtubesearchpython import Transcript, Video
 from app.services.LLM.recipe_generator import RequestGPT
@@ -90,7 +91,8 @@ class RecipeSummary:
             logger.error(f"{settings.LOG_SUMMARY_PREFIX}_유튜브 자막 추출 오류: {e}")
 
         # OpenAI 요청을 위한 메시지 구성
-        system_input, user_input = SUMMARY_SYSTEM_INPUT, SUMMARY_USER_INPUT
+        system_input = SUMMARY_SYSTEM_INPUT
+        user_input = copy.deepcopy(SUMMARY_USER_INPUT)
 
         # try:
         #     # 비디오 설명이 있다면, 이를 프롬프트에 추가
