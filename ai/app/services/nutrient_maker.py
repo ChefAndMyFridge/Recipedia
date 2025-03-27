@@ -31,9 +31,9 @@ class NutrientMaker:
                 messages=[
                     {"role": "system", "content": "You are a food name translator and allergen information provider. Only translate Korean food names into English and also provide allergen information in the format: 'Food Name (Allergen: Info)'. If the input is not a food name, respond with 'INVALID'."},
                     {"role": "user", "content": "Translate the food name '사과' into English and provide allergen information."},
-                    {"role": "assistant", "content": "Apple (Allergen: None)"},
+                    {"role": "assistant", "content": "Apple (Allergen: 없음)"},
                     {"role": "user", "content": "Translate the food name '우유' into English and provide allergen information."},
-                    {"role": "assistant", "content": "Milk (Allergen: Dairy)"},
+                    {"role": "assistant", "content": "Milk (Allergen: 유제품)"},
                     {"role": "user", "content": f"Translate the food name '{food_name}' into English and provide allergen information."}
                 ],
                 max_tokens=20,
