@@ -18,7 +18,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-//@Setter // setter를 사용하지 않는다.
 public class Ingredient {
 
   @Id
@@ -40,12 +39,6 @@ public class Ingredient {
   @Column(nullable = false)
   private LocalDateTime incomingDate = LocalDateTime.now(); // 입고일자는 기본적으로 현재 시간 기준
 
-  @Column
-  private LocalDateTime releasingDate = null;
-
-  @Column
-  private boolean isReleased = false;
-
   @Builder
   public Ingredient(
       IngredientInfo ingredientInfo,
@@ -62,6 +55,5 @@ public class Ingredient {
     this.incomingDate = ingredientUpdateReq.getIncomingDate();
     this.storagePlace = ingredientUpdateReq.getStoragePlace();
     this.expirationDate = ingredientUpdateReq.getExpirationDate();
-    this.releasingDate = ingredientUpdateReq.getReleasingDate();
   }
 }

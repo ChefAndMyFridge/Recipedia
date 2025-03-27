@@ -14,8 +14,7 @@ public interface IngredientInfoRepository extends JpaRepository<IngredientInfo, 
     Optional<IngredientInfo> findByName(String name);
 
     @Query("SELECT distinct i FROM IngredientInfo i "
-        + "JOIN FETCH i.ingredients ing "
-        + "WHERE ing.isReleased = false")
+        + "JOIN FETCH i.ingredients ing ")
     List<IngredientInfo> findAllWithIngredients();
 
     @Query("select if from IngredientInfo if left join fetch if.ingredients where if.id = :ingredientId")
@@ -31,7 +30,6 @@ public interface IngredientInfoRepository extends JpaRepository<IngredientInfo, 
 
     @Query("SELECT DISTINCT i FROM IngredientInfo i " +
         "JOIN FETCH i.ingredients ing " +
-        "LEFT JOIN FETCH i.ingredientNutrients nut " +
-        "WHERE ing.isReleased = false")
+        "LEFT JOIN FETCH i.ingredientNutrients nut ")
     List<IngredientInfo> findAllExistingWithIngredientsAndNutrients();
 }
