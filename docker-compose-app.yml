@@ -11,11 +11,12 @@ services:
         BRANCH_NAME: ${BRANCH_NAME}
         VITE_API_URL: ${VITE_API_URL}
     ports:
-      - "${NGINX_HTTP_PORT}:80"        # ec2 url은 80번 포트만 열려있음
-      - "${NGINX_HTTPS_PORT}:443"
+      - "80:80"        # ec2 url은 80번 포트만 열려있음
+      - "443:443"
     depends_on:
       - server
     volumes:
+      - /home/ubuntu/front_build:/usr/share/nginx
       - /etc/letsencrypt:/etc/letsencrypt:ro
     networks:
       - app-network
