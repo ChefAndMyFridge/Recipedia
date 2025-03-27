@@ -47,9 +47,10 @@ const DetailIngredientModal = ({ ingredientId }: { ingredientId: number }) => {
               <table className="w-full font-preRegular text-center text-xs">
                 <thead className="sticky top-0  bg-[#EEE] z-10">
                   <tr className="h-10 border-b-2 border-gray-300">
-                    <th className="w-1/5"></th>
-                    <th className="w-2/5">입고일</th>
-                    <th className="w-2/5">만료일</th>
+                    <th colSpan={2} className="w-4/5">
+                      만료 시간
+                    </th>
+                    <th className="w-1/5">위치</th>
                   </tr>
                 </thead>
                 <tbody>

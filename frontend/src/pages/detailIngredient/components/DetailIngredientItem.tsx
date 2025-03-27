@@ -45,14 +45,14 @@ const DetailIngredientItem = ({ ingredient, index }: IngredientingredientProps) 
         onBlur={() => setIsClicked(false)}
       >
         <td className={`font-preBold ${isImminent ? "text-error" : "text-primaryDark"}`}>{remaining}</td>
-        <td>{incomingDate.slice(0, 13)}</td>
-        <td>{expirationDate.slice(0, 13)}</td>
+        <td className="font-preMedium">{expirationDate}</td>
+        <td className="text-primaryDark font-preBold">{ingredient.storagePlace === "fridge" ? "냉장실" : "냉동실"}</td>
       </tr>
       {isClicked && (
-        <tr className="h-7 bg-black/5 font-preRegular text-xs">
-          <td className="text-primaryDark font-preBold">{ingredient.storagePlace === "fridge" ? "냉장" : "냉동"}</td>
-          <td>{incomingDate.slice(13, 22)}</td>
-          <td>{expirationDate.slice(13, 22)}</td>
+        <tr className="h-8 bg-black/5 font-preRegular text-xs">
+          <td className="font-preMedium">입고</td>
+          <td className="font-preMedium">{incomingDate}</td>
+          <td />
         </tr>
       )}
     </>
