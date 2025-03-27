@@ -1,6 +1,7 @@
 export interface filteringInformationKeys {
   categories: string[];
   dietaries: string[];
+  allergies: string[];
 }
 
 export interface filteredInfomations {
@@ -8,15 +9,16 @@ export interface filteredInfomations {
   dietaries: string[];
   preferredIngredients: string[];
   dislikedIngredients: string[];
+  allergies: string[];
 }
 
 export interface FilterElementProps {
-  type: "categories" | "dietaries";
+  type: "categories" | "dietaries" | "allergies";
   content: string;
   keys: string[];
   elements: string[];
-  onSetFilter: (type: "categories" | "dietaries", value: string) => void;
-  onClear: (type: "categories" | "dietaries") => void;
+  onSetFilter: (type: "categories" | "dietaries" | "allergies", value: string) => void;
+  onClear: (type: "categories" | "dietaries" | "allergies") => void;
 }
 
 export interface IngredientsPreferenceProps {

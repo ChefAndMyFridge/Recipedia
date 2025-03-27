@@ -12,7 +12,7 @@ import IngredientButton from "@components/common/button/IngredientButton";
 const FilterElement = ({ type, content, keys, elements, onSetFilter, onClear }: FilterElementProps) => {
   return (
     <div className="mb-4">
-      <div className="flex justify-between items-center h-8 mb-2 border-content">
+      <div className="flex justify-between items-center h-8 border-content">
         <span className="text-sm font-preBold">{content}</span>
         <button onClick={() => onClear(type)} className="text-xs font-preRegular text-content2">
           초기화
@@ -108,7 +108,23 @@ const HomeExpandFilter = () => {
     useIngredientsStore();
 
   return (
-    <div className="absolute top-10 left-0 w-full bg-white shadow-md z-30 px-4 py-3 font-preMedium">
+    <div className="absolute top-10 left-0 w-full bg-white shadow-md z-30 px-4 py-2 font-preMedium">
+      <IngredientsPreference
+        type={"preferredIngredients"}
+        label="좋아하는 재료"
+        placeHolder="좋아하는 재료를 입력해주세요."
+        selectedList={filteredInfomations}
+        onSetFilter={setFilteredInfomations}
+        onClear={setClearFilteredInfomations}
+      />
+      <IngredientsPreference
+        type={"dislikedIngredients"}
+        label="싫어하는 재료"
+        placeHolder="싫어하는 재료를 입력해주세요."
+        selectedList={filteredInfomations}
+        onSetFilter={setFilteredInfomations}
+        onClear={setClearFilteredInfomations}
+      />
       <FilterElement
         type={"categories"}
         content="카테고리"
@@ -125,19 +141,11 @@ const HomeExpandFilter = () => {
         onSetFilter={setFilteredInfomations}
         onClear={setClearFilteredInfomations}
       />
-      <IngredientsPreference
-        type={"preferredIngredients"}
-        label="좋아하는 재료"
-        placeHolder="좋아하는 재료를 입력해주세요."
-        selectedList={filteredInfomations}
-        onSetFilter={setFilteredInfomations}
-        onClear={setClearFilteredInfomations}
-      />
-      <IngredientsPreference
-        type={"dislikedIngredients"}
-        label="싫어하는 재료"
-        placeHolder="싫어하는 재료를 입력해주세요."
-        selectedList={filteredInfomations}
+      <FilterElement
+        type={"allergies"}
+        content="알레르기"
+        keys={filteringInfomationKeys.allergies}
+        elements={filteredInfomations.allergies}
         onSetFilter={setFilteredInfomations}
         onClear={setClearFilteredInfomations}
       />
