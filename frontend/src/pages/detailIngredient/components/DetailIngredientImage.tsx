@@ -70,7 +70,7 @@ const NutritionsInfo = ({ detailInfo }: { detailInfo: Nutritions }) => {
             </td>
             {isOpenDetailInfo && (
               <div
-                className="absolute top-full left-0 flex justify-center items-center w-full h-fit bg-black bg-opacity-50 text-white font-preRegular"
+                className="absolute top-full left-0 flex justify-center items-center w-full h-fit p-1 bg-black bg-opacity-50 text-white font-preRegular"
                 onClick={() => setIsOpenDetailInfo(false)}
               >
                 {detailInfo.allergenInfo}
@@ -122,18 +122,18 @@ const DetailIngredientImage = ({
       {/* 영양 정보 - 사진 전환 버튼 */}
       {isOpenDetailInfo ? (
         <button
-          className="absolute bottom-3 right-3 flex justify-between items-center py-1 pl-2 pr-3  h-10 gap-2 rounded-3xl bg-white bg-opacity-75 font-preRegular text-sm"
+          className="absolute bottom-3 right-3 flex justify-between items-center pl-2 pr-3 h-8 gap-2 rounded-3xl bg-white bg-opacity-75 font-preRegular text-sm shadow-lg"
           onClick={handleDetailInfo}
         >
-          <IconCloseCircle strokeColor="black" width={25} height={25} />
+          <IconCloseCircle strokeColor="black" width={15} height={15} />
           <p>닫기</p>
         </button>
       ) : (
         <button
-          className="absolute bottom-3 right-3 flex justify-between items-center py-1 pl-2 pr-3 h-10 gap-2 rounded-3xl bg-white bg-opacity-75 font-preRegular text-sm"
+          className="absolute bottom-3 right-3 flex justify-between items-center pl-2 pr-3 h-8 gap-2 rounded-3xl bg-white bg-opacity-75 font-preRegular text-sm shadow-lg"
           onClick={handleDetailInfo}
         >
-          <IconInfomation strokeColor="black" width={25} height={25} />
+          <IconInfomation strokeColor="black" width={15} height={15} />
           <p>영양 정보</p>
         </button>
       )}
