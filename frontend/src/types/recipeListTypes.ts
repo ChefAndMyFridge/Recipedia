@@ -6,6 +6,7 @@ export interface Video {
   duration: string;
   viewCount: number;
   likeCount: number;
+  hasCaption: boolean;
   favorite: boolean;
   rating: number;
 }
@@ -51,6 +52,7 @@ export interface RecipeInfo {
   duration: string;
   viewCount: number;
   likeCount: number;
+  hasCaption: boolean;
   textRecipe: textRecipeType | null;
 }
 
