@@ -13,6 +13,7 @@ public record RecipeDetailDto(
     String duration,
     long viewCount,
     long likeCount,
+    Boolean hasCaption,
     RecipeExtractRes textRecipe
 ) {
   public static RecipeDetailDto fromEntities(Recipe recipe, RecipeExtractRes extractRes) {
@@ -26,6 +27,7 @@ public record RecipeDetailDto(
         recipe.getDuration(),
         recipe.getViewCount(),
         recipe.getLikeCount(),
+        recipe.getHasCaption(),
         extractRes
     );
   }

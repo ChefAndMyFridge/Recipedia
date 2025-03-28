@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public record RecipeDto(Long recipeId, String name, String title, String youtubeUrl,
                         boolean hasTextRecipe, List<RecipeIngredientDto> ingredients,
                         String channelTitle, String duration, long viewCount,
-                        long likeCount) implements
+                        long likeCount, Boolean hasCaption) implements
         Serializable {
 
     public static RecipeDto fromEntity(Recipe recipe) {
@@ -30,7 +30,8 @@ public record RecipeDto(Long recipeId, String name, String title, String youtube
             recipe.getChannelTitle(),
             recipe.getDuration(),
             recipe.getViewCount(),
-            recipe.getLikeCount()
+            recipe.getLikeCount(),
+            recipe.getHasCaption()
         );
     }
 
