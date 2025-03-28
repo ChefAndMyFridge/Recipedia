@@ -65,6 +65,7 @@ class QueryMaker:
         기능: YouTube API를 사용해 요리 이름에 맞는 레시피 동영상 검색
         """
         self.all_videos = {}
+        dishes_with_videos = []
 
         # 각 요리별로 비동기 작업 생성
         tasks = []
@@ -81,11 +82,18 @@ class QueryMaker:
                 if isinstance(result, Exception):
                     logger.warning(
                         f"{settings.LOG_QUERY_MAKER_PREFIX}_⚠️ {dish} 검색 중 오류: {result}")
-                    self.all_videos[dish] = []
-                else:
+                elif result:
+                    # 검색된 동영상이 있는 경우
                     self.all_videos[dish] = result
+                    dishes_with_videos.append(dish)
                     logger.info(
                         f"{settings.LOG_QUERY_MAKER_PREFIX}_{dish}: {len(result)}개의 동영상 찾음")
+                else:
+                    # 검색된 동영상이 없는 경우
+                    logger.info(
+                        f"{settings.LOG_QUERY_MAKER_PREFIX}_{dish}: 검색 결과 없음")
+            # dishes 목록 업데이트. 비디오가 있는 요리만 남김
+            self.dishes = dishes_with_videos
         except Exception as e:
             logger.error(
                 f"{settings.LOG_QUERY_MAKER_PREFIX}_⚠️ 레시피 검색 중 오류 발생: {e}")
