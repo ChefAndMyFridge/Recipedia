@@ -72,8 +72,10 @@ def _sync_search_youtube_recipe(dish: str, max_results) -> list:
         # 통계 정보 추가
         if "statistics" in item:
             stats = item["statistics"]
-            video_data["view_count"] = int(stats.get("viewCount", 0)) if "viewCount" in stats else 0
-            video_data["like_count"] = int(stats.get("likeCount", 0)) if "likeCount" in stats else 0
+            video_data["view_count"] = int(
+                stats.get("viewCount", 0)) if "viewCount" in stats else 0
+            video_data["like_count"] = int(
+                stats.get("likeCount", 0)) if "likeCount" in stats else 0
 
         results.append(video_data)
 

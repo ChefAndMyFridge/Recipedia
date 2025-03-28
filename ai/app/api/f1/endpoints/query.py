@@ -20,7 +20,9 @@ docs = QueryDocs()
 )
 async def query_maker_endpoint(request: Request, data: Ingredients = docs.base["data"]):
     try:
-        query_maker = QueryMaker(data.ingredients, data.main_ingredients, data.preferred_ingredients, data.disliked_ingredients)
+        query_maker = QueryMaker(data.ingredients, data.main_ingredients,
+                                 data.preferred_ingredients, data.disliked_ingredients,
+                                 data.categories, data.dietaries)
         # 비동기로 전체 프로세스 실행
         result = await query_maker.run()
         return JSONResponse(status_code=200, content=result)

@@ -35,4 +35,9 @@ public class IngredientDocumentServiceImpl implements IngredientDocumentService 
   public List<IngredientDocument> findByMorpheme(String morpheme) {
     return ingredientDocumentRepository.findByTermUsingWildCard(morpheme);
   }
+
+  @Override
+  public void deleteIngredientDocumentById(Long id) {
+    ingredientDocumentRepository.deleteById(id);
+  }
 }

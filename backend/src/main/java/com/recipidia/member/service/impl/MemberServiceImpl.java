@@ -39,6 +39,7 @@ public class MemberServiceImpl implements MemberService {
         .dietaries(List.of())
         .preferredIngredients(List.of())
         .dislikedIngredients(List.of())
+        .allergies(List.of())
         .build();
 
     MemberFilter memberFilter = MemberFilter.builder()

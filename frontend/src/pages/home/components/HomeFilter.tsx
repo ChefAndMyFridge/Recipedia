@@ -15,7 +15,13 @@ import IconSortDesc from "@assets/icons/IconSortDesc";
 import IconFilter from "@assets/icons/IconFilter";
 import ArrowUp from "@assets/icons/ArrowUp";
 
-const HomeFilter = () => {
+const HomeFilter = ({
+  isFilterOpen,
+  handleFilterOpen,
+}: {
+  isFilterOpen: boolean;
+  handleFilterOpen: (state: boolean) => void;
+}) => {
   const { userId } = useUserStore();
   const { filteredInfomations } = useIngredientsStore();
 
@@ -24,7 +30,6 @@ const HomeFilter = () => {
   const [order, setOrder] = useState<"asc" | "desc">("asc");
   const [sort, setSort] = useState<"name" | "expire">("name");
 
-  const [isExpand, setIsExpand] = useState<boolean>(false);
   const [location, setLocation] = useState<"all" | "fridge" | "freezer">("all");
 
   // API 호출: 재료 목록 조회, 필터 정보 조회
@@ -51,7 +56,7 @@ const HomeFilter = () => {
       { id: userId, filterData: filteredInfomations },
       {
         onSuccess: () => {
-          setIsExpand(false);
+          handleFilterOpen(false);
         },
       }
     );
@@ -95,11 +100,13 @@ const HomeFilter = () => {
         </div>
         <div className="border-r border-[#dddddd] h-5 mx-1" />
 
-        {!isExpand && <IconFilter width={18} height={18} strokeColor="#9d9d9d" onClick={() => setIsExpand(true)} />}
-        {isExpand && <ArrowUp width={18} height={18} strokeColor="#9d9d9d" onClick={handleSaveFilter} />}
+        {!isFilterOpen && (
+          <IconFilter width={18} height={18} strokeColor="#9d9d9d" onClick={() => handleFilterOpen(true)} />
+        )}
+        {isFilterOpen && <ArrowUp width={18} height={18} strokeColor="#9d9d9d" onClick={handleSaveFilter} />}
       </div>
 
-      {isExpand && <HomeExpandFilter />}
+      {isFilterOpen && <HomeExpandFilter />}
     </div>
   );
 };

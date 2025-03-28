@@ -16,17 +16,17 @@ import com.recipidia.ingredient.request.IngredientMultipleDeleteReq;
 import com.recipidia.ingredient.request.IngredientUpdateReq;
 import com.recipidia.ingredient.response.IngredientIncomingRes;
 import com.recipidia.ingredient.response.IngredientUpdateRes;
+import com.recipidia.ingredient.scheduler.NutrientUpdateScheduler;
 import com.recipidia.ingredient.service.IngredientService;
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +42,8 @@ public class IngredientServiceImpl implements IngredientService {
 
   // queryDSL
   private final IngredientQueryRepository ingredientQueryRepository;
+
+  private final NutrientUpdateScheduler nutrientUpdateScheduler;
 
   @Override
   public List<IngredientSimpleInfoDto> getAllIngredientInfo() {
@@ -72,9 +74,7 @@ public class IngredientServiceImpl implements IngredientService {
     IngredientInfo ingredientInfo = ingredientInfoRepository.findByName(request.getName())
         .orElseGet(() -> {
           String imageUrl = buildImgUrl(request.getName());
-          return ingredientInfoRepository.save(
-              new IngredientInfo(request.getName(), imageUrl)
-          );
+          return new IngredientInfo(request.getName(), imageUrl);
         });
 
     // 개수만큼 추가
@@ -90,18 +90,17 @@ public class IngredientServiceImpl implements IngredientService {
       ingredients.add(ingredient);
     }
     ingredientInfo.setEarliestExpiration();
+
     // 만약 ingredientInfo가 새로 생성된 객체라면 save 호출
     if (ingredientInfo.getId() == null) { // 새로운 엔티티라면 ID가 null일 것
-      // ingredientInfo에 대한 Nutrient 정보를 추가해야함
-      ingredientInfoRepository.save(ingredientInfo);
+      // 저장하고 ingredientInfo에 대한 Nutrient 정보도 추가
+      ingredientInfoRepository.saveAndFlush(ingredientInfo); // DB에 즉시 반영 : DB에 반영 후 영양 업데이트
+      nutrientUpdateScheduler.updateNutrientForIngredient(ingredientInfo);
       // Elasctic Search index에 추가
       ingredientDocumentRepository.save(IngredientDocument.fromEntity(ingredientInfo));
     }
 
-    // 미출고 재료의 개수 계산 (isReleased가 false인 것들만)
-    int validCount = (int) ingredients.stream()
-        .filter(ingredient -> !ingredient.isReleased())
-        .count();
+    int validCount = ingredients.size();
 
     // 저장: 새로운 재료거나 기존 재료에 item 추가된 상태 저장 후 응답
     return IngredientIncomingRes.builder()
@@ -130,40 +129,31 @@ public class IngredientServiceImpl implements IngredientService {
   @Override
   @Transactional
   public Map<String, Integer> releaseItems(Long ingredientId, int quantity) {
-    // column에 삭제됐다고만 추가, 즉 update
+    // 재료 정보 호출
     IngredientInfo ingredientInfo = ingredientInfoRepository.findWithIngredients(ingredientId);
 
-    // 오래전에 저장한거부터 삭제
+    // 재료 리스트 불러오기
     List<Ingredient> ingredients = ingredientInfo.getIngredients();
 
-    List<Ingredient> remainIngredients = ingredients.stream()
-        .filter(ingredient -> !ingredient.isReleased())
-        .toList();
-
     // 리스트의 수량이 0이면 삭제예외 발생
-    if (remainIngredients.isEmpty()) {
+    if (ingredients.isEmpty()) {
       throw new IngredientDeleteException("재료의 수량이 0개여서 삭제가 불가능합니다");
     }
 
     // 요청한 수량과 남은 재료 수 중 작은 값을 사용
-    int validQuantity = Math.min(quantity, remainIngredients.size());
+    int validQuantity = Math.min(quantity, ingredients.size());
 
     // 출고할 재료 목록: 가장 오래된 미출고 재료부터 validQuantity 개 선택
-    List<Ingredient> toRelease = remainIngredients.subList(0, validQuantity);
-    List<Long> releaseIds = toRelease.stream()
-        .map(Ingredient::getId)
-        .toList();
+    List<Ingredient> toRelease = ingredients.subList(0, validQuantity);
 
-    // 현재 시간으로 출고 처리 (DB update)
-    ingredientRepository.markReleasedByIds(releaseIds, LocalDateTime.now());
+    // DB에서 대상 재료들을 배치 삭제
+    ingredientRepository.deleteAllInBatch(toRelease);
 
-    // 출고된 재료들을 ingredients 컬렉션에서 제거
+    // 영속성 컨텍스트 상의 ingredients 컬렉션에서도 삭제 처리
     ingredients.removeAll(toRelease);
 
-    // 남은 미출고 재료의 수를 새로 계산
-    int remainCount = (int) ingredients.stream()
-        .filter(i -> !i.isReleased())
-        .count();
+    // 남은 재료 수를 계산하여 반환
+    int remainCount = ingredients.size();
 
     return Map.of("remainCount", remainCount);
   }

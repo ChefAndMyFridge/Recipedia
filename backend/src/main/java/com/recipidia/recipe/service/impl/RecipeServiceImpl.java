@@ -86,7 +86,8 @@ public class RecipeServiceImpl implements RecipeService {
     return memberFilterMono.flatMap(memberFilter ->
         Mono.fromCallable(() -> ingredientFilterService.filterIngredientsByDietaries(
                 memberFilter.getFilterData().getDietaries(),
-                mainIngredients
+                mainIngredients,
+                memberFilter.getFilterData().getAllergies()
             ))
             .subscribeOn(Schedulers.boundedElastic())
     );
