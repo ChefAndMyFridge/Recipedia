@@ -83,6 +83,11 @@ pipeline {
                         mysqlHost = "my-mysql-master"
                     } 
 
+                    echo "✅ fastapiApiUrl: ${fastapiApiUrl}"
+                    echo "🌐 VITE_API_URL: ${viteApiUrl}"
+                    echo "📁 mysqlHost: ${mysqlHost}"
+
+
                     sh """
                     cd ${env.WORKSPACE}
                     HOST_URL=${env.HOST_URL} \
