@@ -18,7 +18,7 @@ const RecipeInfoIndexes = ({ selectedIndex, setSelectedIndex }: RecipeInfoIndexe
       <RecipeInfoIndex
         selectedIndex={selectedIndex}
         setSelectedIndex={setSelectedIndex}
-        text="레시피"
+        text="레시피 단계"
         type="cooking_sequence"
       />
       <RecipeInfoIndex
