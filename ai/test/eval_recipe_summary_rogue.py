@@ -8,6 +8,9 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 import os
 
+MENU_NAME = "알리오 올리오"
+MODEL_NAME = "GPT-4"  # 여기에 모델 이름 지정
+
 
 def parse_video_id(data: str) -> str:
     return data.split("v=")[1].split("&")[0]
@@ -23,22 +26,37 @@ def json_to_text(json_data: dict) -> str:
     return text.strip()
 
 
-def visualize_rouge_scores(score_dict: dict, model_name: str, save_dir: str = "logs/recipe_summary_eval_results"):
-    os.makedirs(save_dir, exist_ok=True)
-    keys = list(score_dict.keys())
-    scores = [score_dict[k].fmeasure for k in keys]
+def visualize_rouge_scores_csv(model_name: str, csv_dir: str = "logs/recipe_summary_eval_results"):
+    csv_path = f"{csv_dir}/{model_name}_rouge_scores.csv"
 
-    plt.figure(figsize=(8, 5))
-    plt.bar(keys, scores)
+    if not os.path.exists(csv_path):
+        print(f"CSV 파일이 없습니다: {csv_path}")
+        return
+
+    df = pd.read_csv(csv_path)
+
+    # rogue 평가 시도 횟수
+    x = range(len(df))
+
+    plt.figure(figsize=(10, 6))
+
+    # 각 ROUGE 종류별 F1 점수 꺾은선 그리기
+    rouge_types = ["rouge1", "rouge2", "rougeL"]
+    for rouge in rouge_types:
+        plt.plot(x, df[f"{rouge}_F1"], label=rouge.upper(), marker="o")
+
+    plt.title(f"ROUGE F1 Score - {model_name} - {MENU_NAME}")
+    plt.xlabel("Evaluation Count")
+    plt.ylabel("F1 Score")
     plt.ylim(0, 1)
-    plt.title(f"ROUGE Scores - {model_name}")
-    plt.ylabel("F-measure")
-    plt.xlabel("ROUGE Type")
-    for i, v in enumerate(scores):
-        plt.text(i, v + 0.02, f"{v:.4f}", ha='center')
+    plt.legend()
+    plt.grid(True)
     plt.tight_layout()
-    plt.savefig(os.path.join(save_dir, f"{model_name}_rouge_scores.png"))
+
+    save_path = os.path.join(csv_dir, f"{model_name}_rouge_lineplot.png")
+    plt.savefig(save_path)
     plt.show()
+    print(f"Line plot saved to {save_path}")
 
 
 def save_scores_to_csv(score_dict: dict, model_name: str, menu_name: str, csv_dir: str = "logs/recipe_summary_eval_results"):
@@ -56,7 +74,7 @@ def save_scores_to_csv(score_dict: dict, model_name: str, menu_name: str, csv_di
         row[f"{k}_R"] = round(v.recall, 4)
         row[f"{k}_F1"] = round(v.fmeasure, 4)
 
-    csv_path = os.path.join(csv_dir, f"{model_name}_rouge_scores.csv")
+    csv_path = f"{csv_dir}/{model_name}_rouge_scores.csv"
 
     # 기존 파일 있으면 이어쓰기, 없으면 새로 만들기
     if os.path.exists(csv_path):
@@ -70,8 +88,6 @@ def save_scores_to_csv(score_dict: dict, model_name: str, menu_name: str, csv_di
 
 
 if __name__ == "__main__":
-    MENU_NAME = "알리오 올리오"
-    MODEL_NAME = "GPT-4"  # 여기에 모델 이름 지정
 
     async def main():
         recipe_summary = RecipeSummary()
@@ -89,7 +105,7 @@ if __name__ == "__main__":
             print(f"{key}: {scores[key].fmeasure:.4f}")
 
         # 시각화 및 저장
-        visualize_rouge_scores(scores, MODEL_NAME)
         save_scores_to_csv(scores, MODEL_NAME, MENU_NAME)
+        visualize_rouge_scores_csv(MODEL_NAME)
 
     asyncio.run(main())
