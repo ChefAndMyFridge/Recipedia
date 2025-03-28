@@ -16,6 +16,7 @@ import com.recipidia.ingredient.request.IngredientMultipleDeleteReq;
 import com.recipidia.ingredient.request.IngredientUpdateReq;
 import com.recipidia.ingredient.response.IngredientIncomingRes;
 import com.recipidia.ingredient.response.IngredientUpdateRes;
+import com.recipidia.ingredient.scheduler.NutrientUpdateScheduler;
 import com.recipidia.ingredient.service.IngredientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,6 +42,8 @@ public class IngredientServiceImpl implements IngredientService {
 
   // queryDSL
   private final IngredientQueryRepository ingredientQueryRepository;
+
+  private final NutrientUpdateScheduler nutrientUpdateScheduler;
 
   @Override
   public List<IngredientSimpleInfoDto> getAllIngredientInfo() {
@@ -71,9 +74,7 @@ public class IngredientServiceImpl implements IngredientService {
     IngredientInfo ingredientInfo = ingredientInfoRepository.findByName(request.getName())
         .orElseGet(() -> {
           String imageUrl = buildImgUrl(request.getName());
-          return ingredientInfoRepository.save(
-              new IngredientInfo(request.getName(), imageUrl)
-          );
+          return new IngredientInfo(request.getName(), imageUrl);
         });
 
     // 개수만큼 추가
@@ -89,10 +90,12 @@ public class IngredientServiceImpl implements IngredientService {
       ingredients.add(ingredient);
     }
     ingredientInfo.setEarliestExpiration();
+
     // 만약 ingredientInfo가 새로 생성된 객체라면 save 호출
     if (ingredientInfo.getId() == null) { // 새로운 엔티티라면 ID가 null일 것
-      // ingredientInfo에 대한 Nutrient 정보를 추가해야함
-      ingredientInfoRepository.save(ingredientInfo);
+      // 저장하고 ingredientInfo에 대한 Nutrient 정보도 추가
+      ingredientInfoRepository.saveAndFlush(ingredientInfo); // DB에 즉시 반영 : DB에 반영 후 영양 업데이트
+      nutrientUpdateScheduler.updateNutrientForIngredient(ingredientInfo);
       // Elasctic Search index에 추가
       ingredientDocumentRepository.save(IngredientDocument.fromEntity(ingredientInfo));
     }
