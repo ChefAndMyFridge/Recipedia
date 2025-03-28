@@ -32,7 +32,8 @@ def _sync_search_youtube_recipe(dish: str, max_results) -> list:
     query = f"{dish} 레시피"
 
     # VideosSearch 객체 생성 및 검색 수행 (필터링 추가 : 4-20분 자막 포함)
-    videos_search = CustomSearch(query, 'EgYQARgDKAE', limit=max_results)
+    # videos_search = CustomSearch(query, 'EgYQARgDKAE', limit=max_results)
+    videos_search = CustomSearch(query, '', limit=max_results) # 필터 제거
     search_response = videos_search.result()
 
     if not search_response or 'result' not in search_response:
@@ -65,12 +66,13 @@ def _sync_search_youtube_recipe(dish: str, max_results) -> list:
         if video_id in video_info:
             video_info[video_id]["view_count"] = 0  # 기본값
             video_info[video_id]["like_count"] = 0  # 기본값
+            video_info[video_id]["has_caption"] = False  # 기본값
 
     # API를 통한 통계 정보 추가 시도
     try:
         if video_ids:
             videos_request = youtube.videos().list(
-                part="snippet,statistics",
+                part="snippet,statistics,contentDetails",
                 id=",".join(video_ids)
             )
             videos_response = videos_request.execute()
@@ -81,6 +83,7 @@ def _sync_search_youtube_recipe(dish: str, max_results) -> list:
                 if video_id in video_info:
                     snippet = item.get("snippet", {})
                     stats = item.get("statistics", {})
+                    content_details = item.get("contentDetails", {})
 
                     video_info[video_id]["title"] = snippet.get(
                         "title", video_info[video_id]["title"])  # API에서 갸져온거로 제목 덮어쓰기
@@ -90,6 +93,9 @@ def _sync_search_youtube_recipe(dish: str, max_results) -> list:
                         stats.get("viewCount", 0))
                     video_info[video_id]["like_count"] = int(
                         stats.get("likeCount", 0))
+                    video_info[video_id]["has_caption"] = bool(
+                        content_details.get("caption", "false").lower() == "true")
+                    
     except Exception as e:
         print(f"⚠️ YouTube API 호출 중 오류 발생: {e}")
 
