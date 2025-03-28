@@ -16,6 +16,7 @@ public class VideoInfo {
   private String url;
   private String channel_title;
   private String duration;
-  private long view_count;
-  private long like_count;
+  private Long view_count;
+  private Long like_count;
+  private Boolean has_caption;
 }
