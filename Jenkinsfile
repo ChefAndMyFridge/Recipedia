@@ -74,16 +74,14 @@ pipeline {
         stage('Build & Start New App Containers') {
             steps {
                 script {
-                    def viteApiUrl = ""
-                    def fastapiApiUrl = "http://my-fastapi:8000"
-                    if (env.BRANCH_NAME == "release") {
-                        viteApiUrl = "https://j12s003.p.ssafy.io/api"
-                    } else if (env.BRANCH_NAME == "master") {
+                    def viteApiUrl = "https://j12s003.p.ssafy.io/api"
+                    def fastapiApiUrl = "http://my-fastapi-release:8000"
+                    def mysqlHost = "my-mysql-release"
+                    if (env.BRANCH_NAME == "master") {
                         viteApiUrl = "https://j12s003.p.ssafy.io/master/api"
                         fastapiApiUrl = "http://my-fastapi-master:8000"
-                    } else {
-                        viteApiUrl = "https://j12s003.p.ssafy.io/api"
-                    }
+                        mysqlHost = "my-mysql-master"
+                    } 
 
                     sh """
                     cd ${env.WORKSPACE}
@@ -99,6 +97,7 @@ pipeline {
                     ALLOWED_ORIGINS='${env.ALLOWED_ORIGINS}' \
                     BRANCH_NAME=${env.BRANCH_NAME} \
                     FASTAPI_API_URL=${fastapiApiUrl} \
+                    MYSQL_HOST=${mysqlHost} \
                     cp .env.${env.BRANCH_NAME} .env
                     docker-compose -f docker-compose-app.yml up -d --build
                     """

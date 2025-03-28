@@ -37,7 +37,7 @@ services:
 
   db:
     image: mysql:8
-    container_name: my-mysql
+    container_name: my-mysql-release
     environment:
       - TZ=Asia/Seoul
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
@@ -49,6 +49,20 @@ services:
       - app-network
     restart: always
   
+  master_db:
+    image: mysql:8
+    container_name: my-mysql-master
+    environment:
+      - TZ=Asia/Seoul
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+    volumes:
+      - /home/ubuntu/mysql_data:/var/lib/mysql
+      - ./database/my.cnf:/etc/mysql/conf.d/custom.cnf
+    networks:
+      - app-network
+    restart: always
+
 networks:
   app-network:
     name: app-network  # ✅ 공통 네트워크 설정
