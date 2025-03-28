@@ -42,6 +42,9 @@ class Settings(BaseSettings):
     YOUTUBE_MAX_RESULTS: int = 5
     YOUTUBE_DESCRIPTION_LEN_TH: int = 200
 
+    # YouTube 비디오 필터링 설정 (관련성 검증)
+    FILTER_YOUTUBE_VIDEOS: bool = True
+
     # 생성할 음식 이름 개수
     NUM_DISHES_TO_GENERATE: int = 7
 
