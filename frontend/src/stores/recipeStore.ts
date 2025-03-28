@@ -9,7 +9,9 @@ interface RecipeStore {
   setRecipeList: (recipeList: RecipeList) => void;
   setDetailRecipe: (detailRecipe: RecipeInfo) => void;
   setRecipeSelectedIngredients: (recipeSelectedIngredients: SelectedIngredients[]) => void;
-  resetRecipeStore: () => void;
+  resetRecipeList: () => void;
+  resetDetailRecipe: () => void;
+  resetRecipeSelectedIngredients: () => void;
 }
 
 const useRecipeStore = create<RecipeStore>((set) => ({
@@ -31,7 +33,8 @@ const useRecipeStore = create<RecipeStore>((set) => ({
   setDetailRecipe: (detailRecipe: RecipeInfo) => set({ detailRecipe }),
   setRecipeSelectedIngredients: (recipeSelectedIngredients: SelectedIngredients[]) =>
     set({ recipeSelectedIngredients }),
-  resetRecipeStore: () =>
+  resetRecipeList: () => set({ recipeList: { dishes: [], videos: {} } }),
+  resetDetailRecipe: () =>
     set({
       detailRecipe: {
         recipeId: 0,
@@ -45,6 +48,7 @@ const useRecipeStore = create<RecipeStore>((set) => ({
         textRecipe: null,
       },
     }),
+  resetRecipeSelectedIngredients: () => set({ recipeSelectedIngredients: [] }),
 }));
 
 export default useRecipeStore;
