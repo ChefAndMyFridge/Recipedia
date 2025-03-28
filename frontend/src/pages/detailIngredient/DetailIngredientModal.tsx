@@ -11,7 +11,7 @@ import DetailIngredientItem from "@pages/detailIngredient/components/DetailIngre
 
 import Button from "@components/common/button/Button";
 
-import noImg from "@assets/images/noIngredient/carrot.png";
+import noImg from "@assets/images/noIngredient/noIngredient.jpg";
 
 const DetailIngredientModal = ({ ingredientId }: { ingredientId: number }) => {
   const { closeModal } = useModalStore();

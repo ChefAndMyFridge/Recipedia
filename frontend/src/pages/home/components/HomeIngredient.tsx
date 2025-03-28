@@ -14,7 +14,7 @@ import DetailIngredientModal from "@pages/detailIngredient/DetailIngredientModal
 import IconDecrease from "@assets/icons/IconDecrease";
 import IconIncrease from "@assets/icons/IconIncrease";
 
-import noImg from "@assets/images/noIngredient/carrot.png";
+import noImg from "@assets/images/noIngredient/noIngredient.jpg";
 
 const HomeIngredient = ({ ingredient }: { ingredient: Ingredients }) => {
   const { selectedIngredients, setSelectedCount } = useIngredientsStore();
