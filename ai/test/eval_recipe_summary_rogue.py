@@ -1,15 +1,20 @@
+import matplotlib.pylab
 from rouge_score import rouge_scorer
 from test.utils.recipe_summary_correct_answer import correct_answer, data_url
 from app.services.recipe_summary import RecipeSummary
 import asyncio
 import json
 import pandas as pd
+import matplotlib
 import matplotlib.pyplot as plt
 from datetime import datetime
 import os
 
 MENU_NAME = "알리오 올리오"
 MODEL_NAME = "GPT-4"  # 여기에 모델 이름 지정
+
+matplotlib.rcParams['font.family'] = 'Malgun Gothic'  # 또는 다른 한글 폰트
+matplotlib.rcParams['axes.unicode_minus'] = False
 
 
 def parse_video_id(data: str) -> str:
