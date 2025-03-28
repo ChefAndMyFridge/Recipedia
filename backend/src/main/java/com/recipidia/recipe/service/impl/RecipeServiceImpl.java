@@ -13,6 +13,8 @@ import com.recipidia.recipe.dto.VideoInfo;
 import com.recipidia.recipe.entity.Recipe;
 import com.recipidia.recipe.entity.RecipeIngredient;
 import com.recipidia.recipe.exception.NoRecipeException;
+import com.recipidia.recipe.exception.SummaryNotCookingVideoException;
+import com.recipidia.recipe.exception.SummaryNotValidTranscriptException;
 import com.recipidia.recipe.repository.RecipeRepository;
 import com.recipidia.recipe.request.RecipeQueryReq;
 import com.recipidia.recipe.response.*;
@@ -257,6 +259,20 @@ public class RecipeServiceImpl implements RecipeService {
               .contentType(MediaType.APPLICATION_JSON)
               .bodyValue(payload)
               .retrieve()
+              // FastAPI가 430 에러(자막이 충분하지 않은 내용을 포함)를 반환하는 경우
+              .onStatus(status -> status.value() == 430, clientResponse ->
+                  clientResponse.bodyToMono(String.class)
+                      .flatMap(errorMessage ->
+                          Mono.error(new SummaryNotValidTranscriptException(errorMessage))
+                      )
+              )
+              // FastAPI가 432 에러(영상이 요리영상이 아님)를 반환하는 경우
+              .onStatus(status -> status.value() == 432, clientResponse ->
+                  clientResponse.bodyToMono(String.class)
+                      .flatMap(errorMessage ->
+                          Mono.error(new SummaryNotCookingVideoException(errorMessage))
+                      )
+              )
               .bodyToMono(RecipeExtractRes.class)
               .flatMap(extractRes -> saveExtractResult(recipeId, extractRes)
                   .thenReturn(extractRes));

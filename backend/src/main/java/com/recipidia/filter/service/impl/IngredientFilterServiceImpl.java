@@ -32,6 +32,14 @@ public class IngredientFilterServiceImpl implements IngredientFilterService {
         .map(IngredientInfoWithNutrientDto::name)
         .collect(Collectors.toList());
 
+    // 💡 main_ingredients에 있지만 필터링된 리스트에 빠진 경우 강제로 추가
+    for (String main : mainIngredients) {
+      if (!filteredIngredients.contains(main)) {
+        log.warn("⚠️ 주재료 '{}' 누락되어 재료 리스트에 추가 (주재료 포함 보장)", main);
+        filteredIngredients.add(main);
+      }
+    }
+
     return new FilteredIngredientResult(filteredIngredients, preferredIngredients);
   }
 
