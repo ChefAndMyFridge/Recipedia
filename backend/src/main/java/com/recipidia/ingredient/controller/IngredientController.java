@@ -11,6 +11,8 @@ import com.recipidia.ingredient.response.IngredientIncomingRes;
 import com.recipidia.ingredient.response.IngredientUpdateRes;
 import com.recipidia.ingredient.service.IngredientService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -69,6 +71,11 @@ public class IngredientController {
   @Operation(
       summary = "실제 존재하는 재료 정보 조회",
       description = "FIGMA : 재료 리스트 페이지에서 실제 존재하는 재료 정보만 조회합니다.",
+      parameters = {
+          @Parameter(in = ParameterIn.QUERY, name = "storage", description = "보관 위치(all, fridge, freezer)", example = "fridge"),
+          @Parameter(in = ParameterIn.QUERY, name = "sort", description = "정렬 기준 (expire, name, count, incoming)", example = "name"),
+          @Parameter(in = ParameterIn.QUERY, name = "order", description = "정렬 순서 (asc, desc)", example = "asc")
+      },
       responses = {
           @ApiResponse(responseCode = "200", description = "실제 존재하는 재료 정보 조회 성공",
               content = @Content(schema = @Schema(implementation = IngredientInfoDto[].class))
@@ -76,12 +83,6 @@ public class IngredientController {
       }
   )
   @GetMapping
-  /**
-   * filterParam의 key
-   * storagePlace: 냉장고, 냉동고
-   * sort : 정렬 기준 (expire, name, count, incoming)
-   * order : 정렬 순서 (asc, desc)
-   */
   public List<IngredientInfoDto> getAllExistingIngredients(@RequestParam Map<String, String> filterParam) {
     return ingredientService.findAllExistingIngredients(filterParam);
   }
