@@ -43,7 +43,7 @@ services:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
     volumes:
-      - /home/ubuntu/mysql_data:/var/lib/mysql
+      - /home/ubuntu/mysql_data/release:/var/lib/mysql
       - ./database/my.cnf:/etc/mysql/conf.d/custom.cnf
     networks:
       - app-network
@@ -57,7 +57,7 @@ services:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
     volumes:
-      - /home/ubuntu/mysql_data:/var/lib/mysql
+      - /home/ubuntu/mysql_data/master:/var/lib/mysql
       - ./database/my.cnf:/etc/mysql/conf.d/custom.cnf
     networks:
       - app-network
