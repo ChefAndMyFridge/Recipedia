@@ -38,7 +38,7 @@ async def validate_video_relevance(dish: str, video_title: str, video_descriptio
         response = await loop.run_in_executor(
             None,
             lambda: openai.chat.completions.create(
-                model=settings.QUERY_OPENAI_MODEL,
+                model=settings.YOUTUBE_VALID_OPENAI_MODEL,
                 messages=[
                     {"role": "system", "content": system_message},
                     {"role": "user", "content": user_prompt}
