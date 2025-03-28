@@ -32,7 +32,8 @@ def _sync_search_youtube_recipe(dish: str, max_results) -> list:
     query = f"{dish} 레시피"
 
     # VideosSearch 객체 생성 및 검색 수행 (필터링 추가 : 4-20분 자막 포함)
-    videos_search = CustomSearch(query, 'EgYQARgDKAE', limit=max_results)
+    # videos_search = CustomSearch(query, 'EgYQARgDKAE', limit=max_results)
+    videos_search = CustomSearch(query, '', limit=max_results) # 필터 제거
     search_response = videos_search.result()
 
     if not search_response or 'result' not in search_response:
