@@ -93,7 +93,6 @@ pipeline {
                     HOST_URL=${env.HOST_URL} \
                     MYSQL_ROOT_PASSWORD=${env.MYSQL_ROOT_PASSWORD} \
                     MYSQL_DATABASE=${env.MYSQL_DATABASE} \
-                    VITE_API_URL=${viteApiUrl} \
                     YOUTUBE_API_KEY='${env.YOUTUBE_API_KEY}' \
                     YOUTUBE_API_KEYS='${env.YOUTUBE_API_KEYS}' \
                     OPENAI_API_KEY=${env.OPENAI_API_KEY} \
