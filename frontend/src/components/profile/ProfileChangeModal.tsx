@@ -38,8 +38,9 @@ const ProfileChangeModal = () => {
                 onClick={() => handleProfileChange(profile)}
               >
                 <img
-                  src={defaultProfile}
+                  src={defaultProfile} // 이미지 서버가 추가된다면 변경 필요
                   alt={profile.membername}
+                  onError={(event) => (event.currentTarget.src = defaultProfile)} // 이미지 로드 실패 시 대체 이미지
                   className="w-28 aspect-[1/1] rounded-full object-cover"
                 />
                 <p className="font-preSemiBold text-lg">{profile.membername}</p>

@@ -6,8 +6,8 @@ export const NUTRITIONS = {
   sodium: 0,
   sugars: 0,
   cholesterol: 0,
-  saturatedFat: 0,
-  unsaturatedFat: 0,
+  saturatedFat: 0.9999999999999999,
+  unsaturatedFat: 0.944444444444,
   transFat: 0,
   allergenInfo: "",
 };
