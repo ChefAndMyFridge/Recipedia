@@ -114,6 +114,7 @@ public class RecipeServiceImpl implements RecipeService {
           payload.put("disliked_ingredients", memberFilter.getFilterData().getDislikedIngredients());
           payload.put("dietaries", memberFilter.getFilterData().getDietaries());
           payload.put("categories", memberFilter.getFilterData().getCategories());
+          payload.put("allergies", memberFilter.getFilterData().getAllergies());
 
           // 최종 요청 본문 확인
           log.info("🚩 Final Enhanced Payload: {}", payload);
@@ -156,6 +157,7 @@ public class RecipeServiceImpl implements RecipeService {
                       .duration(videoInfo.getDuration())
                       .viewCount(videoInfo.getView_count())
                       .likeCount(videoInfo.getLike_count())
+                      .hasCaption(videoInfo.getHas_caption())
                       .build();
                   recipeRepository.save(recipe);
                 }
@@ -213,6 +215,7 @@ public class RecipeServiceImpl implements RecipeService {
                       .duration(video.getDuration())
                       .viewCount(video.getView_count())
                       .likeCount(video.getLike_count())
+                      .hasCaption(video.getHas_caption())
                       .favorite(favorite)
                       .rating(rating)
                       .build();
