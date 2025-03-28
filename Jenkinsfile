@@ -101,7 +101,6 @@ pipeline {
                     ELASTIC_PASSWORD=${env.ELASTIC_PASSWORD} \
                     ALLOWED_ORIGINS='${env.ALLOWED_ORIGINS}' \
                     BRANCH_NAME=${env.BRANCH_NAME} \
-                    FASTAPI_API_URL=${fastapiApiUrl} \
                     cp .env.${env.BRANCH_NAME} .env
                     docker-compose -f docker-compose-app.yml up -d --build
                     """
