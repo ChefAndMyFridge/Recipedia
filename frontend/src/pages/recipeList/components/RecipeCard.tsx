@@ -54,7 +54,10 @@ const RecipeCard = ({ video }: RecipeCardProps) => {
           </button>
         </div>
         <VideoInfos duration={video.duration} viewCount={video.viewCount} likeCount={video.likeCount} />
-        <div className="w-full flex justify-end items-center">
+        <div className="w-full flex justify-end items-center gap-2">
+          <p className="text-sm font-preSemiBold text-white bg-content2 p-2 rounded-full">
+            {video.hasCaption ? "레시피 정보 제공" : "레시피 정보 미제공"}
+          </p>
           <Button
             type="button"
             design="confirm"

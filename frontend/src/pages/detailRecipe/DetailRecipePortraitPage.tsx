@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import ReactPlayer from "react-player";
 
 import useModalStore from "@stores/modalStore";
@@ -14,13 +13,18 @@ import RecipeTitle from "@pages/detailRecipe/components/RecipeTitle";
 //세로모드 레이아웃
 const DetailRecipePortraitPage = () => {
   const { openModal } = useModalStore();
-  const navigate = useNavigate();
 
-  const { detailRecipe } = recipeStore();
+  const { detailRecipe, resetDetailRecipe, setHasFetchedDetailRecipe } = recipeStore();
+
+  function toRecipeList() {
+    //  detailRecipe 초기화
+    resetDetailRecipe();
+    setHasFetchedDetailRecipe(false);
+  }
 
   return (
     <section className={`w-full h-full flex flex-col justify-between items-center gap-2 p-3`}>
-      <Header title="레시피" isIcon />
+      <Header title="레시피" isIcon onClick={toRecipeList} />
       <ReactPlayer
         url={detailRecipe.url}
         width="100%"
@@ -36,8 +40,7 @@ const DetailRecipePortraitPage = () => {
       <RecipeInfos />
 
       {/* 버튼 컨테이너 */}
-      <div className="w-full flex justify-end items-center gap-2">
-        <Button type="button" design="cancel" content="요리 취소" className="w-28 h-8" onAction={() => navigate(-1)} />
+      <div className="w-full flex justify-end items-center">
         <Button
           type="button"
           design="confirm"

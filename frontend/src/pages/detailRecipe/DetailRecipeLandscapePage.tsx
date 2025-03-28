@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import ReactPlayer from "react-player";
 
 import useModalStore from "@stores/modalStore";
@@ -14,12 +13,18 @@ import RecipeTitle from "@pages/detailRecipe/components/RecipeTitle";
 //가로모드 레이아웃
 const DetailRecipeLandscapePage = () => {
   const { openModal } = useModalStore();
-  const navigate = useNavigate();
 
-  const { detailRecipe } = recipeStore();
+  const { detailRecipe, resetDetailRecipe, setHasFetchedDetailRecipe } = recipeStore();
+
+  function toRecipeList() {
+    //  detailRecipe 초기화
+    resetDetailRecipe();
+    setHasFetchedDetailRecipe(false);
+  }
+
   return (
     <section className={`w-full h-full flex flex-col justify-start items-center gap-2 p-3`}>
-      <Header title="레시피" isIcon />
+      <Header title="레시피" isIcon onClick={toRecipeList} />
       <div className="h-[90%] flex gap-8">
         <div className="w-[60%] h-full flex flex-col justify-start gap-5">
           <ReactPlayer
@@ -40,13 +45,6 @@ const DetailRecipeLandscapePage = () => {
 
           {/* 버튼 컨테이너 */}
           <div className="w-full flex justify-end items-center gap-2">
-            <Button
-              type="button"
-              design="cancel"
-              content="요리 취소"
-              className="px-3 py-2"
-              onAction={() => navigate(-1)}
-            />
             <Button
               type="button"
               design="confirm"

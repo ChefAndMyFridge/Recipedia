@@ -1,6 +1,6 @@
 import { SelectedIngredients } from "@/types/ingredientsTypes";
 
-import noImg from "@assets/images/noIngredient/carrot.png";
+import noImg from "@assets/images/noIngredient/noIngredient.jpg";
 
 interface HomeIngredientProps {
   ingredient: SelectedIngredients;
@@ -14,6 +14,7 @@ const TakeoutIngredient = ({ ingredient }: HomeIngredientProps) => {
         <img
           src={ingredient.imageUrl ? ingredient.imageUrl : noImg}
           alt={ingredient.imageUrl}
+          onError={(event) => (event.currentTarget.src = noImg)}
           className="w-full h-full object-cover rounded-3xl"
         />
         <span className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/50 to-transparent rounded-b-3xl" />

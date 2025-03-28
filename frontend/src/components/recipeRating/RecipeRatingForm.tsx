@@ -10,12 +10,20 @@ import IconStarFill from "@assets/icons/IconStarFill";
 import Button from "@components/common/button/Button";
 
 import { patchRecipeApi } from "@apis/recipeApi";
+import useRecipeStore from "@/stores/recipeStore";
+import { useQueryClient } from "@tanstack/react-query";
 
 const RecipeRatingForm = () => {
   const navigate = useNavigate();
   const { closeModal } = useModalStore();
   const { recipeId } = useParams();
   const { userId } = useUserStore();
+  const { resetRecipeSelectedIngredients, resetDetailRecipe, resetRecipeList, recipeSelectedIngredients } =
+    useRecipeStore();
+
+  const selectedIngredientsNames = recipeSelectedIngredients.map((ingredient) => ingredient.name);
+
+  const queryClient = useQueryClient();
 
   const [rating, setRating] = useState<boolean[]>([true, true, true, true, true]);
 
@@ -35,6 +43,13 @@ const RecipeRatingForm = () => {
     //레시피 저장 API 호출
     patchRecipeApi(userId, Number(recipeId), ratingNumber);
 
+    //레시피 관련 store, 캐싱 제거
+    resetRecipeSelectedIngredients();
+    resetDetailRecipe();
+    resetRecipeList();
+
+    // 캐싱 제거
+    queryClient.invalidateQueries({ queryKey: ["recipeList", selectedIngredientsNames] });
     closeModal();
     navigate("/");
   }
