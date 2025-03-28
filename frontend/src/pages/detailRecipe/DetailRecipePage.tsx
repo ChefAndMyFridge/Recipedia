@@ -23,18 +23,20 @@ const DetailRecipePage = () => {
   // 스토어 값이 API 응답으로 업데이트되었는지 확인
   useEffect(() => {
     // console.log("data", data);
-    // console.log("detailRecipe", detailRecipe.recipeId);
-    // if (data && detailRecipe.recipeId === Number(recipeId) && detailRecipe.recipeId !== 0) {
-    //   setIsStoreReady(true);
-    // } else {
-    //   setIsStoreReady(false);
-    // }
-
-    if (data && detailRecipe.recipeId === Number(recipeId) && detailRecipe.recipeId !== 0) {
-      console.log("data", data);
+    // console.log("detailRecipe", detailRecipe);
+    // console.log(data?.recipeId == detailRecipe.recipeId);
+    // console.log(detailRecipe.recipeId === Number(recipeId));
+    // console.log(detailRecipe.recipeId !== 0);
+    if (
+      data !== undefined &&
+      data.recipeId == detailRecipe.recipeId &&
+      detailRecipe.recipeId === Number(recipeId) &&
+      detailRecipe.recipeId !== 0
+    ) {
+      console.log("데이터 패칭 완료");
       setHasFetchedDetailRecipe(true);
     }
-  }, [data]);
+  }, [data, detailRecipe, recipeId]);
 
   // 화면 방향 변경 감지
   useEffect(() => {
