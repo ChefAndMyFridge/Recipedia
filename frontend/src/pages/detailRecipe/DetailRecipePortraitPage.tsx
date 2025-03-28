@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import ReactPlayer from "react-player";
 
 import useModalStore from "@stores/modalStore";
@@ -14,7 +13,6 @@ import RecipeTitle from "@pages/detailRecipe/components/RecipeTitle";
 //세로모드 레이아웃
 const DetailRecipePortraitPage = () => {
   const { openModal } = useModalStore();
-  const navigate = useNavigate();
 
   const { detailRecipe } = recipeStore();
 
@@ -36,8 +34,7 @@ const DetailRecipePortraitPage = () => {
       <RecipeInfos />
 
       {/* 버튼 컨테이너 */}
-      <div className="w-full flex justify-end items-center gap-2">
-        <Button type="button" design="cancel" content="요리 취소" className="w-28 h-8" onAction={() => navigate(-1)} />
+      <div className="w-full flex justify-end items-center">
         <Button
           type="button"
           design="confirm"
