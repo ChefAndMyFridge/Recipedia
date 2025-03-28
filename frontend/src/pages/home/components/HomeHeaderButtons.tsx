@@ -11,9 +11,11 @@ import StoreIngredientModal from "@pages/storeIngredient/StoreIngredientModal";
 
 import ProfileModal from "@components/profile/ProfileModal";
 
+import defaultProfile from "@assets/images/DefaultProfile.png";
+
 const HomeHeaderButtons = () => {
   const { openModal } = useModalStore();
-  const { userId, currentProfileImg, setUserId, setUserName } = useUserStore();
+  const { userId, currentProfileImg, setUserId, setUserName, setCurrentProfileImg } = useUserStore();
 
   const { data: profiles } = useGetMemberList();
 
@@ -22,6 +24,9 @@ const HomeHeaderButtons = () => {
     if (userId === 0 && profiles && profiles.length > 0) {
       setUserId(profiles[0].memberId);
       setUserName(profiles[0].membername);
+
+      // 추후 프로필 이미지 관련해서 수정해야함 (이미지 서버가 열린다면..)
+      setCurrentProfileImg(defaultProfile);
     }
   }, [profiles]);
 
