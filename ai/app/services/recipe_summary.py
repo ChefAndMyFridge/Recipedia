@@ -47,7 +47,7 @@ class RecipeSummary:
 
         # transcript 데이터를 하나의 문자열로 통합
         scripts = " ".join([f"[{(int(item['startMs']) // 1000)}]" + item["text"].replace(
-            "\n", "").replace("\r", "") for item in transcript["segments"]])
+            "\n", "").replace("\r", "") for item in transcript["segments"] if item["text"] and item["startMs"]])
 
         # 자막 데이터 유효성 검사: 특정 길이보다 길 때 유효하다고 판단
         if len(scripts) > settings.YOUTUBE_TRANSCRIPT_LEN_TH:
@@ -191,7 +191,7 @@ if __name__ == "__main__":
     async def main():
         try:
             recipe_summary = RecipeSummary()
-            summary = await recipe_summary.summarize_recipe("qWbHSOplcvY")
+            summary = await recipe_summary.summarize_recipe("pi4_Nz_42rw")
             print(summary)
         except HTTPException as e:
             raise e
