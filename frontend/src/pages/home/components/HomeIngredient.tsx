@@ -71,6 +71,7 @@ const HomeIngredient = ({ ingredient }: { ingredient: Ingredients }) => {
         <img
           src={ingredient.imageUrl ? ingredient.imageUrl : noImg}
           alt="no image"
+          onError={(event) => (event.currentTarget.src = noImg)}
           className="w-full aspect-[1/1] object-cover rounded-3xl"
         />
 

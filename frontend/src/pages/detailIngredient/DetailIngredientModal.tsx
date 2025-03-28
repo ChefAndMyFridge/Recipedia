@@ -32,6 +32,7 @@ const DetailIngredientModal = ({ ingredientId }: { ingredientId: number }) => {
         <div className="relative">
           <DetailIngredientImage
             imgSrc={ingredient.imageUrl ? ingredient.imageUrl : noImg}
+            altImgSrc={noImg}
             detailInfo={ingredient.nutrients}
           />
 

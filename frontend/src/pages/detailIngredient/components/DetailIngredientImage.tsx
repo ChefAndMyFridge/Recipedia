@@ -83,7 +83,15 @@ const NutritionsInfo = ({ detailInfo }: { detailInfo: Nutritions }) => {
   );
 };
 
-const DetailIngredientImage = ({ imgSrc, detailInfo }: { imgSrc: string; detailInfo: Nutritions | null }) => {
+const DetailIngredientImage = ({
+  imgSrc,
+  altImgSrc,
+  detailInfo,
+}: {
+  imgSrc: string;
+  altImgSrc: string;
+  detailInfo: Nutritions | null;
+}) => {
   const [isOpenDetailInfo, setIsOpenDetailInfo] = useState<boolean>(false);
 
   function handleDetailInfo() {
@@ -92,7 +100,12 @@ const DetailIngredientImage = ({ imgSrc, detailInfo }: { imgSrc: string; detailI
 
   return (
     <div className="relative h-[30vh] w-full overflow-hidden">
-      <img src={imgSrc} alt={imgSrc} className="w-full h-full object-cover object-center" />
+      <img
+        src={imgSrc}
+        alt={imgSrc}
+        onError={(event) => (event.currentTarget.src = altImgSrc)} // 경로가 존재하지만, 해당 경로에 이미지가 없을 경우에 대한 에러처리
+        className="w-full h-full object-cover object-center"
+      />
 
       {/* 영양 정보 표시 */}
       {detailInfo && isOpenDetailInfo && (
