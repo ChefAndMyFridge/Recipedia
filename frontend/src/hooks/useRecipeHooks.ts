@@ -14,7 +14,7 @@ export const usePostRecipeList = (userId: number, ingredients: string[]) => {
   const query = useQuery<RecipeList>({
     queryKey: ["recipeList", ingredientsKey],
     queryFn: () => makeRecipeApi(userId, ingredients),
-    staleTime: 1000 * 60 * 5, // 5분
+    staleTime: 1000 * 60 * 20, // 20분
     retry: 1,
   });
 
