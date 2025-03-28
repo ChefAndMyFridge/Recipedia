@@ -155,7 +155,7 @@ class RecipeSummary:
             scripts = self.get_transcript(video_id)
             # 적절하지 않은 자막 추출 시 에러 코드 반환
             if scripts == settings.YOUTUBE_TRANSCRIPT_NO_VALID_STR:
-                return settings.YOUTUBE_NOT_VALID_TRANSCRIPT_CDOE
+                return settings.SUMMARY_NOT_VALID_TRANSCRIPT_CDOE
 
             user_input.append({"role": "user", "content": ""})
             user_input[-1]["content"] = scripts
@@ -169,7 +169,7 @@ class RecipeSummary:
 
             end = time.time()
             if summary["title"] == "None":
-                return settings.SUMMARY_NOT_COOKCING_VIDEO
+                return settings.SUMMARY_NOT_COOKCING_VIDEO_CODE
 
             if self.debug_mode:
                 time_dict = {"exec time cons": f"{end - start:.5f}"}
