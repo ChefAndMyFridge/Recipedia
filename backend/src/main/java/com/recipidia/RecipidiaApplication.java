@@ -10,4 +10,8 @@ public class RecipidiaApplication {
 		SpringApplication.run(RecipidiaApplication.class, args);
 	}
 
+	@PostConstruct
+	public void showDbUrl() {
+		System.out.println("DB 접속 URL: " + System.getenv("MYSQL_HOST"));
+	}
 }
