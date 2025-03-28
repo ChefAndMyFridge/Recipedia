@@ -43,7 +43,7 @@ def visualize_rouge_scores(score_dict: dict, model_name: str, save_dir: str = "l
 
 def save_scores_to_csv(score_dict: dict, model_name: str, menu_name: str, csv_dir: str = "logs/recipe_summary_eval_results"):
     os.makedirs(csv_dir, exist_ok=True)
-    date_str = datetime.now().strftime("%Y-%m-%d")
+    date_str = datetime.now()
 
     row = {
         "Date": date_str,
@@ -65,7 +65,7 @@ def save_scores_to_csv(score_dict: dict, model_name: str, menu_name: str, csv_di
     else:
         df = pd.DataFrame([row])
 
-    df.to_csv(csv_path, index=False)
+    df.to_csv(csv_path, index=False, encoding='utf-8-sig')
     print(f"📄 Saved ROUGE scores to {csv_path}")
 
 
