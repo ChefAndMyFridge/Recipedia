@@ -10,10 +10,10 @@ from rouge_score import rouge_scorer
 from test.utils.recipe_summary_correct_answer import correct_answer, data_url
 from app.services.recipe_summary import RecipeSummary
 from datetime import datetime
+from app.core.config import settings
 
 
 MENU_NAME = "알리오 올리오"
-MODEL_NAME = "GPT-4"
 EVAL_DIR = "logs/recipe_summary_eval_results/"
 CSV_DIR = EVAL_DIR + "csv/"
 PLOT_DIR = EVAL_DIR + "plot/"
@@ -37,7 +37,8 @@ def json_to_text(json_data: dict) -> str:
 
 
 def visualize_rouge_scores_csv():
-    csv_path = os.path.join(CSV_DIR, f"{MENU_NAME}_{MODEL_NAME}.csv")
+    csv_path = os.path.join(
+        CSV_DIR, f"{MENU_NAME}_{settings.SUMMARY_OPENAI_MODEL}.csv")
 
     if not os.path.exists(csv_path):
         print(f"CSV 파일이 없습니다: {csv_path}")
@@ -53,7 +54,8 @@ def visualize_rouge_scores_csv():
     for rouge in rouge_types:
         plt.plot(x, df[f"{rouge}_F1"], label=rouge.upper(), marker="o")
 
-    plt.title(f"ROUGE F1 Score - {MODEL_NAME} - {MENU_NAME}")
+    plt.title(
+        f"ROUGE F1 Score - {settings.SUMMARY_OPENAI_MODEL} - {MENU_NAME}")
     plt.xlabel("Evaluation Count")
     plt.ylabel("F1 Score")
     plt.ylim(0, 1)
@@ -63,7 +65,7 @@ def visualize_rouge_scores_csv():
 
     os.makedirs(PLOT_DIR, exist_ok=True)
     save_path = os.path.join(
-        PLOT_DIR, f"{MENU_NAME}_{MODEL_NAME}.png")
+        PLOT_DIR, f"{MENU_NAME}_{settings.SUMMARY_OPENAI_MODEL}.png")
     plt.savefig(save_path)
     plt.show()
     print(f"Line plot saved to {save_path}")
@@ -76,7 +78,7 @@ def save_scores_to_csv(score_dict: dict):
     row = {
         "Date": date_str,
         "Menu": MENU_NAME,
-        "Model": MODEL_NAME,
+        "Model": settings.SUMMARY_OPENAI_MODEL,
     }
 
     for k, v in score_dict.items():
@@ -84,7 +86,8 @@ def save_scores_to_csv(score_dict: dict):
         row[f"{k}_R"] = round(v.recall, 4)
         row[f"{k}_F1"] = round(v.fmeasure, 4)
 
-    csv_path = os.path.join(CSV_DIR, f"{MENU_NAME}_{MODEL_NAME}.csv")
+    csv_path = os.path.join(
+        CSV_DIR, f"{MENU_NAME}_{settings.SUMMARY_OPENAI_MODEL}.csv")
 
     if os.path.exists(csv_path):
         df = pd.read_csv(csv_path)
