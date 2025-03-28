@@ -14,8 +14,8 @@ export const usePostRecipeList = (userId: number, ingredients: string[]) => {
   const query = useQuery<RecipeList>({
     queryKey: ["recipeList", ingredientsKey],
     queryFn: () => makeRecipeApi(userId, ingredients),
-    // staleTime: 1000 * 60 * 60, // 1시간
-    retry: false,
+    staleTime: 1000 * 60 * 5, // 5분
+    retry: 1,
   });
 
   //query 호출 후 데이터 저장
