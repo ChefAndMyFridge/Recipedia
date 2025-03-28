@@ -6,57 +6,76 @@ import IconCloseCircle from "@assets/icons/IconCloseCircle";
 import IconInfomation from "@assets/icons/IconInfomation";
 
 const NutritionsInfo = ({ detailInfo }: { detailInfo: Nutritions }) => {
+  const [isOpenDetailInfo, setIsOpenDetailInfo] = useState<boolean>(false);
+
+  const allergenInfo = detailInfo.allergenInfo.split(", ");
+
+  // 소수점 둘째 자리까지 반올림
+  function mathRound(data: number): number {
+    return Math.round(data * 100) / 100;
+  }
+
   return (
-    <div className="grid grid-cols-2 max-w-4/5 max-h-4/5 gap-5 text-center text-xs font-preLight">
+    <div className="grid grid-cols-2 w-5/6 h-2/3 gap-5 text-center text-xs font-preLight">
       <table className="w-full h-full text-left">
-        <tbody>
+        <tbody className="w-1/2 h-full">
           <tr className="border-b border-gray-300">
-            <th className="p-1">칼로리</th>
-            <td className="p-1">{detailInfo.calories} kcal</td>
+            <th className="p-1 w-1/2">칼로리</th>
+            <td className="p-1 w-1/2">{mathRound(detailInfo.calories)} kcal</td>
           </tr>
           <tr className="border-b border-gray-300">
-            <th className="p-1">탄수화물</th>
-            <td className="p-1">{detailInfo.carbohydrate} g</td>
+            <th className="p-1 w-1/2">탄수화물</th>
+            <td className="p-1 w-1/2">{mathRound(detailInfo.carbohydrate)} g</td>
           </tr>
           <tr className="border-b border-gray-300">
-            <th className="p-1">단백질</th>
-            <td className="p-1">{detailInfo.protein} g</td>
+            <th className="p-1 w-1/2">단백질</th>
+            <td className="p-1 w-1/2">{mathRound(detailInfo.protein)} g</td>
           </tr>
           <tr className="border-b border-gray-300">
-            <th className="p-1">지방</th>
-            <td className="p-1">{detailInfo.fat} g</td>
+            <th className="p-1 w-1/2">지방</th>
+            <td className="p-1 w-1/2">{mathRound(detailInfo.fat)} g</td>
           </tr>
           <tr className="border-b border-gray-300">
-            <th className="p-1">나트륨</th>
-            <td className="p-1">{detailInfo.sodium} mg</td>
+            <th className="p-1 w-1/2">나트륨</th>
+            <td className="p-1 w-1/2">{mathRound(detailInfo.sodium)} mg</td>
           </tr>
           <tr>
-            <th className="p-1">당류</th>
-            <td className="p-1">{detailInfo.sugars} g</td>
+            <th className="p-1 w-1/2">당류</th>
+            <td className="p-1 w-1/2">{mathRound(detailInfo.sugars)} g</td>
           </tr>
         </tbody>
       </table>
       <table className="w-full h-5/6 text-left">
-        <tbody>
+        <tbody className="w-1/2 h-full">
           <tr className="border-b border-gray-300">
-            <th className="p-1">콜레스테롤</th>
-            <td className="p-1">{detailInfo.cholesterol} mg</td>
+            <th className="p-1 w-1/2">콜레스테롤</th>
+            <td className="p-1 w-1/2">{mathRound(detailInfo.cholesterol)} mg</td>
           </tr>
           <tr className="border-b border-gray-300">
-            <th className="p-1">포화지방</th>
-            <td className="p-1">{detailInfo.saturatedFat} g</td>
+            <th className="p-1 w-1/2">포화지방</th>
+            <td className="p-1 w-1/2">{mathRound(detailInfo.saturatedFat)} g</td>
           </tr>
           <tr className="border-b border-gray-300">
-            <th className="p-1">불포화지방</th>
-            <td className="p-1">{detailInfo.unsaturatedFat} g</td>
+            <th className="p-1 w-1/2">불포화지방</th>
+            <td className="p-1 w-1/2">{mathRound(detailInfo.unsaturatedFat)} g</td>
           </tr>
           <tr className="border-b border-gray-300">
-            <th className="p-1">트랜스지방</th>
-            <td className="p-1">{detailInfo.transFat} g</td>
+            <th className="p-1 w-1/2">트랜스지방</th>
+            <td className="p-1 w-1/2">{mathRound(detailInfo.transFat)} g</td>
           </tr>
-          <tr>
-            <th className="p-1">알레르기 정보</th>
-            <td className="p-1">{detailInfo.allergenInfo}</td>
+          <tr className="relative cursor-pointer" onClick={() => setIsOpenDetailInfo(!isOpenDetailInfo)}>
+            <th className="p-1 w-1/2">알레르기 정보</th>
+            <td className="p-1 w-1/2">
+              {allergenInfo.length > 2 ? allergenInfo[0] + ", " + allergenInfo[1] + "..." : allergenInfo[0]}
+            </td>
+            {isOpenDetailInfo && (
+              <div
+                className="absolute top-full left-0 flex justify-center items-center w-full h-fit bg-black bg-opacity-50 text-white font-preRegular"
+                onClick={() => setIsOpenDetailInfo(false)}
+              >
+                {detailInfo.allergenInfo}
+              </div>
+            )}
           </tr>
         </tbody>
       </table>
