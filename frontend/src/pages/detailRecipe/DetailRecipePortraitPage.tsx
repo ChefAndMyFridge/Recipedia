@@ -14,11 +14,12 @@ import RecipeTitle from "@pages/detailRecipe/components/RecipeTitle";
 const DetailRecipePortraitPage = () => {
   const { openModal } = useModalStore();
 
-  const { detailRecipe, resetDetailRecipe } = recipeStore();
+  const { detailRecipe, resetDetailRecipe, setHasFetchedDetailRecipe } = recipeStore();
 
   function toRecipeList() {
     //  detailRecipe 초기화
     resetDetailRecipe();
+    setHasFetchedDetailRecipe(false);
   }
 
   return (
