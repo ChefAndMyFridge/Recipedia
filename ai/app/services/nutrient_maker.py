@@ -101,7 +101,7 @@ class NutrientMaker:
             data = response.json()
 
             # ✅ `labelNutrients`가 있으면 이를 우선 사용
-            if "labelNutrients" in data:
+            if data.get("labelNutrients"):
                 nutrients = data["labelNutrients"]
 
                 total_fat = nutrients.get("fat", {}).get("value", 0.0)
