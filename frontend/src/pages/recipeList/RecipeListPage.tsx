@@ -27,11 +27,6 @@ const RecipeListPage = () => {
 
   const HeaderTitle = recommendType === "AI" ? "AI 레시피" : "레시피";
 
-  // 컴포넌트 마운트 시 detailRecipe 초기화
-  useEffect(() => {
-    resetDetailRecipe();
-  }, []); // 의존성 배열을 비워서 마운트 시 한 번만 실행되도록 함
-
   //선택된 재료 기반 레시피 조회 Hook 호출
   const selectedIngredientsNames = recipeSelectedIngredients.map((ingredient) => ingredient.name);
   const { isLoading, isError } = usePostRecipeList(userId, selectedIngredientsNames);
@@ -52,7 +47,7 @@ const RecipeListPage = () => {
     resetRecipeList();
 
     // 캐싱 제거
-    queryClient.invalidateQueries({ queryKey: ["recipeList", selectedIngredientsNames] });
+    queryClient.removeQueries({ queryKey: ["recipeList"] });
   }
 
   if (isLoading) return <LoadingPlayer />;

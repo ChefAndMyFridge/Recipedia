@@ -14,11 +14,16 @@ import RecipeTitle from "@pages/detailRecipe/components/RecipeTitle";
 const DetailRecipePortraitPage = () => {
   const { openModal } = useModalStore();
 
-  const { detailRecipe } = recipeStore();
+  const { detailRecipe, resetDetailRecipe } = recipeStore();
+
+  function toRecipeList() {
+    //  detailRecipe 초기화
+    resetDetailRecipe();
+  }
 
   return (
     <section className={`w-full h-full flex flex-col justify-between items-center gap-2 p-3`}>
-      <Header title="레시피" isIcon />
+      <Header title="레시피" isIcon onClick={toRecipeList} />
       <ReactPlayer
         url={detailRecipe.url}
         width="100%"

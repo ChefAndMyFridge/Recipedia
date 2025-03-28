@@ -14,35 +14,47 @@ import DetailRecipePortraitPage from "@pages/detailRecipe/DetailRecipePortraitPa
 
 const DetailRecipePage = () => {
   const { recipeId } = useParams();
-  const [isStoreReady, setIsStoreReady] = useState(false);
-  const { detailRecipe } = useRecipeStore();
+  const [isPortrait, setIsPortrait] = useState(window.matchMedia("(orientation: portrait)").matches);
+  const { detailRecipe, setHasFetchedDetailRecipe } = useRecipeStore();
 
   // API 호출로 상세 정보 가져오기
   const { isLoading, isFetching, isError, data } = useGetRecipeDetail(Number(recipeId));
 
   // 스토어 값이 API 응답으로 업데이트되었는지 확인
   useEffect(() => {
-    if (data && detailRecipe.recipeId === Number(recipeId) && detailRecipe.recipeId !== 0) {
-      setIsStoreReady(true);
-    } else {
-      setIsStoreReady(false);
-    }
-  }, [data, detailRecipe, recipeId]);
+    // console.log("data", data);
+    // console.log("detailRecipe", detailRecipe.recipeId);
+    // if (data && detailRecipe.recipeId === Number(recipeId) && detailRecipe.recipeId !== 0) {
+    //   setIsStoreReady(true);
+    // } else {
+    //   setIsStoreReady(false);
+    // }
 
-  if (isLoading || isFetching || !data || !isStoreReady) return <LoadingPlayer />;
+    if (data && detailRecipe.recipeId === Number(recipeId) && detailRecipe.recipeId !== 0) {
+      console.log("data", data);
+      setHasFetchedDetailRecipe(true);
+    }
+  }, [data]);
+
+  // 화면 방향 변경 감지
+  useEffect(() => {
+    const handleOrientationChange = () => {
+      setIsPortrait(window.matchMedia("(orientation: portrait)").matches);
+    };
+
+    window.addEventListener("resize", handleOrientationChange);
+    return () => {
+      window.removeEventListener("resize", handleOrientationChange);
+    };
+  }, []);
+
+  if (isLoading || isFetching || !data) return <LoadingPlayer />;
   if (isError) return <ErrorPage />;
 
   return (
     <>
       <ErrorBoundary FallbackComponent={ErrorPage}>
-        {/* 세로모드 레이아웃 */}
-        <div className="portrait:block landscape:hidden h-full">
-          <DetailRecipePortraitPage />
-        </div>
-        {/* 가로모드 레이아웃 */}
-        <div className="landscape:block portrait:hidden h-full">
-          <DetailRecipeLandscapePage />
-        </div>
+        {isPortrait ? <DetailRecipePortraitPage /> : <DetailRecipeLandscapePage />}
         <Modal />
       </ErrorBoundary>
     </>

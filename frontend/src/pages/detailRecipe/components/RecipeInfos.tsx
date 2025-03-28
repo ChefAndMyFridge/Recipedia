@@ -17,7 +17,7 @@ const RecipeInfos = () => {
   const [selectedIndex, setSelectedIndex] = useState<RecipeInfoKeys>("video_infos");
 
   // recipeStore 구독
-  const { detailRecipe, setDetailRecipe } = recipeStore();
+  const { detailRecipe, hasFetchedDetailRecipe, setDetailRecipe } = recipeStore();
   // 로컬 상태로 텍스트 레시피 데이터를 관리하여 변경 감지
   const [textRecipeData, setTextRecipeData] = useState(detailRecipe.textRecipe);
 
@@ -33,21 +33,43 @@ const RecipeInfos = () => {
     }
   }
 
+  // useEffect(() => {
+  //   //텍스트 레시피 추가 추출
+  //   const detailRecipeCheck =
+  //     detailRecipe.recipeId !== 0 &&
+  //     detailRecipe.textRecipe &&
+  //     detailRecipe.textRecipe?.title &&
+  //     detailRecipe.textRecipe?.cooking_sequence &&
+  //     detailRecipe.textRecipe?.ingredients &&
+  //     detailRecipe.textRecipe?.cooking_tips;
+
+  //   console.log("recipeText 체크", !detailRecipeCheck, detailRecipeCheck === null);
+
+  //   if (!detailRecipeCheck || detailRecipeCheck === null) {
+  //     getRecipeText();
+  //   }
+  // }, []);
+
   useEffect(() => {
-    //텍스트 레시피 추가 추출
+    console.log("hasFetchedDetailRecipe", hasFetchedDetailRecipe);
+    if (!hasFetchedDetailRecipe) return; // 응답 오기 전이면 무시
+
+    console.log("detailRecipe", detailRecipe);
     const detailRecipeCheck =
+      detailRecipe.recipeId !== 0 &&
       detailRecipe.textRecipe &&
-      detailRecipe.textRecipe.title &&
-      detailRecipe.textRecipe.cooking_sequence &&
-      detailRecipe.textRecipe.ingredients &&
-      detailRecipe.textRecipe.cooking_tips;
+      detailRecipe.textRecipe?.title &&
+      detailRecipe.textRecipe?.cooking_sequence &&
+      detailRecipe.textRecipe?.ingredients &&
+      detailRecipe.textRecipe?.cooking_tips;
 
-    console.log("recipeText 체크", !detailRecipeCheck);
+    console.log("recipeText 체크", !detailRecipeCheck, detailRecipeCheck === null);
 
-    if (!detailRecipeCheck) {
+    if (!detailRecipeCheck || detailRecipeCheck === null) {
+      console.log("getRecipeText 호출");
       getRecipeText();
     }
-  }, []);
+  }, [hasFetchedDetailRecipe, detailRecipe]);
 
   // store의 textRecipe가 변경될 때 로컬 상태 업데이트
   useEffect(() => {
