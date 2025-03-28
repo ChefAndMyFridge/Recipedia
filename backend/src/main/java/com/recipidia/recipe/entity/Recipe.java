@@ -41,6 +41,9 @@ public class Recipe {
     @Column
     private Long likeCount;        // VideoInfo의 likeCount
 
+    @Column
+    private Boolean hasCaption = false;    // VideoInfo의 hasCaption
+
     // textRecipe를 RecipeExtractRes 타입으로 변경하고, JSON 직렬화를 위한 Converter 적용
     @Column(columnDefinition = "MEDIUMTEXT")
     @Convert(converter = RecipeExtractResConverter.class)
@@ -53,7 +56,8 @@ public class Recipe {
 
     @Builder
     public Recipe(String name, String youtubeUrl, String title,
-                  String channelTitle, String duration, Long viewCount, Long likeCount) {
+                  String channelTitle, String duration,
+                  Long viewCount, Long likeCount, Boolean hasCaption) {
         this.name = name;
         this.youtubeUrl = youtubeUrl;
         this.title = title;
@@ -61,6 +65,7 @@ public class Recipe {
         this.duration = duration;
         this.viewCount = viewCount;
         this.likeCount = likeCount;
+        this.hasCaption = hasCaption;
     }
     // 외부에서 이 메소드를 통해서만 textRecipe를 변경하도록 함
     public void modifyTextRecipe(RecipeExtractRes extractRes) {
@@ -68,11 +73,13 @@ public class Recipe {
     }
 
     // VideoInfo 부분 업데이트 필요 시 활용하기 (조회 수, 좋아요 수 등 수정)
-    public void updateVideoInfo(String channelTitle, String duration, Long viewCount, Long likeCount) {
+    public void updateVideoInfo(String channelTitle, String duration, Long viewCount,
+                                Long likeCount, Boolean hasCaption) {
         this.channelTitle = channelTitle;
         this.duration = duration;
         this.viewCount = viewCount;
         this.likeCount = likeCount;
+        this.hasCaption = hasCaption;
     }
 
 }

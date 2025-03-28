@@ -3,7 +3,8 @@ import time
 import asyncio
 import copy
 
-from youtubesearchpython import Transcript, Video
+from typing import Optional
+from youtubesearchpython import Transcript
 from app.services.LLM.recipe_generator import RequestGPT
 from fastapi import HTTPException
 from app.utils.prompts.few_shot import SUMMARY_FEW_SHOT_DATA
@@ -31,37 +32,74 @@ class RecipeSummary:
         # 디버그 모드
         self.debug_mode = settings.DEBUG
 
-    def get_transcript_params(self, res: dict) -> str:
-        """ Transcript 응답을 기반으로 우선 순위가 높은 언어의 Param을 반환합니다.
+    def fetch_and_format_transcript(self, video_id: str, lang) -> Optional[str]:
+        """ video id에 대한 영상에서 자막 언어 데이터를 받고 적절한 형태의 자막을 추출하거나 그럴 수 없다면 None을 리턴합니다.
 
         Args:
-            res: 자막, 자막 언어 데이터
+            video_id: 비디오 id
+            lang: 비디오 자막 언어 데이터
 
         Returns:
-            dict: 우선 순위가 가장 높은 언어 Param
+            str: 영상 자막 데이터
         """
-        # 작성된 영어, 한국어의 자막이 있다면 가져오기
-        en_ko_manually_data = [
-            lang for lang in res["languages"] if lang['title'] in self.priority_lang]
+        # 인자 언어에 대한 자막 추출
+        transcript = Transcript.get(video_id, lang['params'])
 
-        if len(en_ko_manually_data) > 0:
+        # transcript 데이터를 하나의 문자열로 통합
+        scripts = " ".join([f"[{(int(item['startMs']) // 1000)}]" + item["text"].replace(
+            "\n", "").replace("\r", "") for item in transcript["segments"] if item["text"] and item["startMs"]])
+
+        # 자막 데이터 유효성 검사: 특정 길이보다 길 때 유효하다고 판단
+        if len(scripts) > settings.YOUTUBE_TRANSCRIPT_LEN_TH:
             logger.info(
-                f"{settings.LOG_SUMMARY_PREFIX}_사용된 자막 : {en_ko_manually_data[0]['title']}")
-            return en_ko_manually_data[0]["params"]
+                f"{settings.LOG_SUMMARY_PREFIX}_자막 언어 : {lang['title']}")
+            return scripts
+        return None
 
-        # 자동 생성된 영어, 한국어의 자막이 있다면 가져오기
-        en_ko_generated_data = [lang for lang in res['languages'] if any(
-            keyword in lang['title'] for keyword in ['English', 'Korean'])]
+    def get_transcript(self, video_id: str) -> str:
+        """ Transcript 응답을 기반으로 우선 순위가 높은 언어의 자막을 반환합니다.
 
-        if len(en_ko_generated_data) > 0:
-            logger.info(
-                f"{settings.LOG_SUMMARY_PREFIX}_사용된 자막 : {en_ko_generated_data[0]['title']}")
-            return en_ko_generated_data[0]["params"]
+        Args:
+            video_id: 비디오 id
 
-        # 없다면, 있는 자막 중 아무거나 가져오기
-        logger.info(
-            f"{settings.LOG_SUMMARY_PREFIX}_사용된 자막 : {res['languages'][-1]['title']}")
-        return res["languages"][-1]["params"]
+        Returns:
+            str: 적절한 자막이 있다면 해당 자막 데이터, 그렇지 않다면 에러 문자열 데이터
+        """
+        # 영상 자막 데이터 가져오기
+        res = Transcript.get(video_id)
+        visit_params = set()
+
+        # 우선 순위 1: 작성된 영어, 한국어의 자막 확인
+        for lang in res["languages"]:
+            if lang['title'] in self.priority_lang:
+                visit_params.add(lang['params'])
+                script = self.fetch_and_format_transcript(video_id, lang)
+                if script:
+                    return script
+        logger.info(f"{settings.LOG_SUMMARY_PREFIX}_매뉴얼 한국어/영어 자막 없음")
+
+        # 우선 순위 2: 자동 생성된 영어, 한국어의 자막 확인
+        for lang in res["languages"]:
+            if lang['params'] in visit_params:
+                continue
+
+            if 'English' in lang['title'] or 'Korean' in lang['title']:
+                visit_params.add(lang['params'])
+                script = self.fetch_and_format_transcript(video_id, lang)
+                if script:
+                    return script
+        logger.info(f"{settings.LOG_SUMMARY_PREFIX}_자동 생성 한국어/영어 자막 없음")
+
+        # 우선 순위 3: 아무 자막이나 가져오기
+        for lang in res["languages"]:
+            if lang['params'] in visit_params:
+                continue
+            script = self.fetch_and_format_transcript(video_id, lang)
+            if script:
+                return script
+        logger.info(f"{settings.LOG_SUMMARY_PREFIX}_영상 자막 없음")
+
+        return settings.YOUTUBE_TRANSCRIPT_NO_VALID_STR
 
     async def summarize_recipe(self, video_id: str) -> str:
         """ 주어진 영상 ID를 기반으로 자막을 가져와 OpenAI API로 요약된 레시피를 반환합니다.
@@ -74,28 +112,11 @@ class RecipeSummary:
         """
         start = time.time()
 
-        scripts = ""
-
-        try:
-            # 영상 자막 데이터 가져오기
-            res = Transcript.get(video_id)
-
-            # 영상에서 지원하는 자막 Param을 우선순위에 따라서 가져오기
-            param = self.get_transcript_params(res)
-
-            # 특정 언어에 대한 자막 가져오기
-            transcription = Transcript.get(video_id, param)
-
-            # 자막 텍스트를 모두 결합
-            scripts = " ".join([f"[{(int(item['startMs']) // 1000)}]" + item["text"].replace(
-                "\n", "").replace("\r", "") for item in transcription["segments"]])
-        except Exception as e:
-            logger.error(f"{settings.LOG_SUMMARY_PREFIX}_유튜브 자막 추출 오류: {e}")
-
-        # OpenAI 요청을 위한 메시지 구성
+        # OpenAI 요청을 위한 기본 메시지 구성
         system_input = SUMMARY_SYSTEM_INPUT
         user_input = copy.deepcopy(SUMMARY_USER_INPUT)
 
+        # 순서 1 : 유튜브 영상 설명이 있다면 User Input에 반영
         try:
             # youtube api 키 라운드 로빈
             await rotate_youtube_api_key()
@@ -126,20 +147,29 @@ class RecipeSummary:
             logger.error(
                 f"{settings.LOG_SUMMARY_PREFIX}_유튜브 영상 설명 추가 중 오류: {e}")
 
-        # Few shot 데이터 적용
+        # 순서 2 : Few shot 데이터 적용
         user_input += SUMMARY_FEW_SHOT_DATA
 
-        # 마지막 입력에 자막 스크립트 삽입
-        user_input.append({"role": "user", "content": ""})
-        user_input[-1]["content"] = scripts
+        # 순서 3 : 자막 스크립트 삽입
+        try:
+            scripts = self.get_transcript(video_id)
+            # 적절하지 않은 자막 추출 시 에러 코드 반환
+            if scripts == settings.YOUTUBE_TRANSCRIPT_NO_VALID_STR:
+                return settings.SUMMARY_NOT_VALID_TRANSCRIPT_CDOE
 
+            user_input.append({"role": "user", "content": ""})
+            user_input[-1]["content"] = scripts
+        except Exception as e:
+            logger.error(f"{settings.LOG_SUMMARY_PREFIX}_유튜브 자막 추출 오류: {e}")
+
+        # 순서 4 : GPT API를 통해 요약 데이터 추출
         try:
             # OpenAI API 호출 (RequestGPT.run이 비동기 함수라고 가정)
             summary = await self.request_gpt.run(system_input, user_input)
 
             end = time.time()
             if summary["title"] == "None":
-                return settings.SUMMARY_NOT_COOKCING_VIDEO
+                return settings.SUMMARY_NOT_COOKCING_VIDEO_CODE
 
             if self.debug_mode:
                 time_dict = {"exec time cons": f"{end - start:.5f}"}
@@ -161,7 +191,7 @@ if __name__ == "__main__":
     async def main():
         try:
             recipe_summary = RecipeSummary()
-            summary = await recipe_summary.summarize_recipe("qWbHSOplcvY")
+            summary = await recipe_summary.summarize_recipe("pi4_Nz_42rw")
             print(summary)
         except HTTPException as e:
             raise e
