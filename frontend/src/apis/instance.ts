@@ -3,8 +3,8 @@ import axios from "axios";
 // const { VITE_API_URL } = import.meta.env;
 
 const base = import.meta.env.BASE_URL;
-
-const baseURL = base === "/master/" 
+console.log("base", base);
+const baseURL = base.startsWith("/master")
   ? "https://j12s003.p.ssafy.io/master/api"
   : "https://j12s003.p.ssafy.io/api";
 
