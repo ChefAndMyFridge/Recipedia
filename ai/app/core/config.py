@@ -47,6 +47,7 @@ class Settings(BaseSettings):
     YOUTUBE_TRANSCRIPT_NO_VALID_STR: str = "NO VALID TRANSCRIPT"
 
     # YouTube 비디오 필터링 설정 (관련성 검증)
+    YOUTUBE_VALID_OPENAI_MODEL: str = "gpt-4o-mini"
     FILTER_YOUTUBE_VIDEOS: bool = True
 
     # 생성할 음식 이름 개수
