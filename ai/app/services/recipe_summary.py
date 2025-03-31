@@ -118,6 +118,8 @@ class RecipeSummary:
 
         # 순서 1 : 유튜브 영상 설명이 있다면 User Input에 반영
         try:
+            description_start = time.time()
+
             # youtube api 키 라운드 로빈
             await rotate_youtube_api_key()
 
@@ -142,6 +144,9 @@ class RecipeSummary:
                 user_input.append(
                     {"role": "user", "content": video_description})
                 logger.info(f"{settings.LOG_SUMMARY_PREFIX}_영상 설명 데이터 추가")
+            description_end = time.time()
+            logger.info(
+                f"{settings.LOG_SUMMARY_PREFIX}_설명 데이터 추가 소요 시간 : {description_end - description_start:.2f} 초 소요")
 
         except Exception as e:
             logger.error(
@@ -152,6 +157,7 @@ class RecipeSummary:
 
         # 순서 3 : 자막 스크립트 삽입
         try:
+            scripts_start = time.time()
             scripts = self.get_transcript(video_id)
             # 적절하지 않은 자막 추출 시 에러 코드 반환
             if scripts == settings.YOUTUBE_TRANSCRIPT_NO_VALID_STR:
@@ -159,11 +165,15 @@ class RecipeSummary:
 
             user_input.append({"role": "user", "content": ""})
             user_input[-1]["content"] = scripts
+            scripts_end = time.time()
+            logger.info(
+                f"{settings.LOG_SUMMARY_PREFIX}_자막 데이터 추가 소요 시간 : {scripts_end - scripts_start:.2f} 초 소요")
         except Exception as e:
             logger.error(f"{settings.LOG_SUMMARY_PREFIX}_유튜브 자막 추출 오류: {e}")
 
         # 순서 4 : GPT API를 통해 요약 데이터 추출
         try:
+            api_start = time.time()
             # OpenAI API 호출 (RequestGPT.run이 비동기 함수라고 가정)
             summary = await self.request_gpt.run(system_input, user_input)
 
@@ -174,6 +184,9 @@ class RecipeSummary:
             if self.debug_mode:
                 time_dict = {"exec time cons": f"{end - start:.5f}"}
                 summary = summary | time_dict
+            api_end = time.time()
+            logger.info(
+                f"{settings.LOG_SUMMARY_PREFIX}_GPT API 소요 시간 : {api_end - api_start:.2f} 초 소요")
             logger.info(
                 f"{settings.LOG_SUMMARY_PREFIX}_전체 처리 완료 : {end - start:.2f} 초 소요")
 
