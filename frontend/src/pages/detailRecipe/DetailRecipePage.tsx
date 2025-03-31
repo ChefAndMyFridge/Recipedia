@@ -15,7 +15,7 @@ import DetailRecipePortraitPage from "@pages/detailRecipe/DetailRecipePortraitPa
 const DetailRecipePage = () => {
   const { recipeId } = useParams();
   const [isPortrait, setIsPortrait] = useState(window.matchMedia("(orientation: portrait)").matches);
-  const { detailRecipe, setHasFetchedDetailRecipe } = useRecipeStore();
+  const { detailRecipe, hasFetchedDetailRecipe, setHasFetchedDetailRecipe } = useRecipeStore();
 
   // API 호출로 상세 정보 가져오기
   const { isLoading, isFetching, isError, data } = useGetRecipeDetail(Number(recipeId));
@@ -50,7 +50,7 @@ const DetailRecipePage = () => {
     };
   }, []);
 
-  if (isLoading || isFetching || !data) return <LoadingPlayer />;
+  if (isLoading || isFetching || !data || !hasFetchedDetailRecipe) return <LoadingPlayer />;
   if (isError) return <ErrorPage />;
 
   return (

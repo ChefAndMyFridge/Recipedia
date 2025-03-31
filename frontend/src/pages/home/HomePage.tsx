@@ -8,6 +8,7 @@ import HomeFooter from "@pages/home/components/HomeFooter.tsx";
 
 import ErrorPage from "@components/common/error/ErrorPage";
 import Modal from "@components/common/modal/Modal";
+import Timer from "@components/common/timer/Timer";
 
 const HomePage = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -21,6 +22,7 @@ const HomePage = () => {
         <HomeFooter isFilterOpen={isFilterOpen} />
       </div>
       <Modal />
+      <Timer defaultTimer={10} />
     </ErrorBoundary>
   );
 };

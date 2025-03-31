@@ -1,10 +1,12 @@
-import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import ReactPlayer from "react-player";
 
 import VideoInfos from "@components/common/videoInfo/VideoInfos";
 
 import RecipeInfoIndexes from "@pages/detailRecipe/components/RecipeInfoIndexes";
 import RecipeTexts from "@pages/detailRecipe/components/RecipeTexts";
+import NoRecipeInfo from "@pages/detailRecipe/components/NoRecipeInfo";
 
 import { recipeIngredientsInfo, RecipeInfoKeys } from "@/types/recipeListTypes";
 
@@ -12,14 +14,24 @@ import recipeStore from "@stores/recipeStore";
 
 import { getRecipeTextApi } from "@apis/recipeApi";
 
-const RecipeInfos = () => {
+interface RecipeInfosProps {
+  currentTime: number;
+  setCurrentTime: (time: number) => void;
+  playerRef: React.RefObject<ReactPlayer>;
+}
+
+const RecipeInfos = ({ currentTime, setCurrentTime, playerRef }: RecipeInfosProps) => {
   const { recipeId } = useParams();
   const [selectedIndex, setSelectedIndex] = useState<RecipeInfoKeys>("video_infos");
 
   // recipeStore 구독
   const { detailRecipe, hasFetchedDetailRecipe, setDetailRecipe } = recipeStore();
+
   // 로컬 상태로 텍스트 레시피 데이터를 관리하여 변경 감지
   const [textRecipeData, setTextRecipeData] = useState(detailRecipe.textRecipe);
+
+  //자동 스크롤
+  const [isAutoScroll, setIsAutoScroll] = useState(false);
 
   async function getRecipeText() {
     try {
@@ -65,11 +77,13 @@ const RecipeInfos = () => {
       <RecipeInfoIndexes
         selectedIndex={selectedIndex}
         setSelectedIndex={(index: RecipeInfoKeys) => setSelectedIndex(index)}
+        isAutoScroll={isAutoScroll}
+        setIsAutoScroll={setIsAutoScroll}
       />
       {/* 선택된 인덱스별 자세한 정보 표시
       추후 데이터 변경 필요 */}
       <div className="w-full portrait:min-h-40 portrait:max-h-60 landscape:max-h-[80%] overflow-y-auto p-4 bg-white rounded-b-2xl shadow-md">
-        <div className="flex flex-wrap gap-2 h-fit">
+        <div className="flex flex-wrap h-fit justify-center items-center gap-2 ">
           {selectedIndex === "video_infos" && (
             <VideoInfos
               duration={detailRecipe.duration}
@@ -80,12 +94,18 @@ const RecipeInfos = () => {
           {selectedIndex === "cooking_sequence" &&
             (detailRecipe.hasCaption ? (
               textRecipeData && textRecipeData.cooking_sequence ? (
-                <RecipeTexts recipe={textRecipeData.cooking_sequence} />
+                <RecipeTexts
+                  recipe={textRecipeData.cooking_sequence}
+                  currentTime={currentTime}
+                  setCurrentTime={setCurrentTime}
+                  playerRef={playerRef}
+                  isAutoScroll={isAutoScroll}
+                />
               ) : (
                 <p className="text-base font-preSemiBold">레시피를 추출 중입니다...</p>
               )
             ) : (
-              <p className="text-base font-preSemiBold">레시피 정보가 없는 영상입니다.</p>
+              <NoRecipeInfo />
             ))}
 
           {selectedIndex === "ingredients" &&
@@ -103,7 +123,7 @@ const RecipeInfos = () => {
                 <p className="text-base font-preSemiBold">재료를 파악 중입니다...</p>
               )
             ) : (
-              <p className="text-base font-preSemiBold">레시피 정보가 없는 영상입니다.</p>
+              <NoRecipeInfo />
             ))}
 
           {selectedIndex === "cooking_tips" &&
@@ -121,7 +141,7 @@ const RecipeInfos = () => {
                 <p className="text-base font-preSemiBold">요리 꿀팁을 생성 중입니다...</p>
               )
             ) : (
-              <p className="text-base font-preSemiBold">레시피 정보가 없는 영상입니다.</p>
+              <NoRecipeInfo />
             ))}
         </div>
       </div>
