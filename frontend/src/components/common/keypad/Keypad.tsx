@@ -1,7 +1,8 @@
-import KeypadElem from "@components/common/keypad/components/KeypadElem";
+import { useEffect, useRef } from "react";
 
 import { KeypadProps } from "@/types/commonProps";
-import { useEffect, useRef } from "react";
+
+import KeypadElem from "@components/common/keypad/components/KeypadElem";
 
 const KeyPad = ({ value, onChange, onClose }: KeypadProps) => {
   const keypadRef = useRef<HTMLDivElement | null>(null);
