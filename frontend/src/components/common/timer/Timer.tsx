@@ -24,9 +24,9 @@ const Timer = ({ defaultTimer }: { defaultTimer: number }) => {
     updateAbsolutePosition();
 
     // 화면 크기 변경 이벤트 처리
-    const handleResize = () => {
+    function handleResize() {
       updateAbsolutePosition();
-    };
+    }
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
