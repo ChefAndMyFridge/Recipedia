@@ -8,7 +8,8 @@ from app.core.config import settings
 from app.api.f1 import endpoints
 from app.utils.docs import RootDocs
 
-app = FastAPI(title=settings.APP_NAME, debug=settings.DEBUG)
+app = FastAPI(title=settings.APP_NAME, debug=settings.DEBUG,
+              docs_url=None, redoc_url=None, openapi_url=None)
 docs = RootDocs()
 
 # CORS 미들웨어 등록

@@ -28,9 +28,9 @@ async def get_recipe_summary(request: Request, data: YoutubeURL = docs.base["dat
             raise HTTPException(
                 status_code=settings.SUMMARY_NOT_COOKCING_VIDEO_CODE,
                 detail=f"해당 영상은 요리 영상이 아니므로 레시피를 추출할 수 없습니다.")
-        elif summary == settings.SUMMARY_NOT_VALID_TRANSCRIPT_CDOE:
+        elif summary == settings.SUMMARY_NOT_VALID_TRANSCRIPT_CODE:
             raise HTTPException(
-                status_code=settings.SUMMARY_NOT_VALID_TRANSCRIPT_CDOE,
+                status_code=settings.SUMMARY_NOT_VALID_TRANSCRIPT_CODE,
                 detail=f"해당 영상에서 충분한 자막을 제공하지 않으므로 레시피를 추출할 수 없습니다.")
 
         # 가령, 영상이 노래 영상이였다거나 등등
