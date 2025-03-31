@@ -1,4 +1,3 @@
-import Toggle from "@/components/common/toggle/Toggle";
 import { RecipeInfoKeys } from "@/types/recipeListTypes";
 import RecipeInfoIndex from "@pages/detailRecipe/components/RecipeInfoIndex";
 
@@ -16,32 +15,45 @@ const RecipeInfoIndexes = ({
   setIsAutoScroll,
 }: RecipeInfoIndexesProps) => {
   return (
-    <div className="flex w-full">
-      <RecipeInfoIndex
-        selectedIndex={selectedIndex}
-        setSelectedIndex={setSelectedIndex}
-        text="영상 정보"
-        type="video_infos"
-      />
-      <RecipeInfoIndex
-        selectedIndex={selectedIndex}
-        setSelectedIndex={setSelectedIndex}
-        text="레시피 단계"
-        type="cooking_sequence"
-      />
-      <RecipeInfoIndex
-        selectedIndex={selectedIndex}
-        setSelectedIndex={setSelectedIndex}
-        text="재료 정보"
-        type="ingredients"
-      />
-      <RecipeInfoIndex
-        selectedIndex={selectedIndex}
-        setSelectedIndex={setSelectedIndex}
-        text="요리 꿀팁"
-        type="cooking_tips"
-      />
-      <Toggle isToggle={isAutoScroll} onToggle={setIsAutoScroll} />
+    <div className="flex w-full items-center justify-between">
+      <div className="flex w-[70%]">
+        <RecipeInfoIndex
+          selectedIndex={selectedIndex}
+          setSelectedIndex={setSelectedIndex}
+          text="영상 정보"
+          type="video_infos"
+        />
+        <RecipeInfoIndex
+          selectedIndex={selectedIndex}
+          setSelectedIndex={setSelectedIndex}
+          text="레시피 단계"
+          type="cooking_sequence"
+        />
+        <RecipeInfoIndex
+          selectedIndex={selectedIndex}
+          setSelectedIndex={setSelectedIndex}
+          text="재료 정보"
+          type="ingredients"
+        />
+        <RecipeInfoIndex
+          selectedIndex={selectedIndex}
+          setSelectedIndex={setSelectedIndex}
+          text="요리 꿀팁"
+          type="cooking_tips"
+        />
+      </div>
+
+      <div className="flex w-[25%] items-center gap-1">
+        <p className="text-sm font-preSemiBold text-longContent"> 자동 스크롤 </p>
+        <button
+          className={`text-sm ${isAutoScroll ? "font-preBold text-primary" : "font-preMedium text-content2"}`}
+          onClick={() => setIsAutoScroll(!isAutoScroll)}
+        >
+          {/* 자동 스크롤 */}
+          {isAutoScroll ? " ON" : " OFF"}
+        </button>
+        {/* <Toggle isToggle={isAutoScroll} onToggle={setIsAutoScroll} /> */}
+      </div>
     </div>
   );
 };

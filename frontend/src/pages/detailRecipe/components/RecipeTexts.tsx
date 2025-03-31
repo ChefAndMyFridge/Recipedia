@@ -7,9 +7,10 @@ interface RecipeTextsProps {
   currentTime: number;
   setCurrentTime: (time: number) => void;
   playerRef: React.RefObject<ReactPlayer>;
+  isAutoScroll: boolean;
 }
 
-const RecipeTexts = ({ recipe, currentTime, setCurrentTime, playerRef }: RecipeTextsProps) => {
+const RecipeTexts = ({ recipe, currentTime, setCurrentTime, playerRef, isAutoScroll }: RecipeTextsProps) => {
   const sectionRef = useRef<HTMLDivElement>(null);
 
   // 스텝 클릭 시, 해당 시간의 영상을 재생
@@ -41,7 +42,7 @@ const RecipeTexts = ({ recipe, currentTime, setCurrentTime, playerRef }: RecipeT
     const currentStep = getCurrentStep();
 
     const stepElement = document.getElementById(`step-${currentStep}`);
-    if (stepElement && sectionRef.current) {
+    if (isAutoScroll && stepElement && sectionRef.current) {
       stepElement.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   }, [currentTime]);

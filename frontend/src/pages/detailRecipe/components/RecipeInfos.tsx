@@ -99,6 +99,7 @@ const RecipeInfos = ({ currentTime, setCurrentTime, playerRef }: RecipeInfosProp
                   currentTime={currentTime}
                   setCurrentTime={setCurrentTime}
                   playerRef={playerRef}
+                  isAutoScroll={isAutoScroll}
                 />
               ) : (
                 <p className="text-base font-preSemiBold">레시피를 추출 중입니다...</p>
