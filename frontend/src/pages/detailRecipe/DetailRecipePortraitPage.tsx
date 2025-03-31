@@ -1,4 +1,5 @@
 import ReactPlayer from "react-player";
+import { useRef, useState } from "react";
 
 import useModalStore from "@stores/modalStore";
 import recipeStore from "@stores/recipeStore";
@@ -14,6 +15,9 @@ import RecipeTitle from "@pages/detailRecipe/components/RecipeTitle";
 const DetailRecipePortraitPage = () => {
   const { openModal } = useModalStore();
 
+  const [currentTime, setCurrentTime] = useState(0);
+  const playerRef = useRef<ReactPlayer>(null);
+
   const { detailRecipe, resetDetailRecipe, setHasFetchedDetailRecipe } = recipeStore();
 
   function toRecipeList() {
@@ -26,6 +30,7 @@ const DetailRecipePortraitPage = () => {
     <section className={`w-full h-full flex flex-col justify-between items-center gap-2 p-3`}>
       <Header title="레시피" isIcon onClick={toRecipeList} />
       <ReactPlayer
+        ref={playerRef}
         url={detailRecipe.url}
         width="100%"
         height="40%"
@@ -34,10 +39,11 @@ const DetailRecipePortraitPage = () => {
         controls={true}
         light={false}
         pip={true}
+        onProgress={(state) => setCurrentTime(state.playedSeconds)}
       />
       <RecipeTitle title={detailRecipe.title} channelTitle={detailRecipe.channelTitle} />
 
-      <RecipeInfos />
+      <RecipeInfos currentTime={currentTime} setCurrentTime={setCurrentTime} playerRef={playerRef} />
 
       {/* 버튼 컨테이너 */}
       <div className="w-full flex justify-end items-center">

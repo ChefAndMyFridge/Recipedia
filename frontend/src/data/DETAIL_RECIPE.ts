@@ -5,7 +5,7 @@ export const DETAIL_RECIPE: RecipeInfo = {
   name: "제육볶음",
   title:
     "[제육볶음] 이 영상을 본다면 앞으로 당신의 대표요리는 '제육볶음' / 돼지고기요리, 두루치기 stir-fried spicy pork",
-  url: "https://www.youtube.com/watch?v=chnArCaEpqA",
+  url: "https://www.youtube.com/watch?v=5WhKAWt8hH4",
   channelTitle: "이 남자의 cook",
   duration: "4:16",
   viewCount: 8556390,
@@ -111,11 +111,11 @@ export const DETAIL_RECIPE_CHECK: RecipeInfo = {
   name: "제육볶음",
   title:
     "[제육볶음] 이 영상을 본다면 앞으로 당신의 대표요리는 '제육볶음' / 돼지고기요리, 두루치기 stir-fried spicy pork",
-  url: "https://www.youtube.com/watch?v=chnArCaEpqA",
+  url: "https://www.youtube.com/watch?v=5WhKAWt8hH4",
   channelTitle: "이 남자의 cook",
   duration: "4:16",
   viewCount: 8556390,
   likeCount: 98385,
-  hasCaption: false,
+  hasCaption: true,
   textRecipe: null,
 };
