@@ -14,7 +14,7 @@ const Login: React.FC = () => {
     setLoading(true);
 
     try {
-      const response = await fetch('https://j12s003.p.ssafy.io/api/auth/login', {
+      const response = await fetch('https://j12s003.p.ssafy.io/api/v1/auth/login', {
         method: 'POST',
         credentials: 'include', // 쿠키 포함 설정
         headers: {
