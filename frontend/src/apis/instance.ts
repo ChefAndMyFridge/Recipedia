@@ -9,7 +9,7 @@ const baseURL = base.startsWith("/master") ? "https://j12s003.p.ssafy.io/master/
 const instance = axios.create({
   // baseURL: VITE_API_URL, // 프로덕션 환경
   baseURL,
-  withCredentials: true, // 쿠키를 포함한 요청을 보낼 수 있도록 설정
+  // withCredentials: true, // 쿠키를 포함한 요청을 보낼 수 있도록 설정
   headers: {
     "Content-Type": "application/json; charset=UTF-8",
     "Access-Control-Allow-Origin": "*",
