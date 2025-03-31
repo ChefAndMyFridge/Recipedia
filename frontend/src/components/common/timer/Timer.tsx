@@ -5,7 +5,7 @@ import OpenTimer from "@components/common/timer/OpenTimer";
 
 import IconTimer from "@assets/icons/IconTimer";
 
-const Timer = () => {
+const Timer = ({ defaultTimer }: { defaultTimer: number }) => {
   const [position, setPosition] = useState({ x: 0, y: 100 }); // 초기 위치
 
   const [isOpen, setIsOpen] = useState(false);
@@ -33,6 +33,14 @@ const Timer = () => {
       }
     };
   }, []);
+
+  // 기본 설정 타이머 값이 있다면 시간 설정
+  useEffect(() => {
+    if (defaultTimer > 0) {
+      setInitTimer(defaultTimer);
+      setTimer(defaultTimer);
+    }
+  }, [defaultTimer]);
 
   // 화면 크기 가져오기
   function getBounds(): { minX: number; maxX: number; minY: number; maxY: number } {
