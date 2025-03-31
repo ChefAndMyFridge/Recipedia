@@ -9,6 +9,7 @@ const Timer = () => {
   const [position, setPosition] = useState({ x: 0, y: 100 }); // 초기 위치
 
   const [isOpen, setIsOpen] = useState(false);
+  const [initTimer, setInitTimer] = useState(0);
   const [timer, setTimer] = useState(0);
   const [timerIsRunning, setTimerIsRunning] = useState(false);
 
@@ -112,7 +113,7 @@ const Timer = () => {
       {!isOpen ? (
         <div
           ref={timerRef}
-          className="fixed p-2.5 z-50 bg-black/50 rounded-full cursor-grab active:cursor-grabbing touch-none"
+          className="fixed flex justify-between items-center px-4 py-3 gap-2 z-50 bg-subContent/50 backdrop-blur-lg rounded-full cursor-grab active:cursor-grabbing touch-none"
           style={{
             left: `${position.x}px`,
             top: `${position.y}px`,
@@ -121,13 +122,35 @@ const Timer = () => {
           onTouchMove={handleTouchMove}
           onClick={() => setIsOpen(true)}
         >
-          <IconTimer width={25} height={25} strokeColor="white" />
+          <IconTimer
+            width={25}
+            height={25}
+            strokeColor={timerIsRunning && timer <= 5 ? "#d44848" : "black"}
+            isRunning={timerIsRunning}
+            percentage={Math.floor((timer / initTimer) * 100)}
+          />
+          <div
+            className={`flex justify-center items-center gap-1 text-xl font-preLight ${timerIsRunning && timer <= 5 ? "text-error" : "text-black"}`}
+          >
+            <div className="flex items-center justify-center rounded-lg text-xl">
+              {String(Math.floor(timer / 3600)).padStart(2, "0")}
+            </div>
+            :
+            <div className="flex items-center justify-center rounded-lg text-xl">
+              {String(Math.floor(timer / 60) % 60).padStart(2, "0")}
+            </div>
+            :
+            <div className="flex items-center justify-center rounded-lg text-xl">
+              {String(timer % 60).padStart(2, "0")}
+            </div>
+          </div>
         </div>
       ) : (
         <OpenTimer
           timer={timer}
           timerIsRunning={timerIsRunning}
           setTimer={setTimer}
+          setInitTimer={setInitTimer}
           setTimerIsRunning={setTimerIsRunning}
           handleActiveTimer={handleRunTimer}
           onClose={() => setIsOpen(false)}
