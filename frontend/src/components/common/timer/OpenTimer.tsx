@@ -29,7 +29,7 @@ const OpenTimer = ({
   // 시간 변경
   function changeValue(type: "hours" | "minutes" | "seconds", step: number) {
     if (type === "hours") {
-      setHours((prev) => Math.max(0, Math.min(prev + step, 99))); // 0~99 제한
+      setHours((prev) => (prev + step + 100) % 100); // 0~99 제한
     } else if (type === "minutes") {
       setMinutes((prev) => (prev + step + 60) % 60); // 0~59 순환
     } else if (type === "seconds") {
@@ -77,7 +77,7 @@ const OpenTimer = ({
 
   return (
     <div
-      className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 w-[70vw] h-[35vh] pb-6 flex flex-col justify-between bg-subContent/50 backdrop-blur-lg
+      className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 w-[70vw] h-fit pb-6 flex flex-col gap-2 justify-between bg-subContent/50 backdrop-blur-lg
  text-black rounded-2xl shadow-lg"
     >
       <div className="flex justify-end items-center font-preSemiBold">
@@ -86,29 +86,44 @@ const OpenTimer = ({
 
       {/* 시간, 분, 초 */}
       {!timerIsRunning && (
-        <div className="flex justify-center items-center gap-2 text-3xl font-preLight">
+        <div className="flex justify-center items-center gap-1.5 text-xl text-longContent font-preLight">
           <div
-            className="w-16 h-16 flex items-center justify-center rounded-lg text-5xl"
+            className="w-16 h-48 flex flex-col items-center justify-center gap-0.5 rounded-lg"
             onTouchStart={handleTouchStart}
             onTouchMove={(event) => handleTouchMove(event, "hours")}
           >
-            {String(hours).padStart(2, "0")}
+            <span>{String((hours + 98) % 100).padStart(2, "0")}</span>
+
+            <span>{String((hours + 99) % 100).padStart(2, "0")}</span>
+            <span className="text-5xl text-black my-0.5">{String(hours).padStart(2, "0")}</span>
+            <span>{String((hours + 1) % 100).padStart(2, "0")}</span>
+            <span>{String((hours + 2) % 100).padStart(2, "0")}</span>
           </div>
-          :
+          <span className="text-5xl text-black">:</span>
           <div
-            className="w-16 h-16 flex items-center justify-center rounded-lg text-5xl"
+            className="w-16 h-48 flex flex-col items-center justify-center gap-0.5 rounded-lg"
             onTouchStart={handleTouchStart}
             onTouchMove={(event) => handleTouchMove(event, "minutes")}
           >
-            {String(minutes).padStart(2, "0")}
+            <span>{String((minutes + 58) % 60).padStart(2, "0")}</span>
+
+            <span>{String((minutes + 59) % 60).padStart(2, "0")}</span>
+            <span className="text-5xl text-black my-0.5">{String(minutes).padStart(2, "0")}</span>
+            <span>{String((minutes + 1) % 60).padStart(2, "0")}</span>
+            <span>{String((minutes + 2) % 60).padStart(2, "0")}</span>
           </div>
-          :
+          <span className="text-5xl text-black">:</span>
           <div
-            className="w-16 h-16 flex items-center justify-center rounded-lg text-5xl"
+            className="w-16 h-48 flex flex-col items-center justify-center gap-0.5 rounded-lg"
             onTouchStart={handleTouchStart}
             onTouchMove={(event) => handleTouchMove(event, "seconds")}
           >
-            {String(seconds).padStart(2, "0")}
+            <span>{String((seconds + 58) % 60).padStart(2, "0")}</span>
+
+            <span>{String((seconds + 59) % 60).padStart(2, "0")}</span>
+            <span className="text-5xl text-black my-0.5">{String(seconds).padStart(2, "0")}</span>
+            <span>{String((seconds + 1) % 60).padStart(2, "0")}</span>
+            <span>{String((seconds + 2) % 60).padStart(2, "0")}</span>
           </div>
         </div>
       )}

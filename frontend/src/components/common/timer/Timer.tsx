@@ -2,30 +2,45 @@ import React, { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 
 import OpenTimer from "@components/common/timer/OpenTimer";
-
 import IconTimer from "@assets/icons/IconTimer";
 
 const Timer = ({ defaultTimer }: { defaultTimer: number }) => {
-  const [position, setPosition] = useState({ x: 0, y: 100 }); // 초기 위치
+  // 상대적 위치 사용 (0~1 사이의 값으로 표현)
+  const [relativePosition, setRelativePosition] = useState({ xPercent: 0.05, yPercent: 0.85 });
+  const [absolutePosition, setAbsolutePosition] = useState({ x: 0, y: 0 });
 
   const [isOpen, setIsOpen] = useState(false);
+
   const [initTimer, setInitTimer] = useState(0);
   const [timer, setTimer] = useState(0);
   const [timerIsRunning, setTimerIsRunning] = useState(false);
 
-  const timerRef = useRef<HTMLDivElement | null>(null);
   const offset = useRef({ x: 0, y: 0 });
-
+  const timerRef = useRef<HTMLDivElement | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // 마운트 될때 위치 조정
+  // 컴포넌트 마운트 시 초기 위치 설정
   useEffect(() => {
-    if (timerRef.current) {
-      setPosition((prev) => clampPosition(prev.x, prev.y));
-    }
-  }, []);
+    updateAbsolutePosition();
 
-  // Timer 컴포넌트가 언마운트될 때 interval 해제해 메모리 누수 방지
+    // 화면 크기 변경 이벤트 처리
+    const handleResize = () => {
+      updateAbsolutePosition();
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [relativePosition]);
+
+  // 기본 타이머 설정
+  useEffect(() => {
+    if (defaultTimer > 0) {
+      setInitTimer(defaultTimer);
+      setTimer(defaultTimer);
+    }
+  }, [defaultTimer]);
+
+  // 타이머 인터벌 정리
   useEffect(() => {
     return () => {
       if (intervalRef.current) {
@@ -34,86 +49,79 @@ const Timer = ({ defaultTimer }: { defaultTimer: number }) => {
     };
   }, []);
 
-  // 기본 설정 타이머 값이 있다면 시간 설정
-  useEffect(() => {
-    if (defaultTimer > 0) {
-      setInitTimer(defaultTimer);
-      setTimer(defaultTimer);
-    }
-  }, [defaultTimer]);
-
-  // 화면 크기 가져오기
-  function getBounds(): { minX: number; maxX: number; minY: number; maxY: number } {
+  // 상대적 위치를 절대적 위치로 변환하는 함수
+  function updateAbsolutePosition() {
     const width = window.innerWidth;
     const height = window.innerHeight;
+
     const element = timerRef.current;
-    const elementWidth = element?.offsetWidth || 50; // 기본 크기
+    const elementWidth = element?.offsetWidth || 50;
     const elementHeight = element?.offsetHeight || 50;
 
-    return {
-      minX: 0,
-      maxX: width - elementWidth,
-      minY: 0,
-      maxY: height - elementHeight,
-    };
-  }
+    const maxX = width - elementWidth;
+    const maxY = height - elementHeight;
 
-  // 위치 제한 함수
-  function clampPosition(x: number, y: number): { x: number; y: number } {
-    const bounds = getBounds();
-    return {
-      x: Math.min(Math.max(x, bounds.minX), bounds.maxX),
-      y: Math.min(Math.max(y, bounds.minY), bounds.maxY),
-    };
+    // 상대적 위치를 절대적 픽셀 위치로 변환
+    setAbsolutePosition({
+      x: Math.max(0, Math.min(relativePosition.xPercent * width, maxX)),
+      y: Math.max(0, Math.min(relativePosition.yPercent * height, maxY)),
+    });
   }
 
   // 드래그 시작
   function handleTouchStart(event: React.TouchEvent<HTMLDivElement>): void {
     const touch = event.touches[0];
+
     offset.current = {
-      x: touch.clientX - position.x,
-      y: touch.clientY - position.y,
+      x: touch.clientX - absolutePosition.x,
+      y: touch.clientY - absolutePosition.y,
     };
   }
 
-  //드래그 중
+  // 드래그 중
   function handleTouchMove(event: React.TouchEvent<HTMLDivElement>): void {
-    // 새로운 위치 계산
     const touch = event.touches[0];
+    const width = window.innerWidth;
+    const height = window.innerHeight;
 
-    const newX = touch.clientX - offset.current.x;
-    const newY = touch.clientY - offset.current.y;
+    const element = timerRef.current;
+    const elementWidth = element?.offsetWidth || 50;
+    const elementHeight = element?.offsetHeight || 50;
 
-    // 화면 범위를 벗어나지 않도록 제한
-    setPosition(clampPosition(newX, newY));
+    const newX = Math.max(0, Math.min(touch.clientX - offset.current.x, width - elementWidth));
+    const newY = Math.max(0, Math.min(touch.clientY - offset.current.y, height - elementHeight));
+
+    // 절대 위치 업데이트
+    setAbsolutePosition({ x: newX, y: newY });
+
+    // 상대 위치도 함께 업데이트 (화면 크기 변경 시 사용)
+    setRelativePosition({
+      xPercent: newX / width,
+      yPercent: newY / height,
+    });
   }
 
   // 타이머 작동
   function handleRunTimer() {
     if (timerIsRunning) {
-      clearInterval(intervalRef.current as NodeJS.Timeout); // 기존 interval 해제
-      setTimerIsRunning(false); // 타이머 중지
-      setTimer((prev) => {
-        return prev;
-      });
+      clearInterval(intervalRef.current as NodeJS.Timeout);
+      setTimerIsRunning(false);
       return;
     }
 
-    // 타이머가 시작되면 새로 interval 설정
     intervalRef.current = setInterval(() => {
       setTimer((prev) => {
         if (prev <= 0) {
           clearInterval(intervalRef.current as NodeJS.Timeout);
-          setTimerIsRunning(false); // 타이머 종료
-          setIsOpen(true); // 타이머 창 열기
+          setTimerIsRunning(false);
+          setIsOpen(true);
           return 0;
         }
-
         return prev - 1;
       });
     }, 1000);
 
-    setTimerIsRunning(true); // 타이머 실행 상태로 변경
+    setTimerIsRunning(true);
   }
 
   return createPortal(
@@ -123,8 +131,8 @@ const Timer = ({ defaultTimer }: { defaultTimer: number }) => {
           ref={timerRef}
           className="fixed flex justify-between items-center px-4 py-3 gap-2 z-50 bg-subContent/50 backdrop-blur-lg rounded-full cursor-grab active:cursor-grabbing touch-none"
           style={{
-            left: `${position.x}px`,
-            top: `${position.y}px`,
+            left: `${absolutePosition.x}px`,
+            top: `${absolutePosition.y}px`,
           }}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
@@ -165,7 +173,6 @@ const Timer = ({ defaultTimer }: { defaultTimer: number }) => {
         />
       )}
     </>,
-
     document.getElementById("timer") as HTMLElement
   );
 };
