@@ -7,7 +7,7 @@ const NUMBER_KEYS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "DEL", "0", "C
 const KeypadElem = ({ value, onChange }: KeypadElemProps) => {
   function handleInput(val: string) {
     if (Number(value + val) > 999) {
-      alert("최대 999까지 입력 가능합니다.");
+      // alert("최대 999까지 입력 가능합니다.");
       return;
     }
 
