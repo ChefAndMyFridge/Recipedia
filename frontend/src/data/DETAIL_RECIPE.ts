@@ -116,6 +116,6 @@ export const DETAIL_RECIPE_CHECK: RecipeInfo = {
   duration: "4:16",
   viewCount: 8556390,
   likeCount: 98385,
-  hasCaption: true,
+  hasCaption: false,
   textRecipe: null,
 };
