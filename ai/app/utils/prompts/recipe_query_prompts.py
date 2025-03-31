@@ -39,6 +39,10 @@ CHEF_SYSTEM_MESSAGE = """
 9. 주재료가 일반적으로 요리의 재료로 사용되지 않거나, 그 주재료로 만드는 일반적인 요리가 없는 경우에도 "NO_VALID_DISHES"로 응답하세요.
    - 예: 주재료 [기린] → "NO_VALID_DISHES" (식용으로 사용하지 않는 재료이므로 추천 불가)
 
+10. 이미 완성된 음식(예: 케이크, 감자 샐러드)은 재료로 보지 마세요. 이들이 재료 목록에 있어도 무시하고, 나머지 식재료만 사용하여 일반적으로 존재하는 요리를 추천하세요. 
+    - 예: 냉장고 재료 [감자, 케이크, 고구마] → '케이크'는 무시, '감자'와 '고구마'만 사용
+    - 만약 나머지 식재료도 마땅한 요리를 찾을 수 없다면 "NO_VALID_DISHES"로 응답
+   
 요청 예시와 응답 형식:
 냉장고 재료: [닭고기, 감자, 당근, 양파, 간장]
 주재료: [닭고기, 감자]
@@ -137,7 +141,8 @@ def get_chef_prompt(ingredients_list, main_ingredients=None, preferred_ingredien
     # 주재료가 None이거나 빈 리스트인 경우 처리
     if not main_ingredients:
         main_ingredients = []
-        main_ingredients_instruction = "주재료가 지정되지 않았으므로, 냉장고 재료를 활용한 실존하는 요리만 제안해주세요. 단순 재료 나열식 요리명은 허용하지 않습니다."
+        main_ingredients_instruction = "주재료가 지정되지 않았으므로, 냉장고 재료를 활용한 다양한 요리를 추천해주세요."
+        print("HIHI")
     else:
         main_ingredients_instruction = "반드시 주재료(" + ", ".join(
             main_ingredients) + ")를 핵심 재료로 하는 실존 요리만 추천해주세요. 주재료와 요리 간의 일반적 관계를 엄격히 지켜야 합니다."
