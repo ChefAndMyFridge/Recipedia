@@ -7,7 +7,6 @@ import IconTimer from "@assets/icons/IconTimer";
 
 const Timer = () => {
   const [position, setPosition] = useState({ x: 0, y: 100 }); // 초기 위치
-  const [isDragging, setIsDragging] = useState(false);
 
   const [isOpen, setIsOpen] = useState(false);
   const [timer, setTimer] = useState(0);
@@ -17,6 +16,22 @@ const Timer = () => {
   const offset = useRef({ x: 0, y: 0 });
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // 마운트 될때 위치 조정
+  useEffect(() => {
+    if (timerRef.current) {
+      setPosition((prev) => clampPosition(prev.x, prev.y));
+    }
+  }, []);
+
+  // Timer 컴포넌트가 언마운트될 때 interval 해제해 메모리 누수 방지
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, []);
 
   // 화면 크기 가져오기
   function getBounds(): { minX: number; maxX: number; minY: number; maxY: number } {
@@ -45,8 +60,6 @@ const Timer = () => {
 
   // 드래그 시작
   function handleTouchStart(event: React.TouchEvent<HTMLDivElement>): void {
-    setIsDragging(true);
-
     const touch = event.touches[0];
     offset.current = {
       x: touch.clientX - position.x,
@@ -55,9 +68,7 @@ const Timer = () => {
   }
 
   //드래그 중
-  function handleTouchMove(event: TouchEvent): void {
-    if (!isDragging) return;
-
+  function handleTouchMove(event: React.TouchEvent<HTMLDivElement>): void {
     // 새로운 위치 계산
     const touch = event.touches[0];
 
@@ -66,11 +77,6 @@ const Timer = () => {
 
     // 화면 범위를 벗어나지 않도록 제한
     setPosition(clampPosition(newX, newY));
-  }
-
-  // 드래그 종료
-  function handleTouchEnd(): void {
-    setIsDragging(false);
   }
 
   // 타이머 작동
@@ -101,22 +107,6 @@ const Timer = () => {
     setTimerIsRunning(true); // 타이머 실행 상태로 변경
   }
 
-  // 이벤트 등록 / 해제
-  useEffect(() => {
-    if (isDragging) {
-      document.addEventListener("touchmove", handleTouchMove);
-      document.addEventListener("touchend", handleTouchEnd);
-    } else {
-      document.removeEventListener("touchmove", handleTouchMove);
-      document.removeEventListener("touchend", handleTouchEnd);
-    }
-
-    return () => {
-      document.removeEventListener("touchmove", handleTouchMove);
-      document.removeEventListener("touchend", handleTouchEnd);
-    };
-  }, [isDragging]);
-
   return createPortal(
     <>
       {!isOpen ? (
@@ -128,6 +118,7 @@ const Timer = () => {
             top: `${position.y}px`,
           }}
           onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
           onClick={() => setIsOpen(true)}
         >
           <IconTimer width={25} height={25} strokeColor="white" />
