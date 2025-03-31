@@ -3,7 +3,7 @@ import axios from "axios";
 // const { VITE_API_URL } = import.meta.env;
 
 const base = import.meta.env.BASE_URL;
-// console.log("base", base);
+console.log("base", base);
 const baseURL = base.startsWith("/master") ? "https://j12s003.p.ssafy.io/master/api" : "https://j12s003.p.ssafy.io/api";
 
 const instance = axios.create({
