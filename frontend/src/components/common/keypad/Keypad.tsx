@@ -4,7 +4,7 @@ import { KeypadProps } from "@/types/commonProps";
 import { useEffect, useRef } from "react";
 
 const KeyPad = ({ value, onChange, onClose }: KeypadProps) => {
-  const keypadRef = useRef<HTMLDivElement>(null);
+  const keypadRef = useRef<HTMLDivElement | null>(null);
 
   // 키패드 외부 클릭 시 닫기
   useEffect(() => {
