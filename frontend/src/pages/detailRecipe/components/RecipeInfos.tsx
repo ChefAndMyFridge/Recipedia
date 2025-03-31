@@ -5,6 +5,7 @@ import VideoInfos from "@components/common/videoInfo/VideoInfos";
 
 import RecipeInfoIndexes from "@pages/detailRecipe/components/RecipeInfoIndexes";
 import RecipeTexts from "@pages/detailRecipe/components/RecipeTexts";
+import NoRecipeInfo from "@pages/detailRecipe/components/NoRecipeInfo";
 
 import { recipeIngredientsInfo, RecipeInfoKeys } from "@/types/recipeListTypes";
 
@@ -69,7 +70,7 @@ const RecipeInfos = () => {
       {/* 선택된 인덱스별 자세한 정보 표시
       추후 데이터 변경 필요 */}
       <div className="w-full portrait:min-h-40 portrait:max-h-60 landscape:max-h-[80%] overflow-y-auto p-4 bg-white rounded-b-2xl shadow-md">
-        <div className="flex flex-wrap gap-2 h-fit">
+        <div className="flex flex-wrap h-fit justify-center items-center gap-2 ">
           {selectedIndex === "video_infos" && (
             <VideoInfos
               duration={detailRecipe.duration}
@@ -85,7 +86,7 @@ const RecipeInfos = () => {
                 <p className="text-base font-preSemiBold">레시피를 추출 중입니다...</p>
               )
             ) : (
-              <p className="text-base font-preSemiBold">레시피 정보가 없는 영상입니다.</p>
+              <NoRecipeInfo />
             ))}
 
           {selectedIndex === "ingredients" &&
@@ -103,7 +104,7 @@ const RecipeInfos = () => {
                 <p className="text-base font-preSemiBold">재료를 파악 중입니다...</p>
               )
             ) : (
-              <p className="text-base font-preSemiBold">레시피 정보가 없는 영상입니다.</p>
+              <NoRecipeInfo />
             ))}
 
           {selectedIndex === "cooking_tips" &&
@@ -121,7 +122,7 @@ const RecipeInfos = () => {
                 <p className="text-base font-preSemiBold">요리 꿀팁을 생성 중입니다...</p>
               )
             ) : (
-              <p className="text-base font-preSemiBold">레시피 정보가 없는 영상입니다.</p>
+              <NoRecipeInfo />
             ))}
         </div>
       </div>
