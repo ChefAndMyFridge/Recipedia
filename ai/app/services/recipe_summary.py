@@ -7,7 +7,8 @@ from typing import Optional
 from youtubesearchpython import Transcript
 from app.services.LLM.recipe_generator import RequestGPT
 from fastapi import HTTPException
-from app.utils.prompts.few_shot import SUMMARY_FEW_SHOT_DATA
+from app.utils.prompts.few_shot_low_size import SUMMARY_FEW_SHOT_DATA
+# from app.utils.prompts.few_shot import SUMMARY_FEW_SHOT_DATA
 from app.utils.prompts.recipe_summary_prompts import SUMMARY_SYSTEM_INPUT, SUMMARY_USER_INPUT, SUMMARY_DESCRIPTION_INPUT
 from app.core.config import settings
 from app.core.logging_config import logger
@@ -101,6 +102,34 @@ class RecipeSummary:
 
         return settings.YOUTUBE_TRANSCRIPT_NO_VALID_STR
 
+    def preprocess_data(self, data):
+        """ GPT API를 통해 출력된 데이터를 Backend에서 활용 가능하도록 정제
+
+        Args:
+            data: 레시피 요약 데이터
+
+        Returns:
+            dict: 정제된 레시피 요약 데이터 
+        """
+
+        # ingredients 변환
+        data['ingredients'] = [
+            {'name': name, 'quantity': quantity}
+            for item in data['ingredients']
+            for name, quantity in item.items()
+        ]
+
+        # cooking_sequence 변환
+        data['cooking_sequence'] = {
+            chapter: {
+                'sequence': cooking_data[0],
+                'timestamp': cooking_data[1]
+            }
+            for chapter, cooking_data in data['cooking_sequence'].items()
+        }
+
+        return data
+
     async def summarize_recipe(self, video_id: str) -> str:
         """ 주어진 영상 ID를 기반으로 자막을 가져와 OpenAI API로 요약된 레시피를 반환합니다.
 
@@ -193,6 +222,8 @@ class RecipeSummary:
             # 리턴 타입 검사
             assert isinstance(
                 summary, dict), f"Excepted return type of summarize_recipe is dict, but got {type(summary)}"
+
+            summary = self.preprocess_data(summary)
 
             return summary
         except Exception as e:
