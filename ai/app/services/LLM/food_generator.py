@@ -2,7 +2,7 @@
 import re
 import openai
 from typing import List, Optional, Union
-from app.utils.prompts.youtube_prompts import get_chef_prompt, CHEF_SYSTEM_MESSAGE
+from app.utils.prompts.recipe_query_prompts import get_chef_prompt, CHEF_SYSTEM_MESSAGE
 from app.core.config import settings
 
 # OpenAI API 키 설정
