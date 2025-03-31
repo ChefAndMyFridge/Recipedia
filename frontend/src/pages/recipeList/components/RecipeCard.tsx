@@ -12,6 +12,7 @@ import IconHeart from "@assets/icons/IconHeart";
 import IconHeartFill from "@assets/icons/IconHeartFill";
 
 import useUserStore from "@stores/userStore";
+import useRecipeStore from "@stores/recipeStore";
 
 import { patchRecipeApi } from "@apis/recipeApi";
 
@@ -22,15 +23,25 @@ interface RecipeCardProps {
 const RecipeCard = ({ video }: RecipeCardProps) => {
   const navigate = useNavigate();
   const { userId } = useUserStore();
+  const { updateRecipeFavorite } = useRecipeStore();
+
   const [isLiked, setIsLiked] = useState<boolean>(video.favorite);
+
   const thumbnailUrl = getYoutubeThumbnailUrl(video.url);
 
-  const handleLike = () => {
+  const handleLike = async () => {
     const newLiked = !isLiked;
     setIsLiked(newLiked);
 
-    //추후 API 연결 시, 좋아요 서버 데이터 반영
-    patchRecipeApi(userId, video.recipeId, 0, newLiked);
+    try {
+      const response = await patchRecipeApi(userId, video.recipeId, 0, newLiked);
+      // API 응답의 favorite 값으로 store 업데이트
+      updateRecipeFavorite(video.recipeId, response.favorite);
+    } catch (error) {
+      // 실패시 상태 되돌리기
+      setIsLiked(!newLiked);
+      console.error("Failed to update favorite status:", error);
+    }
   };
 
   return (
