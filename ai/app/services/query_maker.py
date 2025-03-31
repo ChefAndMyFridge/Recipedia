@@ -11,7 +11,7 @@ from app.core.logging_config import logger
 class QueryMaker:
     def __init__(self, ingredients: List[str] = None, main_ingredients: List[str] = None,
                  preferred_ingredients: List[str] = None, disliked_ingredients: List[str] = None,
-                 categories: List[str] = None, dietaries: List[str] = None) -> None:
+                 categories: List[str] = None, dietaries: List[str] = None, allergies: List[str] = None) -> None:
         """
         QueryMaker 클래스 초기화
 
@@ -22,6 +22,7 @@ class QueryMaker:
             disliked_ingredients: 비선호하는 재료 목록
             categories: 요리 카테고리 목록 (예: 한식, 양식, 일식 등)
             dietaries: 선호 식단 목록 (예: 저염식, 저칼로리, 고단백 등)
+            allergies: 알러지 목록 (예: 갑각류 등)
         """
         self.ingredients: List[str] = ingredients or []
         self.main_ingredients: List[str] = main_ingredients or []
@@ -29,6 +30,7 @@ class QueryMaker:
         self.disliked_ingredients: List[str] = disliked_ingredients or []
         self.categories: List[str] = categories or []
         self.dietaries: List[str] = dietaries or []
+        self.allergies: List[str] = allergies or []
 
         self.dishes: List[str] = []
         self.all_videos: Dict[str, List[Dict[str, Any]]] = {}
@@ -52,7 +54,8 @@ class QueryMaker:
                                                      self.preferred_ingredients,
                                                      self.disliked_ingredients,
                                                      self.categories,
-                                                     self.dietaries
+                                                     self.dietaries,
+                                                     self.allergies
                                                  ))
         logger.info(
             f"{settings.LOG_QUERY_MAKER_PREFIX}_요리 이름 생성 완료: {len(self.dishes)}개 생성됨")
