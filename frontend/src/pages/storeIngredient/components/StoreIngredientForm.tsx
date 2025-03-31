@@ -107,7 +107,7 @@ const StoreIngredientForm = () => {
               name="amount"
               type="text"
               value={keypadValue}
-              onFocus={() => setCustomAmountInput(true)}
+              onClick={() => setCustomAmountInput(true)}
               readOnly
               className="w-full px-3 py-1 g-2 h-12 rounded-lg border border-subcontent bg-white font-preRegular placeholder:text-gray-400"
             />
