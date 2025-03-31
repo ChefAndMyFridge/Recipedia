@@ -94,14 +94,14 @@ FOOD_GENERATOR_PROMPT = """
 
 위 냉장고 재료를 활용하여, 다음 조건을 만족하는 요리 이름을 제안해주세요:
 
-1. 주재료 조건: {main_ingredients_instruction}
-2. {disliked_ingredients_instruction}
-3. {preferred_ingredients_instruction}
-4. {categories_instruction}
-5. {dietaries_instruction}
-6. {allergies_instruction}
-7. 각 요리 이름 뒤에 괄호로 해당 요리의 국가/스타일을 표시해주세요.
-8. 음식 이름만 간결하게 불릿 포인트로 나열해주세요.
+- 주재료 조건: {main_ingredients_instruction}
+{disliked_ingredients_instruction}
+{preferred_ingredients_instruction}
+{categories_instruction}
+{dietaries_instruction}
+{allergies_instruction}
+- 각 요리 이름 뒤에 괄호로 해당 요리의 국가/스타일을 표시해주세요.
+- 음식 이름만 간결하게 불릿 포인트로 나열해주세요.
 
 요청 예시와 응답 형식:
 냉장고 재료: [닭고기, 감자, 당근, 양파, 간장]
@@ -121,6 +121,7 @@ FOOD_GENERATOR_PROMPT = """
 최종 출력에서는 음식 이름을 불릿 리스트로 나열하고, 괄호 안에 해당 요리의 국가/스타일을 표시합니다.
 요리명이 불분명하거나 주재료 조합이 일반적이지 않은 경우는 추천하지 말고, 확실한 요리만 추천하세요.
 음식으로 사용되지 않는 재료나 비현실적인 주재료인 경우 "NO_VALID_DISHES"로만 응답하세요.
+시스템 메시지와 유저 메시지에 따라 요리를 생성해주세요.
 """
 
 
@@ -144,10 +145,10 @@ def get_chef_prompt(ingredients_list, main_ingredients=None, preferred_ingredien
     # 주재료가 None이거나 빈 리스트인 경우 처리
     if not main_ingredients:
         main_ingredients = []
-        main_ingredients_instruction = "주재료가 지정되지 않았으므로, 냉장고 재료를 활용한 다양한 요리를 추천해주세요."
+        main_ingredients_instruction = ""
         print("HIHI")
     else:
-        main_ingredients_instruction = "반드시 주재료(" + ", ".join(
+        main_ingredients_instruction = "- 반드시 주재료(" + ", ".join(
             main_ingredients) + ")를 핵심 재료로 하는 실존 요리만 추천해주세요. 주재료와 요리 간의 일반적 관계를 엄격히 지켜야 합니다."
 
     # 선호 재료 처리 - 빈 리스트인 경우에도 기본 지시사항 제공
@@ -157,46 +158,46 @@ def get_chef_prompt(ingredients_list, main_ingredients=None, preferred_ingredien
             p for p in preferred_ingredients if p in ingredients_list]
         if valid_preferred:
             preferred_ingredients_section = f"선호재료: [{', '.join(valid_preferred)}]"
-            preferred_ingredients_instruction = f"가능하다면 선호재료({', '.join(valid_preferred)})가 포함된 요리를 고려하되, 이에 지나치게 편중되지 않도록 균형 있게 추천해주세요."
+            preferred_ingredients_instruction = f"- 가능하다면 선호재료({', '.join(valid_preferred)})가 포함된 요리를 고려하되, 이에 지나치게 편중되지 않도록 균형 있게 추천해주세요."
         else:
             preferred_ingredients_section = ""
-            preferred_ingredients_instruction = "냉장고 재료를 활용한 다양한 요리를 추천해주세요."
+            preferred_ingredients_instruction = ""
     else:
         preferred_ingredients_section = ""
-        preferred_ingredients_instruction = "냉장고 재료를 활용한 다양한 요리를 추천해주세요."
+        preferred_ingredients_instruction = ""
 
     # 비선호 재료 처리
     if disliked_ingredients and len(disliked_ingredients) > 0:
         disliked_ingredients_section = f"비선호재료: [{', '.join(disliked_ingredients)}]"
-        disliked_ingredients_instruction = f"비선호재료({', '.join(disliked_ingredients)})가 요리의 핵심 재료인 경우는 절대 추천하지 마세요. 일반적인 요리에서 해당 재료를 생략하거나 대체하기 어려운 경우 그 요리는 제외해주세요."
+        disliked_ingredients_instruction = f"- 비선호재료({', '.join(disliked_ingredients)})가 요리의 핵심 재료인 경우는 절대 추천하지 마세요. 일반적인 요리에서 해당 재료를 생략하거나 대체하기 어려운 경우 그 요리는 제외해주세요."
     else:
         disliked_ingredients_section = ""
-        disliked_ingredients_instruction = "냉장고 재료를 활용한 다양한 요리를 추천해주세요."
+        disliked_ingredients_instruction = ""
     
     # 카테고리 처리 (수정된 부분)
     if categories and len(categories) > 0:
         categories_section = f"카테고리: [{', '.join(categories)}]"
-        categories_instruction = f"요청한 카테고리({', '.join(categories)})에 속하는 요리를 약 50~80% 정도 추천하고, 나머지는 다른 국가/스타일의 요리를 균형있게 추천해주세요. 너무 한 가지 카테고리에만 치우치지 마세요."
+        categories_instruction = f"- 요청한 카테고리({', '.join(categories)})에 속하는 요리를 약 50~80% 정도 추천하고, 나머지는 다른 국가/스타일의 요리를 균형있게 추천해주세요. 너무 한 가지 카테고리에만 치우치지 마세요."
     else:
         categories_section = ""
-        categories_instruction = "냉장고 재료를 활용한 다양한 요리를 추천해주세요."
+        categories_instruction = ""
     
     # 식단 처리 (기존과 동일)
     if dietaries and len(dietaries) > 0:
         dietaries_section = f"선호식단: [{', '.join(dietaries)}]"
-        dietaries_instruction = f"선호하는 식단({', '.join(dietaries)})에 맞는 요리를 추천해주세요. 식단 제한사항을 적당히 존중하여 추천해주세요."
+        dietaries_instruction = f"- 선호하는 식단({', '.join(dietaries)})에 맞는 요리를 추천해주세요. 식단 제한사항을 적당히 존중하여 추천해주세요."
     else:
         dietaries_section = ""
-        dietaries_instruction = "냉장고 재료를 활용한 다양한 요리를 추천해주세요."
+        dietaries_instruction = ""
     
     if allergies and len(allergies) > 0:
         allergies_section = f"알러지: [{', '.join(allergies)}]"
-        allergies_instruction = f"다음 알러지({', '.join(allergies)})가 있으므로, 해당 알러지 유발 식품이 포함된 요리는 절대 추천하지 마세요. 예를 들어:"
+        allergies_instruction = f"- 다음 알러지({', '.join(allergies)})가 있으므로, 해당 알러지 유발 식품이 포함된 요리는 절대 추천하지 마세요. 예를 들어:"
         allergies_instruction += "\n   - 갑각류 알러지: 새우, 게, 랍스터 등의 해산물이 포함된 요리 제외"
         allergies_instruction += "\n   - 견과류 알러지: 땅콩, 호두, 아몬드, 캐슈넛 등이 포함된 요리 제외"
     else:
         allergies_section = ""
-        allergies_instruction = "냉장고 재료를 활용한 다양한 요리를 추천해주세요."
+        allergies_instruction = ""
 
     ingredients_str = ', '.join(ingredients_list)
     main_ingredients_str = ', '.join(main_ingredients)
