@@ -14,8 +14,10 @@ import RecipeTitle from "@pages/detailRecipe/components/RecipeTitle";
 //세로모드 레이아웃
 const DetailRecipePortraitPage = () => {
   const { openModal } = useModalStore();
+
   const [currentTime, setCurrentTime] = useState(0);
   const playerRef = useRef<ReactPlayer>(null);
+
   const { detailRecipe, resetDetailRecipe, setHasFetchedDetailRecipe } = recipeStore();
 
   function toRecipeList() {
