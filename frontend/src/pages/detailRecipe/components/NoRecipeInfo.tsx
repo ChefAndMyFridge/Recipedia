@@ -1,4 +1,4 @@
-import IconError from "@/assets/icons/IconError";
+import IconError from "@assets/icons/IconError";
 
 const NoRecipeInfo = () => {
   return (
