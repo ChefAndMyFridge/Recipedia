@@ -85,6 +85,7 @@ def generate_dish_names(
     disliked_ingredients: List[str] = None,
     categories: List[str] = None,
     dietaries: List[str] = None,
+    allergies: List[str] = None,
     num_dishes: Optional[int] = None
 ) -> List[str]:
     """
@@ -95,6 +96,7 @@ def generate_dish_names(
         - disliked_ingredients: 비선호하는 재료 목록 (기본값 None)
         - categories: 요리 카테고리 목록 (예: 한식, 양식, 일식 등) (기본값 None)
         - dietaries: 선호 식단 목록 (예: 저염식, 저칼로리, 고단백 등) (기본값 None)
+        - allergies: 알러지 목록 (기본값 None)
         - num_dishes: 생성할 요리 이름 개수 (기본값 None)
     반환:
         - list: 생성된 요리 이름 문자열의 리스트
@@ -109,6 +111,7 @@ def generate_dish_names(
     disliked_ingredients: List[str] = disliked_ingredients or []
     categories: List[str] = categories or []
     dietaries: List[str] = dietaries or []
+    allergies: List[str] = allergies or []
     num_dishes: Optional[int] = num_dishes or settings.NUM_DISHES_TO_GENERATE
 
     # 프롬프트 생성
@@ -119,6 +122,7 @@ def generate_dish_names(
         disliked_ingredients=disliked_ingredients,
         categories=categories,
         dietaries=dietaries,
+        allergies=allergies,
         num_dishes=num_dishes
     )
 

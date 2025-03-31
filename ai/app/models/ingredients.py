@@ -11,3 +11,4 @@ class Ingredients(BaseModel):
     disliked_ingredients: List[str] = None
     categories: List[str] = None
     dietaries: List[str] = None
+    allergies: List[str] = None

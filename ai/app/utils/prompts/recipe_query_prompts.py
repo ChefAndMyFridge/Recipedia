@@ -82,6 +82,7 @@ FOOD_GENERATOR_PROMPT = """
 {disliked_ingredients_section}
 {categories_section}
 {dietaries_section}
+{allergies_section}
 제안할 음식 이름 개수: 최대 {num_dishes}개
 
 위 냉장고 재료를 활용하여, 다음 조건을 만족하는 요리 이름을 제안해주세요:
@@ -91,8 +92,9 @@ FOOD_GENERATOR_PROMPT = """
 3. {preferred_ingredients_instruction}
 4. {categories_instruction}
 5. {dietaries_instruction}
-6. 각 요리 이름 뒤에 괄호로 해당 요리의 국가/스타일을 표시해주세요.
-7. 음식 이름만 간결하게 불릿 포인트로 나열해주세요.
+6. {allergies_instruction}
+7. 각 요리 이름 뒤에 괄호로 해당 요리의 국가/스타일을 표시해주세요.
+8. 음식 이름만 간결하게 불릿 포인트로 나열해주세요.
 
 요청 예시와 응답 형식:
 냉장고 재료: [닭고기, 감자, 당근, 양파, 간장]
@@ -116,7 +118,7 @@ FOOD_GENERATOR_PROMPT = """
 
 
 def get_chef_prompt(ingredients_list, main_ingredients=None, preferred_ingredients=None, 
-                    disliked_ingredients=None, categories=None, dietaries=None, num_dishes=5):
+                    disliked_ingredients=None, categories=None, dietaries=None, allergies=None, num_dishes=5):
     """요리사 AI에게 전달할 프롬프트를 생성합니다.
 
     Args:
@@ -126,6 +128,7 @@ def get_chef_prompt(ingredients_list, main_ingredients=None, preferred_ingredien
         disliked_ingredients (list, optional): 비선호하는 재료 목록. 기본값은 None
         categories (list, optional): 요리 카테고리 목록 (예: 한식, 양식, 일식 등). 기본값은 None
         dietaries (list, optional): 선호 식단 목록 (예: 저염식, 저칼로리, 고단백 등). 기본값은 None
+        allergies (list, optional): 알러지 목록. 기본값은 None
         num_dishes (int, optional): 생성할 요리 개수. 기본값은 5
 
     Returns:
@@ -177,6 +180,15 @@ def get_chef_prompt(ingredients_list, main_ingredients=None, preferred_ingredien
     else:
         dietaries_section = ""
         dietaries_instruction = "냉장고 재료를 활용한 다양한 요리를 추천해주세요."
+    
+    if allergies and len(allergies) > 0:
+        allergies_section = f"알러지: [{', '.join(allergies)}]"
+        allergies_instruction = f"다음 알러지({', '.join(allergies)})가 있으므로, 해당 알러지 유발 식품이 포함된 요리는 절대 추천하지 마세요. 예를 들어:"
+        allergies_instruction += "\n   - 갑각류 알러지: 새우, 게, 랍스터 등의 해산물이 포함된 요리 제외"
+        allergies_instruction += "\n   - 견과류 알러지: 땅콩, 호두, 아몬드, 캐슈넛 등이 포함된 요리 제외"
+    else:
+        allergies_section = ""
+        allergies_instruction = "냉장고 재료를 활용한 다양한 요리를 추천해주세요."
 
     ingredients_str = ', '.join(ingredients_list)
     main_ingredients_str = ', '.join(main_ingredients)
@@ -188,10 +200,12 @@ def get_chef_prompt(ingredients_list, main_ingredients=None, preferred_ingredien
         disliked_ingredients_section=disliked_ingredients_section,
         categories_section=categories_section,
         dietaries_section=dietaries_section,
+        allergies_section=allergies_section,
         main_ingredients_instruction=main_ingredients_instruction,
         preferred_ingredients_instruction=preferred_ingredients_instruction,
         disliked_ingredients_instruction=disliked_ingredients_instruction,
         categories_instruction=categories_instruction,
         dietaries_instruction=dietaries_instruction,
+        allergies_instruction=allergies_instruction,
         num_dishes=num_dishes
     )
