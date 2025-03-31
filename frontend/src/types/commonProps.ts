@@ -44,7 +44,6 @@ export interface ToggleProps {
 }
 
 export interface KeypadProps {
-  label?: string;
   value: string;
   onChange: (value: string) => void;
   onClose: () => void;

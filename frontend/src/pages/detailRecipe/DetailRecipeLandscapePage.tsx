@@ -1,4 +1,5 @@
 import ReactPlayer from "react-player";
+import { useRef, useState } from "react";
 
 import useModalStore from "@stores/modalStore";
 import recipeStore from "@stores/recipeStore";
@@ -14,6 +15,9 @@ import RecipeTitle from "@pages/detailRecipe/components/RecipeTitle";
 const DetailRecipeLandscapePage = () => {
   const { openModal } = useModalStore();
 
+  const [currentTime, setCurrentTime] = useState(0);
+  const playerRef = useRef<ReactPlayer>(null);
+
   const { detailRecipe, resetDetailRecipe, setHasFetchedDetailRecipe } = recipeStore();
 
   function toRecipeList() {
@@ -28,6 +32,7 @@ const DetailRecipeLandscapePage = () => {
       <div className="h-[90%] flex gap-8">
         <div className="w-[60%] h-full flex flex-col justify-start gap-5">
           <ReactPlayer
+            ref={playerRef}
             url={detailRecipe.url}
             width="100%"
             height="70%"
@@ -36,12 +41,13 @@ const DetailRecipeLandscapePage = () => {
             controls={true}
             light={false}
             pip={true}
+            onProgress={(state) => setCurrentTime(state.playedSeconds)}
           />
           <RecipeTitle title={detailRecipe.title} channelTitle={detailRecipe.channelTitle} />
         </div>
 
         <div className="w-[35%] h-full flex flex-col justify-between">
-          <RecipeInfos />
+          <RecipeInfos currentTime={currentTime} setCurrentTime={setCurrentTime} playerRef={playerRef} />
 
           {/* 버튼 컨테이너 */}
           <div className="w-full flex justify-end items-center gap-2">

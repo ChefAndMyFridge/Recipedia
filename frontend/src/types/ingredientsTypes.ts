@@ -46,7 +46,6 @@ export interface IngredientNutrition {
 
 export interface StoreIngredient {
   name: string;
-  imageUrl: string;
   amount: number;
   storagePlace: string;
   expirationDate: string;

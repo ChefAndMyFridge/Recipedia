@@ -12,6 +12,7 @@ import IconHeart from "@assets/icons/IconHeart";
 import IconHeartFill from "@assets/icons/IconHeartFill";
 
 import useUserStore from "@stores/userStore";
+import useRecipeStore from "@stores/recipeStore";
 
 import { patchRecipeApi } from "@apis/recipeApi";
 
@@ -22,15 +23,25 @@ interface RecipeCardProps {
 const RecipeCard = ({ video }: RecipeCardProps) => {
   const navigate = useNavigate();
   const { userId } = useUserStore();
+  const { updateRecipeFavorite } = useRecipeStore();
+
   const [isLiked, setIsLiked] = useState<boolean>(video.favorite);
+
   const thumbnailUrl = getYoutubeThumbnailUrl(video.url);
 
-  const handleLike = () => {
+  const handleLike = async () => {
     const newLiked = !isLiked;
     setIsLiked(newLiked);
 
-    //추후 API 연결 시, 좋아요 서버 데이터 반영
-    patchRecipeApi(userId, video.recipeId, 0, newLiked);
+    try {
+      const response = await patchRecipeApi(userId, video.recipeId, 0, newLiked);
+      // API 응답의 favorite 값으로 store 업데이트
+      updateRecipeFavorite(video.recipeId, response.favorite);
+    } catch (error) {
+      // 실패시 상태 되돌리기
+      setIsLiked(!newLiked);
+      console.error("Failed to update favorite status:", error);
+    }
   };
 
   return (
@@ -41,23 +52,33 @@ const RecipeCard = ({ video }: RecipeCardProps) => {
           alt={video.title}
           className="w-full h-[45%] min-h-[200px] rounded-xl object-contain bg-black"
         />
-        <div className="flex justify-between items-center">
-          <p className="max-w-[90%] overflow-hidden text-ellipsis whitespace-nowrap font-preSemiBold text-base break-keep">
-            {video.title}
-          </p>
-          <button className="text-sm" onClick={handleLike}>
-            {isLiked ? (
-              <IconHeartFill width={30} height={31} strokeColor="black" />
-            ) : (
-              <IconHeart width={30} height={30} strokeColor="black" />
-            )}
-          </button>
+
+        <div className="flex w-full justify-between items-center">
+          <div className="w-full flex flex-col items-start gap-2">
+            <p
+              className={`text-xs font-preSemiBold px-3 py-1 text-center bg-white rounded-full border border-[1.5px] ${
+                video.hasCaption ? "text-primary border-primary" : "text-content2 border-content2"
+              }`}
+            >
+              {video.hasCaption ? "레시피 제공" : "레시피 미제공"}
+            </p>
+            <div className="flex w-full justify-between items-center">
+              <p className="max-w-[90%] overflow-hidden text-ellipsis whitespace-nowrap font-preSemiBold text-base break-keep">
+                {video.title}
+              </p>
+
+              <button className="text-sm" onClick={handleLike}>
+                {isLiked ? (
+                  <IconHeartFill width={30} height={31} strokeColor="black" />
+                ) : (
+                  <IconHeart width={30} height={30} strokeColor="black" />
+                )}
+              </button>
+            </div>
+          </div>
         </div>
         <VideoInfos duration={video.duration} viewCount={video.viewCount} likeCount={video.likeCount} />
         <div className="w-full flex justify-end items-center gap-2">
-          <p className="text-sm font-preSemiBold text-white bg-content2 p-2 rounded-full">
-            {video.hasCaption ? "레시피 정보 제공" : "레시피 정보 미제공"}
-          </p>
           <Button
             type="button"
             design="confirm"
