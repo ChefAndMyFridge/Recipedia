@@ -78,7 +78,6 @@ const StoreIngredientForm = () => {
 
     const ingredient: StoreIngredient = {
       name: data.name as string,
-      imageUrl: "",
       amount: Number(data.amount),
       incomingDate: currentTime.toISOString().slice(0, 16) + ":00",
       expirationDate: `${expirationDate}T${expirationTime}:00`,
