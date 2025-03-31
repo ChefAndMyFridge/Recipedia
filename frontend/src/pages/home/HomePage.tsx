@@ -22,7 +22,7 @@ const HomePage = () => {
         <HomeFooter isFilterOpen={isFilterOpen} />
       </div>
       <Modal />
-      <Timer />
+      <Timer defaultTimer={10} />
     </ErrorBoundary>
   );
 };
