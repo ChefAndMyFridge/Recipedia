@@ -6,6 +6,7 @@ import SettingPage from "@pages/setting/SettingPage";
 import MyRecipePage from "@pages/myRecipe/MyRecipePage";
 import PreferencePage from "@pages/preference/PreferencePage";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Login from '@pages/login/Login';
 
 const queryClient = new QueryClient();
 
@@ -19,6 +20,7 @@ function App() {
         <Route path="/setting" element={<SettingPage />} />
         <Route path="/setting/:myRecipeType" element={<MyRecipePage />} />
         <Route path="/setting/preference" element={<PreferencePage />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </QueryClientProvider>
   );
