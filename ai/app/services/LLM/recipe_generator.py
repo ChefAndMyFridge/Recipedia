@@ -64,9 +64,9 @@ class RequestGPT:
             messages=prompt,
             max_tokens=settings.SUMMARY_OPENAI_MAX_TOKENS,
             temperature=settings.SUMMARY_OPENAI_TEMPERATURE,
-            top_p=settings.SUMMARY_OPENAI_TOP_P,
-            frequency_penalty=settings.SUMMARY_OPENAI_FREQUENCY_PENALTY,
-            stream=settings.SUMMARY_OPENAI_STREAM,
+            # top_p=settings.SUMMARY_OPENAI_TOP_P,
+            # frequency_penalty=settings.SUMMARY_OPENAI_FREQUENCY_PENALTY,
+            # stream=settings.SUMMARY_OPENAI_STREAM,
         )
 
         if settings.SUMMARY_OPENAI_STREAM:
