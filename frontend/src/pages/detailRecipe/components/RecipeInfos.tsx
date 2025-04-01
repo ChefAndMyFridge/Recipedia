@@ -6,7 +6,7 @@ import VideoInfos from "@components/common/videoInfo/VideoInfos";
 
 import RecipeInfoIndexes from "@pages/detailRecipe/components/RecipeInfoIndexes";
 import RecipeTexts from "@pages/detailRecipe/components/RecipeTexts";
-import NoRecipeInfo from "@pages/detailRecipe/components/NoRecipeInfo";
+// import NoRecipeInfo from "@pages/detailRecipe/components/NoRecipeInfo";
 
 import { recipeIngredientsInfo, RecipeInfoKeys } from "@/types/recipeListTypes";
 
@@ -48,7 +48,6 @@ const RecipeInfos = ({ currentTime, setCurrentTime, playerRef }: RecipeInfosProp
   useEffect(() => {
     // console.log("hasFetchedDetailRecipe", hasFetchedDetailRecipe);
     if (!hasFetchedDetailRecipe) return; // 응답 오기 전이면 무시
-    if (detailRecipe.hasCaption === false) return; //자막이 없으면 무시
 
     // console.log("detailRecipe", detailRecipe);
     const detailRecipeCheck =
@@ -59,9 +58,9 @@ const RecipeInfos = ({ currentTime, setCurrentTime, playerRef }: RecipeInfosProp
       detailRecipe.textRecipe?.ingredients &&
       detailRecipe.textRecipe?.cooking_tips;
 
-    console.log("recipeText 체크", !detailRecipeCheck, detailRecipeCheck === null);
+    console.log("recipeText 체크", !detailRecipeCheck, detailRecipeCheck === null, hasFetchedDetailRecipe);
 
-    if (detailRecipe.hasCaption === true && (!detailRecipeCheck || detailRecipeCheck === null)) {
+    if (!detailRecipeCheck || detailRecipeCheck === null) {
       console.log("getRecipeText 호출");
       getRecipeText();
     }
@@ -92,56 +91,44 @@ const RecipeInfos = ({ currentTime, setCurrentTime, playerRef }: RecipeInfosProp
             />
           )}
           {selectedIndex === "cooking_sequence" &&
-            (detailRecipe.hasCaption ? (
-              textRecipeData && textRecipeData.cooking_sequence ? (
-                <RecipeTexts
-                  recipe={textRecipeData.cooking_sequence}
-                  currentTime={currentTime}
-                  setCurrentTime={setCurrentTime}
-                  playerRef={playerRef}
-                  isAutoScroll={isAutoScroll}
-                />
-              ) : (
-                <p className="text-base font-preSemiBold">레시피를 추출 중입니다...</p>
-              )
+            (textRecipeData && textRecipeData.cooking_sequence ? (
+              <RecipeTexts
+                recipe={textRecipeData.cooking_sequence}
+                currentTime={currentTime}
+                setCurrentTime={setCurrentTime}
+                playerRef={playerRef}
+                isAutoScroll={isAutoScroll}
+              />
             ) : (
-              <NoRecipeInfo />
+              <p className="text-base font-preSemiBold">레시피를 추출 중입니다...</p>
             ))}
 
           {selectedIndex === "ingredients" &&
-            (detailRecipe.hasCaption ? (
-              textRecipeData && textRecipeData.ingredients ? (
-                textRecipeData.ingredients.map((item: recipeIngredientsInfo) => (
-                  <div
-                    key={item.name}
-                    className="px-4 py-2 text-sm landscape:text-xs font-preSemiBold break-keep rounded-3xl shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]"
-                  >
-                    {item.name} {item.quantity}
-                  </div>
-                ))
-              ) : (
-                <p className="text-base font-preSemiBold">재료를 파악 중입니다...</p>
-              )
+            (textRecipeData && textRecipeData.ingredients ? (
+              textRecipeData.ingredients.map((item: recipeIngredientsInfo) => (
+                <div
+                  key={item.name}
+                  className="px-4 py-2 text-sm landscape:text-xs font-preSemiBold break-keep rounded-3xl shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]"
+                >
+                  {item.name} {item.quantity}
+                </div>
+              ))
             ) : (
-              <NoRecipeInfo />
+              <p className="text-base font-preSemiBold">재료를 파악 중입니다...</p>
             ))}
 
           {selectedIndex === "cooking_tips" &&
-            (detailRecipe.hasCaption ? (
-              textRecipeData && textRecipeData.cooking_tips ? (
-                textRecipeData.cooking_tips.map((tip: string, index: number) => (
-                  <div
-                    key={index}
-                    className="px-4 py-2 text-sm font-preSemiBold break-keep rounded-3xl shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]"
-                  >
-                    {tip}
-                  </div>
-                ))
-              ) : (
-                <p className="text-base font-preSemiBold">요리 꿀팁을 생성 중입니다...</p>
-              )
+            (textRecipeData && textRecipeData.cooking_tips ? (
+              textRecipeData.cooking_tips.map((tip: string, index: number) => (
+                <div
+                  key={index}
+                  className="px-4 py-2 text-sm font-preSemiBold break-keep rounded-3xl shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]"
+                >
+                  {tip}
+                </div>
+              ))
             ) : (
-              <NoRecipeInfo />
+              <p className="text-base font-preSemiBold">요리 꿀팁을 생성 중입니다...</p>
             ))}
         </div>
       </div>

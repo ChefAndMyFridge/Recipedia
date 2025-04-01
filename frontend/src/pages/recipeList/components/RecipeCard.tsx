@@ -10,11 +10,13 @@ import Button from "@components/common/button/Button";
 
 import IconHeart from "@assets/icons/IconHeart";
 import IconHeartFill from "@assets/icons/IconHeartFill";
+import IconPremium from "@assets/icons/IconPremium";
 
 import useUserStore from "@stores/userStore";
 import useRecipeStore from "@stores/recipeStore";
 
 import { patchRecipeApi } from "@apis/recipeApi";
+import ReactPlayer from "react-player";
 
 interface RecipeCardProps {
   video: Video;
@@ -47,21 +49,32 @@ const RecipeCard = ({ video }: RecipeCardProps) => {
   return (
     <div className={`flex justify-center`}>
       <div className="w-[80%] h-[60vh] min-h-[450px] p-3 flex flex-col justify-between bg-white rounded-2xl">
-        <img
-          src={thumbnailUrl}
-          alt={video.title}
-          className="w-full h-[45%] min-h-[200px] rounded-xl object-contain bg-black"
+        <ReactPlayer
+          url={video.url}
+          width="100%"
+          height="45%"
+          playing={true}
+          controls={true}
+          light={thumbnailUrl}
+          style={{ backgroundColor: "black" }}
         />
 
         <div className="flex w-full justify-between items-center">
-          <div className="w-full flex flex-col items-start gap-2">
-            <p
-              className={`text-xs font-preSemiBold px-3 py-1 text-center bg-white rounded-full border border-[1.5px] ${
-                video.hasCaption ? "text-primary border-primary" : "text-content2 border-content2"
-              }`}
+          <div className="w-full flex flex-col items-start">
+            <div
+              className={`h-5 bg-white rounded-full  
+                ${video.hasCaption ? "" : ""}`}
             >
-              {video.hasCaption ? "레시피 제공" : "레시피 미제공"}
-            </p>
+              {video.hasCaption ? (
+                <div className="flex items-center gap-1">
+                  <IconPremium width={20} height={20} />
+                  <p className="text-xs font-preSemiBold text-center text-longContent">고품질 레시피</p>
+                </div>
+              ) : (
+                <div></div>
+              )}
+            </div>
+
             <div className="flex w-full justify-between items-center">
               <p className="max-w-[90%] overflow-hidden text-ellipsis whitespace-nowrap font-preSemiBold text-base break-keep">
                 {video.title}
