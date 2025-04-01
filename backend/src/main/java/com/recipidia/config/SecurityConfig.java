@@ -47,8 +47,8 @@ public class SecurityConfig {
             // 나머지 요청은 인증 필요
             .anyRequest().authenticated()
         )
-        .formLogin(form -> form.disable()) // formLogin 비활성화 (API 방식만 사용)
-//        .formLogin(withDefaults()) // 기본 로그인 페이지 사용
+//        .formLogin(form -> form.disable()) // formLogin 비활성화 (API 방식만 사용)
+        .formLogin(withDefaults()) // 기본 로그인 페이지 사용
         .logout(logout -> logout.permitAll());
 
     return http.build();
