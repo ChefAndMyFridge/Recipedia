@@ -44,3 +44,8 @@ fastapi:
 
 host:
   url: http://localhost:3000
+
+jwt:
+  secret: fptlvleldkwpdlEjqmfdbxlxhzms250401s003tlzmfltzlwjrdjeh512qlxmfmfsjadjdigkrlEoansdpcndqnsglrlfdjdigkqslek
+  expiration:
+    ms: 360000000
