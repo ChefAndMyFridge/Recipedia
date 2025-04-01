@@ -2,6 +2,7 @@
 import time
 import asyncio
 import copy
+import re
 
 from typing import Optional
 from youtubesearchpython import Transcript
@@ -102,6 +103,28 @@ class RecipeSummary:
 
         return settings.YOUTUBE_TRANSCRIPT_NO_VALID_STR
 
+    def extract_time_in_seconds(self, sequences: list):
+        total_seconds = 0
+        for seq in sequences:
+            hours = minutes = seconds = 0
+            # 1시간 30분, 30분, 25~30분, 20초 등 대응
+            hour_match = re.search(r'(\d+)\s*시간 ', seq)
+            minute_match = re.search(r'(\d+)(?:~\d+)?\s*분 ', seq)
+            second_match = re.search(r'(\d+)(?:~\d+)?\s*초 ', seq)
+
+            if hour_match:
+                hours = int(hour_match.group(1))
+
+            if minute_match:
+                minutes = int(minute_match.group(1))
+
+            if second_match:
+                seconds = int(second_match.group(1))
+
+            total_seconds += (hours * 3600 + minutes * 60 + seconds)
+
+        return total_seconds
+
     def preprocess_data(self, data):
         """ GPT API를 통해 출력된 데이터를 Backend에서 활용 가능하도록 정제
 
@@ -123,10 +146,23 @@ class RecipeSummary:
         data['cooking_sequence'] = {
             chapter: {
                 'sequence': cooking_data[0],
-                'timestamp': cooking_data[1]
+                'timestamp': cooking_data[1],
+                'timer': self.extract_time_in_seconds(cooking_data[0])
             }
             for chapter, cooking_data in data['cooking_sequence'].items()
         }
+
+        # 기존 cooking_sequence를 timestamp 기준으로 정렬
+        sorted_sequence = dict(
+            sorted(
+                data['cooking_sequence'].items(),
+                # item[1]은 sequence, timestamp data
+                key=lambda item: item[1]['timestamp']
+            )
+        )
+
+        # 정렬된 결과를 다시 할당
+        data['cooking_sequence'] = sorted_sequence
 
         return data
 
