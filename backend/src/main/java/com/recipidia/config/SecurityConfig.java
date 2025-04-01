@@ -2,6 +2,7 @@ package com.recipidia.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -32,14 +33,22 @@ public class SecurityConfig {
 //            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 //        ) // 쿠키에 csrf 토큰 붙이기
         .csrf(csrf -> csrf.disable()) // 일단 CORS 테스트 용으로 비활성화
+//        .authorizeHttpRequests(authorize -> authorize
+//            // /error는 인증 없이 접근 가능하도록 설정
+//            .requestMatchers("/error").permitAll()
+//            // 나머지 요청은 인증 필요
+//            .anyRequest().authenticated()
+//        )
         .authorizeHttpRequests(authorize -> authorize
-            // /error는 인증 없이 접근 가능하도록 설정
-            .requestMatchers("/error").permitAll()
+            // 로그인 API는 인증 없이 접근 가능
+            .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
+            // OPTIONS 요청은 preflight용으로 모두 허용
+            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
             // 나머지 요청은 인증 필요
             .anyRequest().authenticated()
         )
-        // 기본 로그인 페이지 사용
-        .formLogin(withDefaults())
+//        .formLogin(form -> form.disable()) // formLogin 비활성화 (API 방식만 사용)
+        .formLogin(withDefaults()) // 기본 로그인 페이지 사용
         .logout(logout -> logout.permitAll());
 
     return http.build();
@@ -58,24 +67,5 @@ public class SecurityConfig {
     // WebMvcConfigurer의 CORS 매핑과는 별도로 여기서도 설정해줘야 합니다.
     source.registerCorsConfiguration("/api/**", configuration);
     return source;
-  }
-
-
-  // In-Memory 방식으로 admin 계정 생성
-  @Bean
-  public UserDetailsService userDetailsService(PasswordEncoder encoder) {
-    UserDetails admin = User.builder()
-        .username("admin")
-        // 실제 서비스 시 강력한 암호를 사용하세요.
-        .password(encoder.encode("securityTest")) // 나중에 환경변수로 주입
-        .roles("ADMIN")
-        .build();
-    return new InMemoryUserDetailsManager(admin);
-  }
-
-  // BCryptPasswordEncoder를 사용한 PasswordEncoder 빈 등록
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
   }
 }
