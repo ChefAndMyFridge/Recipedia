@@ -22,11 +22,6 @@ const DetailRecipePage = () => {
 
   // 스토어 값이 API 응답으로 업데이트되었는지 확인
   useEffect(() => {
-    // console.log("data", data);
-    // console.log("detailRecipe", detailRecipe);
-    // console.log(data?.recipeId == detailRecipe.recipeId);
-    // console.log(detailRecipe.recipeId === Number(recipeId));
-    // console.log(detailRecipe.recipeId !== 0);
     if (
       data !== undefined &&
       data.recipeId == detailRecipe.recipeId &&
@@ -38,12 +33,12 @@ const DetailRecipePage = () => {
     }
   }, [data, detailRecipe, recipeId]);
 
+  function handleOrientationChange() {
+    setIsPortrait(window.matchMedia("(orientation: portrait)").matches);
+  }
+
   // 화면 방향 변경 감지
   useEffect(() => {
-    const handleOrientationChange = () => {
-      setIsPortrait(window.matchMedia("(orientation: portrait)").matches);
-    };
-
     window.addEventListener("resize", handleOrientationChange);
     return () => {
       window.removeEventListener("resize", handleOrientationChange);
