@@ -51,6 +51,8 @@ public class SecurityConfig {
             .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
             // Swagger 관련 엔드포인트는 모두 허용
             .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**").permitAll()
+            // 임시로 webflux쪽 엔드포인트는 모두 허용
+            .requestMatchers("/api/v1/recipe/**").permitAll()
             // 그 외 모든 요청은 인증 필요
             .anyRequest().authenticated()
         )
