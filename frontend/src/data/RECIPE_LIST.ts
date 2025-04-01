@@ -12,7 +12,7 @@ const RECIPE_LIST = {
         viewCount: 8556390,
         likeCount: 98385,
         favorite: true,
-        hasCaption: true,
+        hasCaption: false,
         rating: 2.0,
       },
       {
@@ -52,7 +52,7 @@ const RECIPE_LIST = {
         viewCount: 733251,
         likeCount: 7341,
         favorite: true,
-        hasCaption: true,
+        hasCaption: false,
         rating: 0.0,
       },
       {
@@ -64,7 +64,7 @@ const RECIPE_LIST = {
         viewCount: 733251,
         likeCount: 7341,
         favorite: true,
-        hasCaption: true,
+        hasCaption: false,
         rating: 0.0,
       },
       {
@@ -76,7 +76,7 @@ const RECIPE_LIST = {
         viewCount: 733251,
         likeCount: 7341,
         favorite: true,
-        hasCaption: true,
+        hasCaption: false,
         rating: 0.0,
       },
     ],
