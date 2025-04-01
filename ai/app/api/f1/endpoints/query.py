@@ -6,6 +6,7 @@ from fastapi.responses import JSONResponse
 from app.services.query_maker import QueryMaker
 from app.models.ingredients import Ingredients
 from app.utils.docs import QueryDocs
+from app.core.config import settings
 
 router = APIRouter()
 docs = QueryDocs()
@@ -20,6 +21,12 @@ docs = QueryDocs()
 )
 async def query_maker_endpoint(request: Request, data: Ingredients = docs.base["data"]):
     try:
+        if settings.ENV == "DEPLOY":
+            security_key = request.headers.get("x-api-key")
+            if security_key != settings.FASTAPI_SECURITY_KEY:
+                raise HTTPException(
+                    status_code=401, detail="Invalid FASTAPI SECURITY KEY")
+
         query_maker = QueryMaker(data.ingredients, data.main_ingredients,
                                  data.preferred_ingredients, data.disliked_ingredients,
                                  data.categories, data.dietaries, data.allergies)

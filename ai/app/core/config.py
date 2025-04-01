@@ -11,6 +11,9 @@ class Settings(BaseSettings):
     YOUTUBE_API_KEY: str = ""
     OPENAI_API_KEY: str
     USDA_API_KEY: str
+    ENV: str
+
+    FASTAPI_SECURITY_KEY: str
 
     YOUTUBE_API_KEYS: List[str]
 
