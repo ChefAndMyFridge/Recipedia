@@ -9,7 +9,7 @@ import { authLoginApi } from "@apis/userApi";
 import Input from "@components/common/input/Input.tsx";
 import Button from "@components/common/button/Button.tsx";
 
-import logo from "@assets/images/favicon/favicon.png";
+import logo from "@assets/images/logo/recipediaLogo.png";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -18,8 +18,9 @@ const Login = () => {
     checkLoginStatus();
   }, []);
 
-  function checkLoginStatus() {
+  function checkLoginStatus(): void {
     const token = localStorage.getItem("jwt");
+
     if (token) {
       navigate("/"); // 이미 로그인된 상태라면 홈으로 리다이렉트
     }
@@ -51,7 +52,7 @@ const Login = () => {
     <div className="w-full h-full flex flex-col items-center justify-center gap-12">
       <div className="w-48 h-fit flex flex-col items-center justify-center slide-down">
         {/* 추후 파비콘 이미지 사용 예정 */}
-        <img src={logo} alt="" className="w-48 h-48 aspect-[1/1] object-cover" />
+        <img src={logo} alt="" className="w-48 h-48 aspect-[1/1] object-cover mb-4" />
         <h1 className="text-2xl font-bold font-preBold">RECIPEDIA</h1>
       </div>
 
