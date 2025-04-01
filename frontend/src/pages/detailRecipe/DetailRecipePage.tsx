@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import ErrorPage from "@components/common/error/ErrorPage";
 import LoadingPlayer from "@components/common/loading/LoadingPlayer";
 import Modal from "@components/common/modal/Modal";
+import Timer from "@components/common/timer/Timer";
 
 import { useGetRecipeDetail } from "@hooks/useRecipeHooks";
 import useRecipeStore from "@stores/recipeStore";
@@ -53,6 +54,7 @@ const DetailRecipePage = () => {
       <ErrorBoundary FallbackComponent={ErrorPage}>
         {isPortrait ? <DetailRecipePortraitPage /> : <DetailRecipeLandscapePage />}
         <Modal />
+        <Timer defaultTimer={10} />
       </ErrorBoundary>
     </>
   );
