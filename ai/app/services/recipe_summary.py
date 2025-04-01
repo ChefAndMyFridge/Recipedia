@@ -166,7 +166,12 @@ class RecipeSummary:
 
         return data
 
-    async def summarize_recipe(self, video_id: str) -> str:
+    async def summarize_recipe(
+        self,
+        video_id: str,
+        use_description: bool = True,
+        use_few_shot_twice: bool = True
+    ) -> str:
         """ 주어진 영상 ID를 기반으로 자막을 가져와 OpenAI API로 요약된 레시피를 반환합니다.
 
         Args:
@@ -182,43 +187,46 @@ class RecipeSummary:
         user_input = copy.deepcopy(SUMMARY_USER_INPUT)
 
         # 순서 1 : 유튜브 영상 설명이 있다면 User Input에 반영
-        try:
-            description_start = time.time()
+        if use_description:
+            try:
+                description_start = time.time()
 
-            # youtube api 키 라운드 로빈
-            await rotate_youtube_api_key()
+                # youtube api 키 라운드 로빈
+                await rotate_youtube_api_key()
 
-            # 유튜브 API 객체
-            youtube = build("youtube", "v3",
-                            developerKey=settings.YOUTUBE_API_KEY)
+                # 유튜브 API 객체
+                youtube = build("youtube", "v3",
+                                developerKey=settings.YOUTUBE_API_KEY)
 
-            # video_id에 해당하는 영상 가져오기
-            response = youtube.videos().list(
-                part='snippet',
-                id=video_id
-            ).execute()
+                # video_id에 해당하는 영상 가져오기
+                response = youtube.videos().list(
+                    part='snippet',
+                    id=video_id
+                ).execute()
 
-            # 데이터에서 description만 추출
-            video_description = response['items'][0]['snippet']['description']
+                # 데이터에서 description만 추출
+                video_description = response['items'][0]['snippet']['description']
 
-            # 예외 처리
-            # 영상 설명 데이터가 정해놓은 글자 수보다 적다면, 레시피 데이터가 아니라고 가정
-            if len(video_description) >= settings.YOUTUBE_DESCRIPTION_LEN_TH:
-                # GPT API 입력 프롬프트에 추가
-                user_input += SUMMARY_DESCRIPTION_INPUT
-                user_input.append(
-                    {"role": "user", "content": video_description})
-                logger.info(f"{settings.LOG_SUMMARY_PREFIX}_영상 설명 데이터 추가")
-            description_end = time.time()
-            logger.info(
-                f"{settings.LOG_SUMMARY_PREFIX}_설명 데이터 추가 소요 시간 : {description_end - description_start:.2f} 초 소요")
+                # 예외 처리
+                # 영상 설명 데이터가 정해놓은 글자 수보다 적다면, 레시피 데이터가 아니라고 가정
+                if len(video_description) >= settings.YOUTUBE_DESCRIPTION_LEN_TH:
+                    # GPT API 입력 프롬프트에 추가
+                    user_input += SUMMARY_DESCRIPTION_INPUT
+                    user_input.append(
+                        {"role": "user", "content": video_description})
+                    logger.info(f"{settings.LOG_SUMMARY_PREFIX}_영상 설명 데이터 추가")
+                description_end = time.time()
+                logger.info(
+                    f"{settings.LOG_SUMMARY_PREFIX}_설명 데이터 추가 소요 시간 : {description_end - description_start:.2f} 초 소요")
 
-        except Exception as e:
-            logger.error(
-                f"{settings.LOG_SUMMARY_PREFIX}_유튜브 영상 설명 추가 중 오류: {e}")
+            except Exception as e:
+                logger.error(
+                    f"{settings.LOG_SUMMARY_PREFIX}_유튜브 영상 설명 추가 중 오류: {e}")
 
         # 순서 2 : Few shot 데이터 적용
-        user_input += SUMMARY_FEW_SHOT_DATA
+        user_input += SUMMARY_FEW_SHOT_DATA[:2]
+        if use_few_shot_twice:
+            user_input += [SUMMARY_FEW_SHOT_DATA[2]]
 
         # 순서 3 : 자막 스크립트 삽입
         try:
@@ -240,6 +248,7 @@ class RecipeSummary:
         try:
             api_start = time.time()
             # OpenAI API 호출 (RequestGPT.run이 비동기 함수라고 가정)
+            # print(user_input)
             summary = await self.request_gpt.run(system_input, user_input)
 
             end = time.time()
