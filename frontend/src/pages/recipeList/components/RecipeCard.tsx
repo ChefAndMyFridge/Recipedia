@@ -15,6 +15,7 @@ import useUserStore from "@stores/userStore";
 import useRecipeStore from "@stores/recipeStore";
 
 import { patchRecipeApi } from "@apis/recipeApi";
+import ReactPlayer from "react-player";
 
 interface RecipeCardProps {
   video: Video;
@@ -47,10 +48,14 @@ const RecipeCard = ({ video }: RecipeCardProps) => {
   return (
     <div className={`flex justify-center`}>
       <div className="w-[80%] h-[60vh] min-h-[450px] p-3 flex flex-col justify-between bg-white rounded-2xl">
-        <img
-          src={thumbnailUrl}
-          alt={video.title}
-          className="w-full h-[45%] min-h-[200px] rounded-xl object-contain bg-black"
+        <ReactPlayer
+          url={video.url}
+          width="100%"
+          height="45%"
+          playing={true}
+          controls={true}
+          light={thumbnailUrl}
+          style={{ backgroundColor: "black" }}
         />
 
         <div className="flex w-full justify-between items-center">
