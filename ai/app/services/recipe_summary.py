@@ -108,9 +108,9 @@ class RecipeSummary:
         for seq in sequences:
             hours = minutes = seconds = 0
             # 1시간 30분, 30분, 25~30분, 20초 등 대응
-            hour_match = re.search(r'(\d+)\s*시간', seq)
-            minute_match = re.search(r'(\d+)(?:~\d+)?\s*분', seq)
-            second_match = re.search(r'(\d+)(?:~\d+)?\s*초', seq)
+            hour_match = re.search(r'(\d+)\s*시간 ', seq)
+            minute_match = re.search(r'(\d+)(?:~\d+)?\s*분 ', seq)
+            second_match = re.search(r'(\d+)(?:~\d+)?\s*초 ', seq)
 
             if hour_match:
                 hours = int(hour_match.group(1))
