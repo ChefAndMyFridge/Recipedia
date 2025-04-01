@@ -66,7 +66,7 @@ SUMMARY_SYSTEM_INPUT = [
     },
     {
         "role": "system",
-        "content": "스크립트 데이터에 있는 대괄호 내 시간 데이터를 기반으로 timestamp에 챕터에 해당하는 타임 스탬프를 지정해줘."
+        "content": "스크립트 데이터에 있는 대괄호 내 시간 데이터를 기반으로 'cooking sequence' 내 두 번째 인덱스 값에 챕터가 시작하는 시간을 작성해줘."
     },
     {
         "role": "system",
