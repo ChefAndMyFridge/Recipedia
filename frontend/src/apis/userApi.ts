@@ -74,3 +74,21 @@ export const saveMemberFilterApi = async ({
     throw new Error(error as string);
   }
 };
+
+export const authLoginApi = async (username: string, password: string): Promise<boolean> => {
+  try {
+    const response = await instance.post("/v1/auth/login", {
+      username,
+      password,
+    });
+    console.log("v1/auth/login", response.data);
+
+    if (response.status === 200) {
+      return true;
+    }
+
+    return false;
+  } catch (error: unknown) {
+    throw new Error(error as string);
+  }
+};
