@@ -2,6 +2,7 @@ package com.recipidia.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -25,32 +26,33 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 public class SecurityConfig {
 
+  // Swagger용 보안 체인: 폼 로그인 활성화
   @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+  @Order(1)
+  public SecurityFilterChain swaggerSecurityFilterChain(HttpSecurity http) throws Exception {
     http
-        .cors(cors -> cors.configurationSource(corsConfigurationSource())) // 여기서 WebMvcConfigurer에 설정한 CORS 설정이 사용됩니다.
-//        .csrf(csrf -> csrf
-//            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-//        ) // 쿠키에 csrf 토큰 붙이기
-        .csrf(csrf -> csrf.disable()) // 일단 CORS 테스트 용으로 비활성화
-//        .authorizeHttpRequests(authorize -> authorize
-//            // /error는 인증 없이 접근 가능하도록 설정
-//            .requestMatchers("/error").permitAll()
-//            // 나머지 요청은 인증 필요
-//            .anyRequest().authenticated()
-//        )
-        .authorizeHttpRequests(authorize -> authorize
-            // 로그인 API는 인증 없이 접근 가능
+        .securityMatcher("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**", "/login")
+        .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
+        .formLogin(withDefaults())  // 기본 폼 로그인 활성화
+        .logout(logout -> logout.permitAll());
+    return http.build();
+  }
+
+  // API용 보안 체인: 폼 로그인 비활성화, JSON 로그인 엔드포인트 사용
+  @Bean
+  @Order(2)
+  public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception {
+    http
+        .securityMatcher("/api/**")
+        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+        .csrf(csrf -> csrf.disable())
+        .authorizeHttpRequests(auth -> auth
             .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
-            // OPTIONS 요청은 preflight용으로 모두 허용
             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-            // 나머지 요청은 인증 필요
             .anyRequest().authenticated()
         )
-//        .formLogin(form -> form.disable()) // formLogin 비활성화 (API 방식만 사용)
-        .formLogin(withDefaults()) // 기본 로그인 페이지 사용
+        .formLogin(form -> form.disable())  // API 엔드포인트에 대해 폼 로그인 비활성화
         .logout(logout -> logout.permitAll());
-
     return http.build();
   }
 
