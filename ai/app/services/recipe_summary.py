@@ -128,6 +128,18 @@ class RecipeSummary:
             for chapter, cooking_data in data['cooking_sequence'].items()
         }
 
+        # 기존 cooking_sequence를 timestamp 기준으로 정렬
+        sorted_sequence = dict(
+            sorted(
+                data['cooking_sequence'].items(),
+                # item[1]은 sequence, timestamp data
+                key=lambda item: item[1]['timestamp']
+            )
+        )
+
+        # 정렬된 결과를 다시 할당
+        data['cooking_sequence'] = sorted_sequence
+
         return data
 
     async def summarize_recipe(self, video_id: str) -> str:
