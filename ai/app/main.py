@@ -10,11 +10,11 @@ from app.utils.docs import RootDocs
 
 app = None
 
-if settings.ENV == "DEPLOY":
+if settings.ENV == "LOCAL":
+    app = FastAPI(title=settings.APP_NAME, debug=settings.DEBUG)
+else:
     app = FastAPI(title=settings.APP_NAME, debug=settings.DEBUG,
                   docs_url=None, redoc_url=None, openapi_url=None)
-else:
-    app = FastAPI(title=settings.APP_NAME, debug=settings.DEBUG)
 
 docs = RootDocs()
 

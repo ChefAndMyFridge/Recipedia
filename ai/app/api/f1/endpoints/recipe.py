@@ -21,7 +21,7 @@ docs = RecipeDocs()
 )
 async def get_recipe_summary(request: Request, data: YoutubeURL = docs.base["data"]):
     try:
-        if settings.ENV == "DEPLOY":
+        if settings.ENV != "LOCAL":
             security_key = request.headers.get("x-api-key")
             if security_key != settings.FASTAPI_SECURITY_KEY:
                 raise HTTPException(

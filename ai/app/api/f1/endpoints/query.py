@@ -21,7 +21,7 @@ docs = QueryDocs()
 )
 async def query_maker_endpoint(request: Request, data: Ingredients = docs.base["data"]):
     try:
-        if settings.ENV == "DEPLOY":
+        if settings.ENV != "LOCAL":
             security_key = request.headers.get("x-api-key")
             if security_key != settings.FASTAPI_SECURITY_KEY:
                 raise HTTPException(
