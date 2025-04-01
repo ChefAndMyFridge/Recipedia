@@ -29,14 +29,14 @@ public class AuthController {
   public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request) {
     // 사용자 이름과 비밀번호로 인증 토큰 생성
     UsernamePasswordAuthenticationToken authToken =
-        new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
+        new UsernamePasswordAuthenticationToken(loginRequest.username(), loginRequest.password());
 
     // 인증 시도
     Authentication authentication = authenticationManager.authenticate(authToken);
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
     // JWT 토큰 생성 후 반환
-    String token = jwtUtil.generateToken(loginRequest.getUsername());
+    String token = jwtUtil.generateToken(loginRequest.username());
     return ResponseEntity.ok(token);
   }
 }
