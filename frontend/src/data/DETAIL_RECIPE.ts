@@ -10,7 +10,7 @@ export const DETAIL_RECIPE: RecipeInfo = {
   duration: "4:16",
   viewCount: 8556390,
   likeCount: 98385,
-  hasCaption: true,
+  hasCaption: false,
   textRecipe: {
     title: "매콤한 돼지고기 김치 볶음",
     cooking_info: {
@@ -116,6 +116,6 @@ export const DETAIL_RECIPE_CHECK: RecipeInfo = {
   duration: "4:16",
   viewCount: 8556390,
   likeCount: 98385,
-  hasCaption: true,
+  hasCaption: false,
   textRecipe: null,
 };

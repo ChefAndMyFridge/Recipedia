@@ -1,6 +1,6 @@
-import { recipeCookingSequenceInfo } from "@/types/recipeListTypes";
 import { useEffect, useRef } from "react";
 import ReactPlayer from "react-player";
+import { recipeCookingSequenceInfo } from "@/types/recipeListTypes";
 
 interface RecipeTextsProps {
   recipe: recipeCookingSequenceInfo;
@@ -24,7 +24,7 @@ const RecipeTexts = ({ recipe, currentTime, setCurrentTime, playerRef, isAutoScr
   }
 
   // 현재 시간에 해당하는 스텝 찾기
-  const getCurrentStep = () => {
+  function getCurrentStep() {
     let currentStep = "";
 
     Object.entries(recipe).forEach(([step, instructions]) => {
@@ -35,7 +35,7 @@ const RecipeTexts = ({ recipe, currentTime, setCurrentTime, playerRef, isAutoScr
     });
 
     return currentStep;
-  };
+  }
 
   // 현재 스텝으로 자동 스크롤
   useEffect(() => {

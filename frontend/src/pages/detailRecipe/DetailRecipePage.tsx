@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import ErrorPage from "@components/common/error/ErrorPage";
 import LoadingPlayer from "@components/common/loading/LoadingPlayer";
 import Modal from "@components/common/modal/Modal";
+import Timer from "@components/common/timer/Timer";
 
 import { useGetRecipeDetail } from "@hooks/useRecipeHooks";
 import useRecipeStore from "@stores/recipeStore";
@@ -22,11 +23,6 @@ const DetailRecipePage = () => {
 
   // 스토어 값이 API 응답으로 업데이트되었는지 확인
   useEffect(() => {
-    // console.log("data", data);
-    // console.log("detailRecipe", detailRecipe);
-    // console.log(data?.recipeId == detailRecipe.recipeId);
-    // console.log(detailRecipe.recipeId === Number(recipeId));
-    // console.log(detailRecipe.recipeId !== 0);
     if (
       data !== undefined &&
       data.recipeId == detailRecipe.recipeId &&
@@ -38,12 +34,12 @@ const DetailRecipePage = () => {
     }
   }, [data, detailRecipe, recipeId]);
 
+  function handleOrientationChange() {
+    setIsPortrait(window.matchMedia("(orientation: portrait)").matches);
+  }
+
   // 화면 방향 변경 감지
   useEffect(() => {
-    const handleOrientationChange = () => {
-      setIsPortrait(window.matchMedia("(orientation: portrait)").matches);
-    };
-
     window.addEventListener("resize", handleOrientationChange);
     return () => {
       window.removeEventListener("resize", handleOrientationChange);
@@ -58,6 +54,7 @@ const DetailRecipePage = () => {
       <ErrorBoundary FallbackComponent={ErrorPage}>
         {isPortrait ? <DetailRecipePortraitPage /> : <DetailRecipeLandscapePage />}
         <Modal />
+        <Timer defaultTimer={10} />
       </ErrorBoundary>
     </>
   );
