@@ -11,6 +11,9 @@ class Settings(BaseSettings):
     YOUTUBE_API_KEY: str = ""
     OPENAI_API_KEY: str
     USDA_API_KEY: str
+    ENV: str
+
+    FASTAPI_SECURITY_KEY: str
 
     YOUTUBE_API_KEYS: List[str]
 
@@ -26,7 +29,7 @@ class Settings(BaseSettings):
     QUERY_OPENAI_MAX_TOKENS: int = 200  # 간결한 응답을 위한 적절한 값
     QUERY_OPENAI_TEMPERATURE: float = 0.2  # 재료 목록에 더 충실하도록 낮은 값 설정
     QUERY_OPENAI_TOP_P: float = 0.85      # 상위 확률 토큰 제한
-    QUERY_OPENAI_FREQUENCY_PENALTY: float = 0.2  # 중복 방지
+    QUERY_OPENAI_FREQUENCY_PENALTY: float = 0.0  # 중복 방지
 
     # Summary OpenAI 설정
     SUMMARY_OPENAI_MODEL: str = "gpt-4o"

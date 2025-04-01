@@ -21,6 +21,12 @@ docs = RecipeDocs()
 )
 async def get_recipe_summary(request: Request, data: YoutubeURL = docs.base["data"]):
     try:
+        if settings.ENV != "LOCAL":
+            security_key = request.headers.get("x-api-key")
+            if security_key != settings.FASTAPI_SECURITY_KEY:
+                raise HTTPException(
+                    status_code=401, detail="Invalid FASTAPI SECURITY KEY")
+
         video_id = data.youtube_url.split("v=")[1].split("&")[0]
         summary = await recipe_summary.summarize_recipe(video_id)
         # TODO: 만일 레시피 요약 정보가 아닌 경우 처리해주기
