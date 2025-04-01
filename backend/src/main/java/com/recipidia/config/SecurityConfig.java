@@ -1,11 +1,14 @@
 package com.recipidia.config;
 
+import com.recipidia.auth.jwt.JwtAuthenticationFilter;
+import com.recipidia.auth.jwt.JwtUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -26,34 +30,42 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 public class SecurityConfig {
 
-  // Swagger용 보안 체인: 폼 로그인 활성화
+  private final UserDetailsService userDetailsService;
+
+  public SecurityConfig(UserDetailsService userDetailsService) {
+    this.userDetailsService = userDetailsService;
+  }
+
   @Bean
-  @Order(1)
-  public SecurityFilterChain swaggerSecurityFilterChain(HttpSecurity http) throws Exception {
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
-        .securityMatcher("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**", "/login")
-        .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
-        .formLogin(withDefaults())  // 기본 폼 로그인 활성화
-        .logout(logout -> logout.permitAll());
+        // CORS 설정
+        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+        // CSRF 비활성화
+        .csrf(csrf -> csrf.disable())
+        // 세션을 사용하지 않음 (JWT 기반 인증은 Stateless)
+        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        // URL 접근 제어
+        .authorizeHttpRequests(auth -> auth
+            // 로그인 엔드포인트는 모두 허용
+            .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
+            // Swagger 관련 엔드포인트는 모두 허용
+            .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**").permitAll()
+            // 그 외 모든 요청은 인증 필요
+            .anyRequest().authenticated()
+        )
+        // JWT 인증 필터 추가 (UsernamePasswordAuthenticationFilter 이전에 실행)
+        .addFilterBefore(new JwtAuthenticationFilter(jwtUtil(), userDetailsService), UsernamePasswordAuthenticationFilter.class)
+        // 폼 로그인/로그아웃 비활성화
+        .formLogin(form -> form.disable())
+        .logout(logout -> logout.disable());
+
     return http.build();
   }
 
-  // API용 보안 체인: 폼 로그인 비활성화, JSON 로그인 엔드포인트 사용
   @Bean
-  @Order(2)
-  public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception {
-    http
-        .securityMatcher("/api/**")
-        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-        .csrf(csrf -> csrf.disable())
-        .authorizeHttpRequests(auth -> auth
-            .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
-            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-            .anyRequest().authenticated()
-        )
-        .formLogin(form -> form.disable())  // API 엔드포인트에 대해 폼 로그인 비활성화
-        .logout(logout -> logout.permitAll());
-    return http.build();
+  public JwtUtil jwtUtil() {
+    return new JwtUtil();
   }
 
   @Bean
@@ -66,8 +78,7 @@ public class SecurityConfig {
     configuration.setAllowCredentials(true);
 
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    // WebMvcConfigurer의 CORS 매핑과는 별도로 여기서도 설정해줘야 합니다.
-    source.registerCorsConfiguration("/api/**", configuration);
+    source.registerCorsConfiguration("/**", configuration);
     return source;
   }
 }
