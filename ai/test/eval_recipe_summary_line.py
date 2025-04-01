@@ -2,38 +2,19 @@ import os
 import asyncio
 import json
 import pandas as pd
-import matplotlib
 import matplotlib.pyplot as plt
-import matplotlib.pylab
 
 from rouge_score import rouge_scorer
 from test.utils.recipe_summary_correct_answer import correct_answer, data_url
+from test.utils.eval_recipe_summary_common import json_to_text, parse_video_id, MENU_NAME
 from app.services.recipe_summary import RecipeSummary
 from datetime import datetime
 from app.core.config import settings
 
 
-MENU_NAME = "알리오 올리오"
-EVAL_DIR = "logs/recipe_summary_eval_results/"
+EVAL_DIR = "logs/recipe_summary_eval_results/line/"
 CSV_DIR = EVAL_DIR + "csv/"
 PLOT_DIR = EVAL_DIR + "plot/"
-
-matplotlib.rcParams['font.family'] = 'Malgun Gothic'  # 또는 다른 한글 폰트
-matplotlib.rcParams['axes.unicode_minus'] = False
-
-
-def parse_video_id(data: str) -> str:
-    return data.split("v=")[1].split("&")[0]
-
-
-def json_to_text(json_data: dict) -> str:
-    text = json_data['title'] + " "
-    text += " ".join([ing['name'] + " " + ing['quantity']
-                     for ing in json_data['ingredients']]) + " "
-    text += " ".join(json_data['cooking_tips']) + " "
-    for step in json_data['cooking_sequence'].values():
-        text += " ".join(step['sequence']) + " "
-    return text.strip()
 
 
 def visualize_rouge_scores_csv():
