@@ -48,7 +48,6 @@ const RecipeInfos = ({ currentTime, setCurrentTime, playerRef }: RecipeInfosProp
   useEffect(() => {
     // console.log("hasFetchedDetailRecipe", hasFetchedDetailRecipe);
     if (!hasFetchedDetailRecipe) return; // 응답 오기 전이면 무시
-    if (detailRecipe.hasCaption === false) return; //자막이 없으면 무시
 
     // console.log("detailRecipe", detailRecipe);
     const detailRecipeCheck =
@@ -61,7 +60,7 @@ const RecipeInfos = ({ currentTime, setCurrentTime, playerRef }: RecipeInfosProp
 
     console.log("recipeText 체크", !detailRecipeCheck, detailRecipeCheck === null);
 
-    if (detailRecipe.hasCaption === true && (!detailRecipeCheck || detailRecipeCheck === null)) {
+    if (!detailRecipeCheck || detailRecipeCheck === null) {
       console.log("getRecipeText 호출");
       getRecipeText();
     }
@@ -92,7 +91,7 @@ const RecipeInfos = ({ currentTime, setCurrentTime, playerRef }: RecipeInfosProp
             />
           )}
           {selectedIndex === "cooking_sequence" &&
-            (detailRecipe.hasCaption ? (
+            (hasFetchedDetailRecipe ? (
               textRecipeData && textRecipeData.cooking_sequence ? (
                 <RecipeTexts
                   recipe={textRecipeData.cooking_sequence}
@@ -102,14 +101,14 @@ const RecipeInfos = ({ currentTime, setCurrentTime, playerRef }: RecipeInfosProp
                   isAutoScroll={isAutoScroll}
                 />
               ) : (
-                <p className="text-base font-preSemiBold">레시피를 추출 중입니다...</p>
+                <NoRecipeInfo text="레시피를 추출하지 못했습니다." />
               )
             ) : (
-              <NoRecipeInfo />
+              <p className="text-base font-preSemiBold">레시피를 추출 중입니다...</p>
             ))}
 
           {selectedIndex === "ingredients" &&
-            (detailRecipe.hasCaption ? (
+            (hasFetchedDetailRecipe ? (
               textRecipeData && textRecipeData.ingredients ? (
                 textRecipeData.ingredients.map((item: recipeIngredientsInfo) => (
                   <div
@@ -120,14 +119,14 @@ const RecipeInfos = ({ currentTime, setCurrentTime, playerRef }: RecipeInfosProp
                   </div>
                 ))
               ) : (
-                <p className="text-base font-preSemiBold">재료를 파악 중입니다...</p>
+                <NoRecipeInfo text="재료를 파악하지 못했습니다." />
               )
             ) : (
-              <NoRecipeInfo />
+              <p className="text-base font-preSemiBold">재료를 파악 중입니다...</p>
             ))}
 
           {selectedIndex === "cooking_tips" &&
-            (detailRecipe.hasCaption ? (
+            (hasFetchedDetailRecipe ? (
               textRecipeData && textRecipeData.cooking_tips ? (
                 textRecipeData.cooking_tips.map((tip: string, index: number) => (
                   <div
@@ -138,10 +137,10 @@ const RecipeInfos = ({ currentTime, setCurrentTime, playerRef }: RecipeInfosProp
                   </div>
                 ))
               ) : (
-                <p className="text-base font-preSemiBold">요리 꿀팁을 생성 중입니다...</p>
+                <NoRecipeInfo text="레시피 자막이 짧아 추출하지 못했습니다." />
               )
             ) : (
-              <NoRecipeInfo />
+              <p className="text-base font-preSemiBold">요리 꿀팁을 생성 중입니다...</p>
             ))}
         </div>
       </div>
