@@ -8,13 +8,13 @@ from rouge_score import rouge_scorer
 from test.utils.recipe_summary_correct_answer import correct_answer, data_url
 from test.utils.eval_recipe_summary_common import json_to_text, parse_video_id, MENU_NAME
 from app.services.recipe_summary import RecipeSummary
-from datetime import datetime
 from app.core.config import settings
 
 
 EVAL_DIR = "logs/recipe_summary_eval_results/bar/"
 CSV_DIR = EVAL_DIR + "csv/"
 PLOT_DIR = EVAL_DIR + "plot/"
+EXP_ENV = "영상 설명, Few Shot, 자막 데이터"
 
 
 def visualize_rouge_scores_csv():
@@ -41,15 +41,15 @@ def visualize_rouge_scores_csv():
 
     # X축 조정
     center_x = [xi + width for xi in x]  # 가운데 기준선
-    if "Date" in df.columns:
-        x_labels = [str(d)[:10] for d in df["Date"]]
-        plt.xticks(center_x, x_labels, rotation=45)
+    if "EXP_ENV" in df.columns:
+        x_labels = [str(d)[:20] for d in df["EXP_ENV"]]
+        plt.xticks(center_x, x_labels, rotation=0)
     else:
         plt.xticks(center_x, [str(i + 1) for i in x])
 
     plt.title(
         f"ROUGE F1 Score (Bar Chart) - {settings.SUMMARY_OPENAI_MODEL} - {MENU_NAME}")
-    plt.xlabel("Evaluation")
+    plt.xlabel("Evaluation Environment")
     plt.ylabel("F1 Score")
     plt.ylim(0, 1)
     plt.legend()
@@ -66,10 +66,9 @@ def visualize_rouge_scores_csv():
 
 def save_scores_to_csv(score_dict: dict):
     os.makedirs(CSV_DIR, exist_ok=True)
-    date_str = datetime.now()
 
     row = {
-        "Date": date_str,
+        "EXP_ENV": EXP_ENV,
         "Menu": MENU_NAME,
         "Model": settings.SUMMARY_OPENAI_MODEL,
     }
