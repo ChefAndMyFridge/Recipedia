@@ -32,9 +32,9 @@ const Timer = ({ defaultTimer }: { defaultTimer: number }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, [relativePosition]);
 
-  // 기본 타이머 설정
+  // 기본 타이머 설정 (타이머가 정지 상태일 때만 적용)
   useEffect(() => {
-    if (defaultTimer > 0) {
+    if (!timerIsRunning && defaultTimer > 0) {
       setInitTimer(defaultTimer);
       setTimer(defaultTimer);
     }
