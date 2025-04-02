@@ -27,7 +27,7 @@ const ProfileModal = () => {
           src={currentProfileImg} // 이미지 서버가 추가된다면 변경 필요
           alt="프로필 이미지"
           onError={(event) => (event.currentTarget.src = defaultProfile)} // 이미지 로드 실패 시 대체 이미지
-          className="w-28 aspect-[1/1] rounded-full object-cover"
+          className="w-32 aspect-[1/1] rounded-full object-cover"
         />
         <p className="font-preSemiBold text-xl">{username}</p>
       </button>
