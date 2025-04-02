@@ -2,38 +2,19 @@ import os
 import asyncio
 import json
 import pandas as pd
-import matplotlib
 import matplotlib.pyplot as plt
-import matplotlib.pylab
 
 from rouge_score import rouge_scorer
 from test.utils.recipe_summary_correct_answer import correct_answer, data_url
+from test.utils.eval_recipe_summary_common import json_to_text, parse_video_id, MENU_NAME
 from app.services.recipe_summary import RecipeSummary
-from datetime import datetime
 from app.core.config import settings
 
 
-MENU_NAME = "알리오 올리오"
-EVAL_DIR = "logs/recipe_summary_eval_results/"
+EVAL_DIR = "logs/recipe_summary_eval_results/bar/"
 CSV_DIR = EVAL_DIR + "csv/"
 PLOT_DIR = EVAL_DIR + "plot/"
-
-matplotlib.rcParams['font.family'] = 'Malgun Gothic'  # 또는 다른 한글 폰트
-matplotlib.rcParams['axes.unicode_minus'] = False
-
-
-def parse_video_id(data: str) -> str:
-    return data.split("v=")[1].split("&")[0]
-
-
-def json_to_text(json_data: dict) -> str:
-    text = json_data['title'] + " "
-    text += " ".join([ing['name'] + " " + ing['quantity']
-                     for ing in json_data['ingredients']]) + " "
-    text += " ".join(json_data['cooking_tips']) + " "
-    for step in json_data['cooking_sequence'].values():
-        text += " ".join(step['sequence']) + " "
-    return text.strip()
+EXP_ENV = "영상 설명, Few Shot, 자막 데이터"
 
 
 def visualize_rouge_scores_csv():
@@ -45,38 +26,49 @@ def visualize_rouge_scores_csv():
         return
 
     df = pd.read_csv(csv_path)
-    # 평가 횟수 기준
-    x = range(len(df))
+    x = range(len(df))  # 평가 인덱스
 
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(12, 6))
 
+    width = 0.25  # 막대 너비
     rouge_types = ["rouge1", "rouge2", "rougeL"]
-    for rouge in rouge_types:
-        plt.plot(x, df[f"{rouge}_F1"], label=rouge.upper(), marker="o")
+    colors = ["skyblue", "salmon", "limegreen"]
+
+    for i, (rouge, color) in enumerate(zip(rouge_types, colors)):
+        offsets = [xi + i * width for xi in x]
+        plt.bar(offsets, df[f"{rouge}_F1"], width=width,
+                label=rouge.upper(), color=color)
+
+    # X축 조정
+    center_x = [xi + width for xi in x]  # 가운데 기준선
+    if "EXP_ENV" in df.columns:
+        x_labels = [str(d)[:20] for d in df["EXP_ENV"]]
+        plt.xticks(center_x, x_labels, rotation=0)
+    else:
+        plt.xticks(center_x, [str(i + 1) for i in x])
 
     plt.title(
-        f"ROUGE F1 Score - {settings.SUMMARY_OPENAI_MODEL} - {MENU_NAME}")
-    plt.xlabel("Evaluation Count")
+        f"ROUGE F1 Score (Bar Chart) - {settings.SUMMARY_OPENAI_MODEL} - {MENU_NAME}")
+    plt.xlabel("Evaluation Environment")
     plt.ylabel("F1 Score")
     plt.ylim(0, 1)
     plt.legend()
-    plt.grid(True)
     plt.tight_layout()
+    plt.grid(axis='y')
 
     os.makedirs(PLOT_DIR, exist_ok=True)
     save_path = os.path.join(
-        PLOT_DIR, f"{MENU_NAME}_{settings.SUMMARY_OPENAI_MODEL}.png")
+        PLOT_DIR, f"{MENU_NAME}_{settings.SUMMARY_OPENAI_MODEL}_bar.png")
     plt.savefig(save_path)
     plt.show()
-    print(f"Line plot saved to {save_path}")
+    print(f"Bar chart saved to {save_path}")
 
 
 def save_scores_to_csv(score_dict: dict):
     os.makedirs(CSV_DIR, exist_ok=True)
-    date_str = datetime.now()
 
     row = {
-        "Date": date_str,
+        "EXP_ENV": EXP_ENV,
         "Menu": MENU_NAME,
         "Model": settings.SUMMARY_OPENAI_MODEL,
     }
