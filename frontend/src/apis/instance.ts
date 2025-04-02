@@ -1,5 +1,4 @@
 import axios from "axios";
-import { navigate } from "../utils/navigationEvent";
 
 const { VITE_MASTER_API_URL, VITE_RELEASE_API_URL } = import.meta.env;
 
@@ -35,8 +34,7 @@ instance.interceptors.response.use(
       console.warn("인증 실패, 로그인 페이지로 이동합니다.");
 
       localStorage.removeItem("jwt"); // 로컬 스토리지에서 토큰 삭제
-      const path = "/login";
-      navigate(path);
+      window.location.href = `${window.location.origin}/login`; // 로그인 페이지로 강제 이동
     }
     return Promise.reject(error);
   }
