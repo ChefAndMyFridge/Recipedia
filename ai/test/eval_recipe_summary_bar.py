@@ -36,7 +36,7 @@ def visualize_rouge_scores_csv():
 
     plt.figure(figsize=(12, 6))
 
-    group_width = 0.3
+    group_width = 0.5
     bar_width = group_width / n_envs
 
     colors = plt.cm.tab20b.colors
@@ -48,7 +48,7 @@ def visualize_rouge_scores_csv():
         ]
 
         offsets = x - group_width/2 + i * bar_width + bar_width / 2  # 중심 기준으로 배치
-        plt.bar(offsets, f1_scores, width=bar_width,
+        plt.bar(offsets, f1_scores, width=bar_width * 0.8,
                 label=exp, color=colors[i % len(colors)])
 
     plt.xticks(x, [r.upper() for r in rouge_types], fontsize=12)
