@@ -6,7 +6,7 @@ import IconTimer from "@assets/icons/IconTimer";
 
 const Timer = ({ defaultTimer }: { defaultTimer: number }) => {
   // 상대적 위치 사용 (0~1 사이의 값으로 표현)
-  const [relativePosition, setRelativePosition] = useState({ xPercent: 0.05, yPercent: 0.85 });
+  const [relativePosition, setRelativePosition] = useState({ xPercent: 0.025, yPercent: 0.915 });
   const [absolutePosition, setAbsolutePosition] = useState({ x: 0, y: 0 });
 
   const [isOpen, setIsOpen] = useState(false);
@@ -146,19 +146,16 @@ const Timer = ({ defaultTimer }: { defaultTimer: number }) => {
             percentage={Math.floor((timer / initTimer) * 100)}
           />
           <div
-            className={`flex justify-center items-center gap-1 text-xl font-preLight ${timerIsRunning && timer <= 5 ? "text-error" : "text-black"}`}
+            className={`flex justify-center items-center gap-0.5 text-xl font-preLight ${timerIsRunning && timer <= 5 ? "text-error" : "text-black"}`}
           >
-            <div className="flex items-center justify-center rounded-lg text-xl">
+            <div className="flex items-center justify-center w-7 text-xl">
               {String(Math.floor(timer / 3600)).padStart(2, "0")}
             </div>
             :
-            <div className="flex items-center justify-center rounded-lg text-xl">
+            <div className="flex items-center justify-center w-7 text-xl">
               {String(Math.floor(timer / 60) % 60).padStart(2, "0")}
             </div>
-            :
-            <div className="flex items-center justify-center rounded-lg text-xl">
-              {String(timer % 60).padStart(2, "0")}
-            </div>
+            :<div className="flex items-center justify-center w-7 text-xl">{String(timer % 60).padStart(2, "0")}</div>
           </div>
         </div>
       ) : (
