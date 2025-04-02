@@ -22,7 +22,7 @@ const HomeFilter = ({
   isFilterOpen: boolean;
   handleFilterOpen: (state: boolean) => void;
 }) => {
-  const { userId } = useUserStore();
+  const { userId, isAuthenticated } = useUserStore();
   const { filteredInfomations } = useIngredientsStore();
 
   const { mutate: useSaveFilteredRequest } = useSaveFilteredInfomations();
@@ -42,11 +42,13 @@ const HomeFilter = ({
 
   useEffect(() => {
     refetchFilteredInfomations();
-  }, [userId]);
+  }, [userId]); 
 
   useEffect(() => {
-    refectchIngredinetsList();
-  }, [order, sort, location]);
+    if (isAuthenticated) {
+      refectchIngredinetsList();
+    }
+  }, [order, sort, location, isAuthenticated]);
 
   function handleSaveFilter(): void {
     console.log(filteredInfomations);
