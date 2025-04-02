@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
+import { useQueryClient } from "@tanstack/react-query";
 
 import RecipeList from "@pages/recipeList/components/RecipeList";
 import NoRecipeList from "@pages/recipeList/components/NoRecipeList";
@@ -11,9 +12,9 @@ import ErrorPage from "@components/common/error/ErrorPage";
 import LoadingPlayer from "@components/common/loading/LoadingPlayer";
 
 import { usePostRecipeList } from "@hooks/useRecipeHooks";
+
 import useRecipeStore from "@stores/recipeStore";
 import useUserStore from "@stores/userStore";
-import { useQueryClient } from "@tanstack/react-query";
 
 const RecipeListPage = () => {
   const { recommendType } = useParams();
@@ -29,7 +30,7 @@ const RecipeListPage = () => {
 
   //선택된 재료 기반 레시피 조회 Hook 호출
   const selectedIngredientsNames = recipeSelectedIngredients.map((ingredient) => ingredient.name);
-  const { isLoading, isError } = usePostRecipeList(userId, selectedIngredientsNames);
+  const { isLoading, isFetching, isError, data } = usePostRecipeList(userId, selectedIngredientsNames);
 
   //레시피 추출 시 DISHES 상태 업데이트
   useEffect(() => {
@@ -50,7 +51,7 @@ const RecipeListPage = () => {
     queryClient.removeQueries({ queryKey: ["recipeList"] });
   }
 
-  if (isLoading) return <LoadingPlayer />;
+  if (isLoading || isFetching || !data) return <LoadingPlayer />;
   if (isError) return <ErrorPage />;
 
   return (
