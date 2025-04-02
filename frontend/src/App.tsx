@@ -1,4 +1,5 @@
-import { Route, Routes } from "react-router-dom";
+import { useEffect } from "react";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import HomePage from "@pages/home/HomePage";
@@ -12,6 +13,18 @@ import PreferencePage from "@pages/preference/PreferencePage";
 const queryClient = new QueryClient();
 
 function App() {
+  const navigate = useNavigate();
+
+  function handleNavigation(event: CustomEvent) {
+    navigate(event.detail.path);
+  }
+  
+  useEffect(() => {
+    //auth-navigate 이벤트 리스너 등록
+    window.addEventListener('auth-navigate', handleNavigation as EventListener);
+    return () => window.removeEventListener('auth-navigate', handleNavigation as EventListener);
+  }, [navigate]);
+
   return (
     <QueryClientProvider client={queryClient}>
       <Routes>

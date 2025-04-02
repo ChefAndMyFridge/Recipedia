@@ -1,4 +1,5 @@
 import axios from "axios";
+import { navigate } from "@utils/navigationEvent";
 
 const { VITE_MASTER_API_URL, VITE_RELEASE_API_URL } = import.meta.env;
 
@@ -18,6 +19,7 @@ const instance = axios.create({
 instance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("jwt");
+
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -34,7 +36,10 @@ instance.interceptors.response.use(
       console.warn("인증 실패, 로그인 페이지로 이동합니다.");
 
       localStorage.removeItem("jwt"); // 로컬 스토리지에서 토큰 삭제
-      window.location.href = `${window.location.origin}/login`; // 로그인 페이지로 강제 이동
+
+      //로그인 페이지로 이동하는 이벤트 발생
+      const path = "/login";
+      navigate(path); 
     }
     return Promise.reject(error);
   }
