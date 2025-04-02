@@ -1,4 +1,6 @@
 import { Route, Routes } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 import HomePage from "@pages/home/HomePage";
 import LoginPage from "@pages/auth/LoginPage";
 import RecipeListPage from "@pages/recipeList/RecipeListPage";
@@ -6,7 +8,6 @@ import DetailRecipePage from "@pages/detailRecipe/DetailRecipePage";
 import SettingPage from "@pages/setting/SettingPage";
 import MyRecipePage from "@pages/myRecipe/MyRecipePage";
 import PreferencePage from "@pages/preference/PreferencePage";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
 
