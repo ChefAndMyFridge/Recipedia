@@ -86,7 +86,7 @@ const handlers = [
       memberId: 9007199254740991,
       filterData: {
         categories: ["한식", "중식", "일식", "양식"],
-        dietaries: ["고단백식", "고열량식", "저염식", "저당식", "저지방식", "저열량식", "비건식", "무가공식", "육식"],
+        dietaries: ["고단백식", "고열량식", "저염식", "저당식"],
         preferredIngredients: ["사과", "대파"],
         dislikedIngredients: ["양파", "고추"],
         allergies: ["견과류", "계란", "유제품", "조개류"],
@@ -100,7 +100,7 @@ const handlers = [
       memberId: 9007199254740991,
       filterData: {
         categories: ["한식", "중식", "일식", "양식"],
-        dietaries: ["고단백식", "고열량식", "저염식", "저당식", "저지방식", "저열량식", "비건식", "무가공식", "육식"],
+        dietaries: ["고단백식", "고열량식", "저염식", "저당식"],
         preferredIngredients: ["사과", "대파"],
         dislikedIngredients: ["양파", "고추"],
         allergies: ["견과류", "계란", "유제품", "조개류"],
