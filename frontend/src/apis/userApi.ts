@@ -85,7 +85,7 @@ export const authLoginApi = async (username: string, password: string): Promise<
     const token = response.data as string;
     localStorage.setItem("jwt", token);
 
-    console.log("로그인 성공, JWT 토큰 저장:", token);
+    // console.log("로그인 성공, JWT 토큰 저장:", token);
     return true;
   } catch (error: unknown) {
     console.error("로그인 실패:", error);
