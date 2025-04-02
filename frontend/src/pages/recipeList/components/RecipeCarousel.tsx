@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Video } from "@/types/recipeListTypes";
 import RecipeCard from "@pages/recipeList/components/RecipeCard";
 
@@ -24,19 +24,19 @@ const RecipeCarousel = ({ videos }: RecipeCarouselProps) => {
   }
 
   // 터치 이벤트 핸들러
-  const handleTouchStart = (event: React.TouchEvent) => {
+  function handleTouchStart(event: React.TouchEvent) {
     // 터치 시작 지점 저장
     touchStartX.current = event.touches[0].clientX;
-  };
+  }
 
-  const handleTouchMove = (event: React.TouchEvent) => {
+  function handleTouchMove(event: React.TouchEvent) {
     // 터치 이동 거리 계산
     const moveX = event.touches[0].clientX;
     setDeltaX(moveX - touchStartX.current);
-  };
+  }
 
-  const handleTouchEnd = () => {
-    if (deltaX < -50 && currentIndex < videos.length - 1) {
+  function handleTouchEnd() {
+    if (deltaX < -50 && currentIndex < videos.length - 1)  {
       // 왼쪽으로 스와이프
       goToNext();
     }
@@ -47,7 +47,31 @@ const RecipeCarousel = ({ videos }: RecipeCarouselProps) => {
     }
 
     setDeltaX(0); // 터치 이동 거리 초기화
-  };
+  }
+
+  const carouselItems = useMemo(() => {
+    return videos && videos.map((video) => (
+        <div key={video.recipeId} className="w-full flex-shrink-0">
+          <RecipeCard video={video} />
+        </div>
+      ));
+  }, [videos]);
+
+  const pagingItems = useMemo(() => {
+    return videos &&
+          videos.map((video, index) => (
+            <div
+              key={video.recipeId}
+              className={`rounded-full transition-all ${index === currentIndex ? "w-2 h-2 bg-primary" : "w-1.5 h-1.5  bg-content"}`}
+              onClick={() => setCurrentIndex(index)}
+            ></div>
+          ));
+  }, [videos, currentIndex]);
+
+   // 새로운 음식 이름 누를 때, index 초기화
+   useEffect(() => {
+    setCurrentIndex(0);
+  }, [videos]);
 
   return (
     <div className="relative flex flex-col gap-8 justify-center items-center flex-[3]">
@@ -61,24 +85,13 @@ const RecipeCarousel = ({ videos }: RecipeCarouselProps) => {
           className="flex transition-transform duration-500"
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         >
-          {videos &&
-            videos.map((video) => (
-              <div key={video.recipeId} className="w-full flex-shrink-0">
-                <RecipeCard video={video} />
-              </div>
-            ))}
+          {carouselItems}
         </div>
       </div>
 
-      <div className="flex gap-2">
-        {videos &&
-          videos.map((video, index) => (
-            <div
-              key={video.recipeId}
-              className={`w-2 h-2 rounded-full ${index === currentIndex ? "bg-primary" : "bg-subContent"}`}
-              onClick={() => setCurrentIndex(index)}
-            ></div>
-          ))}
+      {/* 페이지 인덱싱 */}
+      <div className="flex gap-2 items-center justify-center">
+        {pagingItems}
       </div>
     </div>
   );
