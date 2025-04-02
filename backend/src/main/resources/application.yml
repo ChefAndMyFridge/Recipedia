@@ -14,9 +14,6 @@ spring:
     url: jdbc:mysql://my-mysql:3306/recipidia?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul
     username: root
     password: ${MYSQL_ROOT_PASSWORD}
-  aop:
-    proxy-target-class: true
-    expose-proxy: true
 
   jpa:
     hibernate:
