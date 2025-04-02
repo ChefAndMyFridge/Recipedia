@@ -94,14 +94,17 @@ def save_scores_to_csv(score_dict: dict):
 if __name__ == "__main__":
     async def main():
         recipe_summary = RecipeSummary()
-        api_answer = await recipe_summary.summarize_recipe(parse_video_id(data_url[MENU_NAME]))
-
-        answer_text = json_to_text(json.loads(correct_answer[MENU_NAME]))
-        generated_text = json_to_text(api_answer)
+        api_answer = await recipe_summary.summarize_recipe(
+            parse_video_id(data_url[MENU_NAME]),
+            use_description=False,
+            use_few_shot=True,
+            use_system_input=True
+        )
 
         scorer = rouge_scorer.RougeScorer(
             ['rouge1', 'rouge2', 'rougeL'], use_stemmer=False)
-        scores = scorer.score(answer_text, generated_text)
+        scores = scorer.score(
+            correct_answer[MENU_NAME], json.dumps(api_answer, ensure_ascii=False))
 
         # 출력
         for key in scores:
