@@ -3,7 +3,6 @@ package com.recipidia.recipe.service.impl;
 import com.recipidia.filter.entity.MemberFilter;
 import com.recipidia.filter.repository.MemberFilterRepository;
 import com.recipidia.filter.service.IngredientFilterService;
-import com.recipidia.ingredient.service.IngredientService;
 import com.recipidia.member.entity.MemberRecipe;
 import com.recipidia.member.repository.MemberRecipeRepository;
 import com.recipidia.recipe.converter.RecipeQueryResConverter;
@@ -20,6 +19,7 @@ import com.recipidia.recipe.response.RecipeQueryCustomResponse;
 import com.recipidia.recipe.response.RecipeQueryRes;
 import com.recipidia.recipe.response.VideoInfoCustomResponse;
 import com.recipidia.recipe.service.RecipeService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -39,28 +39,15 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class RecipeServiceImpl implements RecipeService {
 
-  private final IngredientService ingredientService;
   private final IngredientFilterService ingredientFilterService;
   private final WebClient webClient;
   private final RecipeRepository recipeRepository;
-  private final RecipeQueryResConverter queryResConverter = new RecipeQueryResConverter();
   private final MemberRecipeRepository memberRecipeRepository;
   private final MemberFilterRepository memberFilterRepository;
-
-  public RecipeServiceImpl(IngredientService ingredientService,
-                           IngredientFilterService ingredientFilterService, WebClient webClient,
-                           RecipeRepository recipeRepository, MemberRecipeRepository memberRecipeRepository,
-                           MemberFilterRepository memberFilterRepository) {
-    this.ingredientService = ingredientService;
-    this.ingredientFilterService = ingredientFilterService;
-    // FastAPI 컨테이너의 서비스명을 사용
-    this.webClient = webClient;
-    this.recipeRepository = recipeRepository;
-    this.memberRecipeRepository = memberRecipeRepository;
-    this.memberFilterRepository = memberFilterRepository;
-  }
+  private final RecipeQueryResConverter queryResConverter = new RecipeQueryResConverter();
 
   @Override
   @Transactional
@@ -235,7 +222,8 @@ public class RecipeServiceImpl implements RecipeService {
             .map(RecipeDto::fromEntity)
             .collect(Collectors.toList()))
         .map(ResponseEntity::ok)
-        .doOnNext(resp -> log.info("getAllRecipes result size={}", resp.getBody().size()))
+        .doOnNext(resp -> log.info("getAllRecipes result size={}",
+            Optional.ofNullable(resp.getBody()).map(List::size).orElse(0)))
         .doOnError(e -> log.error("getAllRecipes failed", e))
         .onErrorResume(e ->
             Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build())
