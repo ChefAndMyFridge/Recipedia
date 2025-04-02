@@ -2,10 +2,7 @@ package com.recipidia.member.dto;
 
 import com.recipidia.member.entity.MemberRecipe;
 import com.recipidia.recipe.dto.RecipeDto;
-import com.recipidia.recipe.dto.RecipeIngredientDto;
 import com.recipidia.recipe.entity.Recipe;
-
-import java.util.List;
 
 public record RecipeWithMemberInfoDto(
     Long recipeId,

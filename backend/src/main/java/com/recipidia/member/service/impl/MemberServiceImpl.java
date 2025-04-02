@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -93,6 +92,6 @@ public class MemberServiceImpl implements MemberService {
   public List<MemberDto> getAllMembers() {
     return memberRepository.findAllByOrderByIdAsc().stream()
         .map(MemberDto::fromEntity)
-        .collect(Collectors.toList());
+        .toList();
   }
 }

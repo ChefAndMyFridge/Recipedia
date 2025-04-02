@@ -4,7 +4,6 @@ import com.recipidia.recipe.entity.Recipe;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * DTO for {@link Recipe}
@@ -18,7 +17,7 @@ public record RecipeDto(Long recipeId, String name, String title, String youtube
     public static RecipeDto fromEntity(Recipe recipe) {
         List<RecipeIngredientDto> ingredientDtos = recipe.getIngredients().stream()
                 .map(RecipeIngredientDto::fromEntity)
-                .collect(Collectors.toList());
+                .toList();
         return new RecipeDto(
             recipe.getId(),
             recipe.getName(),

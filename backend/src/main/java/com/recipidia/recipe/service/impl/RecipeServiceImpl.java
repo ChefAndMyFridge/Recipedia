@@ -34,7 +34,6 @@ import reactor.util.function.Tuple2;
 import reactor.util.function.Tuples;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -48,6 +47,9 @@ public class RecipeServiceImpl implements RecipeService {
   private final MemberRecipeRepository memberRecipeRepository;
   private final MemberFilterRepository memberFilterRepository;
   private final RecipeQueryResConverter queryResConverter = new RecipeQueryResConverter();
+
+  private static final String RECIPE_NOT_FOUND_MSG = "Recipe not found";
+
 
   @Override
   @Transactional
@@ -124,38 +126,43 @@ public class RecipeServiceImpl implements RecipeService {
   @Override
   @Transactional
   public Mono<Void> saveRecipeResult(ResponseEntity<RecipeQueryRes> responseEntity) {
-    return Mono.fromCallable(() -> {
+    return Mono.fromRunnable(() -> {
           RecipeQueryRes recipeQueryRes = responseEntity.getBody();
           if (recipeQueryRes == null || recipeQueryRes.getDishes() == null) {
-            // 응답이 비어있으면 비어있는 응답 반환. 필요 시 나중에 검색 결과가 없습니다 처리
-            return Mono.empty();
+            // 응답이 비어있으면 아무 작업도 하지 않음
+            return;
           }
-          // 각 dish(레시피 이름)에 대해 반복
-          for (String dish : recipeQueryRes.getDishes()) {
-            List<VideoInfo> videoInfos = recipeQueryRes.getVideos().get(dish);
-            if (videoInfos != null && !videoInfos.isEmpty()) {
-              for (VideoInfo videoInfo : videoInfos) {
-                String youtubeUrl = videoInfo.getUrl();
-                Optional<Recipe> existing = recipeRepository.findByYoutubeUrl(youtubeUrl);
-                if (existing.isEmpty()) {
-                  Recipe recipe = Recipe.builder()
-                      .name(dish)
-                      .title(videoInfo.getTitle())
-                      .youtubeUrl(videoInfo.getUrl())
-                      .channelTitle(videoInfo.getChannel_title())
-                      .duration(videoInfo.getDuration())
-                      .viewCount(videoInfo.getView_count())
-                      .likeCount(videoInfo.getLike_count())
-                      .hasCaption(videoInfo.getHas_caption())
-                      .build();
-                  recipeRepository.save(recipe);
-                }
-              }
-            }
-          }
-          return null;
+          recipeQueryRes.getDishes().forEach(dish -> processDish(dish, recipeQueryRes));
         }).subscribeOn(Schedulers.boundedElastic())
         .then();
+  }
+
+  // 각 요리 이름 별 처리 메소드
+  private void processDish(String dish, RecipeQueryRes recipeQueryRes) {
+    List<VideoInfo> videoInfos = recipeQueryRes.getVideos().get(dish);
+    if (videoInfos == null || videoInfos.isEmpty()) {
+      return;
+    }
+    videoInfos.forEach(videoInfo -> processVideoInfo(dish, videoInfo));
+  }
+
+  // 각 비디오 별 처리 메소드
+  private void processVideoInfo(String dish, VideoInfo videoInfo) {
+    String youtubeUrl = videoInfo.getUrl();
+    Optional<Recipe> existing = recipeRepository.findByYoutubeUrl(youtubeUrl);
+    if (existing.isEmpty()) {
+      Recipe recipe = Recipe.builder()
+          .name(dish)
+          .title(videoInfo.getTitle())
+          .youtubeUrl(videoInfo.getUrl())
+          .channelTitle(videoInfo.getChannel_title())
+          .duration(videoInfo.getDuration())
+          .viewCount(videoInfo.getView_count())
+          .likeCount(videoInfo.getLike_count())
+          .hasCaption(videoInfo.getHas_caption())
+          .build();
+      recipeRepository.save(recipe);
+    }
   }
 
   @Override
@@ -220,7 +227,7 @@ public class RecipeServiceImpl implements RecipeService {
         .publishOn(Schedulers.parallel())
         .map(list -> list.stream()
             .map(RecipeDto::fromEntity)
-            .collect(Collectors.toList()))
+            .toList())
         .map(ResponseEntity::ok)
         .doOnNext(resp -> log.info("getAllRecipes result size={}",
             Optional.ofNullable(resp.getBody()).map(List::size).orElse(0)))
@@ -234,7 +241,7 @@ public class RecipeServiceImpl implements RecipeService {
   @Transactional
   public Mono<RecipeExtractRes> extractRecipe(Long recipeId) {
     return Mono.justOrEmpty(recipeRepository.findById(recipeId))
-        .switchIfEmpty(Mono.error(new NoRecipeException("Recipe not found")))
+        .switchIfEmpty(Mono.error(new NoRecipeException(RECIPE_NOT_FOUND_MSG)))
         .subscribeOn(Schedulers.boundedElastic())
         .flatMap(recipe -> {
           if (recipe.getTextRecipe() != null) {
@@ -262,18 +269,15 @@ public class RecipeServiceImpl implements RecipeService {
                 } else {
                   return response.bodyToMono(RecipeExtractRes.class);
                 }
-              })
-              .flatMap(extractRes -> saveExtractResult(recipeId, extractRes)
-                  .thenReturn(extractRes));
+              });
         });
   }
 
   // 더미 데이터 반환 시 레시피의 HasCaption 값을 false로 변경
-  @Transactional
-  public Mono<Recipe> updateHasCaptionFalse(Long recipeId) {
+  private Mono<Recipe> updateHasCaptionFalse(Long recipeId) {
     return Mono.fromCallable(() -> {
       Recipe recipe = recipeRepository.findById(recipeId)
-          .orElseThrow(() -> new NoRecipeException("Recipe not found"));
+          .orElseThrow(() -> new NoRecipeException(RECIPE_NOT_FOUND_MSG));
       recipe.noCaption();
       return recipeRepository.save(recipe);
     }).subscribeOn(Schedulers.boundedElastic());
@@ -287,7 +291,7 @@ public class RecipeServiceImpl implements RecipeService {
         .subscribeOn(Schedulers.boundedElastic())
         .flatMap(optionalRecipe -> {
           if (optionalRecipe.isEmpty()) {
-            return Mono.error(new NoRecipeException("Recipe not found"));
+            return Mono.error(new NoRecipeException(RECIPE_NOT_FOUND_MSG));
           }
           Recipe recipe = optionalRecipe.get();
           // 추출 결과 전체를 RecipeExtractRes로 저장
@@ -314,7 +318,7 @@ public class RecipeServiceImpl implements RecipeService {
         .subscribeOn(Schedulers.boundedElastic())
         .flatMap(optionalRecipe -> {
           if (optionalRecipe.isEmpty()) {
-            return Mono.error(new NoRecipeException("Recipe not found"));
+            return Mono.error(new NoRecipeException(RECIPE_NOT_FOUND_MSG));
           }
           Recipe recipe = optionalRecipe.get();
           RecipeDetailDto dto = RecipeDetailDto.fromEntities(recipe, extractRes);
@@ -328,7 +332,7 @@ public class RecipeServiceImpl implements RecipeService {
         .subscribeOn(Schedulers.boundedElastic())
         .flatMap(optionalRecipe -> {
           if (optionalRecipe.isEmpty()) {
-            return Mono.error(new NoRecipeException("Recipe not found"));
+            return Mono.error(new NoRecipeException(RECIPE_NOT_FOUND_MSG));
           }
           Recipe recipe = optionalRecipe.get();
           // textRecipe가 없으면 빈 RecipeExtractRes를 생성하거나 null을 사용 (DTO 설계에 따라 선택)

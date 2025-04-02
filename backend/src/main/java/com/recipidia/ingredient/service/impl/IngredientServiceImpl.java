@@ -16,8 +16,8 @@ import com.recipidia.ingredient.request.IngredientMultipleDeleteReq;
 import com.recipidia.ingredient.request.IngredientUpdateReq;
 import com.recipidia.ingredient.response.IngredientIncomingRes;
 import com.recipidia.ingredient.response.IngredientUpdateRes;
-import com.recipidia.ingredient.scheduler.NutrientUpdateScheduler;
 import com.recipidia.ingredient.service.IngredientService;
+import com.recipidia.ingredient.service.NutrientUpdateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,11 +38,8 @@ public class IngredientServiceImpl implements IngredientService {
   private final IngredientInfoRepository ingredientInfoRepository;
   private final IngredientRepository ingredientRepository;
   private final IngredientDocumentRepository ingredientDocumentRepository;
-
-  // queryDSL
   private final IngredientQueryRepository ingredientQueryRepository;
-
-  private final NutrientUpdateScheduler nutrientUpdateScheduler;
+  private final NutrientUpdateService nutrientUpdateService;
 
   @Override
   public List<IngredientSimpleInfoDto> getAllIngredientInfo() {
@@ -56,15 +52,6 @@ public class IngredientServiceImpl implements IngredientService {
   @Override
   public List<IngredientInfoDto> findAllExistingIngredients(Map<String, String> filterParam) {
     return ingredientQueryRepository.findAllExistingIngredients(filterParam);
-  }
-
-  @Override
-  @Transactional(readOnly = true)
-  public List<IngredientInfoDto> getAllExistingIngredients() {
-    List<IngredientInfo> ingredientInfos = ingredientInfoRepository.findAllWithIngredients();
-    return ingredientInfos.stream()
-        .map(IngredientInfoDto::fromEntity)
-        .toList();
   }
 
   @Override
@@ -95,7 +82,7 @@ public class IngredientServiceImpl implements IngredientService {
     if (ingredientInfo.getId() == null) { // 새로운 엔티티라면 ID가 null일 것
       // 저장하고 ingredientInfo에 대한 Nutrient 정보도 추가
       ingredientInfoRepository.saveAndFlush(ingredientInfo); // DB에 즉시 반영 : DB에 반영 후 영양 업데이트
-      nutrientUpdateScheduler.updateNutrientForIngredient(ingredientInfo);
+      nutrientUpdateService.updateNutrientForIngredient(ingredientInfo);
       // Elasctic Search index에 추가
       ingredientDocumentRepository.save(IngredientDocument.fromEntity(ingredientInfo));
     }
@@ -126,9 +113,7 @@ public class IngredientServiceImpl implements IngredientService {
     return IngredientUpdateRes.fromEntity(ingredient);
   }
 
-  @Override
-  @Transactional
-  public Map<String, Integer> releaseItems(Long ingredientId, int quantity) {
+  private Map<String, Integer> releaseItems(Long ingredientId, int quantity) {
     // 재료 정보 호출
     IngredientInfo ingredientInfo = ingredientInfoRepository.findWithIngredients(ingredientId);
 
@@ -194,6 +179,6 @@ public class IngredientServiceImpl implements IngredientService {
     List<IngredientInfo> ingredientInfos = ingredientInfoRepository.findAllExistingWithIngredientsAndNutrients();
     return ingredientInfos.stream()
         .map(IngredientInfoWithNutrientDto::fromEntity)
-        .collect(Collectors.toList());
+        .toList();
   }
 }

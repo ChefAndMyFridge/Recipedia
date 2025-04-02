@@ -26,7 +26,7 @@ public class AuthController {
   }
 
   @PostMapping("/login")
-  public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request) {
+  public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request) {
     // 사용자 이름과 비밀번호로 인증 토큰 생성
     UsernamePasswordAuthenticationToken authToken =
         new UsernamePasswordAuthenticationToken(loginRequest.username(), loginRequest.password());
