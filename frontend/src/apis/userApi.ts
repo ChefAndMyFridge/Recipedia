@@ -86,9 +86,9 @@ export const authLoginApi = async (username: string, password: string): Promise<
     localStorage.setItem("jwt", token);
 
      // 토큰이 localStorage에 완전히 저장될 때까지 짧은 지연 시간 추가
-     await new Promise(resolve => setTimeout(resolve, 100));
+    //  await new Promise(resolve => setTimeout(resolve, 100));
 
-    console.log("로그인 성공, JWT 토큰 저장");
+    console.log("로그인 성공, JWT 토큰 저장 in api");
     return true;
   } catch (error: unknown) {
     console.error("로그인 실패:", error);
