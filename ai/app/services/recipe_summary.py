@@ -201,7 +201,8 @@ class RecipeSummary:
         self,
         video_id: str,
         use_description: bool = True,
-        use_few_shot_twice: bool = True
+        use_few_shot: bool = True,
+        use_system_input: bool = True,
     ) -> str:
         """ 주어진 영상 ID를 기반으로 자막을 가져와 OpenAI API로 요약된 레시피를 반환합니다.
 
@@ -214,7 +215,9 @@ class RecipeSummary:
         start = time.time()
 
         # OpenAI 요청을 위한 기본 메시지 구성
-        system_input = SUMMARY_SYSTEM_INPUT
+        system_input = None
+        if use_system_input:
+            system_input = SUMMARY_SYSTEM_INPUT
         user_input = copy.deepcopy(SUMMARY_USER_INPUT)
 
         # 순서 1 : 유튜브 영상 설명이 있다면 User Input에 반영
@@ -255,9 +258,8 @@ class RecipeSummary:
                     f"{settings.LOG_SUMMARY_PREFIX}_유튜브 영상 설명 추가 중 오류: {e}")
 
         # 순서 2 : Few shot 데이터 적용
-        user_input += SUMMARY_FEW_SHOT_DATA[:2]
-        if use_few_shot_twice:
-            user_input += [SUMMARY_FEW_SHOT_DATA[2]]
+        if use_few_shot:
+            user_input += SUMMARY_FEW_SHOT_DATA
 
         # 순서 3 : 자막 스크립트 삽입
         try:
@@ -279,16 +281,16 @@ class RecipeSummary:
         try:
             api_start = time.time()
             # OpenAI API 호출 (RequestGPT.run이 비동기 함수라고 가정)
-            gpt_output = await self.request_gpt.run(system_input, user_input)
+            summary = await self.request_gpt.run(system_input, user_input)
 
             api_end = time.time()
             logger.info(
                 f"{settings.LOG_SUMMARY_PREFIX}_GPT API 소요 시간 : {api_end - api_start:.2f} 초 소요")
 
             # 레시피 요약이 아닐 경우를 return messgae 길이로 처리
-            if len(gpt_output) < 15:
+            if len(summary) < 15:
                 return settings.SUMMARY_NOT_COOKCING_VIDEO_CODE
-            summary = self.extract_json(gpt_output)
+            summary = self.extract_json(summary)
             if type(summary) is str:
                 summary = json.loads(summary)
 
