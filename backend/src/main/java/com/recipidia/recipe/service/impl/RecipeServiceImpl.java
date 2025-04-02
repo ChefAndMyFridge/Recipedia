@@ -149,20 +149,25 @@ public class RecipeServiceImpl implements RecipeService {
   // 각 비디오 별 처리 메소드
   private void processVideoInfo(String dish, VideoInfo videoInfo) {
     String youtubeUrl = videoInfo.getUrl();
-    Optional<Recipe> existing = recipeRepository.findByYoutubeUrl(youtubeUrl);
-    if (existing.isEmpty()) {
-      Recipe recipe = Recipe.builder()
-          .name(dish)
-          .title(videoInfo.getTitle())
-          .youtubeUrl(videoInfo.getUrl())
-          .channelTitle(videoInfo.getChannel_title())
-          .duration(videoInfo.getDuration())
-          .viewCount(videoInfo.getView_count())
-          .likeCount(videoInfo.getLike_count())
-          .hasCaption(videoInfo.getHas_caption())
-          .build();
-      recipeRepository.save(recipe);
-    }
+
+    // 기존 레시피는 업데이트, 신규 레시피는 빌드해서 저장
+    Recipe recipe = recipeRepository.findByYoutubeUrl(youtubeUrl)
+        .map(existingRecipe -> {
+          existingRecipe.updateFromVideoInfo(videoInfo); // 기존 레시피 업데이트
+          return existingRecipe;
+        })
+        .orElseGet(() -> Recipe.builder()
+            .youtubeUrl(youtubeUrl)
+            .name(dish)
+            .hasCaption(videoInfo.getHasCaption())
+            .title(videoInfo.getTitle())
+            .channelTitle(videoInfo.getChannelTitle())
+            .duration(videoInfo.getDuration())
+            .viewCount(videoInfo.getViewCount())
+            .likeCount(videoInfo.getLikeCount())
+            .build());
+
+    recipeRepository.save(recipe);
   }
 
   @Override
@@ -207,11 +212,11 @@ public class RecipeServiceImpl implements RecipeService {
                       .recipeId(recipeId)
                       .title(video.getTitle())
                       .url(video.getUrl())
-                      .channelTitle(video.getChannel_title())
+                      .channelTitle(video.getChannelTitle())
                       .duration(video.getDuration())
-                      .viewCount(video.getView_count())
-                      .likeCount(video.getLike_count())
-                      .hasCaption(video.getHas_caption())
+                      .viewCount(video.getViewCount())
+                      .likeCount(video.getLikeCount())
+                      .hasCaption(video.getHasCaption())
                       .favorite(favorite)
                       .rating(rating)
                       .build();
