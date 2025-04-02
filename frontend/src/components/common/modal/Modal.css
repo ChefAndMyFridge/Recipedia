@@ -7,6 +7,15 @@ dialog[open] {
   animation: slideDown 0.5s forwards;
 }
 
+.is-closing {
+  animation: slideUp 0.3s forwards !important;
+  transition: all 0.3s ease;
+}
+
 dialog::backdrop {
-  background-color: rgba(0, 0, 0, 0.2);
+  animation: fadeBackdrop 0.5s forwards;
+}
+
+dialog.is-closing::backdrop {
+  animation: fadeBackdropOut 0.3s forwards;
 }
