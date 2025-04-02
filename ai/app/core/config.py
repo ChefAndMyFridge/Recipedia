@@ -19,7 +19,7 @@ class Settings(BaseSettings):
 
     @validator("YOUTUBE_API_KEY", pre=True, always=True)
     def set_default_youtube_api_key(cls, v, values):
-        if v is "" and "YOUTUBE_API_KEYS" in values and values["YOUTUBE_API_KEYS"]:
+        if v == "" and "YOUTUBE_API_KEYS" in values and values["YOUTUBE_API_KEYS"]:
             return values["YOUTUBE_API_KEYS"][0]
         return v
 
