@@ -10,6 +10,7 @@ import {
   deleteMemberApi,
   getMemberFilterApi,
   saveMemberFilterApi,
+  authLoginApi,
 } from "@apis/userApi";
 
 import useUserStore from "@stores/userStore";
@@ -103,5 +104,24 @@ export const useSaveFilteredInfomations = () => {
     },
   });
 
+  return mutation;
+};
+
+// 로그인 관리
+export const useLogin = () => {
+  const { setAuthentication } = useUserStore();
+  
+  const mutation = useMutation<boolean, Error, { username: string; password: string }>({
+    mutationFn: ({ username, password }) => authLoginApi(username, password),
+    onSuccess: () => {
+      // authentication 상태 true로 변경
+      console.log("로그인 성공 in useLogin");
+      setAuthentication();
+    },
+    onError: (error) => {
+      console.error("로그인 실패 in useLogin:", error);
+    }
+  });
+  
   return mutation;
 };
