@@ -1,10 +1,13 @@
 import axios from "axios";
 
-const { VITE_API_URL } = import.meta.env;
+const { VITE_MASTER_API_URL, VITE_RELEASE_API_URL } = import.meta.env;
+
+const base = import.meta.env.BASE_URL;
+const baseURL = base.startsWith("/master") ? VITE_MASTER_API_URL : VITE_RELEASE_API_URL;
 
 const instance = axios.create({
   // baseURL: VITE_API_URL, // 프로덕션 환경
-  VITE_API_URL,
+  baseURL,
   headers: {
     "Content-Type": "application/json; charset=UTF-8",
     "Access-Control-Allow-Origin": "*",
