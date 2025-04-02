@@ -15,7 +15,7 @@ from app.core.config import settings
 EVAL_DIR = "logs/recipe_summary_eval_results/bar/"
 CSV_DIR = EVAL_DIR + "csv/"
 PLOT_DIR = EVAL_DIR + "plot/"
-EXP_ENV = "영상 설명, Few Shot, 자막 데이터"
+EXP_ENV = "Few Shot"
 
 
 def visualize_rouge_scores_csv():
@@ -55,9 +55,9 @@ def visualize_rouge_scores_csv():
 
     plt.title(
         f"ROUGE F1 Score (Bar Chart) - {settings.SUMMARY_OPENAI_MODEL} - {MENU_NAME}")
-    plt.xlabel("Evaluation Environment")
-    plt.ylabel("F1 Score")
+    plt.ylabel("F1 Score", fontdict={'fontsize': 12})
     plt.ylim(0, 1)
+    plt.yticks(fontsize=12)
     plt.legend()
     plt.tight_layout()
     plt.grid(axis='y')
