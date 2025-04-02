@@ -39,7 +39,7 @@ def visualize_rouge_scores_csv():
     group_width = 0.3
     bar_width = group_width / n_envs
 
-    colors = plt.cm.tab10.colors
+    colors = plt.cm.tab20b.colors
 
     for i, exp in enumerate(exp_envs):
         sub_df = df[df["EXP_ENV"] == exp]
