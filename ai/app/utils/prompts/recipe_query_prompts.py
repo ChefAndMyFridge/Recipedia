@@ -161,6 +161,7 @@ def get_chef_prompt(ingredients_list, main_ingredients=None, preferred_ingredien
     else:
         main_ingredients_instruction = "- 반드시 주재료(" + ", ".join(
             main_ingredients) + ")를 핵심 재료로 하는 실존 요리만 추천해주세요. 주재료와 요리 간의 일반적 관계를 엄격히 지켜야 합니다."
+        main_ingredients_instruction += "주재료가 주류(소주, 맥주, 와인 등)인 경우, 오직 냉장고 재료만을 활용하여 해당 주류와 함께 먹기 좋은 안주를 추천하세요."
 
     # 선호 재료 처리 - 빈 리스트인 경우에도 기본 지시사항 제공
     if preferred_ingredients and len(preferred_ingredients) > 0:
