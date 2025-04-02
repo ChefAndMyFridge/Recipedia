@@ -19,6 +19,7 @@ import com.recipidia.ingredient.response.IngredientUpdateRes;
 import com.recipidia.ingredient.scheduler.NutrientUpdateScheduler;
 import com.recipidia.ingredient.service.IngredientService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,10 +39,7 @@ public class IngredientServiceImpl implements IngredientService {
   private final IngredientInfoRepository ingredientInfoRepository;
   private final IngredientRepository ingredientRepository;
   private final IngredientDocumentRepository ingredientDocumentRepository;
-
-  // queryDSL
   private final IngredientQueryRepository ingredientQueryRepository;
-
   private final NutrientUpdateScheduler nutrientUpdateScheduler;
 
   @Override
@@ -176,13 +173,15 @@ public class IngredientServiceImpl implements IngredientService {
   public Map<String, Integer> releaseMultipleItems(List<IngredientMultipleDeleteReq> requests) {
     Map<String, Integer> remainCounts = new HashMap<>();
 
+    IngredientService proxy = (IngredientService) AopContext.currentProxy();
+
     for (IngredientMultipleDeleteReq req : requests) {
       // 이름으로 재료 조회
       IngredientInfo ingredientInfo = ingredientInfoRepository.findByName(req.name())
           .orElseThrow(() -> new IngredientDeleteException("재료 " + req.name() + " 가 존재하지 않습니다."));
 
       // 기존 단일 출고 메서드 재활용
-      Map<String, Integer> result = releaseItems(ingredientInfo.getId(), req.quantity());
+      Map<String, Integer> result = proxy.releaseItems(ingredientInfo.getId(), req.quantity());
       remainCounts.put(req.name(), result.get("remainCount"));
     }
     return remainCounts;
@@ -194,6 +193,6 @@ public class IngredientServiceImpl implements IngredientService {
     List<IngredientInfo> ingredientInfos = ingredientInfoRepository.findAllExistingWithIngredientsAndNutrients();
     return ingredientInfos.stream()
         .map(IngredientInfoWithNutrientDto::fromEntity)
-        .collect(Collectors.toList());
+        .toList();
   }
 }

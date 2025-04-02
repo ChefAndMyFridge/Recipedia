@@ -7,6 +7,7 @@ import com.recipidia.ingredient.repository.IngredientNutrientRepository;
 import com.recipidia.ingredient.response.IngredientNutrientRes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -30,9 +31,10 @@ public class NutrientUpdateScheduler {
     @Scheduled(cron = "0 0 * * * *")
     public void updateMissingNutrients() {
         List<IngredientInfo> ingredientsWithoutNutrient = ingredientInfoRepository.findByIngredientNutrientsIsNull();
+        NutrientUpdateScheduler proxy = (NutrientUpdateScheduler) AopContext.currentProxy();
         for (IngredientInfo ingredient : ingredientsWithoutNutrient) {
             // 영양성분 정보가 비어있는 IngredinentInfo를 순회하며 업데이트
-            updateNutrientForIngredient(ingredient);
+            proxy.updateNutrientForIngredient(ingredient);
         }
     }
 
