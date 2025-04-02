@@ -1,11 +1,17 @@
 package com.recipidia.recipe.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
 import com.recipidia.recipe.dto.RecipeDto;
 import com.recipidia.recipe.request.RecipeQueryReq;
+import com.recipidia.recipe.response.RecipeExtractRes;
 import com.recipidia.recipe.response.RecipeQueryCustomResponse;
 import com.recipidia.recipe.response.RecipeQueryRes;
-import com.recipidia.recipe.response.RecipeExtractRes;
 import com.recipidia.recipe.service.RecipeService;
+import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
@@ -17,16 +23,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-import java.util.Map;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-
 @WebFluxTest(controllers = RecipeController.class)
 @Import(RecipeControllerTest.MockConfig.class)
-public class RecipeControllerTest {
+class RecipeControllerTest {
 
   @TestConfiguration
   static class MockConfig {
@@ -44,7 +43,7 @@ public class RecipeControllerTest {
   private WebTestClient webTestClient;
 
   @Test
-  public void testQueryRecipe() {
+  void testQueryRecipe() {
     // 변경된 RecipeQueryReq: 첫번째 인자는 memberId, 두번째 인자는 ingredients 목록
     RecipeQueryReq request = new RecipeQueryReq(1L, List.of("돼지고기", "대파"));
 
@@ -83,7 +82,7 @@ public class RecipeControllerTest {
   }
 
   @Test
-  public void testGetAllRecipes() {
+  void testGetAllRecipes() {
     RecipeDto recipeDto = new RecipeDto(
         1L,
         "Test Recipe",
@@ -94,7 +93,8 @@ public class RecipeControllerTest {
         "Test Channel",
         "10:00",
         1000L,
-        100L
+        100L,
+        false
     );
     List<RecipeDto> recipes = List.of(recipeDto);
     ResponseEntity<List<RecipeDto>> dummyResponse = ResponseEntity.ok(recipes);
@@ -122,7 +122,7 @@ public class RecipeControllerTest {
   }
 
   @Test
-  public void testExtractAndSaveRecipe() {
+  void testExtractAndSaveRecipe() {
     RecipeExtractRes extractRes = RecipeExtractRes.builder()
         .title("Extracted Recipe Title")
         .ingredients(List.of(
