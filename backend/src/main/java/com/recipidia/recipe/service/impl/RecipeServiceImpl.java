@@ -21,7 +21,6 @@ import com.recipidia.recipe.response.VideoInfoCustomResponse;
 import com.recipidia.recipe.service.RecipeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.aop.framework.AopContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -270,16 +269,12 @@ public class RecipeServiceImpl implements RecipeService {
                 } else {
                   return response.bodyToMono(RecipeExtractRes.class);
                 }
-              })
-              .flatMap(extractRes -> saveExtractResult(recipeId, extractRes)
-                  .thenReturn(extractRes));
+              });
         });
   }
 
   // 더미 데이터 반환 시 레시피의 HasCaption 값을 false로 변경
-  @Override
-  @Transactional
-  public Mono<Recipe> updateHasCaptionFalse(Long recipeId) {
+  private Mono<Recipe> updateHasCaptionFalse(Long recipeId) {
     return Mono.fromCallable(() -> {
       Recipe recipe = recipeRepository.findById(recipeId)
           .orElseThrow(() -> new NoRecipeException(RECIPE_NOT_FOUND_MSG));

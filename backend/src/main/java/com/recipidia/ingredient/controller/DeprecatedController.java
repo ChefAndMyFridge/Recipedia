@@ -2,7 +2,6 @@ package com.recipidia.ingredient.controller;
 
 import com.recipidia.ingredient.dto.IngredientInfoDto;
 import com.recipidia.ingredient.dto.IngredientSimpleInfoDto;
-import com.recipidia.ingredient.request.IngredientDeleteReq;
 import com.recipidia.ingredient.request.IngredientUpdateReq;
 import com.recipidia.ingredient.response.IngredientUpdateRes;
 import com.recipidia.ingredient.service.IngredientService;
@@ -11,12 +10,10 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/ingredient/deprecated")
@@ -121,31 +118,6 @@ public class DeprecatedController {
   public IngredientUpdateRes updateItem(@PathVariable Long itemId,
                                         @RequestBody IngredientUpdateReq updateDTO) {
     return ingredientService.updateItem(itemId, updateDTO);
-  }
-
-  // item 삭제
-  @Operation(
-      summary = "재료 출고",
-      description = "FIGMA : 재료 상세 모달",
-      requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-          description = "출고할 재료 수량",
-          required = true,
-          content = @Content(mediaType = "application/json", schema = @Schema(implementation = IngredientDeleteReq.class),
-              examples = {
-                  @ExampleObject(
-                      name = "요청 데이터",
-                      value = """
-                          {
-                          "quantity": 2
-                          }
-                          """
-                  )
-              }))
-  )
-  @DeleteMapping("/{ingredientId}")
-  public Map<String, Integer> releaseItem(@PathVariable Long ingredientId,
-                                          @RequestBody @Valid IngredientDeleteReq deleteReq) {
-    return ingredientService.releaseItems(ingredientId, deleteReq.quantity());
   }
 
 }

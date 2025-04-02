@@ -26,8 +26,6 @@ public interface IngredientService {
 
   IngredientUpdateRes updateItem(Long itemId, IngredientUpdateReq updateDTO);
 
-  Map<String, Integer> releaseItems(Long itemId, int quantity);
-
   IngredientInfoWithNutrientDto getIngredientInfoWithNutrients(Long id);
 
   Map<String, Integer> releaseMultipleItems(List<IngredientMultipleDeleteReq> requests);

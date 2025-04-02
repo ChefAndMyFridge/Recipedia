@@ -122,9 +122,7 @@ public class IngredientServiceImpl implements IngredientService {
     return IngredientUpdateRes.fromEntity(ingredient);
   }
 
-  @Override
-  @Transactional
-  public Map<String, Integer> releaseItems(Long ingredientId, int quantity) {
+  private Map<String, Integer> releaseItems(Long ingredientId, int quantity) {
     // 재료 정보 호출
     IngredientInfo ingredientInfo = ingredientInfoRepository.findWithIngredients(ingredientId);
 

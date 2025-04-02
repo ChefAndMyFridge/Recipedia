@@ -2,7 +2,6 @@ package com.recipidia.recipe.service;
 
 import com.recipidia.recipe.dto.RecipeDetailDto;
 import com.recipidia.recipe.dto.RecipeDto;
-import com.recipidia.recipe.entity.Recipe;
 import com.recipidia.recipe.request.RecipeQueryReq;
 import com.recipidia.recipe.response.RecipeExtractRes;
 import com.recipidia.recipe.response.RecipeQueryCustomResponse;
@@ -17,7 +16,6 @@ public interface RecipeService {
     Mono<Void> saveRecipeResult(ResponseEntity<RecipeQueryRes> responseEntity);
     Mono<ResponseEntity<List<RecipeDto>>> getAllRecipes();
     Mono<RecipeExtractRes> extractRecipe(Long recipeId);
-    Mono<Recipe> updateHasCaptionFalse(Long recipeId);
     Mono<Void> saveExtractResult(Long recipeId, RecipeExtractRes extractRes);
     Mono<RecipeQueryCustomResponse> mapQueryResponse(ResponseEntity<RecipeQueryRes> responseEntity, Long memberId);
     Mono<RecipeDetailDto> getRecipeDetail(Long recipeId, RecipeExtractRes extractRes);
