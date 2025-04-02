@@ -1,8 +1,6 @@
 # app/services/LLM/recipe_generator.py
-import os
 import json
 import asyncio
-import re
 import openai
 from app.core.config import settings
 from app.models.prompt_input import UserInput, SystemInput
@@ -11,36 +9,6 @@ from app.models.prompt_input import UserInput, SystemInput
 class RequestGPT:
     def __init__(self, api_key: str):
         self.client = openai.AsyncOpenAI(api_key=api_key)
-
-    def extract_json(self, markdown_output: str) -> dict:
-        """ Json Markdown 형태를 추출하여 Dictionary 형태로 변환합니다.
-
-        Args:
-            markdown_output(str): Markdown으로 묶여진 String 레시피 데이터
-
-        Returns:
-            dict: Markdown이 추출된 Dictionary 레시피 데이터
-        """
-        # 만약 문자열이 큰따옴표로 감싸져 있다면 unescape 처리합니다.
-        if markdown_output.startswith('"') and markdown_output.endswith('"'):
-            markdown_output = json.loads(markdown_output)
-
-        # ```json 코드 블록 내부의 JSON 부분 추출
-        match = re.search(
-            r'```json\s*(\{.*\})\s*```', markdown_output, re.DOTALL)
-        if match:
-            json_str = match.group(1)
-            json_data = json.loads(json_str)
-            # 리턴 타입 검사
-            assert isinstance(
-                json_data, dict), f"Excepted return type of extract_json is dict, but got {type(json_data)}"
-            return json_data
-        else:
-            # 리턴 타입 검사
-            json_markdown_output = json.loads(markdown_output)
-            assert isinstance(
-                json_markdown_output, dict), f"Excepted return type of extract_json is dict, but got {type(json_markdown_output)}"
-            return json_markdown_output
 
     def add_system_prompt(self, system_input: SystemInput, prompt: list):
         for input in system_input:
@@ -79,17 +47,7 @@ class RequestGPT:
         )
 
         ret_message = completion.choices[0].message.content
-        # 레시피 요약이 아닐 경우를 return messgae 길이로 처리
-        if len(ret_message) < 15:
-            return {"title": "None"}
-        data = self.extract_json(ret_message)
-        if type(data) is str:
-            data = json.loads(data)
-
-        # 리턴 타입 검사
-        assert isinstance(
-            data, dict), f"Excepted return type of RequestGPT.run is dict, but got {type(data)}"
-        return data
+        return ret_message
 
 
 if __name__ == "__main__":
