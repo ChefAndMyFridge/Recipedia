@@ -199,6 +199,9 @@ def _sync_search_youtube_recipe(dish: str, max_results) -> list:
     # 최종 결과 구성
     results = [video_info[video_id]
                for video_id in video_ids if video_id in video_info]
+    
+    results.sort(key=lambda x: not x.get("has_caption", False)) # 자막이 있는 영상 우선 
+    
     return results
 
 
