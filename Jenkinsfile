@@ -12,6 +12,7 @@ pipeline {
         OPENAI_API_KEY = credentials('OPENAI_API_KEY')
         USDA_API_KEY = credentials('USDA_API_KEY')
         ALLOWED_ORIGINS = credentials('ALLOWED_ORIGINS')
+        X_API = credentials('X_API')
     }
 
     stages {
@@ -42,22 +43,25 @@ pipeline {
         stage('serving frontend build file to nginx') {
             steps {
                 script {
-                    def viteApiUrl = "https://j12s003.p.ssafy.io/api"
+                    def viteReleaseApiUrl = "https://j12s003.p.ssafy.io/api"
+                    def viteMasterApiUrl = "https://j12s003.p.ssafy.io/api"
                     def baseUrl = "/"
 
                     if (env.BRANCH_NAME == "master") {
-                        viteApiUrl = "https://j12s003.p.ssafy.io/master/api"
+                        // viteApiUrl = "https://j12s003.p.ssafy.io/master/api"
                         baseUrl = "/${env.BRANCH_NAME}"
                     } 
 
                     echo "✅ BRANCH_NAME: ${env.BRANCH_NAME}"
-                    echo "🌐 VITE_API_URL: ${viteApiUrl}"
+                    echo "🌐 VITE_MASTER_API_URL: ${viteMasterApiUrl}"
+                    echo "🌐 VITE_RELEASE_API_URL: ${viteReleaseApiUrl}"
                     echo "📁 VITE_BASE_URL: ${baseUrl}"
 
 
                     sh """
                     cd ${env.WORKSPACE}/frontend
-                    echo "VITE_API_URL=${viteApiUrl}" > .env
+                    echo "VITE_RELEASE_API_URL=${viteReleaseApiUrl}" > .env
+                    echo "VITE_MASTER_API_URL=${viteMasterApiUrl}" >> .env
                     echo "VITE_BASE_URL=${baseUrl}" >> .env
 
                     yarn install --frozen-lockfile
@@ -100,6 +104,7 @@ pipeline {
                     ELASTIC_PASSWORD=${env.ELASTIC_PASSWORD} \
                     ALLOWED_ORIGINS='${env.ALLOWED_ORIGINS}' \
                     BRANCH_NAME=${env.BRANCH_NAME} \
+                    X_API=${env.X_API} \
                     cp .env.${env.BRANCH_NAME} .env
                     docker-compose -f docker-compose-app.yml up -d --build
                     """

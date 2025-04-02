@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import useRecipeStore from "@stores/recipeStore";
-import noImg from "@assets/images/noIngredient/carrot.png";
+import noImg from "@assets/images/noIngredient/noIngredient.jpg";
 
 const RecipeListSelectedIngredients = () => {
   const { recommendType } = useParams();
@@ -20,6 +20,7 @@ const RecipeListSelectedIngredients = () => {
               <img
                 src={ingredient.imageUrl ? ingredient.imageUrl : noImg}
                 alt={ingredient.name}
+                onError={(event) => (event.currentTarget.src = noImg)}
                 className="w-12 h-12 rounded-full"
               />
             </div>

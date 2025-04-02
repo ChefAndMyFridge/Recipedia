@@ -37,7 +37,7 @@ class Settings(BaseSettings):
     SUMMARY_OPENAI_STREAM: bool = False  # 스트리밍 사용 여부
 
     # Summary Exception Code
-    SUMMARY_NOT_VALID_TRANSCRIPT_CDOE: int = 430
+    SUMMARY_NOT_VALID_TRANSCRIPT_CODE: int = 430
     SUMMARY_NOT_COOKCING_VIDEO_CODE: int = 432
 
     # YouTube 설정
@@ -47,10 +47,11 @@ class Settings(BaseSettings):
     YOUTUBE_TRANSCRIPT_NO_VALID_STR: str = "NO VALID TRANSCRIPT"
 
     # YouTube 비디오 필터링 설정 (관련성 검증)
+    YOUTUBE_VALID_OPENAI_MODEL: str = "gpt-4o-mini"
     FILTER_YOUTUBE_VIDEOS: bool = True
 
     # 생성할 음식 이름 개수
-    NUM_DISHES_TO_GENERATE: int = 7
+    NUM_DISHES_TO_GENERATE: int = 5
 
     # 로그 파일 관련 설정
     LOG_INTERVAL_UNIT: str = "midnight"

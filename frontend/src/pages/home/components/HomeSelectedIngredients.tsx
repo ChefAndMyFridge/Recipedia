@@ -10,7 +10,7 @@ import Button from "@components/common/button/Button";
 import TakeoutIngredientModal from "@pages/takeoutIngredient/TakeoutIngredientModal";
 
 import IconTrash from "@assets/icons/IconTrash";
-import noImg from "@assets/images/noIngredient/carrot.png";
+import noImg from "@assets/images/noIngredient/noIngredient.jpg";
 
 const HomeSelectedIngredients = () => {
   const { selectedIngredients, setRemoveSelectedIngredients } = useIngredientsStore();
@@ -40,6 +40,7 @@ const HomeSelectedIngredients = () => {
                 <img
                   src={ingredient.imageUrl ? ingredient.imageUrl : noImg}
                   alt={ingredient.imageUrl}
+                  onError={(event) => (event.currentTarget.src = noImg)}
                   className="w-full h-full object-cover rounded-3xl"
                 />
                 <span
