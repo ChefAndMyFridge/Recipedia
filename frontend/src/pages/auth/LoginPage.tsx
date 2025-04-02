@@ -32,7 +32,7 @@ const Login = () => {
     const formData = new FormData(event.currentTarget);
     const data = Object.fromEntries(formData.entries());
 
-    console.log(data);
+    // console.log(data);
 
     try {
       const { username, password } = data as { username: string; password: string };
