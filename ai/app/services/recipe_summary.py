@@ -7,7 +7,8 @@ from typing import Optional
 from youtubesearchpython import Transcript
 from app.services.LLM.recipe_generator import RequestGPT
 from fastapi import HTTPException
-from app.utils.prompts.few_shot import SUMMARY_FEW_SHOT_DATA
+from app.utils.prompts.few_shot_low_size import SUMMARY_FEW_SHOT_DATA
+# from app.utils.prompts.few_shot import SUMMARY_FEW_SHOT_DATA
 from app.utils.prompts.recipe_summary_prompts import SUMMARY_SYSTEM_INPUT, SUMMARY_USER_INPUT, SUMMARY_DESCRIPTION_INPUT
 from app.core.config import settings
 from app.core.logging_config import logger
@@ -101,6 +102,34 @@ class RecipeSummary:
 
         return settings.YOUTUBE_TRANSCRIPT_NO_VALID_STR
 
+    def preprocess_data(self, data):
+        """ GPT API를 통해 출력된 데이터를 Backend에서 활용 가능하도록 정제
+
+        Args:
+            data: 레시피 요약 데이터
+
+        Returns:
+            dict: 정제된 레시피 요약 데이터 
+        """
+
+        # ingredients 변환
+        data['ingredients'] = [
+            {'name': name, 'quantity': quantity}
+            for item in data['ingredients']
+            for name, quantity in item.items()
+        ]
+
+        # cooking_sequence 변환
+        data['cooking_sequence'] = {
+            chapter: {
+                'sequence': cooking_data[0],
+                'timestamp': cooking_data[1]
+            }
+            for chapter, cooking_data in data['cooking_sequence'].items()
+        }
+
+        return data
+
     async def summarize_recipe(self, video_id: str) -> str:
         """ 주어진 영상 ID를 기반으로 자막을 가져와 OpenAI API로 요약된 레시피를 반환합니다.
 
@@ -118,6 +147,8 @@ class RecipeSummary:
 
         # 순서 1 : 유튜브 영상 설명이 있다면 User Input에 반영
         try:
+            description_start = time.time()
+
             # youtube api 키 라운드 로빈
             await rotate_youtube_api_key()
 
@@ -142,6 +173,9 @@ class RecipeSummary:
                 user_input.append(
                     {"role": "user", "content": video_description})
                 logger.info(f"{settings.LOG_SUMMARY_PREFIX}_영상 설명 데이터 추가")
+            description_end = time.time()
+            logger.info(
+                f"{settings.LOG_SUMMARY_PREFIX}_설명 데이터 추가 소요 시간 : {description_end - description_start:.2f} 초 소요")
 
         except Exception as e:
             logger.error(
@@ -152,18 +186,23 @@ class RecipeSummary:
 
         # 순서 3 : 자막 스크립트 삽입
         try:
+            scripts_start = time.time()
             scripts = self.get_transcript(video_id)
             # 적절하지 않은 자막 추출 시 에러 코드 반환
             if scripts == settings.YOUTUBE_TRANSCRIPT_NO_VALID_STR:
-                return settings.SUMMARY_NOT_VALID_TRANSCRIPT_CDOE
+                return settings.SUMMARY_NOT_COOKCING_VIDEO_CODE
 
             user_input.append({"role": "user", "content": ""})
             user_input[-1]["content"] = scripts
+            scripts_end = time.time()
+            logger.info(
+                f"{settings.LOG_SUMMARY_PREFIX}_자막 데이터 추가 소요 시간 : {scripts_end - scripts_start:.2f} 초 소요")
         except Exception as e:
             logger.error(f"{settings.LOG_SUMMARY_PREFIX}_유튜브 자막 추출 오류: {e}")
 
         # 순서 4 : GPT API를 통해 요약 데이터 추출
         try:
+            api_start = time.time()
             # OpenAI API 호출 (RequestGPT.run이 비동기 함수라고 가정)
             summary = await self.request_gpt.run(system_input, user_input)
 
@@ -174,12 +213,17 @@ class RecipeSummary:
             if self.debug_mode:
                 time_dict = {"exec time cons": f"{end - start:.5f}"}
                 summary = summary | time_dict
+            api_end = time.time()
+            logger.info(
+                f"{settings.LOG_SUMMARY_PREFIX}_GPT API 소요 시간 : {api_end - api_start:.2f} 초 소요")
             logger.info(
                 f"{settings.LOG_SUMMARY_PREFIX}_전체 처리 완료 : {end - start:.2f} 초 소요")
 
             # 리턴 타입 검사
             assert isinstance(
                 summary, dict), f"Excepted return type of summarize_recipe is dict, but got {type(summary)}"
+
+            summary = self.preprocess_data(summary)
 
             return summary
         except Exception as e:

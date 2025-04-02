@@ -7,7 +7,7 @@ import { useDebounce } from "@hooks/useDebounceHook";
 
 import { searchIngredientsApi } from "@apis/ingredientApi";
 
-import noImg from "@assets/images/noIngredient/carrot.png";
+import noImg from "@assets/images/noIngredient/noIngredient.jpg";
 
 const Suggestion = ({
   suggestion,
@@ -26,6 +26,7 @@ const Suggestion = ({
         <img
           src={suggestion.imageUrl ? suggestion.imageUrl : noImg}
           alt="no image"
+          onError={(event) => (event.currentTarget.src = noImg)}
           className="h-full aspect-[1/1] object-cover rounded-3xl"
         />
       </span>

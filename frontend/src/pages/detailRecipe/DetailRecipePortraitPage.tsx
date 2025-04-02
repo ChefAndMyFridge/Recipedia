@@ -1,5 +1,5 @@
-import { useNavigate } from "react-router-dom";
 import ReactPlayer from "react-player";
+import { useRef, useState } from "react";
 
 import useModalStore from "@stores/modalStore";
 import recipeStore from "@stores/recipeStore";
@@ -14,14 +14,23 @@ import RecipeTitle from "@pages/detailRecipe/components/RecipeTitle";
 //세로모드 레이아웃
 const DetailRecipePortraitPage = () => {
   const { openModal } = useModalStore();
-  const navigate = useNavigate();
 
-  const { detailRecipe } = recipeStore();
+  const [currentTime, setCurrentTime] = useState(0);
+  const playerRef = useRef<ReactPlayer>(null);
+
+  const { detailRecipe, resetDetailRecipe, setHasFetchedDetailRecipe } = recipeStore();
+
+  function toRecipeList() {
+    //  detailRecipe 초기화
+    resetDetailRecipe();
+    setHasFetchedDetailRecipe(false);
+  }
 
   return (
     <section className={`w-full h-full flex flex-col justify-between items-center gap-2 p-3`}>
-      <Header title="레시피" isIcon />
+      <Header title="레시피" isIcon onClick={toRecipeList} />
       <ReactPlayer
+        ref={playerRef}
         url={detailRecipe.url}
         width="100%"
         height="40%"
@@ -30,14 +39,14 @@ const DetailRecipePortraitPage = () => {
         controls={true}
         light={false}
         pip={true}
+        onProgress={(state) => setCurrentTime(state.playedSeconds)}
       />
       <RecipeTitle title={detailRecipe.title} channelTitle={detailRecipe.channelTitle} />
 
-      <RecipeInfos />
+      <RecipeInfos currentTime={currentTime} setCurrentTime={setCurrentTime} playerRef={playerRef} />
 
       {/* 버튼 컨테이너 */}
-      <div className="w-full flex justify-end items-center gap-2">
-        <Button type="button" design="cancel" content="요리 취소" className="w-28 h-8" onAction={() => navigate(-1)} />
+      <div className="w-full flex justify-end items-center">
         <Button
           type="button"
           design="confirm"

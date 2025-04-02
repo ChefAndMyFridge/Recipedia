@@ -19,7 +19,11 @@ const ErrorPage = () => {
         content="홈으로"
         className="w-[90%] h-10"
         onAction={() => {
-          navigate("/");
+          if (window.location.pathname === "/") {
+            window.location.replace("/"); // 강제 새로고침
+          } else {
+            navigate("/");
+          }
         }}
       />
     </section>
