@@ -108,7 +108,7 @@ const HomeExpandFilter = () => {
     useIngredientsStore();
 
   return (
-    <div className="absolute top-10 left-0 w-full bg-white shadow-md z-30 px-4 py-2 font-preMedium">
+    <div className="absolute top-9 left-0 w-full bg-white shadow-md z-30 px-4 py-2 font-preMedium">
       <IngredientsPreference
         type={"preferredIngredients"}
         label="좋아하는 재료"
