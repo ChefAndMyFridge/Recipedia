@@ -31,7 +31,9 @@ const RecipeCard = ({ video }: RecipeCardProps) => {
 
   const thumbnailUrl = getYoutubeThumbnailUrl(video.url);
 
-  const handleLike = async () => {
+  console.log("video", video)
+
+  async function handleLike() {
     const newLiked = !isLiked;
     setIsLiked(newLiked);
 
@@ -61,19 +63,14 @@ const RecipeCard = ({ video }: RecipeCardProps) => {
 
         <div className="flex w-full justify-between items-center">
           <div className="w-full flex flex-col items-start">
-            <div
-              className={`h-5 bg-white rounded-full  
-                ${video.hasCaption ? "" : ""}`}
-            >
-              {video.hasCaption ? (
-                <div className="flex items-center gap-1">
-                  <IconPremium width={20} height={20} />
-                  <p className="text-xs font-preSemiBold text-center text-longContent">고품질 레시피</p>
-                </div>
-              ) : (
-                <div></div>
-              )}
-            </div>
+            {video.hasCaption ? (
+              <div className="h-5 flex items-center gap-1">
+                <IconPremium width={20} height={20} />
+                <p className="text-xs font-preSemiBold text-center text-longContent">고품질 레시피</p>
+              </div>
+            ) : (
+               <div className="h-5"></div>
+            )}
 
             <div className="flex w-full justify-between items-center">
               <p className="max-w-[90%] overflow-hidden text-ellipsis whitespace-nowrap font-preSemiBold text-base break-keep">
