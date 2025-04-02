@@ -15,7 +15,7 @@ export const getMemberListApi = async (): Promise<User[]> => {
 
 export const addMemberApi = async (newMemberName: string): Promise<User> => {
   try {
-    const response = await instance.post("v1/member", {
+    const response = await instance.post("/v1/member", {
       membername: newMemberName,
     });
     console.log("v1/member (post)", response.data);
