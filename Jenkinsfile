@@ -44,7 +44,7 @@ pipeline {
             steps {
                 script {
                     def viteReleaseApiUrl = "https://j12s003.p.ssafy.io/api"
-                    def viteMasterApiUrl = "https://j12s003.p.ssafy.io/api"
+                    def viteMasterApiUrl = "https://j12s003.p.ssafy.io/master/api"
                     def baseUrl = "/"
 
                     if (env.BRANCH_NAME == "master") {
