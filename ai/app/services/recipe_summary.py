@@ -3,6 +3,7 @@ import time
 import asyncio
 import copy
 import re
+import json
 
 from typing import Optional
 from youtubesearchpython import Transcript
@@ -33,6 +34,36 @@ class RecipeSummary:
 
         # 디버그 모드
         self.debug_mode = settings.DEBUG
+
+    def extract_json(self, markdown_output: str) -> dict:
+        """ Json Markdown 형태를 추출하여 Dictionary 형태로 변환합니다.
+
+        Args:
+            markdown_output(str): Markdown으로 묶여진 String 레시피 데이터
+
+        Returns:
+            dict: Markdown이 추출된 Dictionary 레시피 데이터
+        """
+        # 만약 문자열이 큰따옴표로 감싸져 있다면 unescape 처리합니다.
+        if markdown_output.startswith('"') and markdown_output.endswith('"'):
+            markdown_output = json.loads(markdown_output)
+
+        # ```json 코드 블록 내부의 JSON 부분 추출
+        match = re.search(
+            r'```json\s*(\{.*\})\s*```', markdown_output, re.DOTALL)
+        if match:
+            json_str = match.group(1)
+            json_data = json.loads(json_str)
+            # 리턴 타입 검사
+            assert isinstance(
+                json_data, dict), f"Excepted return type of extract_json is dict, but got {type(json_data)}"
+            return json_data
+        else:
+            # 리턴 타입 검사
+            json_markdown_output = json.loads(markdown_output)
+            assert isinstance(
+                json_markdown_output, dict), f"Excepted return type of extract_json is dict, but got {type(json_markdown_output)}"
+            return json_markdown_output
 
     def fetch_and_format_transcript(self, video_id: str, lang) -> Optional[str]:
         """ video id에 대한 영상에서 자막 언어 데이터를 받고 적절한 형태의 자막을 추출하거나 그럴 수 없다면 None을 리턴합니다.
@@ -170,7 +201,8 @@ class RecipeSummary:
         self,
         video_id: str,
         use_description: bool = True,
-        use_few_shot_twice: bool = True
+        use_few_shot: bool = True,
+        use_system_input: bool = True,
     ) -> str:
         """ 주어진 영상 ID를 기반으로 자막을 가져와 OpenAI API로 요약된 레시피를 반환합니다.
 
@@ -183,7 +215,9 @@ class RecipeSummary:
         start = time.time()
 
         # OpenAI 요청을 위한 기본 메시지 구성
-        system_input = SUMMARY_SYSTEM_INPUT
+        system_input = None
+        if use_system_input:
+            system_input = SUMMARY_SYSTEM_INPUT
         user_input = copy.deepcopy(SUMMARY_USER_INPUT)
 
         # 순서 1 : 유튜브 영상 설명이 있다면 User Input에 반영
@@ -224,9 +258,8 @@ class RecipeSummary:
                     f"{settings.LOG_SUMMARY_PREFIX}_유튜브 영상 설명 추가 중 오류: {e}")
 
         # 순서 2 : Few shot 데이터 적용
-        user_input += SUMMARY_FEW_SHOT_DATA[:2]
-        if use_few_shot_twice:
-            user_input += [SUMMARY_FEW_SHOT_DATA[2]]
+        if use_few_shot:
+            user_input += SUMMARY_FEW_SHOT_DATA
 
         # 순서 3 : 자막 스크립트 삽입
         try:
@@ -234,7 +267,7 @@ class RecipeSummary:
             scripts = self.get_transcript(video_id)
             # 적절하지 않은 자막 추출 시 에러 코드 반환
             if scripts == settings.YOUTUBE_TRANSCRIPT_NO_VALID_STR:
-                return settings.SUMMARY_NOT_COOKCING_VIDEO_CODE
+                return settings.SUMMARY_NOT_VALID_TRANSCRIPT_CODE
 
             user_input.append({"role": "user", "content": ""})
             user_input[-1]["content"] = scripts
@@ -248,27 +281,32 @@ class RecipeSummary:
         try:
             api_start = time.time()
             # OpenAI API 호출 (RequestGPT.run이 비동기 함수라고 가정)
-            # print(user_input)
             summary = await self.request_gpt.run(system_input, user_input)
 
-            end = time.time()
-            if summary["title"] == "None":
+            api_end = time.time()
+            logger.info(
+                f"{settings.LOG_SUMMARY_PREFIX}_GPT API 소요 시간 : {api_end - api_start:.2f} 초 소요")
+
+            # 레시피 요약이 아닐 경우를 return messgae 길이로 처리
+            if len(summary) < 15:
                 return settings.SUMMARY_NOT_COOKCING_VIDEO_CODE
+            summary = self.extract_json(summary)
+            if type(summary) is str:
+                summary = json.loads(summary)
+
+            # 리턴 타입 검사
+            assert isinstance(
+                summary, dict), f"Excepted return type of RequestGPT.run is dict, but got {type(summary)}"
 
             if self.debug_mode:
                 time_dict = {"exec time cons": f"{end - start:.5f}"}
                 summary = summary | time_dict
-            api_end = time.time()
-            logger.info(
-                f"{settings.LOG_SUMMARY_PREFIX}_GPT API 소요 시간 : {api_end - api_start:.2f} 초 소요")
-            logger.info(
-                f"{settings.LOG_SUMMARY_PREFIX}_전체 처리 완료 : {end - start:.2f} 초 소요")
-
-            # 리턴 타입 검사
-            assert isinstance(
-                summary, dict), f"Excepted return type of summarize_recipe is dict, but got {type(summary)}"
 
             summary = self.preprocess_data(summary)
+
+            end = time.time()
+            logger.info(
+                f"{settings.LOG_SUMMARY_PREFIX}_전체 처리 완료 : {end - start:.2f} 초 소요")
 
             return summary
         except Exception as e:
@@ -280,7 +318,7 @@ if __name__ == "__main__":
     async def main():
         try:
             recipe_summary = RecipeSummary()
-            summary = await recipe_summary.summarize_recipe("pi4_Nz_42rw")
+            summary = await recipe_summary.summarize_recipe("SsxWHGjQh2U")
             print(summary)
         except HTTPException as e:
             raise e
