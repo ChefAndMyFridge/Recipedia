@@ -4,6 +4,7 @@ import json
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 from rouge_score import rouge_scorer
 from test.utils.recipe_summary_correct_answer import correct_answer, data_url
@@ -39,7 +40,7 @@ def visualize_rouge_scores_csv():
     group_width = 0.5
     bar_width = group_width / n_envs
 
-    colors = plt.cm.tab20b.colors
+    colors = sns.color_palette("muted", 10)
 
     for i, exp in enumerate(exp_envs):
         sub_df = df[df["EXP_ENV"] == exp]
@@ -51,10 +52,11 @@ def visualize_rouge_scores_csv():
         bars = plt.bar(offsets, f1_scores, width=bar_width * 0.8,
                        label=exp, color=colors[i % len(colors)])
 
-        plt.bar_label(bars, fmt="%.1f", fontsize=10,
+        plt.bar_label(bars, fmt="%.2f", fontsize=10,
                       label_type="edge", padding=1)
 
-    plt.xticks(x, [r.upper() for r in rouge_types], fontsize=10)
+    plt.xticks(x, [r[:5].upper() + '-' + r[5:].upper()
+               for r in rouge_types], fontsize=10)
 
     plt.title(
         f"ROUGE F1 Score (Bar Chart) - {settings.SUMMARY_OPENAI_MODEL} - {MENU_NAME}")
@@ -63,7 +65,7 @@ def visualize_rouge_scores_csv():
     plt.yticks(fontsize=10)
     plt.legend()
     plt.tight_layout()
-    plt.grid(axis='y')
+    plt.grid(axis='y', linestyle='--', alpha=0.5)
 
     os.makedirs(PLOT_DIR, exist_ok=True)
     save_path = os.path.join(
