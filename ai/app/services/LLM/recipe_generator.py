@@ -42,7 +42,17 @@ class RequestGPT:
                 json_markdown_output, dict), f"Excepted return type of extract_json is dict, but got {type(json_markdown_output)}"
             return json_markdown_output
 
-    async def run(self, system_input: SystemInput, user_input: UserInput) -> dict:
+    def add_system_prompt(self, system_input: SystemInput, prompt: list):
+        for input in system_input:
+            prompt.append(input)
+
+        return prompt
+
+    async def run(
+        self,
+        system_input: SystemInput | None,
+        user_input: UserInput,
+    ) -> dict:
         """ 시스템 입력과 사용자 입력을 받아 OpenAI API를 호출합니다.
         stream이 True이면 스트리밍으로 결과를 출력하고, 그렇지 않으면 전체 응답을 반환합니다.
 
@@ -52,12 +62,14 @@ class RequestGPT:
         Retruns:
             dict: 레시피 요약 Dictionary 데이터
         """
+        # user input은 default로 추가
         prompt = []
-        for input in system_input:
-            prompt.append(input)
-
         for input in user_input:
             prompt.append(input)
+
+        # system input이 있는 경우에 append
+        if system_input:
+            self.add_system_prompt(system_input, prompt)
 
         completion = await self.client.chat.completions.create(
             model=settings.SUMMARY_OPENAI_MODEL,
