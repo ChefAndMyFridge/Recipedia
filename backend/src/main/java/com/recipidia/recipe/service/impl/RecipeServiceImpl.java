@@ -155,11 +155,11 @@ public class RecipeServiceImpl implements RecipeService {
           .name(dish)
           .title(videoInfo.getTitle())
           .youtubeUrl(videoInfo.getUrl())
-          .channelTitle(videoInfo.getChannelTitle())
+          .channelTitle(videoInfo.getChannel_title())
           .duration(videoInfo.getDuration())
-          .viewCount(videoInfo.getViewCount())
-          .likeCount(videoInfo.getLikeCount())
-          .hasCaption(videoInfo.getHasCaption())
+          .viewCount(videoInfo.getView_count())
+          .likeCount(videoInfo.getLike_count())
+          .hasCaption(videoInfo.getHas_caption())
           .build();
       recipeRepository.save(recipe);
     }
@@ -207,11 +207,11 @@ public class RecipeServiceImpl implements RecipeService {
                       .recipeId(recipeId)
                       .title(video.getTitle())
                       .url(video.getUrl())
-                      .channelTitle(video.getChannelTitle())
+                      .channelTitle(video.getChannel_title())
                       .duration(video.getDuration())
-                      .viewCount(video.getViewCount())
-                      .likeCount(video.getLikeCount())
-                      .hasCaption(video.getHasCaption())
+                      .viewCount(video.getView_count())
+                      .likeCount(video.getLike_count())
+                      .hasCaption(video.getHas_caption())
                       .favorite(favorite)
                       .rating(rating)
                       .build();
