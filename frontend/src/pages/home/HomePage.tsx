@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
 import HomeHeader from "@pages/home/components/HomeHeader.tsx";
@@ -8,9 +8,19 @@ import HomeFooter from "@pages/home/components/HomeFooter.tsx";
 
 import ErrorPage from "@components/common/error/ErrorPage";
 import Modal from "@components/common/modal/Modal";
+import useUserStore from "@stores/userStore";
+import { navigate } from "@utils/navigationEvent";
 
 const HomePage = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+
+  const { isAuthenticated } = useUserStore();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/login");
+    }
+  }, [isAuthenticated]);
 
   return (
     <ErrorBoundary FallbackComponent={ErrorPage}>

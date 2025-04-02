@@ -17,7 +17,7 @@ interface UserState {
 const useUserStore = create<UserState>()(
   persist(
     (set) => ({
-      userId: 0,
+      userId: 1,
       username: "닉네임",
       currentProfileImg: defaultProfile,
       isAuthenticated: false,
