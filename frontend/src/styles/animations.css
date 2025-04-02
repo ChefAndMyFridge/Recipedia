@@ -1,6 +1,6 @@
 @keyframes slideDown {
   from {
-    transform: translateY(-50vh);
+    transform: translateY(50vh);
   }
   to {
     transform: translateY(0);
@@ -10,9 +10,33 @@
 @keyframes slideUp {
   from {
     transform: translateY(0);
+    opacity: 1;
   }
   to {
     transform: translateY(-50vh);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeBackdrop {
+  0% {
+    background-color: transparent;
+    backdrop-filter: none;
+  }
+  100% {
+    background-color: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(3px);
+  }
+}
+
+@keyframes fadeBackdropOut {
+  0% {
+    background-color: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(3px);
+  }
+  100% {
+    background-color: transparent;
+    backdrop-filter: none;
   }
 }
 
