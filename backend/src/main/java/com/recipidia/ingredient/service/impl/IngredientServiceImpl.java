@@ -73,7 +73,7 @@ public class IngredientServiceImpl implements IngredientService {
     // 이름으로 재료를 검색. 있으면 해당 재료를 사용.
     IngredientInfo ingredientInfo = ingredientInfoRepository.findByName(request.getName())
         .orElseGet(() -> {
-          String imageUrl = buildImgUrl(request.getName());
+          String imageUrl = buildImgUrl("noIngredient"); // 기본 이미지로 설정
           return new IngredientInfo(request.getName(), imageUrl);
         });
 

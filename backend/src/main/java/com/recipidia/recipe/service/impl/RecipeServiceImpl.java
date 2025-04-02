@@ -3,9 +3,8 @@ package com.recipidia.recipe.service.impl;
 import com.recipidia.filter.entity.MemberFilter;
 import com.recipidia.filter.repository.MemberFilterRepository;
 import com.recipidia.filter.service.IngredientFilterService;
-import com.recipidia.ingredient.dto.IngredientInfoDto;
-import com.recipidia.ingredient.service.IngredientService;
 import com.recipidia.member.entity.MemberRecipe;
+import com.recipidia.member.repository.MemberRecipeRepository;
 import com.recipidia.recipe.converter.RecipeQueryResConverter;
 import com.recipidia.recipe.dto.RecipeDetailDto;
 import com.recipidia.recipe.dto.RecipeDto;
@@ -13,13 +12,14 @@ import com.recipidia.recipe.dto.VideoInfo;
 import com.recipidia.recipe.entity.Recipe;
 import com.recipidia.recipe.entity.RecipeIngredient;
 import com.recipidia.recipe.exception.NoRecipeException;
-import com.recipidia.recipe.exception.SummaryNotCookingVideoException;
-import com.recipidia.recipe.exception.SummaryNotValidTranscriptException;
 import com.recipidia.recipe.repository.RecipeRepository;
 import com.recipidia.recipe.request.RecipeQueryReq;
-import com.recipidia.recipe.response.*;
+import com.recipidia.recipe.response.RecipeExtractRes;
+import com.recipidia.recipe.response.RecipeQueryCustomResponse;
+import com.recipidia.recipe.response.RecipeQueryRes;
+import com.recipidia.recipe.response.VideoInfoCustomResponse;
 import com.recipidia.recipe.service.RecipeService;
-import com.recipidia.member.repository.MemberRecipeRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -39,28 +39,15 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class RecipeServiceImpl implements RecipeService {
 
-  private final IngredientService ingredientService;
   private final IngredientFilterService ingredientFilterService;
   private final WebClient webClient;
   private final RecipeRepository recipeRepository;
-  private final RecipeQueryResConverter queryResConverter = new RecipeQueryResConverter();
   private final MemberRecipeRepository memberRecipeRepository;
   private final MemberFilterRepository memberFilterRepository;
-
-  public RecipeServiceImpl(IngredientService ingredientService,
-                           IngredientFilterService ingredientFilterService, WebClient webClient,
-                           RecipeRepository recipeRepository, MemberRecipeRepository memberRecipeRepository,
-                           MemberFilterRepository memberFilterRepository) {
-    this.ingredientService = ingredientService;
-    this.ingredientFilterService = ingredientFilterService;
-    // FastAPI 컨테이너의 서비스명을 사용
-    this.webClient = webClient;
-    this.recipeRepository = recipeRepository;
-    this.memberRecipeRepository = memberRecipeRepository;
-    this.memberFilterRepository = memberFilterRepository;
-  }
+  private final RecipeQueryResConverter queryResConverter = new RecipeQueryResConverter();
 
   @Override
   @Transactional
@@ -235,7 +222,8 @@ public class RecipeServiceImpl implements RecipeService {
             .map(RecipeDto::fromEntity)
             .collect(Collectors.toList()))
         .map(ResponseEntity::ok)
-        .doOnNext(resp -> log.info("getAllRecipes result size={}", resp.getBody().size()))
+        .doOnNext(resp -> log.info("getAllRecipes result size={}",
+            Optional.ofNullable(resp.getBody()).map(List::size).orElse(0)))
         .doOnError(e -> log.error("getAllRecipes failed", e))
         .onErrorResume(e ->
             Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build())
@@ -258,25 +246,37 @@ public class RecipeServiceImpl implements RecipeService {
               .uri("/api/f1/recipe/")
               .contentType(MediaType.APPLICATION_JSON)
               .bodyValue(payload)
-              .retrieve()
-              // FastAPI가 430 에러(자막이 충분하지 않은 내용을 포함)를 반환하는 경우
-              .onStatus(status -> status.value() == 430, clientResponse ->
-                  clientResponse.bodyToMono(String.class)
-                      .flatMap(errorMessage ->
-                          Mono.error(new SummaryNotValidTranscriptException(errorMessage))
-                      )
-              )
-              // FastAPI가 432 에러(영상이 요리영상이 아님)를 반환하는 경우
-              .onStatus(status -> status.value() == 432, clientResponse ->
-                  clientResponse.bodyToMono(String.class)
-                      .flatMap(errorMessage ->
-                          Mono.error(new SummaryNotCookingVideoException(errorMessage))
-                      )
-              )
-              .bodyToMono(RecipeExtractRes.class)
+              .exchangeToMono(response -> {
+                int status = response.statusCode().value();
+                // 상태 코드가 430 또는 432인 경우 더미 RecipeExtractRes 반환
+                if (status == 430 || status == 432) {
+                  return response.bodyToMono(String.class)
+                      .defaultIfEmpty("")
+                      .flatMap(errorMsg -> {
+                        String title = (status == 430)
+                            ? "자막이 너무 짧아 레시피 요약에 충분하지 않습니다."
+                            : "요리 영상이 아닙니다.";
+                        return updateHasCaptionFalse(recipeId) // hasCaption 값을 false로 바꾼 뒤
+                            .thenReturn(RecipeExtractRes.createDummy(title)); // 더미 데이터 반환
+                      });
+                } else {
+                  return response.bodyToMono(RecipeExtractRes.class);
+                }
+              })
               .flatMap(extractRes -> saveExtractResult(recipeId, extractRes)
                   .thenReturn(extractRes));
         });
+  }
+
+  // 더미 데이터 반환 시 레시피의 HasCaption 값을 false로 변경
+  @Transactional
+  public Mono<Recipe> updateHasCaptionFalse(Long recipeId) {
+    return Mono.fromCallable(() -> {
+      Recipe recipe = recipeRepository.findById(recipeId)
+          .orElseThrow(() -> new NoRecipeException("Recipe not found"));
+      recipe.noCaption();
+      return recipeRepository.save(recipe);
+    }).subscribeOn(Schedulers.boundedElastic());
   }
 
 

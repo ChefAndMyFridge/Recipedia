@@ -14,4 +14,5 @@ import java.util.List;
 public class CookingStep {
   private List<String> sequence;
   private long timestamp; // 필요에 따라 int로도 사용 가능
+  private int timer; // 타이머
 }

@@ -40,3 +40,6 @@ host:
 fastapi:
   base:
     url: http://my-fastapi:8000
+  header:
+    xapi: ${X_API}
+

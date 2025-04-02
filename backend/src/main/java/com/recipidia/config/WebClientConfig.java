@@ -11,9 +11,15 @@ public class WebClientConfig {
     @Value("${fastapi.base.url}")
     private String fastApiBaseUrl;
 
+    @Value("${fastapi.header.xapi}")
+    private String fastApiXapi;
+
     @Bean
     public WebClient fastApiWebClient(WebClient.Builder builder) {
-        return builder.baseUrl(fastApiBaseUrl).build();
+        return builder
+            .baseUrl(fastApiBaseUrl)
+            .defaultHeader("x-api-key", fastApiXapi)
+            .build();
     }
 }
 

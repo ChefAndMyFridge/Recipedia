@@ -82,4 +82,9 @@ public class Recipe {
         this.hasCaption = hasCaption;
     }
 
+    // 에러코드 처리 시 hasCaption 값 false로 조정
+    public void noCaption() {
+        this.hasCaption = false;
+    }
+
 }
