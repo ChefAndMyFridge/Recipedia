@@ -48,16 +48,19 @@ def visualize_rouge_scores_csv():
         ]
 
         offsets = x - group_width/2 + i * bar_width + bar_width / 2  # 중심 기준으로 배치
-        plt.bar(offsets, f1_scores, width=bar_width * 0.8,
-                label=exp, color=colors[i % len(colors)])
+        bars = plt.bar(offsets, f1_scores, width=bar_width * 0.8,
+                       label=exp, color=colors[i % len(colors)])
 
-    plt.xticks(x, [r.upper() for r in rouge_types], fontsize=12)
+        plt.bar_label(bars, fmt="%.1f", fontsize=10,
+                      label_type="edge", padding=1)
+
+    plt.xticks(x, [r.upper() for r in rouge_types], fontsize=10)
 
     plt.title(
         f"ROUGE F1 Score (Bar Chart) - {settings.SUMMARY_OPENAI_MODEL} - {MENU_NAME}")
     plt.ylabel("F1 Score", fontdict={'fontsize': 12})
     plt.ylim(0, 1)
-    plt.yticks(fontsize=12)
+    plt.yticks(fontsize=10)
     plt.legend()
     plt.tight_layout()
     plt.grid(axis='y')
