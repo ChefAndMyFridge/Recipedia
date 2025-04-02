@@ -37,7 +37,6 @@ class Settings(BaseSettings):
     SUMMARY_OPENAI_TEMPERATURE: float = 0.1  # 레시피 요약에 대해서 일관적인 답을 받도록 낮은 값 설정정
     SUMMARY_OPENAI_TOP_P: float = 0.80      # 상위 확률 토큰 제한
     SUMMARY_OPENAI_FREQUENCY_PENALTY: float = 0.1  # 중복 방지
-    SUMMARY_OPENAI_STREAM: bool = False  # 스트리밍 사용 여부
 
     # Summary Exception Code
     SUMMARY_NOT_VALID_TRANSCRIPT_CODE: int = 430
