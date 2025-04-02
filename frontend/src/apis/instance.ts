@@ -1,10 +1,13 @@
 import axios from "axios";
 import { navigate } from "@utils/navigationEvent";
+import useUserStore from "@stores/userStore";
 
 const { VITE_MASTER_API_URL, VITE_RELEASE_API_URL } = import.meta.env;
 
 const base = import.meta.env.BASE_URL;
 const baseURL = base.startsWith("/master") ? VITE_MASTER_API_URL : VITE_RELEASE_API_URL;
+
+const { clearAuthentication } = useUserStore.getState();
 
 const instance = axios.create({
   // baseURL: VITE_API_URL, // 프로덕션 환경
@@ -36,6 +39,7 @@ instance.interceptors.response.use(
       console.warn("인증 실패, 로그인 페이지로 이동합니다.");
 
       localStorage.removeItem("jwt"); // 로컬 스토리지에서 토큰 삭제
+      clearAuthentication();
 
       //로그인 페이지로 이동하는 이벤트 발생
       const path = "/login";
