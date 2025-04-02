@@ -22,7 +22,6 @@ public class IngredientInfoDto implements Serializable {
   private int totalCount;
   private LocalDateTime earliestExpiration;
   private LocalDateTime latestExpiration;
-//  private final List<IngredientDto> ingredients = new ArrayList<>();
 
   public IngredientInfoDto(Long id, String name, String imageUrl) {
     this.ingredientInfoId = id;
