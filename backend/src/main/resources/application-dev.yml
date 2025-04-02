@@ -41,6 +41,8 @@ springdoc:
 fastapi:
   base:
     url: http://localhost:51819
+  header:
+    xapi: ${X_API}
 
 host:
   url: http://localhost:3000
