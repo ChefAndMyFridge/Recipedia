@@ -33,6 +33,7 @@ public class IngredientQueryRepositoryImpl implements IngredientQueryRepository 
     List<IngredientInfo> ingredientInfoList = queryFactory.selectFrom(ingredientInfo)
         .innerJoin(ingredientInfo.ingredients, ingredient)
         .fetchJoin()
+        .where(whereClause)
         .orderBy(order)
         .fetch();
 
