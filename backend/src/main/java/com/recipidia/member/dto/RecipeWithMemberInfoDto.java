@@ -16,6 +16,7 @@ public record RecipeWithMemberInfoDto(
     String duration,
     long viewCount,
     long likeCount,
+    Boolean hasCaption,
     Boolean favorite,
     Integer rating
 ) {
@@ -31,6 +32,7 @@ public record RecipeWithMemberInfoDto(
         base.duration(),
         base.viewCount(),
         base.likeCount(),
+        base.hasCaption(),
         memberRecipe.getFavorite(),
         memberRecipe.getRating()
     );

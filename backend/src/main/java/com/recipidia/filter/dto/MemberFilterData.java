@@ -13,4 +13,5 @@ public class MemberFilterData {
   private List<String> dietaries;
   private List<String> preferredIngredients;
   private List<String> dislikedIngredients;
+  private List<String> allergies;
 }

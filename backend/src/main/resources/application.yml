@@ -1,5 +1,8 @@
 server:
   port: 8080
+  servlet:
+    session:
+      timeout: 120m # 세션 유지시간 120분으로 증가
 
 spring:
   elasticsearch:
@@ -8,7 +11,7 @@ spring:
     password: ${ELASTIC_PASSWORD}
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://my-mysql:3306/recipidia?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://${MYSQL_HOST}:3306/recipidia?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul
     username: root
     password: ${MYSQL_ROOT_PASSWORD}
 

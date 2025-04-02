@@ -64,9 +64,9 @@ class RequestGPT:
             messages=prompt,
             max_tokens=settings.SUMMARY_OPENAI_MAX_TOKENS,
             temperature=settings.SUMMARY_OPENAI_TEMPERATURE,
-            top_p=settings.SUMMARY_OPENAI_TOP_P,
-            frequency_penalty=settings.SUMMARY_OPENAI_FREQUENCY_PENALTY,
-            stream=settings.SUMMARY_OPENAI_STREAM,
+            # top_p=settings.SUMMARY_OPENAI_TOP_P,
+            # frequency_penalty=settings.SUMMARY_OPENAI_FREQUENCY_PENALTY,
+            # stream=settings.SUMMARY_OPENAI_STREAM,
         )
 
         if settings.SUMMARY_OPENAI_STREAM:
@@ -79,6 +79,9 @@ class RequestGPT:
                 print(delta_content, end="")
         else:
             ret_message = completion.choices[0].message.content
+            # 레시피 요약이 아닐 경우를 return messgae 길이로 처리
+            if len(ret_message) < 15:
+                return {"title": "None"}
             data = self.extract_json(ret_message)
             if type(data) is str:
                 data = json.loads(data)

@@ -6,6 +6,7 @@ export interface Video {
   duration: string;
   viewCount: number;
   likeCount: number;
+  hasCaption: boolean;
   favorite: boolean;
   rating: number;
 }
@@ -32,14 +33,14 @@ export interface recipeCookingSequenceInfo {
 }
 
 export interface textRecipeType {
-  title: string;
+  title: string | null;
   cooking_info: {
     cooking_time: string;
     kcal: number;
-  };
-  ingredients: recipeIngredientsInfo[];
-  cooking_tips: string[];
-  cooking_sequence: recipeCookingSequenceInfo;
+  } | null;
+  ingredients: recipeIngredientsInfo[] | null;
+  cooking_tips: string[] | null;
+  cooking_sequence: recipeCookingSequenceInfo | null;
 }
 
 export interface RecipeInfo {
@@ -51,7 +52,8 @@ export interface RecipeInfo {
   duration: string;
   viewCount: number;
   likeCount: number;
-  textRecipe: textRecipeType;
+  hasCaption: boolean;
+  textRecipe: textRecipeType | null;
 }
 
-export type RecipeInfoKeys = "ingredients" | "cooking_tips";
+export type RecipeInfoKeys = "video_infos" | "cooking_sequence" | "ingredients" | "cooking_tips";

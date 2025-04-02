@@ -23,7 +23,7 @@ class Settings(BaseSettings):
     # 할루시네이션 줄이기 위한 파라미터 최적화
     # Query OpenAI 설정
     QUERY_OPENAI_MODEL: str = "gpt-4o"
-    QUERY_OPENAI_MAX_TOKENS: int = 100  # 간결한 응답을 위한 적절한 값
+    QUERY_OPENAI_MAX_TOKENS: int = 200  # 간결한 응답을 위한 적절한 값
     QUERY_OPENAI_TEMPERATURE: float = 0.2  # 재료 목록에 더 충실하도록 낮은 값 설정
     QUERY_OPENAI_TOP_P: float = 0.85      # 상위 확률 토큰 제한
     QUERY_OPENAI_FREQUENCY_PENALTY: float = 0.2  # 중복 방지
@@ -36,12 +36,22 @@ class Settings(BaseSettings):
     SUMMARY_OPENAI_FREQUENCY_PENALTY: float = 0.1  # 중복 방지
     SUMMARY_OPENAI_STREAM: bool = False  # 스트리밍 사용 여부
 
+    # Summary Exception Code
+    SUMMARY_NOT_VALID_TRANSCRIPT_CODE: int = 430
+    SUMMARY_NOT_COOKCING_VIDEO_CODE: int = 432
+
     # YouTube 설정
     YOUTUBE_MAX_RESULTS: int = 5
     YOUTUBE_DESCRIPTION_LEN_TH: int = 200
+    YOUTUBE_TRANSCRIPT_LEN_TH: int = 200
+    YOUTUBE_TRANSCRIPT_NO_VALID_STR: str = "NO VALID TRANSCRIPT"
+
+    # YouTube 비디오 필터링 설정 (관련성 검증)
+    YOUTUBE_VALID_OPENAI_MODEL: str = "gpt-4o-mini"
+    FILTER_YOUTUBE_VIDEOS: bool = True
 
     # 생성할 음식 이름 개수
-    NUM_DISHES_TO_GENERATE: int = 3
+    NUM_DISHES_TO_GENERATE: int = 5
 
     # 로그 파일 관련 설정
     LOG_INTERVAL_UNIT: str = "midnight"

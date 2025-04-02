@@ -8,7 +8,10 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
 
   return {
-    base: env.VITE_BASE_URL || '/', // ⭐ 핵심: 동적 base 설정
+    base: env.VITE_BASE_URL || '/', // ⭐ 핵심: 동적 base 설정,
+    define: {
+      'import.meta.env.VITE_API_URL': JSON.stringify(env.VITE_API_URL),
+    },
     plugins: [react(), tsconfigPaths()],
   };
 });

@@ -1,3 +1,6 @@
+"""
+오로지 OpenAI API를 활용해 벤치마크 수행하는 스크립트트
+"""
 import time
 import asyncio
 import json

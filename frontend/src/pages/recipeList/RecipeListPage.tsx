@@ -12,12 +12,16 @@ import LoadingPlayer from "@components/common/loading/LoadingPlayer";
 
 import { usePostRecipeList } from "@hooks/useRecipeHooks";
 import useRecipeStore from "@stores/recipeStore";
-import useUserStore from "@/stores/userStore";
+import useUserStore from "@stores/userStore";
+import { useQueryClient } from "@tanstack/react-query";
 
 const RecipeListPage = () => {
   const { recommendType } = useParams();
   const { userId } = useUserStore();
-  const { recipeSelectedIngredients, recipeList } = useRecipeStore();
+  const { recipeSelectedIngredients, recipeList, resetRecipeSelectedIngredients, resetDetailRecipe, resetRecipeList } =
+    useRecipeStore();
+
+  const queryClient = useQueryClient();
 
   const [DISHES, setDISHES] = useState<string[]>([]);
 
@@ -36,6 +40,16 @@ const RecipeListPage = () => {
     }
   }, [recipeList]);
 
+  function goToPrevious() {
+    //홈으로 돌아갈 때, 선택된 재료, detailRecipe, recipeList 초기화
+    resetRecipeSelectedIngredients();
+    resetDetailRecipe();
+    resetRecipeList();
+
+    // 캐싱 제거
+    queryClient.removeQueries({ queryKey: ["recipeList"] });
+  }
+
   if (isLoading) return <LoadingPlayer />;
   if (isError) return <ErrorPage />;
 
@@ -43,7 +57,7 @@ const RecipeListPage = () => {
     <section className="flex flex-col h-full p-3">
       {DISHES.length > 0 ? (
         <>
-          <Header title={HeaderTitle} isIcon />
+          <Header title={HeaderTitle} isIcon onClick={goToPrevious} />
           <div className="flex-1 overflow-auto relative">
             <ErrorBoundary FallbackComponent={ErrorPage}>
               <RecipeList DISHES={DISHES} />

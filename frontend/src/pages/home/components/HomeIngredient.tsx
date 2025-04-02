@@ -14,13 +14,9 @@ import DetailIngredientModal from "@pages/detailIngredient/DetailIngredientModal
 import IconDecrease from "@assets/icons/IconDecrease";
 import IconIncrease from "@assets/icons/IconIncrease";
 
-import noImg from "@assets/images/noIngredient/carrot.png";
+import noImg from "@assets/images/noIngredient/noIngredient.jpg";
 
-interface HomeIngredientProps {
-  ingredient: Ingredients;
-}
-
-const HomeIngredient = ({ ingredient }: HomeIngredientProps) => {
+const HomeIngredient = ({ ingredient }: { ingredient: Ingredients }) => {
   const { selectedIngredients, setSelectedCount } = useIngredientsStore();
   const { openModal } = useModalStore();
 
@@ -69,12 +65,13 @@ const HomeIngredient = ({ ingredient }: HomeIngredientProps) => {
       {/* 아이콘 부분 */}
       <div
         className={`relative w-full aspect-[1/1] rounded-3xl cursor-pointer ${isShaking ? "shake" : ""}`}
-        onClick={() => openModal(<DetailIngredientModal ingredient={ingredient} />)}
+        onClick={() => openModal(<DetailIngredientModal ingredientId={ingredient.ingredientInfoId} />)}
       >
         {/* 재료 이미지 */}
         <img
           src={ingredient.imageUrl ? ingredient.imageUrl : noImg}
           alt="no image"
+          onError={(event) => (event.currentTarget.src = noImg)}
           className="w-full aspect-[1/1] object-cover rounded-3xl"
         />
 

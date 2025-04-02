@@ -49,15 +49,13 @@ public class DeprecatedController {
                                     "ingredientId": 1,
                                     "storagePlace": "냉장고",
                                     "expirationDate": "2025-03-08T11:00:00",
-                                    "incomingDate": "2025-03-01T12:00:00",
-                                    "releasingDate": "2025-03-05T12:00:00"
+                                    "incomingDate": "2025-03-01T12:00:00"
                                   },
                                   {
                                     "ingredientId": 2,
                                     "storagePlace": "냉장고",
                                     "expirationDate": "2025-03-08T11:00:00",
-                                    "incomingDate": "2025-03-01T12:00:00",
-                                    "releasingDate": "2025-03-05T12:00:00"
+                                    "incomingDate": "2025-03-01T12:00:00"
                                   },
                                 ]
                               }
@@ -115,8 +113,7 @@ public class DeprecatedController {
                           {
                           "storagePlace": "냉동실",
                           "expirationDate": "2025-03-07T11:00:00",
-                          "incomingDate": "2025-03-02T12:00:00",
-                          "releasingDate": "2025-03-05T12:00:00"
+                          "incomingDate": "2025-03-02T12:00:00"
                           }
                           """
                   )

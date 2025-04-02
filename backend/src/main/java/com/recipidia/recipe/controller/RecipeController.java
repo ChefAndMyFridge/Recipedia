@@ -37,7 +37,7 @@ public class RecipeController {
                       value = """
                           {
                               "memberId" : 1,
-                              "ingredients": ["돼지고기", "대파"]
+                              "ingredients": ["돼지고기", "파"]
                           }
                           """
                   )

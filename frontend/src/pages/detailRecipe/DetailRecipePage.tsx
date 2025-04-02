@@ -1,37 +1,60 @@
 import { useParams } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
+import { useEffect, useState } from "react";
 
 import ErrorPage from "@components/common/error/ErrorPage";
 import LoadingPlayer from "@components/common/loading/LoadingPlayer";
 import Modal from "@components/common/modal/Modal";
+import Timer from "@components/common/timer/Timer";
 
 import { useGetRecipeDetail } from "@hooks/useRecipeHooks";
+import useRecipeStore from "@stores/recipeStore";
 
 import DetailRecipeLandscapePage from "@pages/detailRecipe/DetailRecipeLandscapePage";
 import DetailRecipePortraitPage from "@pages/detailRecipe/DetailRecipePortraitPage";
 
 const DetailRecipePage = () => {
-  //detailRecipe 페이지 진입 시, 해당 레시피 정보 get api 호출 예정
   const { recipeId } = useParams();
+  const [isPortrait, setIsPortrait] = useState(window.matchMedia("(orientation: portrait)").matches);
+  const { detailRecipe, hasFetchedDetailRecipe, setHasFetchedDetailRecipe } = useRecipeStore();
 
   // API 호출로 상세 정보 가져오기
-  const { isLoading, isFetching, isError } = useGetRecipeDetail(Number(recipeId));
+  const { isLoading, isFetching, isError, data } = useGetRecipeDetail(Number(recipeId));
 
-  if (isLoading || isFetching) return <LoadingPlayer />;
+  // 스토어 값이 API 응답으로 업데이트되었는지 확인
+  useEffect(() => {
+    if (
+      data !== undefined &&
+      data.recipeId == detailRecipe.recipeId &&
+      detailRecipe.recipeId === Number(recipeId) &&
+      detailRecipe.recipeId !== 0
+    ) {
+      console.log("데이터 패칭 완료");
+      setHasFetchedDetailRecipe(true);
+    }
+  }, [data, detailRecipe, recipeId]);
+
+  function handleOrientationChange() {
+    setIsPortrait(window.matchMedia("(orientation: portrait)").matches);
+  }
+
+  // 화면 방향 변경 감지
+  useEffect(() => {
+    window.addEventListener("resize", handleOrientationChange);
+    return () => {
+      window.removeEventListener("resize", handleOrientationChange);
+    };
+  }, []);
+
+  if (isLoading || isFetching || !data || !hasFetchedDetailRecipe) return <LoadingPlayer />;
   if (isError) return <ErrorPage />;
 
   return (
     <>
       <ErrorBoundary FallbackComponent={ErrorPage}>
-        {/* 세로모드 레이아웃 */}
-        <div className="portrait:block landscape:hidden h-full">
-          <DetailRecipePortraitPage />
-        </div>
-        {/* 가로모드 레이아웃 */}
-        <div className="landscape:block portrait:hidden h-full">
-          <DetailRecipeLandscapePage />
-        </div>
+        {isPortrait ? <DetailRecipePortraitPage /> : <DetailRecipeLandscapePage />}
         <Modal />
+        <Timer defaultTimer={10} />
       </ErrorBoundary>
     </>
   );

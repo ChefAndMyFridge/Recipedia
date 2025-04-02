@@ -1,36 +1,18 @@
 import React from "react";
 
-import { filteredInfomations } from "@/types/ingredientsTypes";
+import { FilterElementProps, IngredientsPreferenceProps } from "@/types/filterTypes.ts";
+
+import useIngredientsStore from "@stores/ingredientsStore";
 
 import IngredientInput from "@components/common/input/IngredientInput";
 import Button from "@components/common/button/Button";
 import FilterButton from "@components/common/button/FilterButton";
 import IngredientButton from "@components/common/button/IngredientButton";
 
-import useIngredientsStore from "@stores/ingredientsStore";
-
-interface FilterElementProps {
-  type: "categories" | "dietaries";
-  content: string;
-  keys: string[];
-  elements: string[];
-  onSetFilter: (type: "categories" | "dietaries", value: string) => void;
-  onClear: (type: "categories" | "dietaries") => void;
-}
-
-interface IngredientsPreferenceProps {
-  type: "preferredIngredients" | "dislikedIngredients";
-  label: string;
-  placeHolder: string;
-  selectedList: filteredInfomations;
-  onSetFilter: (type: "preferredIngredients" | "dislikedIngredients", value: string) => void;
-  onClear: (type: "preferredIngredients" | "dislikedIngredients") => void;
-}
-
 const FilterElement = ({ type, content, keys, elements, onSetFilter, onClear }: FilterElementProps) => {
   return (
     <div className="mb-4">
-      <div className="flex justify-between items-center h-8 mb-2 border-content">
+      <div className="flex justify-between items-center h-8 border-content">
         <span className="text-sm font-preBold">{content}</span>
         <button onClick={() => onClear(type)} className="text-xs font-preRegular text-content2">
           초기화
@@ -99,9 +81,9 @@ const IngredientsPreference = ({
             초기화
           </button>
         </div>
-        <form onSubmit={handleAddItem} className="w-full flex gap-2 justify-center items-center">
+        <form onSubmit={handleAddItem} className="w-full flex gap-4 justify-center items-center">
           <IngredientInput name="ingredient" type="text" placeHolder={placeHolder} labelTextSize="text-lg" />
-          <Button type="submit" design="confirm" content="추가" className="w-12 aspect-[1/1]" />
+          <Button type="submit" design="confirm" content="추가" className="w-1/5 h-12" />
         </form>
       </div>
 
@@ -126,7 +108,23 @@ const HomeExpandFilter = () => {
     useIngredientsStore();
 
   return (
-    <div className="absolute top-10 left-0 w-full bg-white shadow-md z-10 px-4 py-3 font-preMedium">
+    <div className="absolute top-10 left-0 w-full bg-white shadow-md z-30 px-4 py-2 font-preMedium">
+      <IngredientsPreference
+        type={"preferredIngredients"}
+        label="좋아하는 재료"
+        placeHolder="좋아하는 재료를 입력해주세요."
+        selectedList={filteredInfomations}
+        onSetFilter={setFilteredInfomations}
+        onClear={setClearFilteredInfomations}
+      />
+      <IngredientsPreference
+        type={"dislikedIngredients"}
+        label="싫어하는 재료"
+        placeHolder="싫어하는 재료를 입력해주세요."
+        selectedList={filteredInfomations}
+        onSetFilter={setFilteredInfomations}
+        onClear={setClearFilteredInfomations}
+      />
       <FilterElement
         type={"categories"}
         content="카테고리"
@@ -143,19 +141,11 @@ const HomeExpandFilter = () => {
         onSetFilter={setFilteredInfomations}
         onClear={setClearFilteredInfomations}
       />
-      <IngredientsPreference
-        type={"preferredIngredients"}
-        label="좋아하는 재료"
-        placeHolder="좋아하는 재료를 입력해주세요."
-        selectedList={filteredInfomations}
-        onSetFilter={setFilteredInfomations}
-        onClear={setClearFilteredInfomations}
-      />
-      <IngredientsPreference
-        type={"dislikedIngredients"}
-        label="싫어하는 재료"
-        placeHolder="싫어하는 재료를 입력해주세요."
-        selectedList={filteredInfomations}
+      <FilterElement
+        type={"allergies"}
+        content="알레르기"
+        keys={filteringInfomationKeys.allergies}
+        elements={filteredInfomations.allergies}
         onSetFilter={setFilteredInfomations}
         onClear={setClearFilteredInfomations}
       />

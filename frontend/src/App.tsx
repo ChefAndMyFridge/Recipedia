@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import HomePage from "@pages/home/HomePage";
+import LoginPage from "@pages/auth/LoginPage";
 import RecipeListPage from "@pages/recipeList/RecipeListPage";
 import DetailRecipePage from "@pages/detailRecipe/DetailRecipePage";
 import SettingPage from "@pages/setting/SettingPage";
@@ -14,6 +15,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/recipeList/:recommendType" element={<RecipeListPage />} />
         <Route path="/detailRecipe/:recipeId" element={<DetailRecipePage />} />
         <Route path="/setting" element={<SettingPage />} />
