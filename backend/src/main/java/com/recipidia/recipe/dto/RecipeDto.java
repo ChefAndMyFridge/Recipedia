@@ -1,7 +1,6 @@
 package com.recipidia.recipe.dto;
 
 import com.recipidia.recipe.entity.Recipe;
-import com.recipidia.recipe.response.RecipeExtractRes;
 
 import java.io.Serializable;
 import java.util.List;
