@@ -70,9 +70,9 @@ pipeline {
                     yarn install --frozen-lockfile
                     yarn build
 
-                    rm -rf /front_build/${env.BRANCH_NAME}-${env.DEPLOY_SLOT}/html
-                    mkdir -p /front_build/${env.BRANCH_NAME}-${env.DEPLOY_SLOT}/html
-                    cp -r dist/* /front_build/${env.BRANCH_NAME}-${env.DEPLOY_SLOT}/html/
+                    rm -rf /front_build/${env.BRANCH_NAME}/html
+                    mkdir -p /front_build/${env.BRANCH_NAME}/html
+                    cp -r dist/* /front_build/${env.BRANCH_NAME}/html/
                     """
                 }
             }
