@@ -130,7 +130,7 @@ public class MemberRecipeController {
   @GetMapping("/{memberId}/favorites")
   public ResponseEntity<Page<RecipeWithMemberInfoDto>> getMemberFavorites(
       @PathVariable Long memberId,
-      @PageableDefault(page = 0, size = 5) Pageable pageable) {
+      @PageableDefault(size = 5) Pageable pageable) {
     return ResponseEntity.ok(memberRecipeService.getMemberFavorites(memberId, pageable));
   }
 
