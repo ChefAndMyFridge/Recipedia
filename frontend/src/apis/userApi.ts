@@ -79,7 +79,7 @@ export const authLoginApi = async (username: string, password: string): Promise<
   try {
     const response = await instance.post("/v1/auth/login", { username, password });
 
-    if (response.status !== 200) return false; // 로그인 실패
+    // if (response.status !== 200) return false; // 로그인 실패
     
     // 로그인 성공 시 JWT 토큰을 로컬 스토리지에 저장
     const token = response.data as string;
