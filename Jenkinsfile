@@ -127,6 +127,7 @@ pipeline {
                     docker exec my-nginx ln -sf /etc/nginx/upstreams/${env.DEPLOY_SLOT}-${env.BRANCH_NAME}.conf /etc/nginx/upstreams/active-${env.BRANCH_NAME}.conf
                     docker exec my-nginx ln -sf /usr/share/nginx/${BRANCH_NAME}-${DEPLOY_SLOT}/html /usr/share/nginx/${BRANCH_NAME}/html
                     docker exec my-nginx nginx -s reload
+                    mkdir -p /deploy-state
                     echo ${env.DEPLOY_SLOT} > /deploy-state/${env.BRANCH_NAME}.txt
                     """
                 }
