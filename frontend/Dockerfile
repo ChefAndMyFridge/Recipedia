@@ -3,6 +3,8 @@ FROM nginx:stable-alpine
 
 USER root
 
+RUN touch /etc/nginx/upstreams/active-master.conf
+RUN touch /etc/nginx/upstreams/active-release.conf
 RUN mkdir -p /etc/nginx/upstreams 
 RUN mkdir -p /usr/share/nginx/master/html
 RUN mkdir -p /usr/share/nginx/release/html
