@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -43,7 +42,7 @@ public class MemberRecipeServiceImpl implements MemberRecipeService {
           .member(member)
           .recipe(recipe)
           .rating(rating)
-          .favorite(favorite != null ? favorite : false) // 기본 값 false
+          .favorite(favorite != null && favorite) // 기본 값 false
           .createdAt(LocalDateTime.now())
           .build();
       memberRecipeRepository.save(newMemberRecipe); // 새 객체 저장
@@ -66,7 +65,7 @@ public class MemberRecipeServiceImpl implements MemberRecipeService {
     return memberRecipeRepository.findAllByMember(member)
         .stream()
         .map(MemberRecipeDto::fromEntity)
-        .collect(Collectors.toList());
+        .toList();
   }
 
   @Override
@@ -78,7 +77,7 @@ public class MemberRecipeServiceImpl implements MemberRecipeService {
     return memberRecipeRepository.findAllByMemberAndFavoriteTrue(member)
         .stream()
         .map(mr -> RecipeWithMemberInfoDto.fromEntities(mr.getRecipe(), mr))
-        .collect(Collectors.toList());
+        .toList();
   }
 
   @Override
@@ -90,7 +89,7 @@ public class MemberRecipeServiceImpl implements MemberRecipeService {
     return memberRecipeRepository.findAllByMemberAndRatingIsNotNull(member)
         .stream()
         .map(mr -> RecipeWithMemberInfoDto.fromEntities(mr.getRecipe(), mr))
-        .collect(Collectors.toList());
+        .toList();
   }
 
 }

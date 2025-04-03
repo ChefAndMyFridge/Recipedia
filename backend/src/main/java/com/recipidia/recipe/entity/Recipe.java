@@ -1,6 +1,7 @@
 package com.recipidia.recipe.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.recipidia.recipe.dto.VideoInfo;
 import com.recipidia.recipe.response.RecipeExtractRes;
 import com.recipidia.recipe.converter.RecipeExtractResConverter;
 import jakarta.persistence.*;
@@ -72,14 +73,19 @@ public class Recipe {
         this.textRecipe = extractRes;
     }
 
-    // VideoInfo 부분 업데이트 필요 시 활용하기 (조회 수, 좋아요 수 등 수정)
-    public void updateVideoInfo(String channelTitle, String duration, Long viewCount,
-                                Long likeCount, Boolean hasCaption) {
-        this.channelTitle = channelTitle;
-        this.duration = duration;
-        this.viewCount = viewCount;
-        this.likeCount = likeCount;
-        this.hasCaption = hasCaption;
+    // 새로 검색해서 가져온 VideoInfo로 기존 저장된 정보 업데이트
+    public void updateFromVideoInfo(VideoInfo videoInfo) {
+        this.title = videoInfo.getTitle();
+        this.channelTitle = videoInfo.getChannelTitle();
+        this.duration = videoInfo.getDuration();
+        this.viewCount = videoInfo.getViewCount();
+        this.likeCount = videoInfo.getLikeCount();
+        // hasCaption 및 youtubeUrl, id는 업데이트에서 제외
+    }
+
+    // 에러코드 처리 시 hasCaption 값 false로 조정
+    public void noCaption() {
+        this.hasCaption = false;
     }
 
 }

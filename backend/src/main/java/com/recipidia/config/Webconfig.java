@@ -13,7 +13,7 @@ public class Webconfig implements WebMvcConfigurer {
         .allowedOrigins("http://localhost:5173", "https://j12s003.p.ssafy.io")
         .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
         .allowedHeaders("*")
-        .maxAge(3600 * 24);
+        .maxAge(3600L * 24);
   }
 
 }
