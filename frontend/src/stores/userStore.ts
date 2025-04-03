@@ -6,20 +6,31 @@ interface UserState {
   userId: number;
   username: string;
   currentProfileImg: string;
+  isAuthenticated: boolean;
   setUserId: (userId: number) => void;
   setUserName: (username: string) => void;
   setCurrentProfileImg: (profileImg: string) => void;
+  setAuthentication: () => void;
+  clearAuthentication: () => void;
 }
 
 const useUserStore = create<UserState>()(
   persist(
     (set) => ({
-      userId: 0,
+      userId: 1,
       username: "닉네임",
       currentProfileImg: defaultProfile,
+      isAuthenticated: false,
       setUserId: (userId) => set({ userId }),
       setUserName: (username) => set({ username }),
       setCurrentProfileImg: (profileImg) => set({ currentProfileImg: profileImg }),
+      setAuthentication: () => {
+        set({ isAuthenticated: true });
+      },
+      clearAuthentication: () => {
+        localStorage.removeItem("jwt");
+        set({ isAuthenticated: false });
+      }
     }),
     {
       name: "user-storage",

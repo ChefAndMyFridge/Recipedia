@@ -1,5 +1,6 @@
 package com.recipidia;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -12,4 +13,8 @@ public class RecipidiaApplication {
 		SpringApplication.run(RecipidiaApplication.class, args);
 	}
 
+	@PostConstruct
+	public void showDbUrl() {
+		System.out.println("DB 접속 URL: " + System.getenv("MYSQL_HOST"));
+	}
 }

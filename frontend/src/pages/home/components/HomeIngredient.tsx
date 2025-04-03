@@ -14,7 +14,7 @@ import DetailIngredientModal from "@pages/detailIngredient/DetailIngredientModal
 import IconDecrease from "@assets/icons/IconDecrease";
 import IconIncrease from "@assets/icons/IconIncrease";
 
-import noImg from "@assets/images/noIngredient/carrot.png";
+import noImg from "@assets/images/noIngredient/noIngredient.jpg";
 
 const HomeIngredient = ({ ingredient }: { ingredient: Ingredients }) => {
   const { selectedIngredients, setSelectedCount } = useIngredientsStore();
@@ -71,6 +71,7 @@ const HomeIngredient = ({ ingredient }: { ingredient: Ingredients }) => {
         <img
           src={ingredient.imageUrl ? ingredient.imageUrl : noImg}
           alt="no image"
+          onError={(event) => (event.currentTarget.src = noImg)}
           className="w-full aspect-[1/1] object-cover rounded-3xl"
         />
 

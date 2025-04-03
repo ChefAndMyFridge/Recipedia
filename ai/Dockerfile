@@ -7,12 +7,14 @@ RUN apt-get update && apt-get install -y \
     curl \
     wget \
     net-tools \
+    git \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # 3️⃣ 의존성 파일 복사 및 설치
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install git+https://github.com/seof622/youtube-search-python
 
 
 # 4️⃣ FastAPI 앱 코드 복사
