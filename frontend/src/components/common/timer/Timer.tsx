@@ -4,9 +4,17 @@ import { createPortal } from "react-dom";
 import OpenTimer from "@components/common/timer/OpenTimer";
 import IconTimer from "@assets/icons/IconTimer";
 
-const Timer = ({ defaultTimer }: { defaultTimer: number }) => {
+const Timer = ({
+  defaultTimer,
+  initXPercent,
+  initYPercent,
+}: {
+  defaultTimer: number;
+  initXPercent: number;
+  initYPercent: number;
+}) => {
   // 상대적 위치 사용 (0~1 사이의 값으로 표현)
-  const [relativePosition, setRelativePosition] = useState({ xPercent: 0.025, yPercent: 0.915 });
+  const [relativePosition, setRelativePosition] = useState({ xPercent: initXPercent, yPercent: initYPercent });
   const [absolutePosition, setAbsolutePosition] = useState({ x: 0, y: 0 });
 
   const [isOpen, setIsOpen] = useState(false);
@@ -129,7 +137,7 @@ const Timer = ({ defaultTimer }: { defaultTimer: number }) => {
       {!isOpen ? (
         <div
           ref={timerRef}
-          className="fixed flex justify-between items-center px-4 py-3 gap-2 z-50 bg-subContent/50 backdrop-blur-lg rounded-full cursor-grab active:cursor-grabbing touch-none"
+          className="fixed flex justify-between items-center px-4 py-3 gap-2 z-50 bg-subContent/50 backdrop-blur-md rounded-full cursor-grab active:cursor-grabbing touch-none"
           style={{
             left: `${absolutePosition.x}px`,
             top: `${absolutePosition.y}px`,

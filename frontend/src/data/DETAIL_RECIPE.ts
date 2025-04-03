@@ -129,7 +129,7 @@ export const DETAIL_RECIPE: RecipeInfo = {
       "완성 및 서빙": {
         sequence: ["구운 고기와 파절이를 함께 서빙합니다."],
         timestamp: 744,
-        timer: 0,
+        timer: 1200,
       },
     },
   },

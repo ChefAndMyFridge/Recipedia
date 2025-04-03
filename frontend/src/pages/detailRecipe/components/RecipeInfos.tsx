@@ -32,7 +32,7 @@ const RecipeInfos = ({ currentTime, setCurrentTime, playerRef }: RecipeInfosProp
   const [textRecipeData, setTextRecipeData] = useState(detailRecipe.textRecipe);
 
   //자동 스크롤
-  const [isAutoScroll, setIsAutoScroll] = useState(false);
+  const [isAutoScroll, setIsAutoScroll] = useState(true);
 
   // 타이머 배열
   const [timers, setTimers] = useState<number[]>([]);
@@ -124,7 +124,11 @@ const RecipeInfos = ({ currentTime, setCurrentTime, playerRef }: RecipeInfosProp
                 textRecipeData.ingredients.map((item: recipeIngredientsInfo) => (
                   <div
                     key={item.name + item.quantity}
-                    className="px-4 py-2 text-sm landscape:text-xs font-preSemiBold break-keep rounded-3xl shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]"
+                    className={`px-4 py-2 landscape:text-xs font-preSemiBold break-keep ${
+                      item.name !== "텍스트 추출이 불가능한" || item.quantity !== "영상입니다."
+                        ? "text-sm rounded-3xl shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]"
+                        : "text-base"
+                    } `}
                   >
                     {item.name} {item.quantity}
                   </div>
@@ -138,7 +142,11 @@ const RecipeInfos = ({ currentTime, setCurrentTime, playerRef }: RecipeInfosProp
                 textRecipeData.cooking_tips.map((tip: string, index: number) => (
                   <div
                     key={index}
-                    className="px-4 py-2 text-sm font-preSemiBold break-keep rounded-3xl shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]"
+                    className={`px-4 py-2 font-preSemiBold break-keep ${
+                      tip !== "자막이 너무 짧아 레시피 요약에 충분하지 않습니다."
+                        ? "text-sm rounded-3xl shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]"
+                        : "text-base"
+                    } `}
                   >
                     {tip}
                   </div>
@@ -152,7 +160,7 @@ const RecipeInfos = ({ currentTime, setCurrentTime, playerRef }: RecipeInfosProp
       {timers.length > 0 && (
         <div>
           {timers.map((timer, index) => (
-            <Timer key={index} defaultTimer={timer} />
+            <Timer key={index} defaultTimer={timer} initXPercent={0.025} initYPercent={0.915 - index * 0.04} />
           ))}
         </div>
       )}
