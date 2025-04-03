@@ -1,13 +1,10 @@
 package com.recipidia.ingredient.dto;
 
 import com.recipidia.ingredient.entity.IngredientInfo;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * DTO for {@link IngredientInfo}

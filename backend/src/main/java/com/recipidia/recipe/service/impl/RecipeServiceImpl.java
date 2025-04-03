@@ -3,9 +3,8 @@ package com.recipidia.recipe.service.impl;
 import com.recipidia.filter.entity.MemberFilter;
 import com.recipidia.filter.repository.MemberFilterRepository;
 import com.recipidia.filter.service.IngredientFilterService;
-import com.recipidia.ingredient.dto.IngredientInfoDto;
-import com.recipidia.ingredient.service.IngredientService;
 import com.recipidia.member.entity.MemberRecipe;
+import com.recipidia.member.repository.MemberRecipeRepository;
 import com.recipidia.recipe.converter.RecipeQueryResConverter;
 import com.recipidia.recipe.dto.RecipeDetailDto;
 import com.recipidia.recipe.dto.RecipeDto;
@@ -13,13 +12,14 @@ import com.recipidia.recipe.dto.VideoInfo;
 import com.recipidia.recipe.entity.Recipe;
 import com.recipidia.recipe.entity.RecipeIngredient;
 import com.recipidia.recipe.exception.NoRecipeException;
-import com.recipidia.recipe.exception.SummaryNotCookingVideoException;
-import com.recipidia.recipe.exception.SummaryNotValidTranscriptException;
 import com.recipidia.recipe.repository.RecipeRepository;
 import com.recipidia.recipe.request.RecipeQueryReq;
-import com.recipidia.recipe.response.*;
+import com.recipidia.recipe.response.RecipeExtractRes;
+import com.recipidia.recipe.response.RecipeQueryCustomResponse;
+import com.recipidia.recipe.response.RecipeQueryRes;
+import com.recipidia.recipe.response.VideoInfoCustomResponse;
 import com.recipidia.recipe.service.RecipeService;
-import com.recipidia.member.repository.MemberRecipeRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -34,33 +34,22 @@ import reactor.util.function.Tuple2;
 import reactor.util.function.Tuples;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class RecipeServiceImpl implements RecipeService {
 
-  private final IngredientService ingredientService;
   private final IngredientFilterService ingredientFilterService;
   private final WebClient webClient;
   private final RecipeRepository recipeRepository;
-  private final RecipeQueryResConverter queryResConverter = new RecipeQueryResConverter();
   private final MemberRecipeRepository memberRecipeRepository;
   private final MemberFilterRepository memberFilterRepository;
+  private final RecipeQueryResConverter queryResConverter = new RecipeQueryResConverter();
 
-  public RecipeServiceImpl(IngredientService ingredientService,
-                           IngredientFilterService ingredientFilterService, WebClient webClient,
-                           RecipeRepository recipeRepository, MemberRecipeRepository memberRecipeRepository,
-                           MemberFilterRepository memberFilterRepository) {
-    this.ingredientService = ingredientService;
-    this.ingredientFilterService = ingredientFilterService;
-    // FastAPI 컨테이너의 서비스명을 사용
-    this.webClient = webClient;
-    this.recipeRepository = recipeRepository;
-    this.memberRecipeRepository = memberRecipeRepository;
-    this.memberFilterRepository = memberFilterRepository;
-  }
+  private static final String RECIPE_NOT_FOUND_MSG = "Recipe not found";
+
 
   @Override
   @Transactional
@@ -137,38 +126,48 @@ public class RecipeServiceImpl implements RecipeService {
   @Override
   @Transactional
   public Mono<Void> saveRecipeResult(ResponseEntity<RecipeQueryRes> responseEntity) {
-    return Mono.fromCallable(() -> {
+    return Mono.fromRunnable(() -> {
           RecipeQueryRes recipeQueryRes = responseEntity.getBody();
           if (recipeQueryRes == null || recipeQueryRes.getDishes() == null) {
-            // 응답이 비어있으면 비어있는 응답 반환. 필요 시 나중에 검색 결과가 없습니다 처리
-            return Mono.empty();
+            // 응답이 비어있으면 아무 작업도 하지 않음
+            return;
           }
-          // 각 dish(레시피 이름)에 대해 반복
-          for (String dish : recipeQueryRes.getDishes()) {
-            List<VideoInfo> videoInfos = recipeQueryRes.getVideos().get(dish);
-            if (videoInfos != null && !videoInfos.isEmpty()) {
-              for (VideoInfo videoInfo : videoInfos) {
-                String youtubeUrl = videoInfo.getUrl();
-                Optional<Recipe> existing = recipeRepository.findByYoutubeUrl(youtubeUrl);
-                if (existing.isEmpty()) {
-                  Recipe recipe = Recipe.builder()
-                      .name(dish)
-                      .title(videoInfo.getTitle())
-                      .youtubeUrl(videoInfo.getUrl())
-                      .channelTitle(videoInfo.getChannel_title())
-                      .duration(videoInfo.getDuration())
-                      .viewCount(videoInfo.getView_count())
-                      .likeCount(videoInfo.getLike_count())
-                      .hasCaption(videoInfo.getHas_caption())
-                      .build();
-                  recipeRepository.save(recipe);
-                }
-              }
-            }
-          }
-          return null;
+          recipeQueryRes.getDishes().forEach(dish -> processDish(dish, recipeQueryRes));
         }).subscribeOn(Schedulers.boundedElastic())
         .then();
+  }
+
+  // 각 요리 이름 별 처리 메소드
+  private void processDish(String dish, RecipeQueryRes recipeQueryRes) {
+    List<VideoInfo> videoInfos = recipeQueryRes.getVideos().get(dish);
+    if (videoInfos == null || videoInfos.isEmpty()) {
+      return;
+    }
+    videoInfos.forEach(videoInfo -> processVideoInfo(dish, videoInfo));
+  }
+
+  // 각 비디오 별 처리 메소드
+  private void processVideoInfo(String dish, VideoInfo videoInfo) {
+    String youtubeUrl = videoInfo.getUrl();
+
+    // 기존 레시피는 업데이트, 신규 레시피는 빌드해서 저장
+    Recipe recipe = recipeRepository.findByYoutubeUrl(youtubeUrl)
+        .map(existingRecipe -> {
+          existingRecipe.updateFromVideoInfo(videoInfo); // 기존 레시피 업데이트
+          return existingRecipe;
+        })
+        .orElseGet(() -> Recipe.builder()
+            .youtubeUrl(youtubeUrl)
+            .name(dish)
+            .hasCaption(videoInfo.getHasCaption())
+            .title(videoInfo.getTitle())
+            .channelTitle(videoInfo.getChannelTitle())
+            .duration(videoInfo.getDuration())
+            .viewCount(videoInfo.getViewCount())
+            .likeCount(videoInfo.getLikeCount())
+            .build());
+
+    recipeRepository.save(recipe);
   }
 
   @Override
@@ -213,11 +212,11 @@ public class RecipeServiceImpl implements RecipeService {
                       .recipeId(recipeId)
                       .title(video.getTitle())
                       .url(video.getUrl())
-                      .channelTitle(video.getChannel_title())
+                      .channelTitle(video.getChannelTitle())
                       .duration(video.getDuration())
-                      .viewCount(video.getView_count())
-                      .likeCount(video.getLike_count())
-                      .hasCaption(video.getHas_caption())
+                      .viewCount(video.getViewCount())
+                      .likeCount(video.getLikeCount())
+                      .hasCaption(video.getHasCaption())
                       .favorite(favorite)
                       .rating(rating)
                       .build();
@@ -233,9 +232,10 @@ public class RecipeServiceImpl implements RecipeService {
         .publishOn(Schedulers.parallel())
         .map(list -> list.stream()
             .map(RecipeDto::fromEntity)
-            .collect(Collectors.toList()))
+            .toList())
         .map(ResponseEntity::ok)
-        .doOnNext(resp -> log.info("getAllRecipes result size={}", resp.getBody().size()))
+        .doOnNext(resp -> log.info("getAllRecipes result size={}",
+            Optional.ofNullable(resp.getBody()).map(List::size).orElse(0)))
         .doOnError(e -> log.error("getAllRecipes failed", e))
         .onErrorResume(e ->
             Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build())
@@ -246,7 +246,7 @@ public class RecipeServiceImpl implements RecipeService {
   @Transactional
   public Mono<RecipeExtractRes> extractRecipe(Long recipeId) {
     return Mono.justOrEmpty(recipeRepository.findById(recipeId))
-        .switchIfEmpty(Mono.error(new NoRecipeException("Recipe not found")))
+        .switchIfEmpty(Mono.error(new NoRecipeException(RECIPE_NOT_FOUND_MSG)))
         .subscribeOn(Schedulers.boundedElastic())
         .flatMap(recipe -> {
           if (recipe.getTextRecipe() != null) {
@@ -258,25 +258,34 @@ public class RecipeServiceImpl implements RecipeService {
               .uri("/api/f1/recipe/")
               .contentType(MediaType.APPLICATION_JSON)
               .bodyValue(payload)
-              .retrieve()
-              // FastAPI가 430 에러(자막이 충분하지 않은 내용을 포함)를 반환하는 경우
-              .onStatus(status -> status.value() == 430, clientResponse ->
-                  clientResponse.bodyToMono(String.class)
-                      .flatMap(errorMessage ->
-                          Mono.error(new SummaryNotValidTranscriptException(errorMessage))
-                      )
-              )
-              // FastAPI가 432 에러(영상이 요리영상이 아님)를 반환하는 경우
-              .onStatus(status -> status.value() == 432, clientResponse ->
-                  clientResponse.bodyToMono(String.class)
-                      .flatMap(errorMessage ->
-                          Mono.error(new SummaryNotCookingVideoException(errorMessage))
-                      )
-              )
-              .bodyToMono(RecipeExtractRes.class)
-              .flatMap(extractRes -> saveExtractResult(recipeId, extractRes)
-                  .thenReturn(extractRes));
+              .exchangeToMono(response -> {
+                int status = response.statusCode().value();
+                // 상태 코드가 430 또는 432인 경우 더미 RecipeExtractRes 반환
+                if (status == 430 || status == 432) {
+                  return response.bodyToMono(String.class)
+                      .defaultIfEmpty("")
+                      .flatMap(errorMsg -> {
+                        String title = (status == 430)
+                            ? "자막이 너무 짧아 레시피 요약에 충분하지 않습니다."
+                            : "요리 영상이 아닙니다.";
+                        return updateHasCaptionFalse(recipeId) // hasCaption 값을 false로 바꾼 뒤
+                            .thenReturn(RecipeExtractRes.createDummy(title)); // 더미 데이터 반환
+                      });
+                } else {
+                  return response.bodyToMono(RecipeExtractRes.class);
+                }
+              });
         });
+  }
+
+  // 더미 데이터 반환 시 레시피의 HasCaption 값을 false로 변경
+  private Mono<Recipe> updateHasCaptionFalse(Long recipeId) {
+    return Mono.fromCallable(() -> {
+      Recipe recipe = recipeRepository.findById(recipeId)
+          .orElseThrow(() -> new NoRecipeException(RECIPE_NOT_FOUND_MSG));
+      recipe.noCaption();
+      return recipeRepository.save(recipe);
+    }).subscribeOn(Schedulers.boundedElastic());
   }
 
 
@@ -287,7 +296,7 @@ public class RecipeServiceImpl implements RecipeService {
         .subscribeOn(Schedulers.boundedElastic())
         .flatMap(optionalRecipe -> {
           if (optionalRecipe.isEmpty()) {
-            return Mono.error(new NoRecipeException("Recipe not found"));
+            return Mono.error(new NoRecipeException(RECIPE_NOT_FOUND_MSG));
           }
           Recipe recipe = optionalRecipe.get();
           // 추출 결과 전체를 RecipeExtractRes로 저장
@@ -314,7 +323,7 @@ public class RecipeServiceImpl implements RecipeService {
         .subscribeOn(Schedulers.boundedElastic())
         .flatMap(optionalRecipe -> {
           if (optionalRecipe.isEmpty()) {
-            return Mono.error(new NoRecipeException("Recipe not found"));
+            return Mono.error(new NoRecipeException(RECIPE_NOT_FOUND_MSG));
           }
           Recipe recipe = optionalRecipe.get();
           RecipeDetailDto dto = RecipeDetailDto.fromEntities(recipe, extractRes);
@@ -328,7 +337,7 @@ public class RecipeServiceImpl implements RecipeService {
         .subscribeOn(Schedulers.boundedElastic())
         .flatMap(optionalRecipe -> {
           if (optionalRecipe.isEmpty()) {
-            return Mono.error(new NoRecipeException("Recipe not found"));
+            return Mono.error(new NoRecipeException(RECIPE_NOT_FOUND_MSG));
           }
           Recipe recipe = optionalRecipe.get();
           // textRecipe가 없으면 빈 RecipeExtractRes를 생성하거나 null을 사용 (DTO 설계에 따라 선택)
