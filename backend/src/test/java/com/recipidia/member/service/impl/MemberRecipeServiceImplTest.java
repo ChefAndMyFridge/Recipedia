@@ -11,7 +11,6 @@ import com.recipidia.member.exception.MemberNotFoundException;
 import com.recipidia.member.repository.MemberRecipeRepository;
 import com.recipidia.member.repository.MemberRepository;
 import com.recipidia.recipe.entity.Recipe;
-import com.recipidia.recipe.repository.RecipeRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -31,9 +30,6 @@ class MemberRecipeServiceImplTest {
 
   @Mock
   private MemberRepository memberRepository;
-
-  @Mock
-  private RecipeRepository recipeRepository;
 
   @Mock
   private MemberRecipeRepository memberRecipeRepository;
@@ -92,4 +88,54 @@ class MemberRecipeServiceImplTest {
         .isInstanceOf(MemberNotFoundException.class)
         .hasMessageContaining("Member not found with id: " + memberId);
   }
+
+  @Test
+  void getMemberRatedRecipes_ReturnsPagedDtoList_WhenMoreThanPageSize() {
+    // given
+    Long memberId = 1L;
+    Member member = new Member("testuser");
+    ReflectionTestUtils.setField(member, "id", memberId);
+
+    List<MemberRecipe> allRecipes = IntStream.range(0, 10)
+        .mapToObj(i -> {
+          Recipe recipe = new Recipe("recipe" + i, "url", "title", "channel", "duration", 100L, 10L, false);
+          ReflectionTestUtils.setField(recipe, "id", (long) i);
+          return new MemberRecipe(member, recipe, i, true, LocalDateTime.now()); // rating = i
+        })
+        .toList();
+
+    Pageable pageable = PageRequest.of(0, 5);
+    Page<MemberRecipe> page = new PageImpl<>(
+        allRecipes.subList(0, 5), // 페이징된 결과
+        pageable,
+        allRecipes.size()
+    );
+
+    when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
+    when(memberRecipeRepository.findAllByMemberAndRatingIsNotNull(member, pageable)).thenReturn(page);
+
+    // when
+    Page<RecipeWithMemberInfoDto> result = memberRecipeService.getMemberRatedRecipes(memberId, pageable);
+
+    // then
+    assertThat(result).isNotNull();
+    assertThat(result.getTotalElements()).isEqualTo(10);
+    assertThat(result.getContent()).hasSize(5);
+    assertThat(result.getTotalPages()).isEqualTo(2);
+    assertThat(result.hasNext()).isTrue();
+  }
+
+  @Test
+  void getMemberRatedRecipes_ThrowsException_WhenMemberNotFound() {
+    // given
+    Long memberId = 999L;
+    Pageable pageable = PageRequest.of(0, 5);
+    when(memberRepository.findById(memberId)).thenReturn(Optional.empty());
+
+    // when & then
+    assertThatThrownBy(() -> memberRecipeService.getMemberRatedRecipes(memberId, pageable))
+        .isInstanceOf(MemberNotFoundException.class)
+        .hasMessageContaining("Member not found with id: " + memberId);
+  }
+
 }

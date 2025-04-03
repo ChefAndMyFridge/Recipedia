@@ -91,4 +91,40 @@ class MemberRecipeControllerTest {
         .andExpect(jsonPath("$.totalElements").value(total))
         .andExpect(jsonPath("$.content[0].name").value("김치볶음밥"));
   }
+  @Test
+  void getMemberRatedRecipes_ReturnsPagedDtoList_WhenRequestIsValid() throws Exception {
+    // given
+    Long memberId = 1L;
+    int size = 5;
+    int total = 10;
+
+    List<RecipeWithMemberInfoDto> ratedRecipeList = IntStream.range(0, size)
+        .mapToObj(i -> new RecipeWithMemberInfoDto(
+            (long) i,
+            "제육볶음",
+            "맛있는 제육볶음 레시피",
+            "https://youtube.com/jeyuk",
+            "한식의정석",
+            "PT7M10S",
+            800L * i,
+            100L * i,
+            true,
+            true,
+            3 + i // rating 값 다름
+        ))
+        .toList();
+
+    Pageable searchParam = PageRequest.of(0, size);
+    Page<RecipeWithMemberInfoDto> page = new PageImpl<>(ratedRecipeList, searchParam, total);
+
+    when(memberRecipeService.getMemberRatedRecipes(memberId, searchParam)).thenReturn(page);
+
+    // when & then
+    mockMvc.perform(get("/api/v1/member/recipe/1/ratings"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.content", hasSize(size)))
+        .andExpect(jsonPath("$.totalElements").value(total))
+        .andExpect(jsonPath("$.content[1].name").value("제육볶음"))
+        .andExpect(jsonPath("$.content[1].rating").value(4));
+  }
 }
