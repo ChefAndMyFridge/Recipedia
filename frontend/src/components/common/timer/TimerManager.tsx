@@ -1,0 +1,48 @@
+import { useEffect, useState } from "react";
+import { useTimerManager } from "@hooks/useTimerManager";
+import IconTimer from "@assets/icons/IconTimer";
+import TimerCarousel from "@components/common/timer/TimerCarousel";
+
+interface TimerManagerProps {
+  recipeTimers?: { step: string; timer: number }[];
+  position?: { xPercent: number; yPercent: number };
+}
+
+const TimerManager = ({ recipeTimers = [], position = { xPercent: 0.15, yPercent: 0.915 } }: TimerManagerProps) => {
+  const [timerListOpen, setTimerListOpen] = useState(false);
+  const { timers, handleTimerUpdate, addTimer, updateRecipeTimers, hasRunningTimers } = useTimerManager();
+
+  // 레시피 타이머가 변경되면 타이머 목록 업데이트
+  useEffect(() => {
+    if (recipeTimers && recipeTimers.length > 0) {
+      updateRecipeTimers(recipeTimers);
+    }
+  }, [recipeTimers]);
+
+  return (
+    <>
+      {/* 타이머 아이콘 */}
+      <div className="relative">
+        <div
+          className="bg-subContent/50 rounded-full p-3 cursor-pointer"
+          onClick={() => setTimerListOpen(!timerListOpen)}
+        >
+          <IconTimer width={24} height={24} strokeColor="black" isRunning={hasRunningTimers} percentage={50} />
+          {timers.length > 0 && <div className="absolute top-0 right-1 bg-red-500 rounded-full w-3 h-3"></div>}
+        </div>
+      </div>
+
+      {/* TimerCarousel 컴포넌트 */}
+      {timerListOpen && (
+        <TimerCarousel
+          timers={timers}
+          onAddTimer={addTimer}
+          onTimerUpdate={handleTimerUpdate}
+          initialPosition={position}
+        />
+      )}
+    </>
+  );
+};
+
+export default TimerManager;

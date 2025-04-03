@@ -6,7 +6,6 @@ import VideoInfos from "@components/common/videoInfo/VideoInfos";
 
 import RecipeInfoIndexes from "@pages/detailRecipe/components/RecipeInfoIndexes";
 import RecipeTexts from "@pages/detailRecipe/components/RecipeTexts";
-// import NoRecipeInfo from "@pages/detailRecipe/components/NoRecipeInfo";
 
 import { recipeIngredientsInfo, RecipeInfoKeys } from "@/types/recipeListTypes";
 

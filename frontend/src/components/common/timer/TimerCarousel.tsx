@@ -15,11 +15,17 @@ interface TimerCarouselProps {
   timers: TimerInfo[];
   onAddTimer: (timerInfo: { step: string; timer: number }) => void;
   onTimerUpdate: (step: string, data: { currentTimer: number; isRunning: boolean }) => void;
+  initialPosition?: { xPercent: number; yPercent: number };
 }
 
-const TimerCarousel = ({ timers, onAddTimer, onTimerUpdate }: TimerCarouselProps) => {
+const TimerCarousel = ({
+  timers,
+  onAddTimer,
+  onTimerUpdate,
+  initialPosition = { xPercent: 0.15, yPercent: 0.915 },
+}: TimerCarouselProps) => {
   // 상대적 위치 사용 (0~1 사이의 값으로 표현)
-  const [relativePosition, setRelativePosition] = useState({ xPercent: 0.15, yPercent: 0.785 });
+  const [relativePosition, setRelativePosition] = useState(initialPosition);
   const [absolutePosition, setAbsolutePosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
 
