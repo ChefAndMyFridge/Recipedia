@@ -4,14 +4,14 @@ import { useNavigate } from "react-router-dom";
 import useUserStore from "@stores/userStore";
 import useRecipeStore from "@stores/recipeStore";
 
-import { Video } from "@/types/recipeListTypes";
+import { PagenationRecipeInfo } from "@/types/recipeListTypes";
 
-import Button from "@components/common/button/Button";
 import VideoInfoRows from "@components/common/videoInfo/VideoInfoRows";
+import RatingInfos from "@pages/myRecipe/components/RatingInfos";
 
 import { patchRecipeApi } from "@apis/recipeApi";
 
-const MyRecipeItem = ({ recipe }: { recipe: Video }) => {
+const MyRecipeItem = ({ recipe }: { recipe: PagenationRecipeInfo }) => {
   const navigate = useNavigate();
 
   const { userId } = useUserStore();
@@ -44,7 +44,7 @@ const MyRecipeItem = ({ recipe }: { recipe: Video }) => {
     }
   }
 
-  async function handleDelete(recipe: Video) {
+  async function handleDelete(recipe: PagenationRecipeInfo) {
     try {
       const response = await patchRecipeApi(userId, recipe.recipeId, 0, false);
       updateRecipeFavorite(recipe.recipeId, response.favorite);
@@ -75,20 +75,15 @@ const MyRecipeItem = ({ recipe }: { recipe: Video }) => {
 
       {/* 레시피 아이템 */}
       <div
-        className="flex flex-col items-start p-4 gap-4 transition-transform duration-200"
+        className="flex flex-col justify-between items-start w-full h-full px-6 py-4 gap-4 transition-transform duration-200 cursor-pointer"
         style={{ transform: `translateX(${translateX}px)` }}
+        onClick={() => navigate(`/detailRecipe/${recipe.recipeId}`)}
       >
+        <p className="w-[80%] font-preBold text-md overflow-hidden text-ellipsis whitespace-nowrap">{recipe.title}</p>
         <div className="flex justify-between items-center w-full">
-          <p className="w-[60%] font-preBold text-md overflow-hidden text-ellipsis whitespace-nowrap">{recipe.title}</p>
-          <Button
-            type="button"
-            design="confirm"
-            content="요리하기"
-            onAction={() => navigate(`/detailRecipe/${recipe.recipeId}`)}
-            className="px-3 py-1"
-          />
+          <VideoInfoRows duration={recipe.duration} likeCount={recipe.likeCount} viewCount={recipe.viewCount} />
+          <RatingInfos favorite={recipe.favorite} rating={recipe.rating} />
         </div>
-        <VideoInfoRows duration={recipe.duration} likeCount={recipe.likeCount} viewCount={recipe.viewCount} />
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import { http, HttpResponse } from "msw";
 import { INGREDIENTS, SEARCH_INGREDIENTS_INFO } from "@/data/INGREDIENTS";
 import { INGREDIENT_WITH_NUTRITIONS } from "@/data/NUTRITIONS";
 import { USERS } from "@/data/USERS";
-import RECIPE_LIST from "@/data/RECIPE_LIST";
+import RECIPE_LIST, { PAGENATION_RECIPE_LIST } from "@/data/RECIPE_LIST";
 import { DETAIL_RECIPE, DETAIL_RECIPE_CHECK } from "@/data/DETAIL_RECIPE";
 
 const { VITE_API_URL } = import.meta.env;
@@ -117,6 +117,14 @@ const handlers = [
       favorite: true,
       createdAt: "2025-03-24T10:15:30",
     });
+  }),
+
+  http.get(VITE_API_URL + "/v1/member/recipe/:memberId/ratings&page=:page", () => {
+    return HttpResponse.json(PAGENATION_RECIPE_LIST);
+  }),
+
+  http.get(VITE_API_URL + "/v1/member/recipe/:memberId/favorites&page=:page", () => {
+    return HttpResponse.json(PAGENATION_RECIPE_LIST);
   }),
 ];
 

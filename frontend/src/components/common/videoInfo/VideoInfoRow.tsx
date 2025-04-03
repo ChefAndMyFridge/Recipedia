@@ -17,10 +17,9 @@ const VideoInfoRow = ({ IconName, InfoData, InfoType }: VideoInfoRowProps) => {
   }, [InfoData]);
 
   return (
-    <div className="flex gap-1 justify-center items-center text-sm">
-      <IconName width={25} height={25} strokeColor="black" />
-      <p className="font-preBold">{renderInfoData}</p>
-      <p className="font-preRegular">{InfoType}</p>
+    <div className="flex gap-1.5 justify-center items-center text-sm text-title">
+      <IconName width={15} height={15} strokeColor="#202020" strokeWidth={2.5} />
+      <p className="font-preMedium text-sm">{renderInfoData}</p>
     </div>
   );
 };

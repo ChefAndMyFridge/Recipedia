@@ -13,7 +13,7 @@ interface VideoInfoRowsProps {
 const VideoInfoRows = ({ duration, likeCount, viewCount }: VideoInfoRowsProps) => {
   return (
     <div>
-      <div className="w-full flex justify-around items-center gap-3 text-sm">
+      <div className="w-full flex justify-around items-center gap-4 text-sm">
         <VideoInfoRow IconName={IconClock} InfoData={duration} InfoType="TIME" />
         <VideoInfoRow IconName={IconLike} InfoData={likeCount.toString()} InfoType="LIKE" />
         <VideoInfoRow IconName={IconView} InfoData={viewCount.toString()} InfoType="VIEW" />
