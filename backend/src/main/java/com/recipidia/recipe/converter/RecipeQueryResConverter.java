@@ -8,7 +8,6 @@ import com.recipidia.recipe.response.RecipeQueryRes;
 public class RecipeQueryResConverter {
 
   private final ObjectMapper objectMapper = new ObjectMapper()
-      .findAndRegisterModules()
       .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
 
   public String convertToDatabaseColumn(RecipeQueryRes queryRes) {
