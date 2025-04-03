@@ -18,7 +18,21 @@ pipeline {
     }
 
     stages {
-        stage('git repository pull, sourcecode update') {
+        stage('Determine Next Deployment Slot') {
+            steps {
+                script {
+                    def branch = env.BRANCH_NAME
+                    def stateFile = "/deploy-state/${branch}.txt"
+                    def current = sh(script: "cat ${stateFile} || echo green", returnStdout: true).trim()
+                    def next = current == "blue" ? "green" : "blue"
+
+                    env.DEPLOY_SLOT = next
+                    echo "🔁 Switching ${branch} from ${current} to ${next}"
+                }
+            }
+        }
+
+        stage('Checkout Code') {
             steps {
                 cleanWs()  // Jenkins 작업 공간을 완전히 초기화
                 script {
@@ -28,50 +42,37 @@ pipeline {
             }
         }
 
-        stage('Stop & Remove Old App Containers') {
+        // stage('Stop & Remove Old App Containers') {
+        //     steps {
+        //         script {
+        //             sh """
+        //             cd ${env.WORKSPACE}
+        //             MYSQL_ROOT_PASSWORD=${env.MYSQL_ROOT_PASSWORD} \
+        //             MYSQL_DATABASE=${env.MYSQL_DATABASE} \
+        //             ELASTIC_PASSWORD=${env.ELASTIC_PASSWORD} \
+        //             docker-compose -f docker-compose-app.yml down
+        //             """
+        //         }
+        //     }
+        // }
+
+        stage('Build Frontend') {
             steps {
                 script {
-                    sh """
-                    cd ${env.WORKSPACE}
-                    MYSQL_ROOT_PASSWORD=${env.MYSQL_ROOT_PASSWORD} \
-                    MYSQL_DATABASE=${env.MYSQL_DATABASE} \
-                    ELASTIC_PASSWORD=${env.ELASTIC_PASSWORD} \
-                    docker-compose -f docker-compose-app.yml down
-                    """
-                }
-            }
-        }
-
-        stage('serving frontend build file to nginx') {
-            steps {
-                script {
-                    def viteReleaseApiUrl = "https://j12s003.p.ssafy.io/api"
-                    def viteMasterApiUrl = "https://j12s003.p.ssafy.io/api"
-                    def baseUrl = "/"
-
-                    if (env.BRANCH_NAME == "master") {
-                        // viteApiUrl = "https://j12s003.p.ssafy.io/master/api"
-                        baseUrl = "/${env.BRANCH_NAME}"
-                    } 
-
-                    echo "✅ BRANCH_NAME: ${env.BRANCH_NAME}"
-                    echo "🌐 VITE_MASTER_API_URL: ${viteMasterApiUrl}"
-                    echo "🌐 VITE_RELEASE_API_URL: ${viteReleaseApiUrl}"
-                    echo "📁 VITE_BASE_URL: ${baseUrl}"
-
+                    def baseUrl = env.BRANCH_NAME == "master" ? "/master" : "/"
+                    def apiUrl = env.BRANCH_NAME == "master" ? "https://j12s003.p.ssafy.io/master/api" : "https://j12s003.p.ssafy.io/api"
 
                     sh """
                     cd ${env.WORKSPACE}/frontend
-                    echo "VITE_RELEASE_API_URL=${viteReleaseApiUrl}" > .env
-                    echo "VITE_MASTER_API_URL=${viteMasterApiUrl}" >> .env
-                    echo "VITE_BASE_URL=${baseUrl}" >> .env
+                    echo "VITE_BASE_URL=${baseUrl}" > .env
+                    echo "VITE_API_URL=${apiUrl}" >> .env
 
                     yarn install --frozen-lockfile
                     yarn build
 
-                    rm -rf /front_build/${env.BRANCH_NAME}/html
-                    mkdir -p /front_build/${env.BRANCH_NAME}/html
-                    cp -r dist/* /front_build/${env.BRANCH_NAME}/html/
+                    rm -rf /front_build/${env.BRANCH_NAME}-${env.DEPLOY_SLOT}/html
+                    mkdir -p /front_build/${env.BRANCH_NAME}-${env.DEPLOY_SLOT}/html
+                    cp -r dist/* /front_build/${env.BRANCH_NAME}-${env.DEPLOY_SLOT}/html/
                     """
                 }
             }
@@ -80,18 +81,18 @@ pipeline {
         stage('Build & Start New App Containers') {
             steps {
                 script {
-                    def viteApiUrl = "https://j12s003.p.ssafy.io/api"
-                    def fastapiApiUrl = "http://my-fastapi-release:8000"
-                    def mysqlHost = "my-mysql-release"
-                    if (env.BRANCH_NAME == "master") {
-                        viteApiUrl = "https://j12s003.p.ssafy.io/master/api"
-                        fastapiApiUrl = "http://my-fastapi-master:8000"
-                        mysqlHost = "my-mysql-master"
-                    } 
+                    // def viteApiUrl = "https://j12s003.p.ssafy.io/api"
+                    // def fastapiApiUrl = "http://my-fastapi-release:8000"
+                    // def mysqlHost = "my-mysql-release"
+                    // if (env.BRANCH_NAME == "master") {
+                    //     viteApiUrl = "https://j12s003.p.ssafy.io/master/api"
+                    //     fastapiApiUrl = "http://my-fastapi-master:8000"
+                    //     mysqlHost = "my-mysql-master"
+                    // } 
 
-                    echo "✅ fastapiApiUrl: ${fastapiApiUrl}"
-                    echo "🌐 VITE_API_URL: ${viteApiUrl}"
-                    echo "📁 mysqlHost: ${mysqlHost}"
+                    // echo "✅ fastapiApiUrl: ${fastapiApiUrl}"
+                    // echo "🌐 VITE_API_URL: ${viteApiUrl}"
+                    // echo "📁 mysqlHost: ${mysqlHost}"
 
 
                     sh """
@@ -111,6 +112,19 @@ pipeline {
                     ENV=${env.FASTAPI_PROFILE} \
                     cp .env.${env.BRANCH_NAME} .env
                     docker-compose -f docker-compose-app.yml up -d --build
+                    """
+                }
+            }
+        }
+
+        stage('Update Nginx Upstream') {
+            steps {
+                script {
+                    sh """
+                    docker exec my-nginx ln -sf /etc/nginx/upstreams/${env.DEPLOY_SLOT}-${env.BRANCH_NAME}.conf /etc/nginx/upstreams/active-${env.BRANCH_NAME}.conf
+                    docker exec my-nginx ln -sf /usr/share/nginx/${BRANCH_NAME}-${DEPLOY_SLOT}/html /usr/share/nginx/${BRANCH_NAME}/html
+                    docker exec my-nginx nginx -s reload
+                    echo ${env.DEPLOY_SLOT} > /deploy-state/${env.BRANCH_NAME}.txt
                     """
                 }
             }
