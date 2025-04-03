@@ -1,5 +1,5 @@
+# app/services/external_api/youtube_lib.py
 import asyncio
-import re
 import openai
 from youtubesearchpython import CustomSearch
 from app.core.config import settings

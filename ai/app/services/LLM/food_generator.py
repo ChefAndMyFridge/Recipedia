@@ -1,7 +1,7 @@
 # app/services/LLM/food_generator.py
 import re
 import openai
-from typing import List, Optional, Union
+from typing import List, Optional
 from app.utils.prompts.recipe_query_prompts import get_chef_prompt, CHEF_SYSTEM_MESSAGE
 from app.core.config import settings
 

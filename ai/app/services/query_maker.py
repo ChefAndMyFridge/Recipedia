@@ -1,6 +1,7 @@
+# app/services/query_maker.py
 import time
 import asyncio
-from typing import List, Dict, Optional, Any, Union
+from typing import List, Dict, Optional, Any
 from app.services.LLM.food_generator import generate_dish_names
 from app.services.external_api.youtube_lib import get_youtube_videos
 from app.core.config import settings
