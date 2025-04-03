@@ -92,13 +92,14 @@ public class MemberRecipeServiceImpl implements MemberRecipeService {
 
   @Override
   @Transactional(readOnly = true)
-  public List<RecipeWithMemberInfoDto> getMemberRatedRecipes(Long memberId) {
+  public Page<RecipeWithMemberInfoDto> getMemberRatedRecipes(Long memberId, Pageable pageable) {
     Member member = memberRepository.findById(memberId)
         .orElseThrow(() -> new MemberNotFoundException(memberId));
 
-    return memberRecipeRepository.findAllByMemberAndRatingIsNotNull(member)
-        .stream()
-        .map(mr -> RecipeWithMemberInfoDto.fromEntities(mr.getRecipe(), mr))
-        .toList();
+    Page<MemberRecipe> allByMemberAndRatingIsNotNull = memberRecipeRepository.findAllByMemberAndRatingIsNotNull(
+        member, pageable);
+
+    return allByMemberAndRatingIsNotNull.map(
+        mr -> RecipeWithMemberInfoDto.fromEntities(mr.getRecipe(), mr));
   }
 }

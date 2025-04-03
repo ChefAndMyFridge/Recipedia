@@ -149,9 +149,10 @@ public class MemberRecipeController {
       }
   )
   @GetMapping("/{memberId}/ratings")
-  public ResponseEntity<List<RecipeWithMemberInfoDto>> getMemberRatedRecipes(
-      @PathVariable Long memberId) {
-    return ResponseEntity.ok(memberRecipeService.getMemberRatedRecipes(memberId));
+  public ResponseEntity<Page<RecipeWithMemberInfoDto>> getMemberRatedRecipes(
+      @PathVariable Long memberId,
+      @PageableDefault(size = 5) Pageable pageable) {
+    return ResponseEntity.ok(memberRecipeService.getMemberRatedRecipes(memberId, pageable));
   }
 
 }

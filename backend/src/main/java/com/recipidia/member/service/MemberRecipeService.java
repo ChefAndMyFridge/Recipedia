@@ -11,7 +11,7 @@ public interface MemberRecipeService {
   MemberRecipeDto patchMemberRecipe(Long memberId, Long recipeId, Integer rating, Boolean favorite);
   List<MemberRecipeDto> getMemberRecipes(Long memberId);
   Page<RecipeWithMemberInfoDto> getMemberFavorites(Long memberId, Pageable pageable);
-  List<RecipeWithMemberInfoDto> getMemberRatedRecipes(Long memberId);
+  Page<RecipeWithMemberInfoDto> getMemberRatedRecipes(Long memberId, Pageable pageable);
 
 
 }
