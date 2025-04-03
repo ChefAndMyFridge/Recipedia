@@ -13,6 +13,8 @@ pipeline {
         USDA_API_KEY = credentials('USDA_API_KEY')
         ALLOWED_ORIGINS = credentials('ALLOWED_ORIGINS')
         X_API = credentials('X_API')
+        FASTAPI_SECURITY_KEY = credentials('FASTAPI_SECURITY_KEY')
+        FASTAPI_PROFILE = credentials('FASTAPI_PROFILE')
     }
 
     stages {
@@ -105,6 +107,8 @@ pipeline {
                     ALLOWED_ORIGINS='${env.ALLOWED_ORIGINS}' \
                     BRANCH_NAME=${env.BRANCH_NAME} \
                     X_API=${env.X_API} \
+                    FASTAPI_SECURITY_KEY=${env.FASTAPI_SECURITY_KEY} \
+                    ENV=${env.FASTAPI_PROFILE} \
                     cp .env.${env.BRANCH_NAME} .env
                     docker-compose -f docker-compose-app.yml up -d --build
                     """
