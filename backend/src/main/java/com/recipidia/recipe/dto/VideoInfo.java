@@ -14,9 +14,9 @@ import lombok.NoArgsConstructor;
 public class VideoInfo {
   private String title;
   private String url;
-  private String channel_title;
+  private String channelTitle;
   private String duration;
-  private Long view_count;
-  private Long like_count;
-  private Boolean has_caption;
+  private Long viewCount;
+  private Long likeCount;
+  private Boolean hasCaption;
 }
