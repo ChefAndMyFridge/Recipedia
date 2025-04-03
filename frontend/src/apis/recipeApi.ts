@@ -34,6 +34,7 @@ export const getRecipeTextApi = async (recipeId: number): Promise<RecipeInfo> =>
     throw new Error(error as string);
   }
 };
+
 //레시피 평가 및 즐겨찾기 API
 export const patchRecipeApi = async (memberId: number, recipeId: number, rating?: number, favorite?: boolean) => {
   const reqBody =
