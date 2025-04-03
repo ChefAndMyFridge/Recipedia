@@ -107,11 +107,11 @@ pipeline {
                     ELASTIC_PASSWORD=${env.ELASTIC_PASSWORD} \
                     ALLOWED_ORIGINS='${env.ALLOWED_ORIGINS}' \
                     BRANCH_NAME=${env.BRANCH_NAME} \
-                    COLOR=${env.DEPLOY_SLOT} \
                     X_API=${env.X_API} \
                     FASTAPI_SECURITY_KEY=${env.FASTAPI_SECURITY_KEY} \
                     ENV=${env.FASTAPI_PROFILE} \
                     cp .env.${env.BRANCH_NAME} .env
+                    echo "COLOR=${env.DEPLOY_SLOT}" >> .env
                     docker-compose -f docker-compose-app.yml up -d --build
                     """
                 }
