@@ -12,15 +12,17 @@ openai.api_key = settings.OPENAI_API_KEY
 
 
 async def validate_video_relevance(dish: str, video_title: str, video_description: str = "") -> bool:
-    """
-    입력:
-        - dish: 요리 이름
-        - video_title: 유튜브 동영상 제목
-        - video_description: 유튜브 동영상 설명 (기본값: 빈 문자열)
-    반환:
-        - bool: 해당 동영상이 요리 레시피와 관련이 있는지 여부 (True/False)
-    기능:
-        - OpenAI API를 사용하여 동영상 제목과 설명이 요리 레시피와 관련이 있는지 판단
+    """요리 이름과 동영상 정보를 기반으로 관련성을 판단합니다.
+    
+    OpenAI API를 사용하여 동영상 제목과 설명이 요리 레시피와 관련이 있는지 판단합니다.
+
+    Args:
+        dish: 요리 이름.
+        video_title: 유튜브 동영상 제목.
+        video_description: 유튜브 동영상 설명 (기본값: 빈 문자열).
+
+    Returns:
+        bool: 해당 동영상이 요리 레시피와 관련이 있는지 여부.
     """
     system_message = """당신은 요리 비디오 관련성 판단 AI입니다. 
 요리 이름과 유튜브 동영상 제목 및 설명을 분석하여 해당 동영상이 그 요리의 레시피 또는 조리법을 다루고 있는지 판단해야 합니다.
@@ -58,14 +60,16 @@ async def validate_video_relevance(dish: str, video_title: str, video_descriptio
 
 
 async def filter_videos_by_relevance(dish: str, videos: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    """
-    입력:
-        - dish: 요리 이름
-        - videos: 검색된 동영상 목록
-    반환:
-        - list: 관련성이 있는 동영상만 필터링한 목록
-    기능:
-        - 각 동영상의 제목을 기반으로 요리와의 관련성을 검증하고 관련 있는 것만 반환
+    """요리 이름과 관련된 동영상만 필터링합니다.
+    
+    각 동영상의 제목을 기반으로 요리와의 관련성을 검증하고 관련 있는 것만 반환합니다.
+
+    Args:
+        dish: 요리 이름.
+        videos: 검색된 동영상 목록.
+
+    Returns:
+        List[Dict[str, Any]]: 관련성이 있는 동영상만 필터링한 목록.
     """
     if not videos:
         return []
@@ -97,10 +101,14 @@ async def filter_videos_by_relevance(dish: str, videos: List[Dict[str, Any]]) ->
 
 
 async def search_youtube_recipe(dish: str, max_results=None) -> list:
-    """
-    입력: 요리 이름, 최대 결과 수(선택)
-    반환: 유튜브 동영상 정보 목록
-    기능: 유튜브 레시피를 비동기적으로 검색
+    """요리 이름으로 유튜브 레시피를 비동기적으로 검색합니다.
+
+    Args:
+        dish: 요리 이름.
+        max_results: 최대 결과 수(None일 경우 설정값 사용).
+
+    Returns:
+        list: 유튜브 동영상 정보 목록.
     """
     if max_results is None:
         max_results = settings.YOUTUBE_MAX_RESULTS
@@ -112,10 +120,14 @@ async def search_youtube_recipe(dish: str, max_results=None) -> list:
 
 
 def _sync_search_youtube_recipe(dish: str, max_results) -> list:
-    """
-    입력: 요리 이름, 최대 결과 수
-    반환: 유튜브 동영상 정보 목록
-    기능: youtubesearchpython을 사용한 동기식 YouTube 검색 수행
+    """youtubesearchpython을 사용하여 동기식 YouTube 검색을 수행합니다.
+
+    Args:
+        dish: 요리 이름.
+        max_results: 최대 결과 수.
+
+    Returns:
+        list: 유튜브 동영상 정보 목록.
     """
     query = f"{dish} 레시피"
 
@@ -206,10 +218,16 @@ def _sync_search_youtube_recipe(dish: str, max_results) -> list:
 
 
 async def get_youtube_videos(dish):
-    """
-    입력: 요리 이름
-    반환: 유튜브 동영상 정보 목록
-    기능: 요리 이름으로 유튜브 비디오를 검색하여 결과 반환
+    """요리 이름으로 유튜브 비디오를 검색하고 관련성 검증을 수행합니다.
+    
+    검색 결과가 있고 설정에서 필터링이 활성화된 경우 관련성 검증을 수행합니다.
+    최종 결과에서는 description 필드를 제거합니다.
+
+    Args:
+        dish: 요리 이름.
+
+    Returns:
+        list: 유튜브 동영상 정보 목록.
     """
     videos = await search_youtube_recipe(dish)
     

@@ -10,15 +10,17 @@ openai.api_key = settings.OPENAI_API_KEY
 
 
 def _generate_from_prompt(system_message: str, user_prompt: str) -> str:
-    """
-    입력:
-        - system_message: OpenAI에 전달할 시스템 메시지
-        - user_prompt: OpenAI에 전달할 사용자 프롬프트
-    반환:
-        - str: OpenAI로부터 반환된 텍스트 응답
-    기능:
-        - system_message, user_prompt를 사용해 OpenAI API(chat.completions)를 호출하고,
-          생성된 메시지의 content를 문자열로 반환한다.
+    """OpenAI API를 사용하여 프롬프트에서 텍스트를 생성합니다.
+    
+    system_message와 user_prompt를 사용해 OpenAI API(chat.completions)를 호출하고,
+    생성된 메시지의 content를 문자열로 반환합니다.
+    
+    Args:
+        system_message: OpenAI에 전달할 시스템 메시지.
+        user_prompt: OpenAI에 전달할 사용자 프롬프트.
+        
+    Returns:
+        OpenAI로부터 반환된 텍스트 응답.
     """
     response = openai.chat.completions.create(
         model=settings.QUERY_OPENAI_MODEL,
@@ -35,15 +37,16 @@ def _generate_from_prompt(system_message: str, user_prompt: str) -> str:
 
 
 def _parse_dish_names(content: str) -> List[str]:
+    """OpenAI 응답에서 요리 이름 목록을 추출합니다.
+    
+    불릿 포인트('- ') 및 괄호 내 문자 등을 제거한 뒤 줄 단위로 음식 이름을 수집합니다.
+    
+    Args:
+        content: OpenAI로부터 반환된 문자열.
+        
+    Returns:
+        추출된 음식 이름 리스트.
     """
-    입력:
-        - content: OpenAI로부터 반환된 문자열
-    반환:
-        - list: 추출된 음식 이름 리스트
-    기능:
-        - 불릿 포인트('- ') 및 괄호 내 문자 등을 제거한 뒤 줄 단위로 음식 이름을 수집한다.
-    """
-
     # 예외 처리 추가가
     if "NO_VALID_DISHES" in content:
         return []
@@ -88,21 +91,23 @@ def generate_dish_names(
     allergies: List[str] = None,
     num_dishes: Optional[int] = None
 ) -> List[str]:
-    """
-    입력:
-        - ingredients: 재료 목록 (기본값 None)
-        - main_ingredients: 주재료 (기본값 None)
-        - preferred_ingredients: 선호하는 재료 목록 (기본값 None)
-        - disliked_ingredients: 비선호하는 재료 목록 (기본값 None)
-        - categories: 요리 카테고리 목록 (예: 한식, 양식, 일식 등) (기본값 None)
-        - dietaries: 선호 식단 목록 (예: 저염식, 저칼로리, 고단백 등) (기본값 None)
-        - allergies: 알러지 목록 (기본값 None)
-        - num_dishes: 생성할 요리 이름 개수 (기본값 None)
-    반환:
-        - list: 생성된 요리 이름 문자열의 리스트
-    기능:
-        - 재료, 주재료, 선호/비선호 재료, 카테고리, 선호 식단 정보를 바탕으로 프롬프트를 생성하고,
-          OpenAI API에 전송해 받은 결과를 파싱해 음식 이름을 추출한다.
+    """재료와 선호도를 기반으로 요리 이름을 생성합니다.
+    
+    재료, 주재료, 선호/비선호 재료, 카테고리, 선호 식단 정보를 바탕으로 프롬프트를 생성하고,
+    OpenAI API에 전송해 받은 결과를 파싱해 음식 이름을 추출합니다.
+    
+    Args:
+        ingredients: 재료 목록.
+        main_ingredients: 주재료 목록.
+        preferred_ingredients: 선호하는 재료 목록.
+        disliked_ingredients: 비선호하는 재료 목록.
+        categories: 요리 카테고리 목록 (예: 한식, 양식, 일식 등).
+        dietaries: 선호 식단 목록 (예: 저염식, 저칼로리, 고단백 등).
+        allergies: 알러지 목록.
+        num_dishes: 생성할 요리 이름 개수.
+        
+    Returns:
+        생성된 요리 이름 문자열의 리스트.
     """
     # 타입 변환 및 기본값 설정
     ingredients: List[str] = ingredients or []

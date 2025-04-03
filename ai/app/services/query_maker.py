@@ -12,17 +12,16 @@ class QueryMaker:
     def __init__(self, ingredients: List[str] = None, main_ingredients: List[str] = None,
                  preferred_ingredients: List[str] = None, disliked_ingredients: List[str] = None,
                  categories: List[str] = None, dietaries: List[str] = None, allergies: List[str] = None) -> None:
-        """
-        QueryMaker 클래스 초기화
+        """QueryMaker 클래스 초기화.
 
         Args:
-            ingredients: 사용할 재료 목록
-            main_ingredients: 주재료 목록
-            preferred_ingredients: 선호하는 재료 목록
-            disliked_ingredients: 비선호하는 재료 목록
-            categories: 요리 카테고리 목록 (예: 한식, 양식, 일식 등)
-            dietaries: 선호 식단 목록 (예: 저염식, 저칼로리, 고단백 등)
-            allergies: 알러지 목록 (예: 갑각류 등)
+            ingredients: 사용할 재료 목록.
+            main_ingredients: 주재료 목록.
+            preferred_ingredients: 선호하는 재료 목록.
+            disliked_ingredients: 비선호하는 재료 목록.
+            categories: 요리 카테고리 목록 (예: 한식, 양식, 일식 등).
+            dietaries: 선호 식단 목록 (예: 저염식, 저칼로리, 고단백 등).
+            allergies: 알러지 목록 (예: 갑각류 등).
         """
         self.ingredients: List[str] = ingredients or []
         self.main_ingredients: List[str] = main_ingredients or []
@@ -39,10 +38,10 @@ class QueryMaker:
         self.execution_time: float = 0  # 전체 실행 시간
 
     async def generate_dishes(self) -> List[str]:
-        """
-        입력: 없음
-        반환: 생성된 음식 이름 목록
-        기능: OpenAI API를 사용해 재료에 맞는 요리 이름 생성
+        """OpenAI API를 사용해 재료에 맞는 요리 이름을 생성합니다.
+
+        Returns:
+            List[str]: 생성된 음식 이름 목록.
         """
         # generate_dish_names가 동기 함수이면 비동기로 변환 필요
         loop = asyncio.get_running_loop()
@@ -62,10 +61,10 @@ class QueryMaker:
         return self.dishes
 
     async def search_recipes(self) -> Dict[str, List[Dict[str, Any]]]:
-        """
-        입력: 없음
-        반환: {요리이름 : 동영상 목록} 형태의 딕셔너리
-        기능: YouTube API를 사용해 요리 이름에 맞는 레시피 동영상 검색
+        """YouTube API를 사용해 요리 이름에 맞는 레시피 동영상을 검색합니다.
+
+        Returns:
+            Dict[str, List[Dict[str, Any]]]: {요리이름 : 동영상 목록} 형태의 딕셔너리.
         """
         self.all_videos = {}
         dishes_with_videos = []
@@ -103,10 +102,13 @@ class QueryMaker:
         return self.all_videos
 
     async def search_recipe_with_timeout(self, dish: str) -> List[Dict[str, Any]]:
-        """
-        입력: 요리 이름
-        반환: 검색된 동영상 목록
-        기능: 각 요청에 타임아웃 설정
+        """각 요청에 타임아웃을 설정하여 동영상을 검색합니다.
+
+        Args:
+            dish: 요리 이름.
+
+        Returns:
+            List[Dict[str, Any]]: 검색된 동영상 목록.
         """
         try:
             result = await asyncio.wait_for(get_youtube_videos(dish), timeout=10.0)
@@ -122,10 +124,10 @@ class QueryMaker:
             return []
 
     async def run(self) -> Dict[str, Any]:
-        """
-        입력: 없음
-        반환: 딕셔너리 (요리이름, 동영상, 실행시간 정보)
-        기능: 전체 과정 실행(요리 이름 생성, 유튜브 레시피 검색)
+        """전체 과정을 실행합니다(요리 이름 생성, 유튜브 레시피 검색).
+
+        Returns:
+            Dict[str, Any]: 요리이름, 동영상, 실행시간 정보가 포함된 딕셔너리.
         """
         start_time = time.time()
         logger.info(f"{settings.LOG_QUERY_MAKER_PREFIX}_QueryMaker 실행 시작")
@@ -164,15 +166,14 @@ class QueryMaker:
 
     def print_results(self, include_ingredients=False, include_dishes=True,
                       include_recipes=False, include_time=False, include_api_times=False) -> None:
-        """
-        결과를 통합적으로 출력하는 함수
+        """결과를 통합적으로 출력합니다.
 
         Args:
-            include_ingredients (bool): 재료 정보 출력 여부
-            include_dishes (bool): 생성된 요리 이름 출력 여부
-            include_recipes (bool): 검색된 레시피 출력 여부
-            include_time (bool): 실행 시간 출력 여부
-            include_api_times (bool): API 호출 시간 비교 출력 여부
+            include_ingredients: 재료 정보 출력 여부.
+            include_dishes: 생성된 요리 이름 출력 여부.
+            include_recipes: 검색된 레시피 출력 여부.
+            include_time: 실행 시간 출력 여부.
+            include_api_times: API 호출 시간 비교 출력 여부.
         """
         # 1. 재료 정보 출력
         if include_ingredients:
@@ -255,7 +256,20 @@ if __name__ == "__main__":
                                    categories: Optional[List[str]] = None,
                                    dietaries: Optional[List[str]] = None,
                                    title: str = "") -> List[str]:
-        """음식 이름 생성만 테스트하는 간소화된 함수"""
+        """음식 이름 생성만 테스트합니다.
+
+        Args:
+            ingredients: 냉장고 재료 목록.
+            main_ingredients: 주재료 목록.
+            preferred_ingredients: 선호하는 재료 목록.
+            disliked_ingredients: 비선호하는 재료 목록.
+            categories: 요리 카테고리 목록.
+            dietaries: 선호 식단 목록.
+            title: 테스트 제목.
+
+        Returns:
+            List[str]: 생성된 음식 이름 목록.
+        """
         print(f"\n===== {title} =====")
         print(f"냉장고 재료: {', '.join(ingredients)}")
         print(f"주재료: {', '.join(main_ingredients) if main_ingredients else '지정되지 않음'}")
@@ -298,7 +312,17 @@ if __name__ == "__main__":
                                 categories: Optional[List[str]] = None,
                                 dietaries: Optional[List[str]] = None,
                                 title: str = "") -> None:
-        """전체 과정(음식 이름 생성 + 유튜브 검색)을 테스트하는 함수"""
+        """전체 과정(음식 이름 생성 + 유튜브 검색)을 테스트합니다.
+
+        Args:
+            ingredients: 냉장고 재료 목록.
+            main_ingredients: 주재료 목록.
+            preferred_ingredients: 선호하는 재료 목록.
+            disliked_ingredients: 비선호하는 재료 목록.
+            categories: 요리 카테고리 목록.
+            dietaries: 선호 식단 목록.
+            title: 테스트 제목.
+        """
         print(f"\n===== {title} (전체 과정) =====")
         print(f"냉장고 재료: {', '.join(ingredients)}")
         print(f"주재료: {', '.join(main_ingredients) if main_ingredients else '지정되지 않음'}")
