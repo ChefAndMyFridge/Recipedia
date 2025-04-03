@@ -13,7 +13,6 @@ import { recipeIngredientsInfo, RecipeInfoKeys } from "@/types/recipeListTypes";
 import recipeStore from "@stores/recipeStore";
 
 import { getRecipeTextApi } from "@apis/recipeApi";
-import Timer from "@/components/common/timer/Timer";
 
 interface RecipeInfosProps {
   currentTime: number;
@@ -33,9 +32,6 @@ const RecipeInfos = ({ currentTime, setCurrentTime, playerRef }: RecipeInfosProp
 
   //자동 스크롤
   const [isAutoScroll, setIsAutoScroll] = useState(true);
-
-  // 타이머 배열
-  const [timers, setTimers] = useState<number[]>([]);
 
   async function getRecipeText() {
     try {
@@ -74,17 +70,6 @@ const RecipeInfos = ({ currentTime, setCurrentTime, playerRef }: RecipeInfosProp
   useEffect(() => {
     setTextRecipeData(detailRecipe.textRecipe);
   }, [detailRecipe.textRecipe]);
-
-  useEffect(() => {
-    if (!textRecipeData) return;
-
-    textRecipeData.cooking_sequence &&
-      Object.entries(textRecipeData.cooking_sequence).map(([key, value]) => {
-        if (value.timer > 0) {
-          setTimers((prev) => [...prev, value.timer]);
-        }
-      });
-  }, [textRecipeData]);
 
   return (
     <>
@@ -157,13 +142,6 @@ const RecipeInfos = ({ currentTime, setCurrentTime, playerRef }: RecipeInfosProp
           </div>
         </div>
       </section>
-      {timers.length > 0 && (
-        <div>
-          {timers.map((timer, index) => (
-            <Timer key={index} defaultTimer={timer} initXPercent={0.025} initYPercent={0.915 - index * 0.04} />
-          ))}
-        </div>
-      )}
     </>
   );
 };
