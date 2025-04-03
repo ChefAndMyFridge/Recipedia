@@ -16,7 +16,6 @@ const instance = axios.create({
     "Content-Type": "application/json; charset=UTF-8",
     "Access-Control-Allow-Origin": "*",
   },
-  withCredentials: true, // 쿠키를 포함한 요청을 보낼 때 true로 설정
 });
 
 // 요청 인터셉터: JWT 토큰을 요청 헤더에 추가
