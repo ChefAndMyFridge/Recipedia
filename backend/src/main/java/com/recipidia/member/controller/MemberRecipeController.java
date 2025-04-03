@@ -9,16 +9,24 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/member/recipe")
 @RequiredArgsConstructor
 public class MemberRecipeController {
+
   private final MemberRecipeService memberRecipeService;
 
   @Operation(
@@ -31,12 +39,12 @@ public class MemberRecipeController {
               mediaType = "application/json",
               schema = @Schema(implementation = BookmarkPatchReq.class),
               examples = @ExampleObject(value = """
-                {
-                  "memberId": 2,
-                  "rating": 4,
-                  "favorite": true
-                }
-            """)
+                      {
+                        "memberId": 2,
+                        "rating": 4,
+                        "favorite": true
+                      }
+                  """)
           )
       ),
       responses = {
@@ -47,14 +55,14 @@ public class MemberRecipeController {
                   mediaType = "application/json",
                   schema = @Schema(implementation = MemberRecipeDto.class),
                   examples = @ExampleObject(value = """
-                    {
-                      "memberId": 2,
-                      "recipeId": 12,
-                      "rating": 4,
-                      "favorite": true,
-                      "createdAt": "2025-03-24T10:15:30"
-                    }
-                """)
+                          {
+                            "memberId": 2,
+                            "recipeId": 12,
+                            "rating": 4,
+                            "favorite": true,
+                            "createdAt": "2025-03-24T10:15:30"
+                          }
+                      """)
               )
           ),
           @ApiResponse(
@@ -72,7 +80,8 @@ public class MemberRecipeController {
       @PathVariable Long recipeId,
       @RequestBody BookmarkPatchReq req
   ) {
-    MemberRecipeDto result = memberRecipeService.patchMemberRecipe(req.memberId(), recipeId, req.rating(), req.favorite());
+    MemberRecipeDto result = memberRecipeService.patchMemberRecipe(req.memberId(), recipeId,
+        req.rating(), req.favorite());
     return ResponseEntity.ok(result);
   }
 
@@ -119,8 +128,10 @@ public class MemberRecipeController {
       }
   )
   @GetMapping("/{memberId}/favorites")
-  public ResponseEntity<List<RecipeWithMemberInfoDto>> getMemberFavorites(@PathVariable Long memberId) {
-    return ResponseEntity.ok(memberRecipeService.getMemberFavorites(memberId));
+  public ResponseEntity<Page<RecipeWithMemberInfoDto>> getMemberFavorites(
+      @PathVariable Long memberId,
+      @PageableDefault(size = 5) Pageable pageable) {
+    return ResponseEntity.ok(memberRecipeService.getMemberFavorites(memberId, pageable));
   }
 
   @Operation(
@@ -138,8 +149,10 @@ public class MemberRecipeController {
       }
   )
   @GetMapping("/{memberId}/ratings")
-  public ResponseEntity<List<RecipeWithMemberInfoDto>> getMemberRatedRecipes(@PathVariable Long memberId) {
-    return ResponseEntity.ok(memberRecipeService.getMemberRatedRecipes(memberId));
+  public ResponseEntity<Page<RecipeWithMemberInfoDto>> getMemberRatedRecipes(
+      @PathVariable Long memberId,
+      @PageableDefault(size = 5) Pageable pageable) {
+    return ResponseEntity.ok(memberRecipeService.getMemberRatedRecipes(memberId, pageable));
   }
 
 }
