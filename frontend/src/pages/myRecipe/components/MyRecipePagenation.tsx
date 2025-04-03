@@ -29,7 +29,7 @@ const Pagination = ({ totalPages, currentPage, onPageChange }: PaginationProps) 
   }
 
   return (
-    <div className="flex justify-center items-center w-full h-10 mt-4 gap-2 font-preRegular">
+    <div className="flex justify-center items-center w-full h-[10%] gap-2 font-preRegular">
       {/* 이전 페이지 */}
       <button
         className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 disabled:opacity-50"

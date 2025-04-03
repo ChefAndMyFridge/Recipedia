@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import useUserStore from "@stores/userStore";
-import useRecipeStore from "@stores/recipeStore";
 
 import { PagenationRecipeInfo } from "@/types/recipeListTypes";
 
@@ -11,11 +10,22 @@ import RatingInfos from "@pages/myRecipe/components/RatingInfos";
 
 import { patchRecipeApi } from "@apis/recipeApi";
 
-const MyRecipeItem = ({ recipe }: { recipe: PagenationRecipeInfo }) => {
+const MyRecipeItem = ({
+  currentPage,
+  numberOfElements,
+  type,
+  recipe,
+  onDelete,
+}: {
+  currentPage: number;
+  numberOfElements: number;
+  type: "favorite" | "rating";
+  recipe: PagenationRecipeInfo;
+  onDelete: (pageNumber: number) => void;
+}) => {
   const navigate = useNavigate();
 
   const { userId } = useUserStore();
-  const { updateRecipeFavorite } = useRecipeStore();
 
   const [startX, setStartX] = useState(0);
   const [translateX, setTranslateX] = useState(0);
@@ -46,8 +56,22 @@ const MyRecipeItem = ({ recipe }: { recipe: PagenationRecipeInfo }) => {
 
   async function handleDelete(recipe: PagenationRecipeInfo) {
     try {
-      const response = await patchRecipeApi(userId, recipe.recipeId, 0, false);
-      updateRecipeFavorite(recipe.recipeId, response.favorite);
+      if (type === "favorite") {
+        // 즐겨찾기 삭제
+        await patchRecipeApi(userId, recipe.recipeId, 0, false);
+
+        // 삭제 후 페이지 갱신
+        // (currentPage가 1이거나 지워도 목록 개수가 1개 이상이면 페이지를 유지하고, 아니면 이전 페이지로 이동)
+        onDelete(numberOfElements > 1 || currentPage === 1 ? currentPage : currentPage - 1);
+      } else {
+        // 평점(기록) 삭제
+        await patchRecipeApi(userId, recipe.recipeId, -1);
+
+        // 삭제 후 페이지 갱신
+        onDelete(numberOfElements > 1 || currentPage === 1 ? currentPage : currentPage - 1);
+      }
+
+      console.log(`${recipe.name} 삭제 완료`);
     } catch (error) {
       console.error("Failed to update favorite status:", error);
     }
@@ -66,7 +90,7 @@ const MyRecipeItem = ({ recipe }: { recipe: PagenationRecipeInfo }) => {
         onClick={() => handleDelete(recipe)}
         className="absolute right-0 top-0 h-full px-4 bg-error font-preSemiBold text-white transition-all duration-200"
         style={{
-          transform: `translateX(${Math.min(translateX + 80, 80)}px)`, // 점진적으로 나타남
+          transform: `translateX(${Math.min(translateX + 80, 80)}px)`,
           opacity: Math.min(Math.abs(translateX) / 80, 1), // 80px 이동할 때 100% 투명도
         }}
       >

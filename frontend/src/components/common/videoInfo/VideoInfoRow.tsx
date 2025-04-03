@@ -3,10 +3,9 @@ import React, { useEffect, useState } from "react";
 interface VideoInfoRowProps {
   IconName: React.ElementType;
   InfoData: string;
-  InfoType: string;
 }
 
-const VideoInfoRow = ({ IconName, InfoData, InfoType }: VideoInfoRowProps) => {
+const VideoInfoRow = ({ IconName, InfoData }: VideoInfoRowProps) => {
   const [renderInfoData, setRenderInfoData] = useState(InfoData);
 
   useEffect(() => {

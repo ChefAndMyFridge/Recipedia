@@ -38,8 +38,9 @@ const RecipeCard = ({ video }: RecipeCardProps) => {
     setIsLiked(newLiked);
 
     try {
-      const response = await patchRecipeApi(userId, video.recipeId, -1, newLiked);
+      const response = await patchRecipeApi(userId, video.recipeId, 0, newLiked);
       // API 응답의 favorite 값으로 store 업데이트
+      console.log("response", response);
       updateRecipeFavorite(video.recipeId, response.favorite);
     } catch (error) {
       // 실패시 상태 되돌리기
@@ -79,7 +80,7 @@ const RecipeCard = ({ video }: RecipeCardProps) => {
 
               <button className="text-sm" onClick={handleLike}>
                 {isLiked ? (
-                  <IconHeartFill width={30} height={31} strokeColor="black" />
+                  <IconHeartFill width={30} height={30} strokeColor="black" />
                 ) : (
                   <IconHeart width={30} height={30} strokeColor="black" />
                 )}

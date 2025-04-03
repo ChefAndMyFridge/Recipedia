@@ -22,7 +22,9 @@ const RecipeList = ({ DISHES }: { DISHES: string[] }) => {
           </div>
         )
       }
-      {VIDEOS[selectedDish] && VIDEOS[selectedDish].length > 0 && <Carousel videos={VIDEOS[selectedDish]} />}
+      {VIDEOS[selectedDish] && VIDEOS[selectedDish].length > 0 && (
+        <Carousel selectedDish={selectedDish} videos={VIDEOS[selectedDish]} />
+      )}
     </section>
   );
 };
