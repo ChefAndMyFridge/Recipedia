@@ -110,9 +110,10 @@ pipeline {
                     X_API=${env.X_API} \
                     FASTAPI_SECURITY_KEY=${env.FASTAPI_SECURITY_KEY} \
                     ENV=${env.FASTAPI_PROFILE} \
-                    cp .env.${env.BRANCH_NAME} .env && \
-                    echo "COLOR=${env.DEPLOY_SLOT}" >> .env && \
-                    cat .env && \
+                    cp .env.${env.BRANCH_NAME} .env
+                    echo "" >> .env
+                    echo "COLOR=${env.DEPLOY_SLOT}" >> .env
+                    cat .env
                     docker-compose -f docker-compose-app.yml up -d --build
                     """
                 }
