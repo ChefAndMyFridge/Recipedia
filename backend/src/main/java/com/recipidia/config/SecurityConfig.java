@@ -66,7 +66,7 @@ public class SecurityConfig {
     CorsConfiguration configuration = new CorsConfiguration();
     configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173", "https://j12s003.p.ssafy.io"));
     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-    configuration.setAllowedHeaders(Arrays.asList("*"));
+    configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
     configuration.setMaxAge(3600L * 24);
     configuration.setAllowCredentials(true);
 
