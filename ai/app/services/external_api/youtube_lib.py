@@ -161,7 +161,7 @@ def _sync_search_youtube_recipe(dish: str, max_results) -> list:
     try:
         if video_ids:
             videos_request = youtube.videos().list(
-                part="snippet,statistics,contentDetails",
+                part="snippet,statistics,contentDetails, status",
                 id=",".join(video_ids)
             )
             videos_response = videos_request.execute()
@@ -174,6 +174,13 @@ def _sync_search_youtube_recipe(dish: str, max_results) -> list:
                     stats = item.get("statistics", {})
                     content_details = item.get("contentDetails", {})
 
+                    status_info = item.get("status", {})
+                    is_embeddable = status_info.get("embeddable", False)
+
+                    if not is_embeddable:
+                        del video_info[video_id]
+                        continue
+
                     video_info[video_id]["title"] = snippet.get(
                         "title", video_info[video_id]["title"])  # API에서 갸져온거로 제목 덮어쓰기
                     video_info[video_id]["description"] = snippet.get(
@@ -184,6 +191,7 @@ def _sync_search_youtube_recipe(dish: str, max_results) -> list:
                         stats.get("likeCount", 0))
                     video_info[video_id]["has_caption"] = bool(
                         content_details.get("caption", "false").lower() == "true")
+                    # video_info[video_id]["is_embeddable"] = is_embeddable
                     
     except Exception as e:
         print(f"⚠️ YouTube API 호출 중 오류 발생: {e}")
@@ -191,6 +199,9 @@ def _sync_search_youtube_recipe(dish: str, max_results) -> list:
     # 최종 결과 구성
     results = [video_info[video_id]
                for video_id in video_ids if video_id in video_info]
+    
+    results.sort(key=lambda x: not x.get("has_caption", False)) # 자막이 있는 영상 우선 
+    
     return results
 
 
