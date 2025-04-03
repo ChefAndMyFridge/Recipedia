@@ -4,7 +4,6 @@ import com.recipidia.member.dto.MemberRecipeDto;
 import com.recipidia.member.dto.RecipeWithMemberInfoDto;
 import com.recipidia.member.request.BookmarkPatchReq;
 import com.recipidia.member.service.MemberRecipeService;
-import com.recipidia.recipe.dto.RecipeDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;

@@ -51,31 +51,24 @@ class IngredientQueryRepositoryImplTest {
     em.clear();
   }
 
+  private void storageTest(String storage, int resultCnt) {
+    Map<String, String> params = Map.of("storage", storage);
+    List<IngredientInfoDto> result = ingredientQueryRepository.findAllExistingIngredients(params);
+    assertThat(result.get(0).getTotalCount()).isEqualTo(resultCnt);
+  }
+
   @Test
   void findAllExistingIngredientsForFridge() {
-    Map<String, String> params = Map.of("storage", "fridge");
-    List<IngredientInfoDto> result = ingredientQueryRepository.findAllExistingIngredients(params);
-
-    assertThat(result).hasSize(1);
-    assertThat(result.get(0).getTotalCount()).isEqualTo(2);
+    storageTest("fridge", 2);
   }
 
   @Test
   void findAllExistingIngredientsForFreezer() {
-    Map<String, String> params = Map.of("storage", "freezer");
-    List<IngredientInfoDto> result = ingredientQueryRepository.findAllExistingIngredients(params);
-
-    assertThat(result).hasSize(1);
-    assertThat(result.get(0).getTotalCount()).isEqualTo(3);
-
+    storageTest("freezer", 3);
   }
 
   @Test
   void findAllExistingIngredientsForAll() {
-    Map<String, String> params = Map.of("storage", "all");
-    List<IngredientInfoDto> result = ingredientQueryRepository.findAllExistingIngredients(params);
-
-    assertThat(result).hasSize(1);
-    assertThat(result.get(0).getTotalCount()).isEqualTo(5);
+    storageTest("all", 5);
   }
 }
