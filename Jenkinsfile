@@ -1,3 +1,5 @@
+def releaseNotes = ""
+
 pipeline {
     agent any  // 어떤 Jenkins 에이전트에서도 실행 가능
 
@@ -26,7 +28,23 @@ pipeline {
                 script {
                     echo "Checking out branch: ${env.BRANCH_NAME}"
                     git branch: env.BRANCH_NAME, credentialsId: 'my-gitlab-token', url: 'https://lab.ssafy.com/s12-s-project/S12P21S003.git'
-                    sendMattermostNotification('STARTED')
+
+                    // Git에서 최신 원격 커밋 ID 가져오기 (브랜치 시작점)
+                    def previousRemoteCommit = sh(
+                        script: "git rev-parse origin/${env.BRANCH_NAME}",
+                        returnStdout: true
+                    ).trim()
+
+                    // 현재 HEAD 기준으로 변경된 커밋 로그 추출
+                    releaseNotes = sh(
+                        script: "git log ${previousRemoteCommit}..HEAD --pretty=format:'- %s'",
+                        returnStdout: true
+                    ).trim()
+
+                    if (!releaseNotes) {
+                        releaseNotes = "- No new commits."
+                    }
+                    sendMattermostNotification('STARTED', releaseNotes)
                 }
             }
         }
@@ -100,11 +118,11 @@ pipeline {
 
     post {
         success {
-            sendMattermostNotification('SUCCESS')
+            sendMattermostNotification('SUCCESS', releaseNotes)
         }
 
         failure {
-            sendMattermostNotification('FAILURE')
+            sendMattermostNotification('FAILURE', releaseNotes)
         }
 
         always {
@@ -113,7 +131,7 @@ pipeline {
     }
 }
 
-def sendMattermostNotification(String status) {
+def sendMattermostNotification(String status, String releaseNotes = "- No release notes.") {
     def emoji
     def color
     switch (status) {
@@ -146,6 +164,9 @@ def sendMattermostNotification(String status) {
     🔀 ${commit}  
     👤 Triggered by: ${user}  
     🕒 ${timestamp}
+
+    📋 *Release Notes*
+    ${releaseNotes}
     """.stripIndent()
 
     sh """
