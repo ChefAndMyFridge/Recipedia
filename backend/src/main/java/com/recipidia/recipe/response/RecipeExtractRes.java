@@ -26,8 +26,8 @@ public class RecipeExtractRes {
         .cooking_info(new CookingInfo("", 0))
         .ingredients(Collections.singletonList(
             IngredientQueryRes.builder()
-                .name("텍스트 추출이 불가능한")
-                .quantity("영상입니다.")
+                .name(errorTitle)
+                .quantity("")
                 .build()
         ))
         .cooking_tips(Collections.singletonList(errorTitle))

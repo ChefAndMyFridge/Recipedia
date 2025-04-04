@@ -67,10 +67,11 @@ export const useStoreIngredient = () => {
 };
 
 // 영양 정보 조회
-export const useGetIngredientNutrition = (ingredientId: number) => {
+export const useGetIngredientNutrition = (ingredientId: number, enabled: boolean) => {
   const query = useQuery<IngredientNutrition>({
     queryKey: ["ingredientNutrition", ingredientId],
     queryFn: () => getIngredientNutritionApi(ingredientId),
+    enabled,
     throwOnError: true,
   });
 
