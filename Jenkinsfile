@@ -51,7 +51,6 @@ pipeline {
                     if (!releaseNotes) {
                         releaseNotes = "- No new commits."
                     }
-                    releaseNotes = "```\n${releaseNotes}\n```"
 
                     // 5. 최신 커밋 정보도 따로 저장
                     latestCommit = sh(
@@ -175,15 +174,28 @@ def sendMattermostNotification(String status, String releaseNotes = "- No releas
     🕒 ${timestamp}
 
     📋 *Release Notes*
-    """ + "```\\n${releaseNotes}\\n```"
+    """
 
-    def safeMessage = message
-    .replace("\\", "\\\\")
-    .replace("\"", "\\\"")
+    def markdownNote = "```\n${releaseNotes}\n```"
+
+    def escapedPlain = escapeJson(message)
+    def escapedMd = escapeJson(markdownNote)
 
     sh """
     curl -X POST -H 'Content-Type: application/json' \\
-    -d "{ \\"text\\": \\"${safeMessage}\\" }" \\
-    ${env.MATTERMOST_WEBHOOK_URL}
+    -d '{
+        "text": "${escapedPlain}",
+        "attachments": [
+            { "text": "${escapedMd}" }
+        ]
+    }' ${env.MATTERMOST_WEBHOOK_URL}
     """
+}
+
+def escapeJson(String input) {
+    return input
+        .replace("\\", "\\\\")   // 백슬래시 먼저 처리!
+        .replace("\"", "\\\"")   // 큰따옴표 이스케이프
+        .replace("\r", "")       // 캐리지 리턴 제거
+        .replace("\n", "\\n")    // 줄바꿈 이스케이프
 }
