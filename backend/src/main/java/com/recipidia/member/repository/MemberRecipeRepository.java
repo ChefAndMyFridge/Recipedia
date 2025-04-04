@@ -15,5 +15,6 @@ public interface MemberRecipeRepository extends JpaRepository<MemberRecipe, Long
   List<MemberRecipe> findAllByMember(Member member);
   Page<MemberRecipe> findAllByMemberAndFavoriteTrue(Member member, Pageable pageable);
   Page<MemberRecipe> findAllByMemberAndRatingIsNotNull(Member member, Pageable pageable);
+  Page<MemberRecipe> findAllByMemberAndRatingNot(Member member, Integer rating, Pageable pageable);
   void deleteAllByMember(Member member);
 }
