@@ -31,8 +31,6 @@ const RecipeCard = ({ video }: RecipeCardProps) => {
 
   const thumbnailUrl = getYoutubeThumbnailUrl(video.url);
 
-  console.log("video", video);
-
   async function handleLike() {
     const newLiked = !isLiked;
     setIsLiked(newLiked);
@@ -40,7 +38,6 @@ const RecipeCard = ({ video }: RecipeCardProps) => {
     try {
       const response = await patchRecipeApi(userId, video.recipeId, 0, newLiked);
       // API 응답의 favorite 값으로 store 업데이트
-      console.log("response", response);
       updateRecipeFavorite(video.recipeId, response.favorite);
     } catch (error) {
       // 실패시 상태 되돌리기
