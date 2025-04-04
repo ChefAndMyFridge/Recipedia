@@ -7,10 +7,10 @@ import LoadingPlayer from "@components/common/loading/LoadingPlayer";
 import Modal from "@components/common/modal/Modal";
 
 import { useGetRecipeDetail } from "@hooks/useRecipeHooks";
+
 import useRecipeStore from "@stores/recipeStore";
 
-import DetailRecipeLandscapePage from "@pages/detailRecipe/DetailRecipeLandscapePage";
-import DetailRecipePortraitPage from "@pages/detailRecipe/DetailRecipePortraitPage";
+import DetailRecipeContents from "@pages/detailRecipe/components/DetailRecipeContents";
 
 const DetailRecipePage = () => {
   const { recipeId } = useParams();
@@ -51,7 +51,7 @@ const DetailRecipePage = () => {
   return (
     <>
       <ErrorBoundary FallbackComponent={ErrorPage}>
-        {isPortrait ? <DetailRecipePortraitPage /> : <DetailRecipeLandscapePage />}
+        <DetailRecipeContents isPortrait={isPortrait} />
         <Modal />
       </ErrorBoundary>
     </>
