@@ -28,31 +28,12 @@ pipeline {
             }
         }
 
-        stage('Stop & Remove Old App Containers') {
-            steps {
-                script {
-                    sh """
-                    cd ${env.WORKSPACE}
-                    MYSQL_ROOT_PASSWORD=${env.MYSQL_ROOT_PASSWORD} \
-                    MYSQL_DATABASE=${env.MYSQL_DATABASE} \
-                    ELASTIC_PASSWORD=${env.ELASTIC_PASSWORD} \
-                    docker-compose -f docker-compose-app.yml down
-                    """
-                }
-            }
-        }
-
         stage('serving frontend build file to nginx') {
             steps {
                 script {
                     def viteReleaseApiUrl = "https://j12s003.p.ssafy.io/api"
                     def viteMasterApiUrl = "https://j12s003.p.ssafy.io/api"
-                    def baseUrl = "/"
-
-                    if (env.BRANCH_NAME == "master") {
-                        // viteApiUrl = "https://j12s003.p.ssafy.io/master/api"
-                        baseUrl = "/${env.BRANCH_NAME}"
-                    } 
+                    def baseUrl = env.BRANCH_NAME == "master" ? "/master" : "/"
 
                     echo "✅ BRANCH_NAME: ${env.BRANCH_NAME}"
                     echo "🌐 VITE_MASTER_API_URL: ${viteMasterApiUrl}"
@@ -80,20 +61,6 @@ pipeline {
         stage('Build & Start New App Containers') {
             steps {
                 script {
-                    def viteApiUrl = "https://j12s003.p.ssafy.io/api"
-                    def fastapiApiUrl = "http://my-fastapi-release:8000"
-                    def mysqlHost = "my-mysql-release"
-                    if (env.BRANCH_NAME == "master") {
-                        viteApiUrl = "https://j12s003.p.ssafy.io/master/api"
-                        fastapiApiUrl = "http://my-fastapi-master:8000"
-                        mysqlHost = "my-mysql-master"
-                    } 
-
-                    echo "✅ fastapiApiUrl: ${fastapiApiUrl}"
-                    echo "🌐 VITE_API_URL: ${viteApiUrl}"
-                    echo "📁 mysqlHost: ${mysqlHost}"
-
-
                     sh """
                     cd ${env.WORKSPACE}
                     HOST_URL=${env.HOST_URL} \
@@ -111,6 +78,16 @@ pipeline {
                     ENV=${env.FASTAPI_PROFILE} \
                     cp .env.${env.BRANCH_NAME} .env
                     docker-compose -f docker-compose-app.yml up -d --build
+                    """
+                }
+            }
+        }
+
+        stage("nginx restart") {
+            steps {
+                script {
+                    sh """
+                    docker exec my-nginx nginx -s reload
                     """
                 }
             }
