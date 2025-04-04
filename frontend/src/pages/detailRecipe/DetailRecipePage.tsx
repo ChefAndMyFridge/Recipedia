@@ -1,16 +1,16 @@
 import { useParams } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import ErrorPage from "@components/common/error/ErrorPage";
 import LoadingPlayer from "@components/common/loading/LoadingPlayer";
 import Modal from "@components/common/modal/Modal";
 
 import { useGetRecipeDetail } from "@hooks/useRecipeHooks";
+
 import useRecipeStore from "@stores/recipeStore";
 
-import DetailRecipeLandscapePage from "@pages/detailRecipe/DetailRecipeLandscapePage";
-import DetailRecipePortraitPage from "@pages/detailRecipe/DetailRecipePortraitPage";
+import DetailRecipeContents from "@pages/detailRecipe/components/DetailRecipeContents";
 
 const DetailRecipePage = () => {
   const { recipeId } = useParams();
@@ -24,18 +24,17 @@ const DetailRecipePage = () => {
   useEffect(() => {
     if (
       data !== undefined &&
-      data.recipeId == detailRecipe.recipeId &&
+      data.recipeId === detailRecipe.recipeId &&
       detailRecipe.recipeId === Number(recipeId) &&
       detailRecipe.recipeId !== 0
     ) {
-      console.log("데이터 패칭 완료");
       setHasFetchedDetailRecipe(true);
     }
   }, [data, detailRecipe, recipeId]);
 
-  function handleOrientationChange() {
+  const handleOrientationChange = useCallback(() => {
     setIsPortrait(window.matchMedia("(orientation: portrait)").matches);
-  }
+  }, []);
 
   // 화면 방향 변경 감지
   useEffect(() => {
@@ -51,7 +50,7 @@ const DetailRecipePage = () => {
   return (
     <>
       <ErrorBoundary FallbackComponent={ErrorPage}>
-        {isPortrait ? <DetailRecipePortraitPage /> : <DetailRecipeLandscapePage />}
+        <DetailRecipeContents isPortrait={isPortrait} />
         <Modal />
       </ErrorBoundary>
     </>

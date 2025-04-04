@@ -28,7 +28,6 @@ const OpenTimer = ({ onClose, onAddTimer }: TimerProps) => {
   function handleModalBackgroundTouch(e: React.TouchEvent<HTMLDivElement>) {
     // 배경 클릭 시에만 전파 중단 (시간 선택기 제외)
     if (e.target === e.currentTarget) {
-      e.preventDefault();
       e.stopPropagation();
     }
   }
