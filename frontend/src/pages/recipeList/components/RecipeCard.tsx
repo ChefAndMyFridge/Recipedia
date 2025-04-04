@@ -31,7 +31,7 @@ const RecipeCard = ({ video }: RecipeCardProps) => {
 
   const thumbnailUrl = getYoutubeThumbnailUrl(video.url);
 
-  console.log("video", video)
+  console.log("video", video);
 
   async function handleLike() {
     const newLiked = !isLiked;
@@ -40,13 +40,14 @@ const RecipeCard = ({ video }: RecipeCardProps) => {
     try {
       const response = await patchRecipeApi(userId, video.recipeId, 0, newLiked);
       // API 응답의 favorite 값으로 store 업데이트
+      console.log("response", response);
       updateRecipeFavorite(video.recipeId, response.favorite);
     } catch (error) {
       // 실패시 상태 되돌리기
       setIsLiked(!newLiked);
       console.error("Failed to update favorite status:", error);
     }
-  };
+  }
 
   return (
     <div className={`flex justify-center`}>
@@ -69,7 +70,7 @@ const RecipeCard = ({ video }: RecipeCardProps) => {
                 <p className="text-xs font-preSemiBold text-center text-longContent">고품질 레시피</p>
               </div>
             ) : (
-               <div className="h-5"></div>
+              <div className="h-5"></div>
             )}
 
             <div className="flex w-full justify-between items-center">
@@ -79,7 +80,7 @@ const RecipeCard = ({ video }: RecipeCardProps) => {
 
               <button className="text-sm" onClick={handleLike}>
                 {isLiked ? (
-                  <IconHeartFill width={30} height={31} strokeColor="black" />
+                  <IconHeartFill width={30} height={30} strokeColor="black" />
                 ) : (
                   <IconHeart width={30} height={30} strokeColor="black" />
                 )}

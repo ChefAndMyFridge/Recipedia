@@ -62,9 +62,15 @@ const RecipeTexts = ({ recipe, currentTime, setCurrentTime, playerRef, isAutoScr
               className="w-full flex flex-col justify-start items-start gap-2"
               onClick={() => handleClickInstr(step, instructions.timestamp)}
             >
-              <h3 className={`text-base ${isCurrentStep ? "font-preBold text-black" : "font-preMedium text-content2"}`}>
-                {index + 1}. {step}
-              </h3>
+              {step !== "자막이 너무 짧아 레시피 요약에 충분하지 않습니다." ? (
+                <h3
+                  className={`text-base ${isCurrentStep ? "font-preBold text-black" : "font-preMedium text-content2"}`}
+                >
+                  {index + 1}. {step}
+                </h3>
+              ) : (
+                <h3 className="w-full text-center text-base font-preSemiBold text-black">{step}</h3>
+              )}
               <ul className="flex flex-col">
                 {instructions &&
                   instructions.sequence.map((instruction, i) => (
