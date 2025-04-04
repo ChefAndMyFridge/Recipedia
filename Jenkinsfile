@@ -29,6 +29,9 @@ pipeline {
                     echo "Checking out branch: ${env.BRANCH_NAME}"
                     git branch: env.BRANCH_NAME, credentialsId: 'my-gitlab-token', url: 'https://lab.ssafy.com/s12-s-project/S12P21S003.git'
 
+                    // 🔥 origin 최신 커밋 정보 갱신
+                    sh "git fetch origin ${env.BRANCH_NAME}"
+
                     // Git에서 최신 원격 커밋 ID 가져오기 (브랜치 시작점)
                     def previousRemoteCommit = sh(
                         script: "git rev-parse origin/${env.BRANCH_NAME}",
