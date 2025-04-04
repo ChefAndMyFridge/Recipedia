@@ -47,10 +47,11 @@ pipeline {
                         script: "git log -n 5 --pretty=format:'- %h - %s'",
                         returnStdout: true
                     ).trim()
-
+                    
                     if (!releaseNotes) {
                         releaseNotes = "- No new commits."
                     }
+                    releaseNotes = "```\n${releaseNotes}\n```"
 
                     // 5. 최신 커밋 정보도 따로 저장
                     latestCommit = sh(
@@ -177,12 +178,15 @@ def sendMattermostNotification(String status, String releaseNotes = "- No releas
     ${releaseNotes}
     """.stripIndent()
 
+    // ⭐ JSON-safe로 메시지 이스케이프
+    def safeMessage = message
+        .replace("\\", "\\\\")
+        .replace("\"", "\\\"")
+        .replace("\n", "\\n")
+
     sh """
     curl -X POST -H 'Content-Type: application/json' \\
-    -d '{
-        "text": "${message}",
-        "username": "Jenkins",
-        "icon_url": "https://www.jenkins.io/images/logos/jenkins/jenkins.png"
-    }' ${env.MATTERMOST_WEBHOOK_URL}
+    -d "{ \\"text\\": \\"${safeMessage}\\" }" \\
+    ${env.MATTERMOST_WEBHOOK_URL}
     """
 }
