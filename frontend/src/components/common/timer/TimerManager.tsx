@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { useTimerManager } from "@hooks/useTimerManager";
+
 import IconTimer from "@assets/icons/IconTimer";
-import TimerCarousel from "@components/common/timer/TimerCarousel";
 import IconClose from "@assets/icons/IconClose";
+
+import TimerCarousel from "@components/common/timer/TimerCarousel";
 
 interface TimerManagerProps {
   recipeTimers?: { step: string; timer: number }[];
