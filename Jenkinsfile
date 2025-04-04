@@ -14,7 +14,7 @@ pipeline {
         ALLOWED_ORIGINS = credentials('ALLOWED_ORIGINS')
         X_API = credentials('X_API')
         FASTAPI_SECURITY_KEY = credentials('FASTAPI_SECURITY_KEY')
-        FASTAPI_PROFILE = credentials('FASTAPI_PROFILE')\
+        FASTAPI_PROFILE = credentials('FASTAPI_PROFILE')
         ADMIN_PW = credentials('ADMIN_PW')
     }
 
