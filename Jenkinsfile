@@ -178,9 +178,8 @@ def sendMattermostNotification(String status, String releaseNotes = "- No releas
     """ + "```\\n${releaseNotes}\\n```"
 
     def safeMessage = message
-        .replace("\\", "\\\\")
-        .replace("\"", "\\\"")
-        .replace("\n", "\\n")
+    .replace("\\", "\\\\")
+    .replace("\"", "\\\"")
 
     sh """
     curl -X POST -H 'Content-Type: application/json' \\
