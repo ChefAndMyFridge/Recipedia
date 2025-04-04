@@ -23,20 +23,6 @@ pipeline {
     }
 
     stages {
-        stage('Determine Next Deployment Slot') {
-            steps {
-                script {
-                    def branch = env.BRANCH_NAME
-                    def stateFile = "/deploy-state/${branch}.txt"
-                    def current = sh(script: "cat ${stateFile} || echo green", returnStdout: true).trim()
-                    def next = current == "blue" ? "green" : "blue"
-
-                    env.DEPLOY_SLOT = next
-                    echo "🔁 Switching ${branch} from ${current} to ${next}"
-                }
-            }
-        }
-
         stage('Checkout Code') {
             steps {
                 cleanWs()  // Jenkins 작업 공간을 완전히 초기화
@@ -45,29 +31,14 @@ pipeline {
                     git branch: env.BRANCH_NAME, credentialsId: 'my-gitlab-token',
                         url: 'https://lab.ssafy.com/s12-s-project/S12P21S003.git'
 
-                    // 2. 인증 포함 fetch (origin 최신화)
-                    withCredentials([usernamePassword(credentialsId: 'my-gitlab-token', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
-                        sh "git fetch https://${GIT_USER}:${GIT_PASS}@lab.ssafy.com/s12-s-project/S12P21S003.git ${env.BRANCH_NAME}"
-                    }
-
-                    // 3. 이전 origin 커밋 기준점 추출
-                    def baseCommit = sh(
-                        script: "git rev-parse origin/${env.BRANCH_NAME}",
-                        returnStdout: true
-                    ).trim()
-
-                    // 4. release notes 생성
+                    // 2. release notes 생성
                     releaseNotes = sh(
                         // script: "git log -n 5 --pretty=format:'- %h - %s'",
                         script: "git log --graph -n 5 --pretty=format:'%h - %s (by %an, %ad)' --date=format:'%Y-%m-%d %H:%M:%S'",
                         returnStdout: true
                     ).trim()
                     
-                    if (!releaseNotes) {
-                        releaseNotes = "- No new commits."
-                    }
-
-                    // 5. 최신 커밋 정보도 따로 저장
+                    // 3. 최신 커밋 정보도 따로 저장
                     latestCommit = sh(
                         script: "git log -1 --pretty=format:'%h - %s (by %an, %ad)' --date=format:'%Y-%m-%d %H:%M:%S'",
                         returnStdout: true
@@ -173,7 +144,6 @@ def sendMattermostNotification(String status, String releaseNotes = "- No releas
             emoji = "ℹ️"
     }
 
-    def user = currentBuild.getBuildCauses()[0]?.userName ?: '자동 트리거'
     def buildUrl = "${env.BUILD_URL}console"
     def timestamp = new Date().format("yyyy-MM-dd HH:mm", TimeZone.getTimeZone('Asia/Seoul'))
 
