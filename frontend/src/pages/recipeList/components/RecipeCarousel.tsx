@@ -1,12 +1,13 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Video } from "@/types/recipeListTypes";
+import { Video, VideoList } from "@/types/recipeListTypes";
 import RecipeCard from "@pages/recipeList/components/RecipeCard";
 
 interface RecipeCarouselProps {
+  selectedDish: keyof VideoList | string;
   videos: Video[];
 }
 
-const RecipeCarousel = ({ videos }: RecipeCarouselProps) => {
+const RecipeCarousel = ({ selectedDish, videos }: RecipeCarouselProps) => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   const [deltaX, setDeltaX] = useState(0);
@@ -36,7 +37,7 @@ const RecipeCarousel = ({ videos }: RecipeCarouselProps) => {
   }
 
   function handleTouchEnd() {
-    if (deltaX < -50 && currentIndex < videos.length - 1)  {
+    if (deltaX < -50 && currentIndex < videos.length - 1) {
       // 왼쪽으로 스와이프
       goToNext();
     }
@@ -50,28 +51,33 @@ const RecipeCarousel = ({ videos }: RecipeCarouselProps) => {
   }
 
   const carouselItems = useMemo(() => {
-    return videos && videos.map((video) => (
+    return (
+      videos &&
+      videos.map((video) => (
         <div key={video.recipeId} className="w-full flex-shrink-0">
           <RecipeCard video={video} />
         </div>
-      ));
+      ))
+    );
   }, [videos]);
 
   const pagingItems = useMemo(() => {
-    return videos &&
-          videos.map((video, index) => (
-            <div
-              key={video.recipeId}
-              className={`rounded-full transition-all ${index === currentIndex ? "w-2 h-2 bg-primary" : "w-1.5 h-1.5  bg-content"}`}
-              onClick={() => setCurrentIndex(index)}
-            ></div>
-          ));
+    return (
+      videos &&
+      videos.map((video, index) => (
+        <div
+          key={video.recipeId}
+          className={`rounded-full transition-all aspect-[1/1] ${index === currentIndex ? "w-2 h-2 bg-primary" : "w-1.5 h-1.5 bg-content"}`}
+          onClick={() => setCurrentIndex(index)}
+        ></div>
+      ))
+    );
   }, [videos, currentIndex]);
 
-   // 새로운 음식 이름 누를 때, index 초기화
-   useEffect(() => {
+  // 새로운 음식 이름 누를 때, index 초기화
+  useEffect(() => {
     setCurrentIndex(0);
-  }, [videos]);
+  }, [selectedDish]);
 
   return (
     <div className="relative flex flex-col gap-8 justify-center items-center flex-[3]">
@@ -90,9 +96,7 @@ const RecipeCarousel = ({ videos }: RecipeCarouselProps) => {
       </div>
 
       {/* 페이지 인덱싱 */}
-      <div className="flex gap-2 items-center justify-center">
-        {pagingItems}
-      </div>
+      <div className="flex gap-2 items-center justify-center">{pagingItems}</div>
     </div>
   );
 };

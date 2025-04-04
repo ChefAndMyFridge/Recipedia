@@ -22,14 +22,17 @@ const Modal = () => {
     }
   }, [isOpen]);
 
-  function handleClose() {
-    closeModal();
+  function handleBackdropClick(event: React.MouseEvent<HTMLDialogElement, MouseEvent>) {
+    if (dialog.current && event.target === dialog.current) {
+      closeModal();
+    }
   }
 
   return (
     <dialog
       ref={dialog}
-      onClose={handleClose}
+      onClose={() => closeModal()}
+      onClick={handleBackdropClick}
       className={`fixed top-0 z-50 mx-auto w-full rounded-b-xl ${isClosing ? "is-closing" : ""}`}
       style={{ maxWidth: "clamp(344px, 100vw, 576px)" }}
     >
