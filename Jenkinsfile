@@ -26,23 +26,20 @@ pipeline {
             steps {
                 cleanWs()  // Jenkins 작업 공간을 완전히 초기화
                 script {
-                    echo "📥 초기 원격 상태 추적 중..."
-                    // 1️⃣ clone 없이 먼저 fetch해서 origin 정보만 가져오기
-                    sh "git init"
-                    sh "git remote add origin https://lab.ssafy.com/s12-s-project/S12P21S003.git"
+                    // 1. Jenkins의 인증된 git checkout 먼저 실행
+                    git branch: env.BRANCH_NAME, credentialsId: 'my-gitlab-token',
+                        url: 'https://lab.ssafy.com/s12-s-project/S12P21S003.git'
+
+                    // 2. git fetch로 origin 최신화 (이젠 인증 문제 없음)
                     sh "git fetch origin ${env.BRANCH_NAME}"
 
-                    // 2️⃣ 기준점 커밋 저장 (현재 원격 HEAD 상태)
-                    baseCommit = sh(
+                    // 3. 이전 origin 커밋 기준점 추출
+                    def baseCommit = sh(
                         script: "git rev-parse origin/${env.BRANCH_NAME}",
                         returnStdout: true
                     ).trim()
 
-                    // 3️⃣ 실제 git checkout
-                    git branch: env.BRANCH_NAME, credentialsId: 'my-gitlab-token',
-                        url: 'https://lab.ssafy.com/s12-s-project/S12P21S003.git'
-
-                    // 4️⃣ 기준점 이후의 커밋 로그 추출
+                    // 4. release notes 생성
                     releaseNotes = sh(
                         script: "git log ${baseCommit}..HEAD --pretty=format:'- %h - %s'",
                         returnStdout: true
