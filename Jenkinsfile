@@ -1,3 +1,6 @@
+def releaseNotes = ""
+def latestCommit = ""
+
 pipeline {
     agent any  // 어떤 Jenkins 에이전트에서도 실행 가능
 
@@ -15,6 +18,8 @@ pipeline {
         X_API = credentials('X_API')
         FASTAPI_SECURITY_KEY = credentials('FASTAPI_SECURITY_KEY')
         FASTAPI_PROFILE = credentials('FASTAPI_PROFILE')
+        ADMIN_PW = credentials('ADMIN_PW')
+        MATTERMOST_WEBHOOK_URL = credentials('MATTERMOST_WEBHOOK_URL')
     }
 
     stages {
@@ -36,31 +41,54 @@ pipeline {
             steps {
                 cleanWs()  // Jenkins 작업 공간을 완전히 초기화
                 script {
-                    echo "Checking out branch: ${env.BRANCH_NAME}"
-                    git branch: env.BRANCH_NAME, credentialsId: 'my-gitlab-token', url: 'https://lab.ssafy.com/s12-s-project/S12P21S003.git'
+                    // 1. Jenkins의 인증된 git checkout 먼저 실행
+                    git branch: env.BRANCH_NAME, credentialsId: 'my-gitlab-token',
+                        url: 'https://lab.ssafy.com/s12-s-project/S12P21S003.git'
+
+                    // 2. 인증 포함 fetch (origin 최신화)
+                    withCredentials([usernamePassword(credentialsId: 'my-gitlab-token', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
+                        sh "git fetch https://${GIT_USER}:${GIT_PASS}@lab.ssafy.com/s12-s-project/S12P21S003.git ${env.BRANCH_NAME}"
+                    }
+
+                    // 3. 이전 origin 커밋 기준점 추출
+                    def baseCommit = sh(
+                        script: "git rev-parse origin/${env.BRANCH_NAME}",
+                        returnStdout: true
+                    ).trim()
+
+                    // 4. release notes 생성
+                    releaseNotes = sh(
+                        script: "git log -n 5 --pretty=format:'- %h - %s'",
+                        returnStdout: true
+                    ).trim()
+                    
+                    if (!releaseNotes) {
+                        releaseNotes = "- No new commits."
+                    }
+
+                    // 5. 최신 커밋 정보도 따로 저장
+                    latestCommit = sh(
+                        script: "git log -1 --pretty=format:'%h - %s'",
+                        returnStdout: true
+                    ).trim()
+
+                    sendMattermostNotification('STARTED', releaseNotes)
                 }
             }
         }
 
-        // stage('Stop & Remove Old App Containers') {
-        //     steps {
-        //         script {
-        //             sh """
-        //             cd ${env.WORKSPACE}
-        //             MYSQL_ROOT_PASSWORD=${env.MYSQL_ROOT_PASSWORD} \
-        //             MYSQL_DATABASE=${env.MYSQL_DATABASE} \
-        //             ELASTIC_PASSWORD=${env.ELASTIC_PASSWORD} \
-        //             docker-compose -f docker-compose-app.yml down
-        //             """
-        //         }
-        //     }
-        // }
-
         stage('Build Frontend') {
             steps {
                 script {
+                    def viteReleaseApiUrl = "https://j12s003.p.ssafy.io/api"
+                    def viteMasterApiUrl = "https://j12s003.p.ssafy.io/api"
                     def baseUrl = env.BRANCH_NAME == "master" ? "/master" : "/"
-                    def apiUrl = env.BRANCH_NAME == "master" ? "https://j12s003.p.ssafy.io/master/api" : "https://j12s003.p.ssafy.io/api"
+
+                    echo "✅ BRANCH_NAME: ${env.BRANCH_NAME}"
+                    echo "🌐 VITE_MASTER_API_URL: ${viteMasterApiUrl}"
+                    echo "🌐 VITE_RELEASE_API_URL: ${viteReleaseApiUrl}"
+                    echo "📁 VITE_BASE_URL: ${baseUrl}"
+
 
                     sh """
                     cd ${env.WORKSPACE}/frontend
@@ -81,20 +109,6 @@ pipeline {
         stage('Build & Start New App Containers') {
             steps {
                 script {
-                    // def viteApiUrl = "https://j12s003.p.ssafy.io/api"
-                    // def fastapiApiUrl = "http://my-fastapi-release:8000"
-                    // def mysqlHost = "my-mysql-release"
-                    // if (env.BRANCH_NAME == "master") {
-                    //     viteApiUrl = "https://j12s003.p.ssafy.io/master/api"
-                    //     fastapiApiUrl = "http://my-fastapi-master:8000"
-                    //     mysqlHost = "my-mysql-master"
-                    // } 
-
-                    // echo "✅ fastapiApiUrl: ${fastapiApiUrl}"
-                    // echo "🌐 VITE_API_URL: ${viteApiUrl}"
-                    // echo "📁 mysqlHost: ${mysqlHost}"
-
-
                     sh """
                     cd ${env.WORKSPACE}
                     HOST_URL=${env.HOST_URL} \
@@ -110,6 +124,7 @@ pipeline {
                     X_API=${env.X_API} \
                     FASTAPI_SECURITY_KEY=${env.FASTAPI_SECURITY_KEY} \
                     ENV=${env.FASTAPI_PROFILE} \
+                    ADMIN_PW=${env.ADMIN_PW} \
                     cp .env.${env.BRANCH_NAME} .env
                     echo "" >> .env
                     echo "COLOR=${env.DEPLOY_SLOT}" >> .env
@@ -120,18 +135,83 @@ pipeline {
             }
         }
 
-        stage('Update Nginx Upstream') {
+        stage("nginx restart") {
             steps {
                 script {
-                    // docker exec my-nginx ln -sf /etc/nginx/upstreams/${env.DEPLOY_SLOT}-${env.BRANCH_NAME}.conf /etc/nginx/upstreams/active-${env.BRANCH_NAME}.conf
-                    // docker exec my-nginx ln -sf /usr/share/nginx/${BRANCH_NAME}-${DEPLOY_SLOT}/html /usr/share/nginx/${BRANCH_NAME}/html
                     sh """
                     docker exec my-nginx nginx -s reload
-                    mkdir -p /deploy-state
-                    echo ${env.DEPLOY_SLOT} > /deploy-state/${env.BRANCH_NAME}.txt
                     """
                 }
             }
         }
     }
+
+    post {
+        success {
+            sendMattermostNotification('SUCCESS', releaseNotes, latestCommit)
+        }
+
+        failure {
+            sendMattermostNotification('FAILURE', releaseNotes, latestCommit)
+        }
+
+        always {
+            cleanWs()
+        }
+    }
+}
+
+def sendMattermostNotification(String status, String releaseNotes = "- No release notes.", String commit = "Unknown") {
+    def emoji
+    def color
+    switch (status) {
+        case 'STARTED':
+            emoji = "🚀"
+            break
+        case 'SUCCESS':
+            emoji = "✅"
+            break
+        case 'FAILURE':
+            emoji = "❌"
+            break
+        default:
+            emoji = "ℹ️"
+    }
+
+    def user = currentBuild.getBuildCauses()[0]?.userName ?: '자동 트리거'
+    def buildUrl = "${env.BUILD_URL}console"
+    def timestamp = new Date().format("yyyy-MM-dd HH:mm", TimeZone.getTimeZone('Asia/Seoul'))
+
+    def message = """
+    ${emoji} *[${env.BRANCH_NAME}]* 브랜치 - *${env.JOB_NAME}* 빌드 **${status}** (*#${env.BUILD_NUMBER}*)
+    🔗 [콘솔 보기](${buildUrl})  
+    🔀 ${commit}  
+    👤 Triggered by: ${user}  
+    🕒 ${timestamp}
+
+    📋 *Release Notes*
+    """
+
+    def markdownNote = "```\n${releaseNotes}\n```"
+
+    def escapedPlain = escapeJson(message)
+    def escapedMd = escapeJson(markdownNote)
+
+    sh """
+    curl -X POST -H 'Content-Type: application/json' \\
+    -d '{
+        "text": "${escapedPlain}",
+        "attachments": [
+            { "text": "${escapedMd}" }
+        ]
+    }' ${env.MATTERMOST_WEBHOOK_URL}
+    """
+}
+
+def escapeJson(String input) {
+    return input
+        .replace("\\", "\\\\")   // 백슬래시 먼저 처리!
+        .replace("\"", "\\\"")   // 큰따옴표 이스케이프
+        .replace("\r", "")       // 캐리지 리턴 제거
+        .replace("\n", "\\n")    // 줄바꿈 이스케이프
 }

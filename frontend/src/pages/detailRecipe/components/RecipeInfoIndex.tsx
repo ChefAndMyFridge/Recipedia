@@ -10,7 +10,7 @@ interface RecipeInfoIndexProps {
 const RecipeInfoIndex = ({ selectedIndex, setSelectedIndex, text, type }: RecipeInfoIndexProps) => {
   return (
     <div
-      className={`px-2 py-3 rounded-t-2xl text-white cursor-pointer text-sm break-keep ${selectedIndex === type ? "bg-primary font-preBold" : "bg-subContent font-preMedium"}`}
+      className={`flex justify-center items-center px-2 py-2.5 rounded-t-xl text-white cursor-pointer text-sm break-keep ${selectedIndex === type ? "bg-primary font-preBold" : "bg-subContent font-preMedium"}`}
       onClick={() => setSelectedIndex(type)}
     >
       {text}

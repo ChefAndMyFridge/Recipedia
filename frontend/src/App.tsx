@@ -36,7 +36,7 @@ const PublicLayout = () => {
   return <Outlet />;
 };
 
-function App() {
+const App = () => {
   const navigate = useNavigate();
 
   function handleNavigation(event: CustomEvent) {
@@ -73,6 +73,6 @@ function App() {
       </Routes>
     </QueryClientProvider>
   );
-}
+};
 
 export default App;

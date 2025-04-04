@@ -16,10 +16,8 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install git+https://github.com/seof622/youtube-search-python
 
-
 # 4️⃣ FastAPI 앱 코드 복사
 COPY . .
-
 ENV TZ=Asia/Seoul
 RUN ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 RUN echo "Asia/Seoul" > /etc/timezone
