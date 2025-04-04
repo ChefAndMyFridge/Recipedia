@@ -14,6 +14,7 @@ interface TimerInfo {
 interface TimerCarouselProps {
   timers: TimerInfo[];
   onAddTimer: (timerInfo: { step: string; timer: number }) => void;
+  onRemoveTimer: (step: string) => void;
   onTimerUpdate: (step: string, data: { currentTimer: number; isRunning: boolean }) => void;
   initialPosition?: { xPercent: number; yPercent: number };
 }
@@ -21,6 +22,7 @@ interface TimerCarouselProps {
 const TimerCarousel = ({
   timers,
   onAddTimer,
+  onRemoveTimer,
   onTimerUpdate,
   initialPosition = { xPercent: 0.15, yPercent: 0.915 },
 }: TimerCarouselProps) => {
@@ -166,7 +168,7 @@ const TimerCarousel = ({
           style={{
             left: `${absolutePosition.x}px`,
             top: `${absolutePosition.y}px`,
-            width: "160px",
+            width: "200px",
             touchAction: "none",
           }}
           onTouchStart={handleTouchStart}
@@ -181,7 +183,7 @@ const TimerCarousel = ({
           {/* 타이머 리스트 영역 - 터치 이벤트 전파 중단 */}
           <div
             ref={contentRef}
-            className="max-h-[110px] overflow-y-auto"
+            className="max-h-[120px] overflow-y-auto"
             onTouchStart={handleContentTouch}
             onTouchMove={handleContentTouch}
             style={{ touchAction: "auto" }}
@@ -198,6 +200,7 @@ const TimerCarousel = ({
                       currentTimer={timer.currentTimer}
                       isRunning={timer.isRunning}
                       onTimerUpdate={(data) => onTimerUpdate(timer.step, data)}
+                      onRemoveTimer={onRemoveTimer}
                     />
                   </div>
                 ))}

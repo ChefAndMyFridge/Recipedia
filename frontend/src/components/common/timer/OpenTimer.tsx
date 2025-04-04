@@ -35,14 +35,12 @@ const OpenTimer = ({ onClose, onAddTimer }: TimerProps) => {
 
   // 터치 시작
   function handleTouchStart(event: React.TouchEvent<HTMLDivElement>) {
-    event.preventDefault();
     event.stopPropagation();
     setStartY(event.touches[0].clientY);
   }
 
   // 터치 이동
   function handleTouchMove(event: React.TouchEvent<HTMLDivElement>, type: "hours" | "minutes" | "seconds") {
-    event.preventDefault();
     event.stopPropagation();
 
     const deltaY = startY - event.touches[0].clientY;
@@ -55,7 +53,7 @@ const OpenTimer = ({ onClose, onAddTimer }: TimerProps) => {
   }
 
   return (
-    <div 
+    <div
       className="fixed inset-0 flex items-center justify-center"
       onTouchStart={handleModalBackgroundTouch}
       onTouchMove={handleModalBackgroundTouch}

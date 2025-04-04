@@ -86,6 +86,10 @@ export function useTimerManager(initialTimers: TimerInfo[] = []) {
     ]);
   }
 
+  function removeTimer(step: string) {
+    setTimers((prev) => prev.filter((timer) => timer.step !== step));
+  }
+
   // 레시피 타이머 업데이트
   function updateRecipeTimers(recipeTimers: { step: string; timer: number }[]) {
     if (!recipeTimers || recipeTimers.length === 0) return;
@@ -125,6 +129,7 @@ export function useTimerManager(initialTimers: TimerInfo[] = []) {
     timers,
     handleTimerUpdate,
     addTimer,
+    removeTimer,
     updateRecipeTimers,
     hasRunningTimers: timers.some((timer) => timer.isRunning),
   };
