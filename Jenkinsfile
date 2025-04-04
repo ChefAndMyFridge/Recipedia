@@ -175,10 +175,8 @@ def sendMattermostNotification(String status, String releaseNotes = "- No releas
     🕒 ${timestamp}
 
     📋 *Release Notes*
-    ${releaseNotes}
-    """.stripIndent()
+    """ + "```\\n${releaseNotes}\\n```"
 
-    // ⭐ JSON-safe로 메시지 이스케이프
     def safeMessage = message
         .replace("\\", "\\\\")
         .replace("\"", "\\\"")
