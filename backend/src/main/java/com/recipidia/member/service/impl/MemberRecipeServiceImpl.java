@@ -101,9 +101,9 @@ public class MemberRecipeServiceImpl implements MemberRecipeService {
     Member member = memberRepository.findById(memberId)
         .orElseThrow(() -> new MemberNotFoundException(memberId));
 
-    Page<MemberRecipe> allByMemberAndRatingIsNotNull = memberRecipeRepository.findAllByMemberAndRatingNot(member, 0, pageable);
+    Page<MemberRecipe> allByMemberAndRatingIsNotZero = memberRecipeRepository.findAllByMemberAndRatingNot(member, 0, pageable);
 
-    return allByMemberAndRatingIsNotNull.map(
+    return allByMemberAndRatingIsNotZero.map(
         mr -> RecipeWithMemberInfoDto.fromEntities(mr.getRecipe(), mr));
   }
 }

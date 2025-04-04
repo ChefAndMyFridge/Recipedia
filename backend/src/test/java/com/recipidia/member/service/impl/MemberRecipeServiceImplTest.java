@@ -112,7 +112,7 @@ class MemberRecipeServiceImplTest {
     );
 
     when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
-    when(memberRecipeRepository.findAllByMemberAndRatingIsNotNull(member, pageable)).thenReturn(page);
+    when(memberRecipeRepository.findAllByMemberAndRatingNot(member, 0, pageable)).thenReturn(page);
 
     // when
     Page<RecipeWithMemberInfoDto> result = memberRecipeService.getMemberRatedRecipes(memberId, pageable);
