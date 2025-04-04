@@ -186,6 +186,7 @@ def sendMattermostNotification(String status, String releaseNotes = "- No releas
     """.stripIndent().trim()
 
     escapedReleaseNotes = escapeJson(releaseNotes)
+    def gitGraph = "```\\n${escapedReleaseNotes}\\n```"
 
     sh """
     curl -X POST -H 'Content-Type: application/json' \\
@@ -194,7 +195,7 @@ def sendMattermostNotification(String status, String releaseNotes = "- No releas
         "attachments": [
             {
                 "pretext": "### Release Notes📋",
-                "text" : "${escapedReleaseNotes}"
+                "text" : "${gitGraph}"
             }
             ]
     }' ${env.MATTERMOST_WEBHOOK_URL}
