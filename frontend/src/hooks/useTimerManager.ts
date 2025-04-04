@@ -7,7 +7,7 @@ export interface TimerInfo {
   isRunning?: boolean;
 }
 
-export function useTimerManager(initialTimers: TimerInfo[] = []) {
+const useTimerManager = (initialTimers: TimerInfo[] = []) => {
   const [timers, setTimers] = useState<TimerInfo[]>(initialTimers);
   const timerIntervals = useRef<{ [key: string]: NodeJS.Timeout }>({});
 
@@ -133,4 +133,6 @@ export function useTimerManager(initialTimers: TimerInfo[] = []) {
     updateRecipeTimers,
     hasRunningTimers: timers.some((timer) => timer.isRunning),
   };
-}
+};
+
+export default useTimerManager;

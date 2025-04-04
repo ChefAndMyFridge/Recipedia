@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useTimerManager } from "@hooks/useTimerManager";
+import useTimerManager from "@hooks/useTimerManager";
 
 import IconTimer from "@assets/icons/IconTimer";
 import IconClose from "@assets/icons/IconClose";
