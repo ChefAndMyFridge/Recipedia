@@ -26,27 +26,32 @@ pipeline {
             steps {
                 cleanWs()  // Jenkins 작업 공간을 완전히 초기화
                 script {
-                    echo "Checking out branch: ${env.BRANCH_NAME}"
-                    git branch: env.BRANCH_NAME, credentialsId: 'my-gitlab-token', url: 'https://lab.ssafy.com/s12-s-project/S12P21S003.git'
-
-                    // 🔥 origin 최신 커밋 정보 갱신
+                    echo "📥 초기 원격 상태 추적 중..."
+                    // 1️⃣ clone 없이 먼저 fetch해서 origin 정보만 가져오기
+                    sh "git init"
+                    sh "git remote add origin https://lab.ssafy.com/s12-s-project/S12P21S003.git"
                     sh "git fetch origin ${env.BRANCH_NAME}"
 
-                    // Git에서 최신 원격 커밋 ID 가져오기 (브랜치 시작점)
-                    def previousRemoteCommit = sh(
+                    // 2️⃣ 기준점 커밋 저장 (현재 원격 HEAD 상태)
+                    baseCommit = sh(
                         script: "git rev-parse origin/${env.BRANCH_NAME}",
                         returnStdout: true
                     ).trim()
 
-                    // 현재 HEAD 기준으로 변경된 커밋 로그 추출
+                    // 3️⃣ 실제 git checkout
+                    git branch: env.BRANCH_NAME, credentialsId: 'my-gitlab-token',
+                        url: 'https://lab.ssafy.com/s12-s-project/S12P21S003.git'
+
+                    // 4️⃣ 기준점 이후의 커밋 로그 추출
                     releaseNotes = sh(
-                        script: "git log ${previousRemoteCommit}..HEAD --pretty=format:'- %s'",
+                        script: "git log ${baseCommit}..HEAD --pretty=format:'- %h - %s'",
                         returnStdout: true
                     ).trim()
 
                     if (!releaseNotes) {
                         releaseNotes = "- No new commits."
                     }
+
                     sendMattermostNotification('STARTED', releaseNotes)
                 }
             }
