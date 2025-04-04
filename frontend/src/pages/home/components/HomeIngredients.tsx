@@ -93,7 +93,7 @@ const HomeIngredients = ({ isFilterOpen }: { isFilterOpen: boolean }) => {
           {pagination.map((_, idx) => (
             <span
               key={idx}
-              className={`rounded-full transition-all ${idx === pageIndex ? "w-2 h-2 bg-primary" : "w-1.5 h-1.5  bg-content"}`}
+              className={`rounded-full transition-all aspect-[1/1] ${idx === pageIndex ? "w-2 h-2 bg-primary" : "w-1.5 h-1.5 bg-content"}`}
               onClick={() => setPageIndex(idx)}
             />
           ))}
