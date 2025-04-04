@@ -42,3 +42,7 @@ fastapi:
     url: ${FASTAPI_API_URL}
   header:
     xapi: ${X_API}
+
+login:
+  admin:
+    pw: ${ADMIN_PW}
