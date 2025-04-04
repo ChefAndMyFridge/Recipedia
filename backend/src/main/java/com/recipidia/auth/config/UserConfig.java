@@ -1,5 +1,6 @@
 package com.recipidia.auth.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,13 +15,15 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 @Configuration
 public class UserConfig {
 
+  @Value("${login.admin.pw}")
+  private String adminPassword;
+
   // In-Memory 방식으로 admin 계정 생성
   @Bean
   public UserDetailsService userDetailsService(PasswordEncoder encoder) {
     UserDetails admin = User.builder()
         .username("admin")
-        // 실제 서비스 시 강력한 암호를 사용하세요.
-        .password(encoder.encode("securityTest")) // 나중에 환경변수로 주입
+        .password(encoder.encode(adminPassword))
         .roles("ADMIN")
         .build();
     return new InMemoryUserDetailsManager(admin);
