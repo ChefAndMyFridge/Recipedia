@@ -29,6 +29,7 @@ export interface recipeCookingSequenceInfo {
   [step: string]: {
     sequence: string[];
     timestamp: number;
+    timer: number;
   };
 }
 
