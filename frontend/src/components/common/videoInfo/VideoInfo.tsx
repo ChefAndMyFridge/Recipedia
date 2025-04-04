@@ -17,10 +17,10 @@ const VideoInfo = ({ IconName, InfoData, InfoType }: VideoInfoProps) => {
   }, [InfoData]);
 
   return (
-    <div className="flex flex-col gap-1 justify-center items-center text-sm">
-      <IconName width={25} height={25} strokeColor="black" />
-      <p className="text-sm font-preBold">{renderInfoData}</p>
-      <p className="text-xs font-preRegular">{InfoType}</p>
+    <div className="flex flex-col my-2 gap-1 justify-center items-center text-sm">
+      <IconName width={25} height={25} strokeColor="black" strokeWidth={2.5} />
+      <p className="text-xs font-preMedium">{InfoType}</p>
+      <p className="text-sm font-preBold mt-1">{renderInfoData}</p>
     </div>
   );
 };

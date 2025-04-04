@@ -16,7 +16,7 @@ const RecipeInfoIndexes = ({
 }: RecipeInfoIndexesProps) => {
   return (
     <div className="flex w-full items-center justify-between">
-      <div className="flex w-[70%]">
+      <div className="flex w-[75%]">
         <RecipeInfoIndex
           selectedIndex={selectedIndex}
           setSelectedIndex={setSelectedIndex}
@@ -43,16 +43,15 @@ const RecipeInfoIndexes = ({
         />
       </div>
 
-      <div className="flex w-[25%] items-center gap-1 landscape:flex-col landscape:items-end">
-        <p className="text-sm font-preSemiBold text-longContent break-keep"> 자동 스크롤 </p>
+      <div className="flex w-[25%] justify-end items-center gap-1 landscape:flex-col landscape:items-end">
+        <p className="text-xs font-preSemiBold text-longContent text-end break-keep"> 자동 스크롤 </p>
         <button
-          className={`text-sm ${isAutoScroll ? "font-preBold text-primary" : "font-preMedium text-content2"}`}
+          className={`text-xs ${isAutoScroll ? "font-preBold text-primary" : "font-preMedium text-content2"}`}
           onClick={() => setIsAutoScroll(!isAutoScroll)}
         >
           {/* 자동 스크롤 */}
           {isAutoScroll ? " ON" : " OFF"}
         </button>
-        {/* <Toggle isToggle={isAutoScroll} onToggle={setIsAutoScroll} /> */}
       </div>
     </div>
   );
