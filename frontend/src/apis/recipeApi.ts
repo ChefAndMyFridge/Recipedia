@@ -45,7 +45,7 @@ export const patchRecipeApi = async (memberId: number, recipeId: number, rating?
         }
       : {
           memberId: memberId,
-          rating: rating === -1 ? null : rating,
+          rating: rating === -1 ? 0 : rating,
         };
   try {
     const response = await instance.patch(`/v1/member/recipe/${recipeId}`, reqBody);
