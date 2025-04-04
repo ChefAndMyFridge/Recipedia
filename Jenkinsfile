@@ -44,7 +44,7 @@ pipeline {
 
                     // 4. release notes 생성
                     releaseNotes = sh(
-                        script: "git log ${baseCommit}..HEAD --pretty=format:'- %h - %s'",
+                        script: "git log -n 5 --pretty=format:'- %h - %s'",
                         returnStdout: true
                     ).trim()
 
