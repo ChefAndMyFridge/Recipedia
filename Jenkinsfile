@@ -1,4 +1,5 @@
 def releaseNotes = ""
+def latestCommit = ""
 
 pipeline {
     agent any  // 어떤 Jenkins 에이전트에서도 실행 가능
@@ -30,8 +31,10 @@ pipeline {
                     git branch: env.BRANCH_NAME, credentialsId: 'my-gitlab-token',
                         url: 'https://lab.ssafy.com/s12-s-project/S12P21S003.git'
 
-                    // 2. git fetch로 origin 최신화 (이젠 인증 문제 없음)
-                    sh "git fetch origin ${env.BRANCH_NAME}"
+                    // 2. 인증 포함 fetch (origin 최신화)
+                    withCredentials([usernamePassword(credentialsId: 'my-gitlab-token', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
+                        sh "git fetch https://${GIT_USER}:${GIT_PASS}@lab.ssafy.com/s12-s-project/S12P21S003.git ${env.BRANCH_NAME}"
+                    }
 
                     // 3. 이전 origin 커밋 기준점 추출
                     def baseCommit = sh(
@@ -48,6 +51,12 @@ pipeline {
                     if (!releaseNotes) {
                         releaseNotes = "- No new commits."
                     }
+
+                    // 5. 최신 커밋 정보도 따로 저장
+                    latestCommit = sh(
+                        script: "git log -1 --pretty=format:'%h - %s'",
+                        returnStdout: true
+                    ).trim()
 
                     sendMattermostNotification('STARTED', releaseNotes)
                 }
@@ -123,11 +132,11 @@ pipeline {
 
     post {
         success {
-            sendMattermostNotification('SUCCESS', releaseNotes)
+            sendMattermostNotification('SUCCESS', releaseNotes, latestCommit)
         }
 
         failure {
-            sendMattermostNotification('FAILURE', releaseNotes)
+            sendMattermostNotification('FAILURE', releaseNotes, latestCommit)
         }
 
         always {
@@ -136,7 +145,7 @@ pipeline {
     }
 }
 
-def sendMattermostNotification(String status, String releaseNotes = "- No release notes.") {
+def sendMattermostNotification(String status, String releaseNotes = "- No release notes.", String commit = "Unknown") {
     def emoji
     def color
     switch (status) {
@@ -153,12 +162,6 @@ def sendMattermostNotification(String status, String releaseNotes = "- No releas
             emoji = "ℹ️"
     }
 
-    def commit = "Unknown"
-    try {
-        commit = sh(script: "git log -1 --pretty=format:'%h - %s'", returnStdout: true).trim()
-    } catch (ignored) {
-        commit = "커밋 정보 조회 실패"
-    }
     def user = currentBuild.getBuildCauses()[0]?.userName ?: '자동 트리거'
     def buildUrl = "${env.BUILD_URL}console"
     def timestamp = new Date().format("yyyy-MM-dd HH:mm", TimeZone.getTimeZone('Asia/Seoul'))
