@@ -16,6 +16,7 @@ pipeline {
         FASTAPI_SECURITY_KEY = credentials('FASTAPI_SECURITY_KEY')
         FASTAPI_PROFILE = credentials('FASTAPI_PROFILE')
         ADMIN_PW = credentials('ADMIN_PW')
+        MATTERMOST_WEBHOOK_URL = credentials('MATTERMOST_WEBHOOK_URL')
     }
 
     stages {
@@ -25,6 +26,7 @@ pipeline {
                 script {
                     echo "Checking out branch: ${env.BRANCH_NAME}"
                     git branch: env.BRANCH_NAME, credentialsId: 'my-gitlab-token', url: 'https://lab.ssafy.com/s12-s-project/S12P21S003.git'
+                    sendMattermostNotification('STARTED')
                 }
             }
         }
@@ -97,8 +99,61 @@ pipeline {
     }
 
     post {
+        success {
+            sendMattermostNotification('SUCCESS')
+        }
+
+        failure {
+            sendMattermostNotification('FAILURE')
+        }
+
         always {
             cleanWs()
         }
+    }
 }
+
+def sendMattermostNotification(String status) {
+    def emoji
+    def color
+    switch (status) {
+        case 'STARTED':
+            emoji = "🚀"
+            break
+        case 'SUCCESS':
+            emoji = "✅"
+            break
+        case 'FAILURE':
+            emoji = "❌"
+            break
+        default:
+            emoji = "ℹ️"
+    }
+
+    def commit = "Unknown"
+    try {
+        commit = sh(script: "git log -1 --pretty=format:'%h - %s'", returnStdout: true).trim()
+    } catch (ignored) {
+        commit = "커밋 정보 조회 실패"
+    }
+    def user = currentBuild.getBuildCauses()[0]?.userName ?: '자동 트리거'
+    def buildUrl = "${env.BUILD_URL}console"
+    def timestamp = new Date().format("yyyy-MM-dd HH:mm", TimeZone.getTimeZone('Asia/Seoul'))
+
+    def message = """
+    ${emoji} *[${env.BRANCH_NAME}]* 브랜치 - *${env.JOB_NAME}* 빌드 **${status}** (*#${env.BUILD_NUMBER}*)
+    🔗 [콘솔 보기](${buildUrl})  
+    🔀 ${commit}  
+    👤 Triggered by: ${user}  
+    🕒 ${timestamp}
+    """.stripIndent()
+
+    sh """
+    curl -X POST -H 'Content-Type: application/json' \\
+    -d '{
+        "text": "${message}",
+        "username": "Jenkins",
+        "icon_url": "https://www.jenkins.io/images/logos/jenkins/jenkins.png"
+    }' ${env.MATTERMOST_WEBHOOK_URL}
+    """
 }
