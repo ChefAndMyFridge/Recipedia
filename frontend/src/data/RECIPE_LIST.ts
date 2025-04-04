@@ -15,7 +15,7 @@ const RECIPE_LIST = {
         rating: 2.0,
       },
       {
-        recipeId: 10,
+        recipeId: 100,
         title:
           "집에서도 갈비집맛을 그대로! 돼지갈비양념 | 돼지갈비구이 황금레시피 | 파절이 만드는법 | 석쇠돼지구이 | 어린이반찬 | 파무침 만들기 | 파무침 레시피 | 돼지갈비 만드는 법",
         url: "https://www.youtube.com/watch?v=nmycKTOEbP8",
@@ -27,7 +27,7 @@ const RECIPE_LIST = {
         rating: 2.0,
       },
       {
-        recipeId: 10,
+        recipeId: 1000,
         title:
           "집에서도 갈비집맛을 그대로! 돼지갈비양념 | 돼지갈비구이 황금레시피 | 파절이 만드는법 | 석쇠돼지구이 | 어린이반찬 | 파무침 만들기 | 파무침 레시피 | 돼지갈비 만드는 법",
         url: "https://www.youtube.com/watch?v=nmycKTOEbP8",

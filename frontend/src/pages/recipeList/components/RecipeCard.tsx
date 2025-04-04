@@ -31,8 +31,6 @@ const RecipeCard = ({ video }: RecipeCardProps) => {
 
   const thumbnailUrl = getYoutubeThumbnailUrl(video.url);
 
-  console.log("video", video);
-
   async function handleLike() {
     const newLiked = !isLiked;
     setIsLiked(newLiked);
@@ -40,7 +38,6 @@ const RecipeCard = ({ video }: RecipeCardProps) => {
     try {
       const response = await patchRecipeApi(userId, video.recipeId, 0, newLiked);
       // API 응답의 favorite 값으로 store 업데이트
-      console.log("response", response);
       updateRecipeFavorite(video.recipeId, response.favorite);
     } catch (error) {
       // 실패시 상태 되돌리기
@@ -73,16 +70,16 @@ const RecipeCard = ({ video }: RecipeCardProps) => {
               <div className="h-5"></div>
             )}
 
-            <div className="flex w-full justify-between items-center">
-              <p className="max-w-[90%] overflow-hidden text-ellipsis whitespace-nowrap font-preSemiBold text-base break-keep">
+            <div className="flex w-full justify-between items-center px-1">
+              <p className="max-w-[85%] overflow-hidden text-ellipsis whitespace-nowrap font-preSemiBold text-base break-keep">
                 {video.title}
               </p>
 
               <button className="text-sm" onClick={handleLike}>
                 {isLiked ? (
-                  <IconHeartFill width={30} height={30} strokeColor="black" />
+                  <IconHeartFill width={25} height={25} strokeColor="black" />
                 ) : (
-                  <IconHeart width={30} height={30} strokeColor="black" />
+                  <IconHeart width={25} height={25} strokeColor="black" strokeWidth={2} />
                 )}
               </button>
             </div>
