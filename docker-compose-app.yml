@@ -9,6 +9,7 @@ services:
       - FASTAPI_API_URL=${FASTAPI_API_URL}
       - MYSQL_HOST=${MYSQL_HOST}
       - X_API=${X_API}
+      - ADMIN_PW=${ADMIN_PW}
     build:
       context: ./backend   # server 폴더를 빌드 컨텍스트로 지정
       dockerfile: Dockerfile  # 서버용 Dockerfile 경로

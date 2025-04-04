@@ -14,7 +14,8 @@ pipeline {
         ALLOWED_ORIGINS = credentials('ALLOWED_ORIGINS')
         X_API = credentials('X_API')
         FASTAPI_SECURITY_KEY = credentials('FASTAPI_SECURITY_KEY')
-        FASTAPI_PROFILE = credentials('FASTAPI_PROFILE')
+        FASTAPI_PROFILE = credentials('FASTAPI_PROFILE')\
+        ADMIN_PW = credentials('ADMIN_PW')
     }
 
     stages {
@@ -76,6 +77,7 @@ pipeline {
                     X_API=${env.X_API} \
                     FASTAPI_SECURITY_KEY=${env.FASTAPI_SECURITY_KEY} \
                     ENV=${env.FASTAPI_PROFILE} \
+                    ADMIN_PW=${env.ADMIN_PW} \
                     cp .env.${env.BRANCH_NAME} .env
                     docker-compose -f docker-compose-app.yml up -d --build
                     """
