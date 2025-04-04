@@ -265,9 +265,7 @@ public class RecipeServiceImpl implements RecipeService {
                   return response.bodyToMono(String.class)
                       .defaultIfEmpty("")
                       .flatMap(errorMsg -> {
-                        String title = (status == 430)
-                            ? "자막이 너무 짧아 레시피 요약에 충분하지 않습니다."
-                            : "요리 영상이 아닙니다.";
+                        String title = "영상 자막이 레시피를 추출하는데 적합하지 않습니다.";
                         return updateHasCaptionFalse(recipeId) // hasCaption 값을 false로 바꾼 뒤
                             .thenReturn(RecipeExtractRes.createDummy(title)); // 더미 데이터 반환
                       });
