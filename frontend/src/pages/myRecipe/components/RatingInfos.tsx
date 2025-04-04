@@ -1,7 +1,7 @@
-import IconHeart from "@/assets/icons/IconHeart";
-import IconHeartFill from "@/assets/icons/IconHeartFill";
-import IconStarBlank from "@/assets/icons/IconStarBlank";
-import IconStarFill from "@/assets/icons/IconStarFill";
+import IconHeart from "@assets/icons/IconHeart";
+import IconHeartFill from "@assets/icons/IconHeartFill";
+import IconStarBlank from "@assets/icons/IconStarBlank";
+import IconStarFill from "@assets/icons/IconStarFill";
 
 const RatingInfos = ({ favorite, rating }: { favorite: boolean; rating: number }) => {
   return (

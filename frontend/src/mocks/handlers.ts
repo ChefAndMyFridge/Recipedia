@@ -119,11 +119,11 @@ const handlers = [
     });
   }),
 
-  http.get(VITE_API_URL + "/v1/member/recipe/:memberId/ratings&page=:page", () => {
+  http.get(VITE_API_URL + "/v1/member/recipe/:memberId/ratings?page=:page", () => {
     return HttpResponse.json(PAGENATION_RECIPE_LIST);
   }),
 
-  http.get(VITE_API_URL + "/v1/member/recipe/:memberId/favorites&page=:page", () => {
+  http.get(VITE_API_URL + "/v1/member/recipe/:memberId/favorites?page=:page", () => {
     return HttpResponse.json(PAGENATION_RECIPE_LIST);
   }),
 ];

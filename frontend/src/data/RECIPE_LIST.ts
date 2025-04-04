@@ -178,7 +178,7 @@ export const PAGENATION_RECIPE_LIST = {
       likeCount: 6981,
       hasCaption: true,
       favorite: false,
-      rating: 5,
+      rating: 2,
     },
     {
       recipeId: 867,
