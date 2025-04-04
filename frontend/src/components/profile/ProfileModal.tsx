@@ -29,7 +29,10 @@ const ProfileModal = () => {
           onError={(event) => (event.currentTarget.src = defaultProfile)} // 이미지 로드 실패 시 대체 이미지
           className="w-32 aspect-[1/1] rounded-full object-cover"
         />
-        <p className="font-preSemiBold text-xl">{username}</p>
+        <div className="flex flex-col items-center justify-center gap-2">
+          <p className="font-preSemiBold text-xl">{username}</p>
+          <p className="text-sm text-content2">프로필 정보 보기</p>
+        </div>
       </button>
 
       <hr className="w-[80%]" />

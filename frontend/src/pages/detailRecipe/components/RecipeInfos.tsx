@@ -151,14 +151,14 @@ const RecipeInfos = ({ currentTime, setCurrentTime, playerRef }: RecipeInfosProp
   }
   return (
     <>
-      <section className="w-full landscape:h-[85%] portrait:h-[30%] flex flex-col items-center justify-start">
+      <section className="w-full landscape:h-3/4 portrait:h-[30%] flex flex-col items-center justify-start">
         <RecipeInfoIndexes
           selectedIndex={selectedIndex}
           setSelectedIndex={(index: RecipeInfoKeys) => setSelectedIndex(index)}
           isAutoScroll={isAutoScroll}
           setIsAutoScroll={setIsAutoScroll}
         />
-        <div className="w-full portrait:min-h-40 portrait:max-h-60 landscape:max-h-[80%] overflow-y-auto p-4 bg-white rounded-b-2xl shadow-md">
+        <div className="w-full landscape:h-fit portrait:h-fit overflow-y-auto p-4 bg-white rounded-b-xl rounded-tr-xl shadow-md">
           <div className="flex flex-wrap h-fit justify-center items-center gap-2 ">{renderTabContent()}</div>
         </div>
       </section>
