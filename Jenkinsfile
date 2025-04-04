@@ -71,8 +71,6 @@ pipeline {
                         script: "git log -1 --pretty=format:'%h - %s'",
                         returnStdout: true
                     ).trim()
-
-                    sendMattermostNotification('STARTED', releaseNotes)
                 }
             }
         }
@@ -186,24 +184,16 @@ def sendMattermostNotification(String status, String releaseNotes = "- No releas
     ${emoji} *[${env.BRANCH_NAME}]* 브랜치 - *${env.JOB_NAME}* 빌드 **${status}** (*#${env.BUILD_NUMBER}*)
     🔗 [콘솔 보기](${buildUrl})  
     🔀 ${commit}  
-    👤 Triggered by: ${user}  
     🕒 ${timestamp}
 
     📋 *Release Notes*
+    ${releaseNotes}
     """
-
-    def markdownNote = "```\n${releaseNotes}\n```"
-
-    def escapedPlain = escapeJson(message)
-    def escapedMd = escapeJson(markdownNote)
 
     sh """
     curl -X POST -H 'Content-Type: application/json' \\
     -d '{
-        "text": "${escapedPlain}",
-        "attachments": [
-            { "text": "${escapedMd}" }
-        ]
+        "text": "${message}"
     }' ${env.MATTERMOST_WEBHOOK_URL}
     """
 }
