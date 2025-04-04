@@ -45,7 +45,7 @@ public class MemberRecipeServiceImpl implements MemberRecipeService {
       MemberRecipe newMemberRecipe = MemberRecipe.builder()
           .member(member)
           .recipe(recipe)
-          .rating(rating)
+          .rating(rating != null ? rating : 0)
           .favorite(favorite != null && favorite) // 기본 값 false
           .createdAt(LocalDateTime.now())
           .build();
@@ -58,6 +58,11 @@ public class MemberRecipeServiceImpl implements MemberRecipeService {
     }
     if (favorite != null) {
       memberRecipe.updateFavorite(favorite);
+    }
+
+    // patch 결과 rating이 null이고 favorite이 false이면 객체 삭제
+    if (memberRecipe.getRating() == 0 && Boolean.FALSE.equals(memberRecipe.getFavorite())) {
+      memberRecipeRepository.delete(memberRecipe);
     }
 
     return MemberRecipeDto.fromEntity(memberRecipe);
@@ -96,10 +101,9 @@ public class MemberRecipeServiceImpl implements MemberRecipeService {
     Member member = memberRepository.findById(memberId)
         .orElseThrow(() -> new MemberNotFoundException(memberId));
 
-    Page<MemberRecipe> allByMemberAndRatingIsNotNull = memberRecipeRepository.findAllByMemberAndRatingIsNotNull(
-        member, pageable);
+    Page<MemberRecipe> allByMemberAndRatingIsNotZero = memberRecipeRepository.findAllByMemberAndRatingNot(member, 0, pageable);
 
-    return allByMemberAndRatingIsNotNull.map(
+    return allByMemberAndRatingIsNotZero.map(
         mr -> RecipeWithMemberInfoDto.fromEntities(mr.getRecipe(), mr));
   }
 }
