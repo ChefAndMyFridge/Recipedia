@@ -52,7 +52,6 @@ const RecipeInfoIndexes = ({
           {/* 자동 스크롤 */}
           {isAutoScroll ? " ON" : " OFF"}
         </button>
-        {/* <Toggle isToggle={isAutoScroll} onToggle={setIsAutoScroll} /> */}
       </div>
     </div>
   );
