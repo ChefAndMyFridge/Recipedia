@@ -6,7 +6,6 @@ import VideoInfos from "@components/common/videoInfo/VideoInfos";
 
 import RecipeInfoIndexes from "@pages/detailRecipe/components/RecipeInfoIndexes";
 import RecipeTexts from "@pages/detailRecipe/components/RecipeTexts";
-// import NoRecipeInfo from "@pages/detailRecipe/components/NoRecipeInfo";
 
 import { recipeIngredientsInfo, RecipeInfoKeys } from "@/types/recipeListTypes";
 
@@ -31,7 +30,7 @@ const RecipeInfos = ({ currentTime, setCurrentTime, playerRef }: RecipeInfosProp
   const [textRecipeData, setTextRecipeData] = useState(detailRecipe.textRecipe);
 
   //자동 스크롤
-  const [isAutoScroll, setIsAutoScroll] = useState(false);
+  const [isAutoScroll, setIsAutoScroll] = useState(true);
 
   async function getRecipeText() {
     try {
@@ -72,67 +71,77 @@ const RecipeInfos = ({ currentTime, setCurrentTime, playerRef }: RecipeInfosProp
   }, [detailRecipe.textRecipe]);
 
   return (
-    <section className="w-full landscape:h-[85%] portrait:h-[30%] flex flex-col items-center justify-start">
-      <RecipeInfoIndexes
-        selectedIndex={selectedIndex}
-        setSelectedIndex={(index: RecipeInfoKeys) => setSelectedIndex(index)}
-        isAutoScroll={isAutoScroll}
-        setIsAutoScroll={setIsAutoScroll}
-      />
-      {/* 선택된 인덱스별 자세한 정보 표시
+    <>
+      <section className="w-full landscape:h-[85%] portrait:h-[30%] flex flex-col items-center justify-start">
+        <RecipeInfoIndexes
+          selectedIndex={selectedIndex}
+          setSelectedIndex={(index: RecipeInfoKeys) => setSelectedIndex(index)}
+          isAutoScroll={isAutoScroll}
+          setIsAutoScroll={setIsAutoScroll}
+        />
+        {/* 선택된 인덱스별 자세한 정보 표시
       추후 데이터 변경 필요 */}
-      <div className="w-full portrait:min-h-40 portrait:max-h-60 landscape:max-h-[80%] overflow-y-auto p-4 bg-white rounded-b-2xl shadow-md">
-        <div className="flex flex-wrap h-fit justify-center items-center gap-2 ">
-          {selectedIndex === "video_infos" && (
-            <VideoInfos
-              duration={detailRecipe.duration}
-              likeCount={detailRecipe.likeCount}
-              viewCount={detailRecipe.viewCount}
-            />
-          )}
-          {selectedIndex === "cooking_sequence" &&
-            (textRecipeData && textRecipeData.cooking_sequence ? (
-              <RecipeTexts
-                recipe={textRecipeData.cooking_sequence}
-                currentTime={currentTime}
-                setCurrentTime={setCurrentTime}
-                playerRef={playerRef}
-                isAutoScroll={isAutoScroll}
+        <div className="w-full portrait:min-h-40 portrait:max-h-60 landscape:max-h-[80%] overflow-y-auto p-4 bg-white rounded-b-2xl shadow-md">
+          <div className="flex flex-wrap h-fit justify-center items-center gap-2 ">
+            {selectedIndex === "video_infos" && (
+              <VideoInfos
+                duration={detailRecipe.duration}
+                likeCount={detailRecipe.likeCount}
+                viewCount={detailRecipe.viewCount}
               />
-            ) : (
-              <p className="text-base font-preSemiBold">레시피를 추출 중입니다...</p>
-            ))}
+            )}
+            {selectedIndex === "cooking_sequence" &&
+              (textRecipeData && textRecipeData.cooking_sequence ? (
+                <RecipeTexts
+                  recipe={textRecipeData.cooking_sequence}
+                  currentTime={currentTime}
+                  setCurrentTime={setCurrentTime}
+                  playerRef={playerRef}
+                  isAutoScroll={isAutoScroll}
+                />
+              ) : (
+                <p className="text-base font-preSemiBold">레시피를 추출 중입니다...</p>
+              ))}
 
-          {selectedIndex === "ingredients" &&
-            (textRecipeData && textRecipeData.ingredients ? (
-              textRecipeData.ingredients.map((item: recipeIngredientsInfo) => (
-                <div
-                  key={item.name}
-                  className="px-4 py-2 text-sm landscape:text-xs font-preSemiBold break-keep rounded-3xl shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]"
-                >
-                  {item.name} {item.quantity}
-                </div>
-              ))
-            ) : (
-              <p className="text-base font-preSemiBold">재료를 파악 중입니다...</p>
-            ))}
+            {selectedIndex === "ingredients" &&
+              (textRecipeData && textRecipeData.ingredients ? (
+                textRecipeData.ingredients.map((item: recipeIngredientsInfo) => (
+                  <div
+                    key={item.name + item.quantity}
+                    className={`px-4 py-2 landscape:text-xs font-preSemiBold break-keep ${
+                      item.name !== "텍스트 추출이 불가능한" || item.quantity !== "영상입니다."
+                        ? "text-sm rounded-3xl shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]"
+                        : "text-base"
+                    } `}
+                  >
+                    {item.name} {item.quantity}
+                  </div>
+                ))
+              ) : (
+                <p className="text-base font-preSemiBold">재료를 파악 중입니다...</p>
+              ))}
 
-          {selectedIndex === "cooking_tips" &&
-            (textRecipeData && textRecipeData.cooking_tips ? (
-              textRecipeData.cooking_tips.map((tip: string, index: number) => (
-                <div
-                  key={index}
-                  className="px-4 py-2 text-sm font-preSemiBold break-keep rounded-3xl shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]"
-                >
-                  {tip}
-                </div>
-              ))
-            ) : (
-              <p className="text-base font-preSemiBold">요리 꿀팁을 생성 중입니다...</p>
-            ))}
+            {selectedIndex === "cooking_tips" &&
+              (textRecipeData && textRecipeData.cooking_tips ? (
+                textRecipeData.cooking_tips.map((tip: string, index: number) => (
+                  <div
+                    key={index}
+                    className={`px-4 py-2 font-preSemiBold break-keep ${
+                      tip !== "자막이 너무 짧아 레시피 요약에 충분하지 않습니다."
+                        ? "text-sm rounded-3xl shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]"
+                        : "text-base"
+                    } `}
+                  >
+                    {tip}
+                  </div>
+                ))
+              ) : (
+                <p className="text-base font-preSemiBold">요리 꿀팁을 생성 중입니다...</p>
+              ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 
