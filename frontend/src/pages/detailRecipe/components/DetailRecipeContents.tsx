@@ -72,7 +72,7 @@ const DetailRecipeContents = ({ isPortrait }: { isPortrait: boolean }) => {
       <section className={`w-full h-full flex flex-col justify-start items-center gap-2 p-3`}>
         <Header title="레시피" isIcon onClick={toRecipeList} />
         {qrIsOpen && <RecipeQrCode path={window.location.href} onClose={() => setQrIsOpen(false)} />}
-        <div className="h-[90%] flex gap-8">
+        <div className="h-[85%] flex gap-4">
           <div className="w-[60%] h-full flex flex-col justify-start gap-5">
             <ReactPlayer
               ref={playerRef}
@@ -89,7 +89,7 @@ const DetailRecipeContents = ({ isPortrait }: { isPortrait: boolean }) => {
             <RecipeTitle title={detailRecipe.title} channelTitle={detailRecipe.channelTitle} />
           </div>
 
-          <div className="w-[35%] h-full flex flex-col justify-between">
+          <div className="w-[40%] h-full flex flex-col justify-between">
             <RecipeInfos currentTime={currentTime} setCurrentTime={setCurrentTime} playerRef={playerRef} />
 
             {/* 버튼 컨테이너 */}

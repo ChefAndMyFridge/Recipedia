@@ -164,7 +164,7 @@ const TimerCarousel = ({
       {createPortal(
         <div
           ref={carouselRef}
-          className="fixed z-50 bg-subContent/50 backdrop-blur-md rounded-xl shadow-lg overflow-hidden border border-gray-200"
+          className="fixed z-30 bg-subContent/80 rounded-xl shadow-lg overflow-hidden border border-gray-200"
           style={{
             left: `${absolutePosition.x}px`,
             top: `${absolutePosition.y}px`,

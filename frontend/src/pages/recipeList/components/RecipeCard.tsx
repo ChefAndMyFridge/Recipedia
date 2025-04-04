@@ -70,16 +70,16 @@ const RecipeCard = ({ video }: RecipeCardProps) => {
               <div className="h-5"></div>
             )}
 
-            <div className="flex w-full justify-between items-center">
-              <p className="max-w-[90%] overflow-hidden text-ellipsis whitespace-nowrap font-preSemiBold text-base break-keep">
+            <div className="flex w-full justify-between items-center px-1">
+              <p className="max-w-[85%] overflow-hidden text-ellipsis whitespace-nowrap font-preSemiBold text-base break-keep">
                 {video.title}
               </p>
 
               <button className="text-sm" onClick={handleLike}>
                 {isLiked ? (
-                  <IconHeartFill width={30} height={30} strokeColor="black" />
+                  <IconHeartFill width={25} height={25} strokeColor="black" />
                 ) : (
-                  <IconHeart width={30} height={30} strokeColor="black" />
+                  <IconHeart width={25} height={25} strokeColor="black" strokeWidth={2} />
                 )}
               </button>
             </div>
