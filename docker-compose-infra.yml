@@ -13,7 +13,6 @@ services:
     volumes:
       - /home/ubuntu/front_build:/usr/share/nginx
       - /etc/letsencrypt:/etc/letsencrypt:ro
-      - ./nginx/upstreams:/etc/nginx/upstreams # ✅ 프로젝트 내부 디렉토리를 그대로 마운트!
     networks:
       - app-network
 
