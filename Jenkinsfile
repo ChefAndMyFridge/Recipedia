@@ -7,10 +7,8 @@ pipeline {
     environment {
         HOST_URL = credentials('HOST_URL')
         MYSQL_ROOT_PASSWORD = credentials('MYSQL_ROOT_PASSWORD')
-        MYSQL_DATABASE = credentials('MYSQL_DATABASE')
         ELASTIC_PASSWORD = credentials('ELASTIC_PASSWORD')
         VITE_API_URL = credentials('VITE_API_URL')
-        YOUTUBE_API_KEY = credentials('YOUTUBE_API_KEY')
         YOUTUBE_API_KEYS = credentials('YOUTUBE_API_KEYS')
         OPENAI_API_KEY = credentials('OPENAI_API_KEY')
         USDA_API_KEY = credentials('USDA_API_KEY')
@@ -80,8 +78,6 @@ pipeline {
                     cd ${env.WORKSPACE}
                     HOST_URL=${env.HOST_URL} \
                     MYSQL_ROOT_PASSWORD=${env.MYSQL_ROOT_PASSWORD} \
-                    MYSQL_DATABASE=${env.MYSQL_DATABASE} \
-                    YOUTUBE_API_KEY='${env.YOUTUBE_API_KEY}' \
                     YOUTUBE_API_KEYS='${env.YOUTUBE_API_KEYS}' \
                     OPENAI_API_KEY=${env.OPENAI_API_KEY} \
                     USDA_API_KEY=${env.USDA_API_KEY} \

@@ -42,7 +42,6 @@ services:
     environment:
       - TZ=Asia/Seoul
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
     volumes:
       - /home/ubuntu/mysql_data/release:/var/lib/mysql
       - ./database/my.cnf:/etc/mysql/conf.d/custom.cnf
@@ -56,7 +55,6 @@ services:
     environment:
       - TZ=Asia/Seoul
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
     volumes:
       - /home/ubuntu/mysql_data/master:/var/lib/mysql
       - ./database/my.cnf:/etc/mysql/conf.d/custom.cnf
