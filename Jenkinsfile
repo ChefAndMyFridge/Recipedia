@@ -34,7 +34,7 @@ pipeline {
                     // 2. release notes 생성
                     releaseNotes = sh(
                         // script: "git log -n 5 --pretty=format:'- %h - %s'",
-                        script: "git log --graph -n 5 --pretty=format:'%h - %s (by %an, %ad)' --date=format:'%Y-%m-%d %H:%M:%S'",
+                        script: "git log -n 5 --pretty=format:'%h - %s (by %an, %ad)' --date=format:'%Y-%m-%d %H:%M:%S'",
                         returnStdout: true
                     ).trim()
                     
