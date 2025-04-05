@@ -50,13 +50,17 @@ pipeline {
         stage('Build Frontend') {
             steps {
                 script {
+                    def viteReleaseApiUrl = "https://j12s003.p.ssafy.io/api"
+                    def viteMasterApiUrl = "https://j12s003.p.ssafy.io/master/api"
                     def baseUrl = env.BRANCH_NAME == "master" ? "/master" : "/"
-                    def apiUrl = env.BRANCH_NAME == "master" ? "https://j12s003.p.ssafy.io/master/api" : "https://j12s003.p.ssafy.io/api"
+                    def apiUrl = env.BRANCH_NAME == "master" ? viteMasterApiUrl : viteReleaseApiUrl
 
                     sh """
                     cd ${env.WORKSPACE}/frontend
                     echo "VITE_BASE_URL=${baseUrl}" > .env
                     echo "VITE_API_URL=${apiUrl}" >> .env
+                    echo "VITE_RELEASE_API_URL=${viteReleaseApiUrl}" >> .env
+                    echo "VITE_MASTER_API_URL=${viteMasterApiUrl}" >> .env
 
                     yarn install --frozen-lockfile
                     yarn build
