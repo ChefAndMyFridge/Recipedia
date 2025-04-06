@@ -70,8 +70,6 @@ const MyRecipeItem = ({
         // 삭제 후 페이지 갱신
         onDelete(numberOfElements > 1 || currentPage === 1 ? currentPage : currentPage - 1);
       }
-
-      console.log(`${recipe.name} 삭제 완료`);
     } catch (error) {
       console.error("Failed to update favorite status:", error);
     }
