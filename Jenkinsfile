@@ -141,9 +141,6 @@ pipeline {
                         def jwt = lines[0]
                         def status = lines[1]
 
-                        echo "🔐 JWT: ${jwt}"
-                        echo "🔍 응답 코드: ${status}"
-
                         if (status != "200") {
                             error("❌ 로그인 실패 또는 토큰 이상 (status=${status})")
                         }                        
