@@ -126,7 +126,7 @@ pipeline {
                                 curl -s -w "\\n%{http_code}" \\
                                     -X POST ${apiUrl}/v1/auth/login \\
                                     -H "Content-Type: application/json" \\
-                                    -d "{\"username\": \"${USERNAME}\", \"password\": \"${PASSWORD}\"}"
+                                    -d "{\\"username\\": \\"${USERNAME}\\", \\"password\\": \\"${PASSWORD}\\"}"
                                 '
                             """,
                             returnStdout: true
