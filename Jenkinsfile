@@ -31,13 +31,13 @@ pipeline {
                         url: 'https://lab.ssafy.com/s12-s-project/S12P21S003.git'
 
                     // 2. Release notes
-                    def notes = sh(
+                    releaseNotes = sh(
                         script: "git log -n 5 --pretty=format:'%h - %s (by %an, %ad)' --date=format:'%Y-%m-%d %H:%M:%S'",
                         returnStdout: true
                     ).trim()
 
                     // 3. Latest commit
-                    def commit = sh(
+                    latestCommit = sh(
                         script: "git log -1 --pretty=format:'%h - %s (by %an, %ad)' --date=format:'%Y-%m-%d %H:%M:%S'",
                         returnStdout: true
                     ).trim()
