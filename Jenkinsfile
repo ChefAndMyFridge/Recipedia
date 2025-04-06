@@ -1,6 +1,7 @@
 def releaseNotes = ""
 def latestCommit = ""
 def apiUrl = ""
+def notify
 
 pipeline {
     agent any  // 어떤 Jenkins 에이전트에서도 실행 가능
@@ -115,8 +116,6 @@ pipeline {
             }
         }
     }
-
-    def notify  // post 블록 외부에서 선언
 
     post {
         always {
