@@ -126,7 +126,7 @@ pipeline {
                                 curl -s -w "\\n%{http_code}" \\
                                     -X POST ${apiUrl}/v1/auth/login \\
                                     -H "Content-Type: application/json" \\
-                                    -d "{\\\\\\"username\\\\\\": \\\\\\"${USERNAME}\\\\\\", \\\\\\"password\\\\\\": \\\\\\"${PASSWORD}\\\\\\"}"
+                                    -d "{\"username\": \"${USERNAME}\", \"password\": \"${PASSWORD}\"}"
                                 '
                             """,
                             returnStdout: true
@@ -216,7 +216,7 @@ def sendMattermostNotification(String status, String releaseNotes = "- No releas
 🔗 [콘솔 보기](${buildUrl})  
     """.stripIndent().trim()
 
-    escapedReleaseNotes = escapeJson(releaseNotes)
+    def escapedReleaseNotes = escapeJson(releaseNotes)
     def gitGraph = "```\\n${escapedReleaseNotes}\\n```"
 
     sh """
