@@ -26,22 +26,11 @@ pipeline {
             steps {
                 cleanWs()  // Jenkins 작업 공간을 완전히 초기화
                 script {
-                    // 1. Jenkins의 인증된 git checkout 먼저 실행
-                    git branch: env.BRANCH_NAME, credentialsId: 'my-gitlab-token',
-                        url: 'https://lab.ssafy.com/s12-s-project/S12P21S003.git'
+                    def gitHelper = load 'scripts/gitUtils.groovy'
+                    def gitInfo = gitHelper.checkoutAndGenerateReleaseNotes()
 
-                    // 2. release notes 생성
-                    releaseNotes = sh(
-                        // script: "git log -n 5 --pretty=format:'- %h - %s'",
-                        script: "git log -n 5 --pretty=format:'%h - %s (by %an, %ad)' --date=format:'%Y-%m-%d %H:%M:%S'",
-                        returnStdout: true
-                    ).trim()
-                    
-                    // 3. 최신 커밋 정보도 따로 저장
-                    latestCommit = sh(
-                        script: "git log -1 --pretty=format:'%h - %s (by %an, %ad)' --date=format:'%Y-%m-%d %H:%M:%S'",
-                        returnStdout: true
-                    ).trim()
+                    releaseNotes = gitInfo.releaseNotes
+                    latestCommit = gitInfo.latestCommit
                 }
             }
         }
@@ -113,127 +102,41 @@ pipeline {
             steps {
                 script {
                     echo "🔐 withCredentials로 로그인 후 인증 API 확인"
+                    def healthCheck = load 'jenkins/scripts/healthCheck.groovy'
 
                     withCredentials([usernamePassword(
                         credentialsId: 'login-creds',
                         usernameVariable: 'USERNAME',
                         passwordVariable: 'PASSWORD'
                     )]) {
-                        // 1. 로그인 요청 → 토큰 추출
-                        def response = sh(
-                            script: """
-                                docker exec my-nginx sh -c '
-                                curl -s -w "\\n%{http_code}" \\
-                                    -X POST ${apiUrl}/v1/auth/login \\
-                                    -H "Content-Type: application/json" \\
-                                    -d "{\\"username\\": \\"${USERNAME}\\", \\"password\\": \\"${PASSWORD}\\"}"
-                                '
-                            """,
-                            returnStdout: true
-                        ).trim()
-
-                        def lines = response.readLines()
-                        if (lines.size() < 2) {
-                            def statusOnly = lines.size() == 1 ? lines[0] : "unknown"
-                            error("❌ 로그인 실패 또는 응답 이상 (status=${statusOnly})")
-                        }
-
-                        def jwt = lines[0]
-                        def status = lines[1]
-
-                        if (status != "200") {
-                            error("❌ 로그인 실패 또는 토큰 이상 (status=${status})")
-                        }                        
-
-                        // 2. 인증이 필요한 API 호출
-                        def resCode = sh(
-                            script: """
-                                docker exec my-nginx curl -s -o /dev/null -w '%{http_code}' \\
-                                    -H "Authorization: Bearer ${jwt}" \\
-                                    ${apiUrl}/v1/ingredient
-                            """,
-                            returnStdout: true
-                        ).trim()
-
-                        if (resCode == "200") {
-                            echo "✅ 인증된 API 호출 성공!"
-                        } else {
-                            error("❌ 인증 API 호출 실패 (응답코드: ${resCode})")
-                        }
+                        healthCheck.check(apiUrl, USERNAME, PASSWORD)
                     }
-
                 }
             }
         }
     }
 
+    def notify  // post 블록 외부에서 선언
+
     post {
+        always {
+            script {
+                notify = load 'jenkins/scripts/notify.groovy'
+            }
+            cleanWs()
+        }
+
         success {
             script {
                 def durationSec = (currentBuild.duration / 1000).toInteger()
-                sendMattermostNotification('SUCCESS', releaseNotes, latestCommit, "${durationSec}초")
+                notify.sendMattermostNotification('SUCCESS', releaseNotes, latestCommit, "${durationSec}초")
             }
         }
 
         failure {
-            sendMattermostNotification('FAILURE', releaseNotes, latestCommit)
-        }
-
-        always {
-            cleanWs()
-        }
-    }
-}
-
-def sendMattermostNotification(String status, String releaseNotes = "- No release notes.", String commit = "Unknown", String duration = "측정 불가") {
-    def emoji
-    def color
-    switch (status) {
-        case 'STARTED':
-            emoji = "🚀"
-            break
-        case 'SUCCESS':
-            emoji = "✅"
-            break
-        case 'FAILURE':
-            emoji = "❌"
-            break
-        default:
-            emoji = "ℹ️"
-    }
-
-    def buildUrl = "${env.BUILD_URL}console"
-    def timestamp = new Date().format("yyyy-MM-dd HH:mm", TimeZone.getTimeZone('Asia/Seoul'))
-
-    def message = """
-## **[${env.BRANCH_NAME}]** 브랜치 - **${env.JOB_NAME}** 빌드 **${status}** ${emoji} (*#${env.BUILD_NUMBER}*)
-🔀 트리거 커밋 : **${commit}**
-🕒 현재 시각 : **${timestamp}**
-⏱️ 빌드 시간 : **${duration}**
-🔗 [콘솔 보기](${buildUrl})  
-    """.stripIndent().trim()
-
-    def escapedReleaseNotes = escapeJson(releaseNotes)
-    def gitGraph = "```\\n${escapedReleaseNotes}\\n```"
-
-    sh """
-    curl -X POST -H 'Content-Type: application/json' \\
-    -d '{
-        "text": "${message}",
-        "attachments": [
-            {
-                "pretext": "### Release Notes📋",
-                "text" : "${gitGraph}"
+            script {
+                notify.sendMattermostNotification('FAILURE', releaseNotes, latestCommit)
             }
-            ]
-    }' ${env.MATTERMOST_WEBHOOK_URL}
-    """
-}
-
-def escapeJson(String s) {
-    return s
-        .replace("\\", "\\\\")   // 백슬래시 먼저!
-        .replace("\"", "\\\"")   // 큰따옴표 이스케이프
-        .replace("\r", "")       // 캐리지 리턴 제거
-        .replace("\n", "\\n")    // 줄바꿈 이스케이프
+        }
+    }
 }
