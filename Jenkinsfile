@@ -112,7 +112,7 @@ pipeline {
             steps {
                 script {
                     echo "🔐 withCredentials로 로그인 후 인증 API 확인"
-                    def healthCheck = load '/jenkins/scripts/healthCheck.groovy'
+                    def healthCheck = load 'jenkins/scripts/healthCheck.groovy'
 
                     withCredentials([usernamePassword(
                         credentialsId: 'login-creds',
@@ -129,7 +129,7 @@ pipeline {
     post {
         always {
             script {
-                notify = load '/jenkins/scripts/notify.groovy'
+                notify = load 'jenkins/scripts/notify.groovy'
             }
             cleanWs()
         }
