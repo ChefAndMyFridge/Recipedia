@@ -53,8 +53,6 @@ export const useStoreIngredient = () => {
   const mutation = useMutation<StoreResponseIngredient, Error, StoreIngredient>({
     mutationFn: storeIngredientApi, // 재료 저장 API 호출
     onSuccess: () => {
-      console.log("재료 저장 성공!");
-
       // 저장 성공 시, 기존 재료 목록을 무효화하여 자동으로 다시 가져옴
       queryClient.invalidateQueries({ queryKey: ["ingredients"] });
     },
@@ -85,8 +83,6 @@ export const useDeleteIngredient = () => {
   const mutation = useMutation<DeleteIngredientResponse, Error, DeleteIngredient[]>({
     mutationFn: deleteIngredientApi, // 재료 삭제 API 호출
     onSuccess: () => {
-      console.log("재료 삭제 성공!");
-
       // 삭제 성공 시, 기존 재료 목록을 무효화하여 자동으로 다시 가져옴
       queryClient.invalidateQueries({ queryKey: ["ingredients"] });
     },
