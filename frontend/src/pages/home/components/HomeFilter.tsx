@@ -42,7 +42,7 @@ const HomeFilter = ({
 
   useEffect(() => {
     refetchFilteredInfomations();
-  }, [userId]); 
+  }, [userId]);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -51,8 +51,6 @@ const HomeFilter = ({
   }, [order, sort, location, isAuthenticated]);
 
   function handleSaveFilter(): void {
-    console.log(filteredInfomations);
-
     // 필터 저장하는 API 호출
     useSaveFilteredRequest(
       { id: userId, filterData: filteredInfomations },
