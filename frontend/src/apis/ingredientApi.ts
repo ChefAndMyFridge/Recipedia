@@ -23,10 +23,9 @@ export const getIngredientsApi = async (location: string, sort: string, order: s
 
 // 재료 자동완성 검색
 export const searchIngredientsApi = async (inputValue: string): Promise<IngredientsSearchInfo[]> => {
-  console.log(`v1/ingredient/search?req=${inputValue}`);
   try {
     const response = await instance.get(`/v1/ingredient/search?req=${inputValue}`);
-    console.log("v1/ingredient/search", response.data);
+    console.log(`v1/ingredient/search?req=${inputValue}`, response.data);
     return response.data;
   } catch (error: unknown) {
     throw new Error(error as string);
