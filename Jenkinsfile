@@ -1,7 +1,7 @@
 def releaseNotes = ""
 def latestCommit = ""
-def apiUrl = ""
 def notify
+def root = "S12P21S003"
 
 pipeline {
     agent any  // 어떤 Jenkins 에이전트에서도 실행 가능
@@ -27,7 +27,7 @@ pipeline {
             steps {
                 cleanWs()  // Jenkins 작업 공간을 완전히 초기화
                 script {
-                    def gitHelper = load 'scripts/gitUtils.groovy'
+                    def gitHelper = load "${root}/scripts/gitUtils.groovy"
                     def gitInfo = gitHelper.checkoutAndGenerateReleaseNotes()
 
                     releaseNotes = gitInfo.releaseNotes
@@ -42,12 +42,12 @@ pipeline {
                     def viteReleaseApiUrl = "https://j12s003.p.ssafy.io/api"
                     def viteMasterApiUrl = "https://j12s003.p.ssafy.io/master/api"
                     def baseUrl = env.BRANCH_NAME == "master" ? "/master" : "/"
-                    apiUrl = env.BRANCH_NAME == "master" ? viteMasterApiUrl : viteReleaseApiUrl
+                    env.API_URL = env.BRANCH_NAME == "master" ? viteMasterApiUrl : viteReleaseApiUrl
 
                     sh """
                     cd ${env.WORKSPACE}/frontend
                     echo "VITE_BASE_URL=${baseUrl}" > .env
-                    echo "VITE_API_URL=${apiUrl}" >> .env
+                    echo "VITE_API_URL=${env.API_URL}" >> .env
                     echo "VITE_RELEASE_API_URL=${viteReleaseApiUrl}" >> .env
                     echo "VITE_MASTER_API_URL=${viteMasterApiUrl}" >> .env
 
@@ -103,14 +103,14 @@ pipeline {
             steps {
                 script {
                     echo "🔐 withCredentials로 로그인 후 인증 API 확인"
-                    def healthCheck = load 'jenkins/scripts/healthCheck.groovy'
+                    def healthCheck = load "${root}/jenkins/scripts/healthCheck.groovy"
 
                     withCredentials([usernamePassword(
                         credentialsId: 'login-creds',
                         usernameVariable: 'USERNAME',
                         passwordVariable: 'PASSWORD'
                     )]) {
-                        healthCheck.check(apiUrl, USERNAME, PASSWORD)
+                        healthCheck.check(env.API_URL, USERNAME, PASSWORD)
                     }
                 }
             }
@@ -120,7 +120,7 @@ pipeline {
     post {
         always {
             script {
-                notify = load 'jenkins/scripts/notify.groovy'
+                notify = load "${root}/jenkins/scripts/notify.groovy"
             }
             cleanWs()
         }
