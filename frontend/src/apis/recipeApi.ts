@@ -49,7 +49,7 @@ export const patchRecipeApi = async (memberId: number, recipeId: number, rating?
         };
   try {
     const response = await instance.patch(`/v1/member/recipe/${recipeId}`, reqBody);
-    console.log(`/v1/member/recipe/${recipeId}`, reqBody, response.data);
+    // console.log(`/v1/member/recipe/${recipeId}`, reqBody, response.data);
     return response.data;
   } catch (error: unknown) {
     throw new Error(error as string);
@@ -60,7 +60,7 @@ export const patchRecipeApi = async (memberId: number, recipeId: number, rating?
 export const getRecipeRatingApi = async (memberId: number, page: number): Promise<PaginationRecipeList> => {
   try {
     const response = await instance.get(`/v1/member/recipe/${memberId}/ratings?page=${page}`);
-    console.log(`/v1/member/recipe/${memberId}/ratings?page=${page}`, response.data);
+    // console.log(`/v1/member/recipe/${memberId}/ratings?page=${page}`, response.data);
     return response.data;
   } catch (error: unknown) {
     throw new Error(error as string);
@@ -71,7 +71,7 @@ export const getRecipeRatingApi = async (memberId: number, page: number): Promis
 export const getRecipeFavoriteApi = async (memberId: number, page: number): Promise<PaginationRecipeList> => {
   try {
     const response = await instance.get(`/v1/member/recipe/${memberId}/favorites?page=${page}`);
-    console.log(`/v1/member/recipe/${memberId}/favorites?page=${page}`, response.data);
+    // console.log(`/v1/member/recipe/${memberId}/favorites?page=${page}`, response.data);
     return response.data;
   } catch (error: unknown) {
     throw new Error(error as string);
