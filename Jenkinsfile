@@ -1,6 +1,11 @@
 def releaseNotes = ""
 def latestCommit = ""
 def notify
+def envVars = [
+  "HOST_URL", "MYSQL_ROOT_PASSWORD", "YOUTUBE_API_KEYS", "OPENAI_API_KEY",
+  "USDA_API_KEY", "ELASTIC_PASSWORD", "ALLOWED_ORIGINS", "BRANCH_NAME",
+  "X_API", "FASTAPI_SECURITY_KEY", "FASTAPI_PROFILE", "ADMIN_PW", "MATTERMOST_WEBHOOK_URL"
+]
 
 pipeline {
     agent any  // 어떤 Jenkins 에이전트에서도 실행 가능
@@ -74,24 +79,11 @@ pipeline {
         stage('Build & Start New App Containers') {
             steps {
                 script {
+                    def exportString = envVars.collect { "${it}='${env[it]}'" }.join(" \\\n")
                     sh """
                     cd ${env.WORKSPACE}
-                    HOST_URL=${env.HOST_URL} \
-                    MYSQL_ROOT_PASSWORD=${env.MYSQL_ROOT_PASSWORD} \
-                    YOUTUBE_API_KEYS='${env.YOUTUBE_API_KEYS}' \
-                    OPENAI_API_KEY=${env.OPENAI_API_KEY} \
-                    USDA_API_KEY=${env.USDA_API_KEY} \
-                    ELASTIC_PASSWORD=${env.ELASTIC_PASSWORD} \
-                    ALLOWED_ORIGINS='${env.ALLOWED_ORIGINS}' \
-                    BRANCH_NAME=${env.BRANCH_NAME} \
-                    X_API=${env.X_API} \
-                    FASTAPI_SECURITY_KEY=${env.FASTAPI_SECURITY_KEY} \
-                    ENV=${env.FASTAPI_PROFILE} \
-                    ADMIN_PW=${env.ADMIN_PW} \
+                    ${exportString}
                     cp .env.${env.BRANCH_NAME} .env
-                    echo "" >> .env
-                    echo "COLOR=${env.DEPLOY_SLOT}" >> .env
-                    cat .env
                     docker-compose -f docker-compose-app.yml up -d --build
                     """
                 }
