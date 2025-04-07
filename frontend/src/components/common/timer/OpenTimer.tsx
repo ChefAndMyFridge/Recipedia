@@ -59,7 +59,7 @@ const OpenTimer = ({ onClose, onAddTimer }: TimerProps) => {
       onTouchEnd={handleModalBackgroundTouch}
     >
       <div
-        className="w-[70vw] h-fit pb-6 flex flex-col gap-2 justify-between bg-subContent/50 backdrop-blur-lg
+        className="portrait:w-[70vw] landscape:w-[50vw] h-fit pb-6 flex flex-col gap-2 justify-between bg-subContent/90 backdrop-blur-lg
         text-black rounded-2xl shadow-lg relative"
         onClick={(e) => e.stopPropagation()}
         onTouchStart={(e) => e.stopPropagation()}

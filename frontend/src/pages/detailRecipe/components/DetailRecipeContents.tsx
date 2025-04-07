@@ -46,7 +46,7 @@ const DetailRecipeContents = ({ isPortrait }: { isPortrait: boolean }) => {
 
         {/* 버튼 컨테이너 */}
         <div className="w-full flex justify-between items-center">
-          <TimerManager recipeTimers={recipeTimers} position={{ xPercent: 0.175, yPercent: 0.775 }} />
+          <TimerManager recipeTimers={recipeTimers} position={{ xPercent: 0.03, yPercent: 0.68 }} />
           <div className="w-full flex justify-end items-center gap-2.5">
             <button
               className="w-10 h-10 flex justify-center items-center bg-content2 rounded-full"
@@ -94,7 +94,7 @@ const DetailRecipeContents = ({ isPortrait }: { isPortrait: boolean }) => {
 
             {/* 버튼 컨테이너 */}
             <div className="w-full flex justify-end items-center gap-2">
-              <TimerManager recipeTimers={recipeTimers} position={{ xPercent: 0.405, yPercent: 0.595 }} />
+              <TimerManager recipeTimers={recipeTimers} position={{ xPercent: 0.688, yPercent: 0.4 }} />
               <button
                 className="w-10 h-10 flex justify-center items-center bg-content2 rounded-full"
                 onClick={() => setQrIsOpen(true)}
