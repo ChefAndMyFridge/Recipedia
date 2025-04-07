@@ -13,6 +13,7 @@ services:
     volumes:
       - /home/ubuntu/front_build:/usr/share/nginx
       - /etc/letsencrypt:/etc/letsencrypt:ro
+      - /etc/nginx/htpasswd/.htpasswd:/etc/nginx/.htpasswd:ro
     networks:
       - app-network
 

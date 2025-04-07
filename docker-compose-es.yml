@@ -24,8 +24,8 @@ services:
       - ELASTICSEARCH_HOSTS=http://my-elasticSearch:9200
       - ELASTICSEARCH_USERNAME=elastic
       - ELASTICSEARCH_PASSWORD="${ELASTICSEARCH_PASSWORD}"  # ✅ 비밀번호 추가!
-    ports:
-      - "5601:5601"  # ✅ Kibana 웹 UI 접근 (localhost:5601)
+      - SERVER_BASEPATH=/kibana
+      - SERVER_REWRITEBASEPATH=true
     depends_on:
       - elasticsearch
     networks:
