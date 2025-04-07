@@ -144,17 +144,25 @@ class RecipeSummary:
 
             # 시간, 분, 초 추출
             hour_match = re.search(r'(\d+)\s*시간', seq)
-            minute_match = re.search(r'(\d+)(?:~\d+)?\s*분', seq)
-            second_match = re.search(r'(\d+)(?:~\d+)?\s*초', seq)
+
+            # 물결 앞 뒤로 정수 추출
+            minute_match = re.search(r'(\d+)(?:~(\d+))?\s*분', seq)
+            second_match = re.search(r'(\d+)(?:~(\d+))?\s*초', seq)
 
             if hour_match:
                 hours = int(hour_match.group(1))
 
             if minute_match:
                 minutes = int(minute_match.group(1))
+                # 만약 물결이 있다면, 물결 뒤 숫자 활용
+                if minute_match.lastindex >= 2:
+                    minutes = int(minute_match.group(2))
 
             if second_match:
                 seconds = int(second_match.group(1))
+                # 만약 물결이 있다면, 물결 뒤 숫자 활용
+                if second_match.lastindex >= 2:
+                    seconds = int(second_match.group(2))
 
             total_seconds += (hours * 3600 + minutes * 60 + seconds)
 
@@ -322,7 +330,7 @@ if __name__ == "__main__":
     async def main():
         try:
             recipe_summary = RecipeSummary()
-            summary = await recipe_summary.summarize_recipe("SsxWHGjQh2U")
+            summary = await recipe_summary.summarize_recipe("gfkgEHsC3qk")
             print(summary)
         except HTTPException as e:
             raise e
