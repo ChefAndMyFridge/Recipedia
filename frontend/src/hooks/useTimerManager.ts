@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 
+import alertSound from "@assets/sounds/alertSound.mp3";
+
 export interface TimerInfo {
   step: string;
   timer: number;
@@ -30,6 +32,13 @@ const useTimerManager = (initialTimers: TimerInfo[] = []) => {
             if (newValue === 0) {
               clearInterval(timerIntervals.current[step]);
               delete timerIntervals.current[step];
+
+              // 알림음 재생
+              const audio = new Audio(alertSound);
+              audio.play().catch((error) => {
+                console.error("Audio play error:", error);
+              });
+
               return { ...timer, currentTimer: newValue, isRunning: false };
             }
 

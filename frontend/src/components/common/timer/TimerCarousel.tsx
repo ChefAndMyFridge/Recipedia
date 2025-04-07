@@ -164,11 +164,10 @@ const TimerCarousel = ({
       {createPortal(
         <div
           ref={carouselRef}
-          className="fixed z-30 bg-subContent/80 rounded-xl shadow-lg overflow-hidden border border-gray-200"
+          className="fixed z-50 bg-subContent/80 rounded-xl shadow-lg overflow-hidden border border-gray-200 portrait:w-[58vw] landscape:w-[30vw]"
           style={{
             left: `${absolutePosition.x}px`,
             top: `${absolutePosition.y}px`,
-            width: "200px",
             touchAction: "none",
           }}
           onTouchStart={handleTouchStart}
@@ -183,7 +182,7 @@ const TimerCarousel = ({
           {/* 타이머 리스트 영역 - 터치 이벤트 전파 중단 */}
           <div
             ref={contentRef}
-            className="max-h-[120px] overflow-y-auto"
+            className="portrait:h-[20vh] landscape:h-[38vh] overflow-y-auto"
             onTouchStart={handleContentTouch}
             onTouchMove={handleContentTouch}
             style={{ touchAction: "auto" }}
