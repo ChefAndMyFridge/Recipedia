@@ -31,8 +31,6 @@ const RecipeCard = ({ video }: RecipeCardProps) => {
 
   const thumbnailUrl = getYoutubeThumbnailUrl(video.url);
 
-  console.log("video", video)
-
   async function handleLike() {
     const newLiked = !isLiked;
     setIsLiked(newLiked);
@@ -46,7 +44,7 @@ const RecipeCard = ({ video }: RecipeCardProps) => {
       setIsLiked(!newLiked);
       console.error("Failed to update favorite status:", error);
     }
-  };
+  }
 
   return (
     <div className={`flex justify-center`}>
@@ -69,19 +67,19 @@ const RecipeCard = ({ video }: RecipeCardProps) => {
                 <p className="text-xs font-preSemiBold text-center text-longContent">고품질 레시피</p>
               </div>
             ) : (
-               <div className="h-5"></div>
+              <div className="h-5"></div>
             )}
 
-            <div className="flex w-full justify-between items-center">
-              <p className="max-w-[90%] overflow-hidden text-ellipsis whitespace-nowrap font-preSemiBold text-base break-keep">
+            <div className="flex w-full justify-between items-center px-1">
+              <p className="max-w-[85%] overflow-hidden text-ellipsis whitespace-nowrap font-preSemiBold text-base break-keep">
                 {video.title}
               </p>
 
               <button className="text-sm" onClick={handleLike}>
                 {isLiked ? (
-                  <IconHeartFill width={30} height={31} strokeColor="black" />
+                  <IconHeartFill width={25} height={25} strokeColor="black" />
                 ) : (
-                  <IconHeart width={30} height={30} strokeColor="black" />
+                  <IconHeart width={25} height={25} strokeColor="black" strokeWidth={2} />
                 )}
               </button>
             </div>

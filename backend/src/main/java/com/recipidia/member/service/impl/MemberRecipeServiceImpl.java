@@ -12,46 +12,58 @@ import com.recipidia.member.repository.MemberRepository;
 import com.recipidia.member.service.MemberRecipeService;
 import com.recipidia.recipe.entity.Recipe;
 import com.recipidia.recipe.repository.RecipeRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class MemberRecipeServiceImpl implements MemberRecipeService {
+
   private final MemberRepository memberRepository;
   private final RecipeRepository recipeRepository;
   private final MemberRecipeRepository memberRecipeRepository;
 
   @Override
   @Transactional
-  public MemberRecipeDto patchMemberRecipe(Long memberId, Long recipeId, Integer rating, Boolean favorite) {
+  public MemberRecipeDto patchMemberRecipe(Long memberId, Long recipeId, Integer rating,
+      Boolean favorite) {
     Member member = memberRepository.findById(memberId)
         .orElseThrow(() -> new MemberNotFoundException(memberId));
     Recipe recipe = recipeRepository.findById(recipeId)
         .orElseThrow(() -> new RecipeNotFoundException(recipeId));
 
-    Optional<MemberRecipe> optMemberRecipe = memberRecipeRepository.findByMemberIdAndRecipeId(memberId, recipeId);
+    Optional<MemberRecipe> optMemberRecipe = memberRecipeRepository.findByMemberIdAndRecipeId(
+        memberId, recipeId);
     MemberRecipe memberRecipe = optMemberRecipe.orElseGet(() -> {
       MemberRecipe newMemberRecipe = MemberRecipe.builder()
           .member(member)
           .recipe(recipe)
-          .rating(rating)
-          .favorite(favorite != null ? favorite : false) // 기본 값 false
+          .rating(rating != null ? rating : 0)
+          .favorite(favorite != null && favorite) // 기본 값 false
           .createdAt(LocalDateTime.now())
           .build();
       memberRecipeRepository.save(newMemberRecipe); // 새 객체 저장
       return newMemberRecipe;
     });
 
-    if (rating != null) memberRecipe.updateRating(rating);
-    if (favorite != null) memberRecipe.updateFavorite(favorite);
+    if (rating != null) {
+      memberRecipe.updateRating(rating);
+    }
+    if (favorite != null) {
+      memberRecipe.updateFavorite(favorite);
+    }
+
+    // patch 결과 rating이 null이고 favorite이 false이면 객체 삭제
+    if (memberRecipe.getRating() == 0 && Boolean.FALSE.equals(memberRecipe.getFavorite())) {
+      memberRecipeRepository.delete(memberRecipe);
+    }
 
     return MemberRecipeDto.fromEntity(memberRecipe);
   }
@@ -66,31 +78,32 @@ public class MemberRecipeServiceImpl implements MemberRecipeService {
     return memberRecipeRepository.findAllByMember(member)
         .stream()
         .map(MemberRecipeDto::fromEntity)
-        .collect(Collectors.toList());
+        .toList();
   }
 
   @Override
   @Transactional(readOnly = true)
-  public List<RecipeWithMemberInfoDto> getMemberFavorites(Long memberId) {
+  public Page<RecipeWithMemberInfoDto> getMemberFavorites(Long memberId,
+      Pageable pageable) {
     Member member = memberRepository.findById(memberId)
         .orElseThrow(() -> new MemberNotFoundException(memberId));
 
-    return memberRecipeRepository.findAllByMemberAndFavoriteTrue(member)
-        .stream()
-        .map(mr -> RecipeWithMemberInfoDto.fromEntities(mr.getRecipe(), mr))
-        .collect(Collectors.toList());
+    Page<MemberRecipe> allByMemberAndFavoriteTrue = memberRecipeRepository.findAllByMemberAndFavoriteTrue(
+        member, pageable);
+
+    return allByMemberAndFavoriteTrue.map(
+        mr -> RecipeWithMemberInfoDto.fromEntities(mr.getRecipe(), mr));
   }
 
   @Override
   @Transactional(readOnly = true)
-  public List<RecipeWithMemberInfoDto> getMemberRatedRecipes(Long memberId) {
+  public Page<RecipeWithMemberInfoDto> getMemberRatedRecipes(Long memberId, Pageable pageable) {
     Member member = memberRepository.findById(memberId)
         .orElseThrow(() -> new MemberNotFoundException(memberId));
 
-    return memberRecipeRepository.findAllByMemberAndRatingIsNotNull(member)
-        .stream()
-        .map(mr -> RecipeWithMemberInfoDto.fromEntities(mr.getRecipe(), mr))
-        .collect(Collectors.toList());
-  }
+    Page<MemberRecipe> allByMemberAndRatingIsNotZero = memberRecipeRepository.findAllByMemberAndRatingNot(member, 0, pageable);
 
+    return allByMemberAndRatingIsNotZero.map(
+        mr -> RecipeWithMemberInfoDto.fromEntities(mr.getRecipe(), mr));
+  }
 }

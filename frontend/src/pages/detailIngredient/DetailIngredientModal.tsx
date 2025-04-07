@@ -14,14 +14,14 @@ import Button from "@components/common/button/Button";
 import noImg from "@assets/images/noIngredient/noIngredient.jpg";
 
 const DetailIngredientModal = ({ ingredientId }: { ingredientId: number }) => {
-  const { closeModal } = useModalStore();
+  const { isClosing, closeModal } = useModalStore();
 
   const [ingredient, setIngredient] = useState<IngredientNutrition>(INGREDIENT_WITH_NUTRITIONS);
 
-  const { data } = useGetIngredientNutrition(ingredientId);
+  const { data } = useGetIngredientNutrition(ingredientId, !isClosing);
 
   useEffect(() => {
-    if (data) {
+    if (!isClosing && data) {
       setIngredient(data);
     }
   }, [data]);

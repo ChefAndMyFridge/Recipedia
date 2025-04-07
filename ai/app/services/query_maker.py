@@ -138,6 +138,8 @@ class QueryMaker:
         await self.generate_dishes()
         openai_end = time.time()
         self.openai_time = openai_end - openai_start
+        logger.info(
+            f"{settings.LOG_QUERY_MAKER_PREFIX}_OepnAI 레시피 생성 완료: {self.openai_time:.2f}초 소요")
 
         # 2단계: YouTube 레시피 검색
         youtube_start = time.time()
@@ -145,7 +147,7 @@ class QueryMaker:
         youtube_end = time.time()
         self.youtube_time = youtube_end - youtube_start
         logger.info(
-            f"{settings.LOG_QUERY_MAKER_PREFIX}_레시피 검색 완료: {self.youtube_time:.2f}초 소요")
+            f"{settings.LOG_QUERY_MAKER_PREFIX}_Youtube 레시피 검색 완료: {self.youtube_time:.2f}초 소요")
 
         end_time = time.time()
         self.execution_time = end_time - start_time

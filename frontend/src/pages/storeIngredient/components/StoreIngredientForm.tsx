@@ -84,8 +84,6 @@ const StoreIngredientForm = () => {
       storagePlace: storagePlace === "냉장실" ? "fridge" : "freezer",
     };
 
-    console.log(ingredient);
-
     // API 호출
     storeIngredientRequest(
       ingredient, // 저장할 재료 정보

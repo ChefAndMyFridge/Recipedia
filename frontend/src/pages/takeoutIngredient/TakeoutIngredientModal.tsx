@@ -23,8 +23,6 @@ const TakeoutIngredientModal = () => {
       };
     });
 
-    console.log(ingredients);
-
     deleteIngredientRequest(ingredients, {
       onSuccess: () => {
         openModal(<TakeoutConfirmModal />);

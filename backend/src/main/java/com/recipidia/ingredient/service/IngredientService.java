@@ -18,15 +18,11 @@ public interface IngredientService {
 
   List<IngredientInfoDto> findAllExistingIngredients(Map<String, String> filterParam);
 
-  List<IngredientInfoDto> getAllExistingIngredients();
-
   IngredientInfoDto getIngredient(Long ingredientId);
 
   IngredientIncomingRes stockItem(IngredientIncomingReq request);
 
   IngredientUpdateRes updateItem(Long itemId, IngredientUpdateReq updateDTO);
-
-  Map<String, Integer> releaseItems(Long itemId, int quantity);
 
   IngredientInfoWithNutrientDto getIngredientInfoWithNutrients(Long id);
 

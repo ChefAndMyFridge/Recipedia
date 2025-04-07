@@ -34,11 +34,10 @@ export const useAddMember = () => {
   const mutation = useMutation<User, Error, string>({
     mutationFn: addMemberApi,
     onSuccess: () => {
-      console.log("가족 구성원 등록 성공");
       queryClient.invalidateQueries({ queryKey: ["memberList"] });
     },
     onError: (error) => {
-      console.log("가족 구성원 등록 실패", error);
+      console.error("가족 구성원 등록 실패", error);
     },
   });
 
@@ -52,11 +51,10 @@ export const useDeleteMember = () => {
   const mutation = useMutation<void, Error, number>({
     mutationFn: deleteMemberApi,
     onSuccess: () => {
-      console.log("가족 구성원 삭제 성공");
       queryClient.invalidateQueries({ queryKey: ["memberList"] });
     },
     onError: (error) => {
-      console.log("가족 구성원 삭제 실패", error);
+      console.error("가족 구성원 삭제 실패", error);
     },
   });
 
@@ -96,11 +94,10 @@ export const useSaveFilteredInfomations = () => {
   >({
     mutationFn: saveMemberFilterApi,
     onSuccess: () => {
-      console.log("필터 저장 성공");
       queryClient.invalidateQueries({ queryKey: ["filteredInfomations", userId] }); // 캐시 무효화하여 refetch 실행
     },
     onError: (error) => {
-      console.log("필터 저장 실패", error);
+      console.error("필터 저장 실패", error);
     },
   });
 
@@ -110,18 +107,17 @@ export const useSaveFilteredInfomations = () => {
 // 로그인 관리
 export const useLogin = () => {
   const { setAuthentication } = useUserStore();
-  
+
   const mutation = useMutation<boolean, Error, { username: string; password: string }>({
     mutationFn: ({ username, password }) => authLoginApi(username, password),
     onSuccess: () => {
       // authentication 상태 true로 변경
-      console.log("로그인 성공 in useLogin");
       setAuthentication();
     },
     onError: (error) => {
       console.error("로그인 실패 in useLogin:", error);
-    }
+    },
   });
-  
+
   return mutation;
 };
