@@ -60,7 +60,7 @@ pipeline {
                     echo "VITE_RELEASE_API_URL=${viteReleaseApiUrl}" >> .env
                     echo "VITE_MASTER_API_URL=${viteMasterApiUrl}" >> .env
 
-                    yarn install --frozen-lockfile
+                    yarn install --immutable --immutable-cache || yarn install
                     yarn build
 
                     rm -rf /front_build/${env.BRANCH_NAME}/html
