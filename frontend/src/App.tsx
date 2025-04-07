@@ -19,6 +19,8 @@ const ProtectedLayout = () => {
   const location = useLocation();
 
   if (!isAuthenticated) {
+    const from = location.pathname;
+    localStorage.setItem("redirect", from);
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
@@ -30,7 +32,9 @@ const PublicLayout = () => {
   const { isAuthenticated } = useUserStore();
 
   if (isAuthenticated) {
-    return <Navigate to="/" replace />;
+    const redirect = localStorage.getItem("redirect");
+    localStorage.removeItem("redirect");
+    return <Navigate to={redirect || "/"} replace />;
   }
 
   return <Outlet />;
