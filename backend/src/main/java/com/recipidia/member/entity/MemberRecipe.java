@@ -53,4 +53,8 @@ public class MemberRecipe {
   public void updateFavorite(Boolean favorite) {
     this.favorite = favorite;
   }
+
+  public void updateCreatedAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
+  }
 }
