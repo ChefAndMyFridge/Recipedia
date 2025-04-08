@@ -56,7 +56,7 @@ export const useGetRecipeDetail = (recipeId: number) => {
 //즐겨찾기 레시피 조회 상태 관리용 query
 export const useGetFavoriteRecipe = (userId: number, page: number) => {
   const query = useQuery<PaginationRecipeList>({
-    queryKey: ["favoriteRecipe", userId, page],
+    queryKey: ["favoriteRecipe", userId],
     queryFn: () => getRecipeFavoriteApi(userId, page),
     retry: false,
     staleTime: 1000 * 60 * 20, // 20분
@@ -73,7 +73,7 @@ export const useGetFavoriteRecipe = (userId: number, page: number) => {
 //이전 레시피 조회 상태 관리용 query
 export const useGetRatingRecipe = (userId: number, page: number) => {
   const query = useQuery<PaginationRecipeList>({
-    queryKey: ["historyRecipe", userId, page],
+    queryKey: ["historyRecipe", userId],
     queryFn: () => getRecipeRatingApi(userId, page),
     retry: false,
     staleTime: 1000 * 60 * 20, // 20분

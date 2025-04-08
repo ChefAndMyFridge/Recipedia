@@ -2,6 +2,7 @@ import "./RecipeTitle.css";
 import { useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
 import { Video } from "@/types/recipeListTypes";
 
@@ -27,6 +28,8 @@ const RecipeCard = ({ video }: RecipeCardProps) => {
   const navigate = useNavigate();
   const { userId } = useUserStore();
   const { updateRecipeFavorite } = useRecipeStore();
+
+  const queryClient = useQueryClient();
 
   const [isLiked, setIsLiked] = useState<boolean>(video.favorite);
   const [duration, setDuration] = useState<number>(15);
@@ -54,6 +57,9 @@ const RecipeCard = ({ video }: RecipeCardProps) => {
       const response = await patchRecipeApi(userId, video.recipeId, 0, newLiked);
       // API 응답의 favorite 값으로 store 업데이트
       updateRecipeFavorite(video.recipeId, response.favorite);
+
+      //즐겨찾기 쿼리 무효화
+      queryClient.invalidateQueries({ queryKey: ["favoriteRecipe", userId] });
     } catch (error) {
       // 실패시 상태 되돌리기
       setIsLiked(!newLiked);
