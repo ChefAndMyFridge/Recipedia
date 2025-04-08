@@ -7,7 +7,8 @@ import NoMyRecipeList from "@pages/myRecipe/components/NoMyRecipeList";
 import Pagination from "@pages/myRecipe/components/MyRecipePagenation";
 
 import useUserStore from "@stores/userStore";
-import { useGetRatingRecipe } from "@/hooks/useRecipeHooks";
+
+import { useGetRatingRecipe } from "@hooks/useRecipeHooks";
 
 const MyRecipeHistory = () => {
   const { userId } = useUserStore();
@@ -29,14 +30,17 @@ const MyRecipeHistory = () => {
     }
   }, [data]);
 
-  const handlePageChange = async (pageNumber: number) => {
+  const handlePageChange = (pageNumber: number) => {
     setPage(pageNumber);
-    await refetch();
   };
 
-  const handleDelete = async () => {
+  useEffect(() => {
+    refetch();
+  }, [page]);
+
+  async function handleDelete() {
     await refetch();
-  };
+  }
 
   //데이터를 받아오는 중이거나, recipeList가 undefined일 때, 빈화면 렌더링
   if (isLoading || !recipeList) return <></>;
