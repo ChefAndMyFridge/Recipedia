@@ -1,4 +1,6 @@
-import { useState } from "react";
+import "./RecipeTitle.css";
+import { useEffect, useRef, useState } from "react";
+import ReactPlayer from "react-player";
 import { useNavigate } from "react-router-dom";
 
 import { Video } from "@/types/recipeListTypes";
@@ -16,7 +18,6 @@ import useUserStore from "@stores/userStore";
 import useRecipeStore from "@stores/recipeStore";
 
 import { patchRecipeApi } from "@apis/recipeApi";
-import ReactPlayer from "react-player";
 
 interface RecipeCardProps {
   video: Video;
@@ -28,8 +29,22 @@ const RecipeCard = ({ video }: RecipeCardProps) => {
   const { updateRecipeFavorite } = useRecipeStore();
 
   const [isLiked, setIsLiked] = useState<boolean>(video.favorite);
+  const [duration, setDuration] = useState<number>(15);
 
   const thumbnailUrl = getYoutubeThumbnailUrl(video.url);
+
+  const textRef = useRef<HTMLDivElement>(null);
+
+  //제목 이동 속도 일관되게 하기 위한 useEffect
+  useEffect(() => {
+    if (video.title.length > 30 && textRef.current) {
+      const textWidth = textRef.current.offsetWidth;
+      const totalDistance = textWidth; // 한 타이틀만 기준으로
+      const speed = 150; // px/sec (속도 고정)
+      const calculatedDuration = (totalDistance * 2) / speed; // 2배 길이만큼 움직임
+      setDuration(calculatedDuration);
+    }
+  }, [video.title]);
 
   async function handleLike() {
     const newLiked = !isLiked;
@@ -71,9 +86,20 @@ const RecipeCard = ({ video }: RecipeCardProps) => {
             )}
 
             <div className="flex w-full justify-between items-center px-1">
-              <p className="max-w-[85%] overflow-hidden text-ellipsis whitespace-nowrap font-preSemiBold text-base break-keep">
-                {video.title}
-              </p>
+              {video.title.length > 30 ? (
+                <div className="max-w-[85%] font-preSemiBold text-base marquee-loop-wrapper">
+                  <div
+                    className="marquee-loop-content"
+                    ref={textRef}
+                    style={{ animation: `marquee-loop ${duration}s linear infinite` }}
+                  >
+                    <span>{video.title}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <span>{video.title}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                  </div>
+                </div>
+              ) : (
+                <p className="max-w-[85%] font-preSemiBold text-base">{video.title}</p>
+              )}
 
               <button className="text-sm" onClick={handleLike}>
                 {isLiked ? (
