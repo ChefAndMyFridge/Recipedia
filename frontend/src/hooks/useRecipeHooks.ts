@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getRecipeDetailApi, makeRecipeApi } from "@apis/recipeApi";
+import { getRecipeDetailApi, getRecipeFavoriteApi, getRecipeRatingApi, makeRecipeApi } from "@apis/recipeApi";
 import useRecipeStore from "@stores/recipeStore";
-import { RecipeInfo, RecipeList } from "@/types/recipeListTypes";
+import { PaginationRecipeList, RecipeInfo, RecipeList } from "@/types/recipeListTypes";
 
 //선택 재료 기반 레시피 리스트 조회 API 호출
 export const usePostRecipeList = (userId: number, ingredients: string[]) => {
@@ -50,5 +50,39 @@ export const useGetRecipeDetail = (recipeId: number) => {
     isError: query.isError,
     isFetching: query.isFetching,
     data: query.data,
+  };
+};
+
+//즐겨찾기 레시피 조회 상태 관리용 query
+export const useGetFavoriteRecipe = (userId: number, page: number) => {
+  const query = useQuery<PaginationRecipeList>({
+    queryKey: ["favoriteRecipe", userId, page],
+    queryFn: () => getRecipeFavoriteApi(userId, page),
+    retry: false,
+    staleTime: 1000 * 60 * 20, // 20분
+    throwOnError: true,
+  });
+
+  return {
+    isLoading: query.isLoading,
+    data: query.data,
+    refetch: query.refetch,
+  };
+};
+
+//이전 레시피 조회 상태 관리용 query
+export const useGetRatingRecipe = (userId: number, page: number) => {
+  const query = useQuery<PaginationRecipeList>({
+    queryKey: ["historyRecipe", userId, page],
+    queryFn: () => getRecipeRatingApi(userId, page),
+    retry: false,
+    staleTime: 1000 * 60 * 20, // 20분
+    throwOnError: true,
+  });
+
+  return {
+    isLoading: query.isLoading,
+    data: query.data,
+    refetch: query.refetch,
   };
 };
