@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
 import useModalStore from "@stores/modalStore";
 import useUserStore from "@stores/userStore";
+import useRecipeStore from "@stores/recipeStore";
 
 import IconStarBlank from "@assets/icons/IconStarBlank";
 import IconStarFill from "@assets/icons/IconStarFill";
@@ -10,8 +12,6 @@ import IconStarFill from "@assets/icons/IconStarFill";
 import Button from "@components/common/button/Button";
 
 import { patchRecipeApi } from "@apis/recipeApi";
-import useRecipeStore from "@/stores/recipeStore";
-import { useQueryClient } from "@tanstack/react-query";
 
 const RecipeRatingForm = () => {
   const navigate = useNavigate();
@@ -50,6 +50,8 @@ const RecipeRatingForm = () => {
 
     // 캐싱 제거
     queryClient.invalidateQueries({ queryKey: ["recipeList", selectedIngredientsNames] });
+    queryClient.invalidateQueries({ queryKey: ["historyRecipe", userId] });
+
     closeModal();
     navigate("/");
   }

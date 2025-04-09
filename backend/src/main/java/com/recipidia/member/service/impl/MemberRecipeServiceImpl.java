@@ -60,6 +60,8 @@ public class MemberRecipeServiceImpl implements MemberRecipeService {
       memberRecipe.updateFavorite(favorite);
     }
 
+    memberRecipe.updateCreatedAt(LocalDateTime.now());
+
     // patch 결과 rating이 null이고 favorite이 false이면 객체 삭제
     if (memberRecipe.getRating() == 0 && Boolean.FALSE.equals(memberRecipe.getFavorite())) {
       memberRecipeRepository.delete(memberRecipe);
