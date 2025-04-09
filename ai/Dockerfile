@@ -18,7 +18,10 @@ RUN pip install --upgrade pip
 
 # 3️⃣ requirements.txt 복사 및 설치
 COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+# pip 업그레이드 + wheel 설치 + requirements 설치
+RUN pip install --upgrade pip \
+ && pip install wheel \
+ && pip install --no-cache-dir -r requirements.txt
 
 # rouge_score 외 추가 패키지 설치
 RUN pip install git+https://github.com/seof622/youtube-search-python
