@@ -116,6 +116,7 @@
 <br>
 
 ## 서비스 아키텍처
+<img src="/uploads/9a46786b144b1a9255a057060f63be5c/웹아키텍처.jpg" alt="ERD"/>
 
 <br>
 
@@ -133,94 +134,94 @@
 client
 ├── .yarn
 ├── public
-├── src
-|   ├── apis
-│   ├── assets
-│   │   ├── fonts
-│   │   ├── icons
-│   │   ├── images
-│   │   ├── sounds
-│   ├── components
-│   │   ├── common
-│   │   ├── Layout
-│   │   ├── profile
-│   │   └── recipeRating
-│   ├── data
-│   ├── hooks
-│   ├── mocks
-│   ├── pages
-|   ├── stores
-|   ├── styles
-|   ├── types
-│   ├── utils
-│   ├── App.tsx
-|   ├── index.css
-|   ├── main.tsx
-│   └── vite-env.d.ts
+└── src
+    ├── apis
+    ├── assets
+    │   ├── fonts
+    │   ├── icons
+    │   ├── images
+    │   └── sounds
+    ├── components
+    │   ├── common
+    │   ├── Layout
+    │   ├── profile
+    │   └── recipeRating
+    ├── data
+    ├── hooks
+    ├── mocks
+    ├── pages
+    ├── stores
+    ├── styles
+    ├── types
+    ├── utils
+    ├── App.tsx
+    ├── index.css
+    ├── main.tsx
+    └── vite-env.d.ts
 ```
 
 ### BackEnd
 
 ```text
 backend
-└─ src
-   └─ main
-      ├─ java
-      │  └─ com
-      │     └─ recipidia
-      │        ├─ aop
-      │        ├─ auth
-      │        │  ├─ config
-      │        │  ├─ controller
-      │        │  ├─ dto
-      │        │  └─ jwt
-      │        ├─ config
-      │        ├─ exception
-      │        ├─ filter
-      │        │  ├─ controller
-      │        │  ├─ converter
-      │        │  ├─ dto
-      │        │  ├─ entity
-      │        │  ├─ repository
-      │        │  └─ service
-      │        ├─ ingredient
-      │        │  ├─ controller
-      │        │  ├─ document
-      │        │  ├─ dto
-      │        │  ├─ entity
-      │        │  ├─ enums
-      │        │  ├─ exception
-      │        │  ├─ handler
-      │        │  ├─ repository
-      │        │  │  └─ querydsl
-      │        │  ├─ request
-      │        │  ├─ response
-      │        │  ├─ scheduler
-      │        │  └─ service
-      │        ├─ member
-      │        │  ├─ controller
-      │        │  ├─ dto
-      │        │  ├─ entity
-      │        │  ├─ exception
-      │        │  ├─ handler
-      │        │  ├─ repository
-      │        │  ├─ request
-      │        │  ├─ response
-      │        │  └─ service
-      │        └─ recipe
-      │           ├─ controller
-      │           ├─ converter
-      │           ├─ dto
-      │           ├─ entity
-      │           ├─ exception
-      │           ├─ handler
-      │           ├─ repository
-      │           ├─ request
-      │           ├─ response
-      │           └─ service
-      └─ resources
-         ├─ application.yml
-         └─ data
+└── src
+    └── main
+        ├── java
+        │   └── com
+        │       └── recipidia
+        │           ├── aop
+        │           ├── auth
+        │           │   ├── config
+        │           │   ├── controller
+        │           │   ├── dto
+        │           │   └── jwt
+        │           ├── config
+        │           ├── exception
+        │           ├── filter
+        │           │   ├── controller
+        │           │   ├── converter
+        │           │   ├── dto
+        │           │   ├── entity
+        │           │   ├── repository
+        │           │   └── service
+        │           ├── ingredient
+        │           │   ├── controller
+        │           │   ├── document
+        │           │   ├── dto
+        │           │   ├── entity
+        │           │   ├── enums
+        │           │   ├── exception
+        │           │   ├── handler
+        │           │   ├── repository
+        │           │   │   └── querydsl
+        │           │   ├── request
+        │           │   ├── response
+        │           │   ├── scheduler
+        │           │   └── service
+        │           ├── member
+        │           │   ├── controller
+        │           │   ├── dto
+        │           │   ├── entity
+        │           │   ├── exception
+        │           │   ├── handler
+        │           │   ├── repository
+        │           │   ├── request
+        │           │   ├── response
+        │           │   └── service
+        │           └── recipe
+        │               ├── controller
+        │               ├── converter
+        │               ├── dto
+        │               ├── entity
+        │               ├── exception
+        │               ├── handler
+        │               ├── repository
+        │               ├── request
+        │               ├── response
+        │               └── service
+        └── resources
+            ├── application.yml
+            └── data
 ```
 
 ### AI
