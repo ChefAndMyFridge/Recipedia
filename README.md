@@ -63,8 +63,8 @@
 ### 사용자 프로필
 
 <div align="center">
-    <img src="/uploads/e0eada06b85377a73c4cd883ab5c883a/프로필_홈.png" width="45%" alt="프로필 홈 화면"/>
-    <img src="/uploads/7244249efc0dd1eaeaecbbed137f78b9/프로필_전환.png" width="45%" alt="프로필 전환 화면"/>
+    <img src="/uploads/4433461e5e5bcde69cfba87dd20d9e8b/프로필_홈.png" width="45%" alt="프로필 홈 화면"/>
+    <img src="/uploads/7a5e5254dd6616618be237fc261fddeb/프로필_전환.png" width="45%" alt="프로필 전환 화면"/>
 </div>
 
 
