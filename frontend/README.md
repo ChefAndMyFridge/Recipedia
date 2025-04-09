@@ -1,6 +1,6 @@
 # RECIPEDIA
 
-![recipediaLogo](/uploads/350bf6bbb93dbe34f7fb9cf9f61b5f00/recipediaLogo.png)
+<img src="/uploads/350bf6bbb93dbe34f7fb9cf9f61b5f00/recipediaLogo.png" width="50%" alt="레시피디아 로고"/>
 
 ### Recipedia 링크 : https://j12s003.p.ssafy.io/
 
@@ -46,32 +46,35 @@
 
 #### 재료 입출고
 
-![재료_리스트](/uploads/d7fef37c47fcbf06c531d5f5df2474e9/재료_리스트.png)
+<img src="/uploads/d7fef37c47fcbf06c531d5f5df2474e9/재료_리스트.png" width="50%" alt="재료 입출고 화면"/>
 
 #### 개인 선호 필터링
 
-![선호_필터링](/uploads/2730691f58b2f91a6ef98d23b1024d67/선호_필터링.png)
+<img src="/uploads/2730691f58b2f91a6ef98d23b1024d67/선호_필터링.png" width="50%" alt="개인 선호 필터링 화면"/>
 
 ### 레시피 생성
 
-![레시피_리스트_-_즐찾](/uploads/e3a720994b8436e6ce68e94423fdd3de/레시피_리스트_-_즐찾.png)
+<img src="/uploads/e3a720994b8436e6ce68e94423fdd3de/레시피_리스트_-_즐찾.png" width="50%" alt="레시피 생성 화면"/>
 
 ### 레시피 추출
 
-![레시피_상세_-_단계](/uploads/65987eeb4f96ce90991498eed4de441a/레시피_상세_-_단계.png)
+<img src="/uploads/65987eeb4f96ce90991498eed4de441a/레시피_상세_-_단계.png" width="50%" alt="레시피 추출 화면"/>
 
 ### 사용자 프로필
 
-![프로필_홈](/uploads/e0eada06b85377a73c4cd883ab5c883a/프로필_홈.png)
-![프로필_전환](/uploads/7244249efc0dd1eaeaecbbed137f78b9/프로필_전환.png)
+<div align="center">
+    <img src="/uploads/e0eada06b85377a73c4cd883ab5c883a/프로필_홈.png" width="45%" alt="프로필 홈 화면"/>
+    <img src="/uploads/7244249efc0dd1eaeaecbbed137f78b9/프로필_전환.png" width="45%" alt="프로필 전환 화면"/>
+</div>
+
 
 #### 즐겨찾기
 
-![즐겨찾기_리스트](/uploads/61c354075c4d410cd19aee175625b64c/즐겨찾기_리스트.png)
+<img src="/uploads/61c354075c4d410cd19aee175625b64c/즐겨찾기_리스트.png" width="50%" alt="즐겨찾기 화면"/>
 
 #### 이전 레시피
 
-![이전_레시피](/uploads/b6a31fda97d25edb05cc11d0413ee3ce/이전_레시피.png)
+<img src="/uploads/b6a31fda97d25edb05cc11d0413ee3ce/이전_레시피.png" width="50%" alt="이전 레시피 화면"/>
 
 ## 기술 스택
 
@@ -118,7 +121,7 @@
 
 ## ERD
 
-![ERD](/uploads/f19c32ae296f9b2c4592406cfbf48dfe/ERD.png)
+<img src="/uploads/f19c32ae296f9b2c4592406cfbf48dfe/ERD.png" width="50%" alt="ERD"/>
 
 <br>
 
