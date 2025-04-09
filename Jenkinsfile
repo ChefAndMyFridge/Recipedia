@@ -55,8 +55,10 @@ pipeline {
                 script {
                     def viteReleaseApiUrl = "https://j12s003.p.ssafy.io/api"
                     def viteMasterApiUrl = "https://j12s003.p.ssafy.io/master/api"
-                    def baseUrl = env.BRANCH_NAME == "master" ? "/master" : "/"
-                    env.API_URL = env.BRANCH_NAME == "master" ? viteMasterApiUrl : viteReleaseApiUrl
+                    // def baseUrl = env.BRANCH_NAME == "master" ? "/master" : "/"
+                    def baseUrl = "/"
+                    // env.API_URL = env.BRANCH_NAME == "master" ? viteMasterApiUrl : viteReleaseApiUrl
+                    env.API_URL = viteMasterApiUrl
 
                     sh """
                     cd ${env.WORKSPACE}/frontend
