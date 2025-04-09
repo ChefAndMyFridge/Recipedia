@@ -15,7 +15,7 @@ const TakeoutIngredient = ({ ingredient }: HomeIngredientProps) => {
           src={ingredient.imageUrl ? ingredient.imageUrl : noImg}
           alt={ingredient.imageUrl}
           onError={(event) => (event.currentTarget.src = noImg)}
-          className="w-full h-full object-cover rounded-3xl"
+          className="w-full aspect-[1/1] object-cover rounded-3xl"
         />
         <span className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/50 to-transparent rounded-b-3xl" />
         <p
