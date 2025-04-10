@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>냉장고 줌인 데모 (터치 스크롤 활성화)</title>
+  <script src="https://hammerjs.github.io/dist/hammer.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <style>
+    /* 전체 화면 설정 */
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden; /* 부모 페이지에는 스크롤 없으나, iframe 내부는 별도 */
+      background: #f8f8f8;
+      position: relative;
+    }
+    .scene-container {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+    /* 냉장고 요소 */
+    .fridge {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(1);
+      transform-origin: top left;
+      width: 380px;
+      height: 760px;
+      background: url('fridge.png') no-repeat center center;
+      background-size: contain;
+      transition: transform 1s ease;
+      cursor: pointer;
+    }
+    /* 디스플레이 영역 */
+    .fridge-screen {
+      position: absolute;
+      top: 88px;
+      left: 205px;
+      width: 155px;
+      height: 275px;
+      overflow: auto; /* 부모 역할 : 내용이 넘치면 잘라내지만, 내부 iframe 페이지가 자체 스크롤 되도록 함 */
+    }
+    /* 내부 웹 콘텐츠 축소 */
+    .scale-wrapper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 375px;
+      height: 667px;
+      transform: scale3d(0.41, 0.41, 1);
+      transform-origin: left top;
+    }
+    .scale-wrapper iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    /* 줌인 상태 (예시) */
+    .fridge.zoom {
+      transform: translate(-150%, -50%) translate(-200px, -200px) scale(2.5);
+    }
+
+    #touchArea {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0); /* 완전히 투명 */
+      z-index: 9999; /* 다른 요소보다 위에 있음 */
+    }
+  </style>
+</head>
+<body>
+  <div class="scene-container" id="touchArea">
+    <div class="fridge" id="fridgeElement">
+      <div class="fridge-screen">
+        <div class="scale-wrapper">
+          <!-- <iframe src="https://j12s003.p.ssafy.io/" id="myIframe"></iframe> -->
+          <iframe src="http://localhost:5173/" id="myIframe"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const fridgeElement = document.getElementById('fridgeElement');
+    fridgeElement.addEventListener('click', function(e) {
+      e.stopPropagation();
+      fridgeElement.classList.toggle('zoom');
+    });
+    
+    const iframe = document.getElementById('myIframe');
+    iframe.addEventListener('load', function(){
+        try {
+        const doc = iframe.contentDocument || iframe.contentWindow.document;
+        const swipeArea = doc.body; // 또는 원하는 특정 요소
+        const hammerInside = new Hammer(swipeArea);
+        hammerInside.on('swipe', function(e) {
+            console.log("iframe에서 swipe 감지됨: ", e.direction);
+            // e.direction 값에 따라 원하는 동작을 구현합니다.
+        });
+        } catch(e) {
+        console.error("iframe 내부 스크립트 주입 실패(크로스 도메인):", e);
+        }
+    });
+
+    // 고정 오버레이에 Hammer.js를 적용하여 pan 제스처(드래그)를 감지
+    const touchArea = document.getElementById('touchArea');
+    const hammerManager = new Hammer(touchArea);
+    // 모든 방향 pan 감지
+    hammerManager.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+    
+    // pan 시작 시 현재 스크롤 위치 기록
+    let startScrollX = window.pageXOffset;
+    let startScrollY = window.pageYOffset;
+    let isPanning = false;
+
+    hammerManager.on('panstart', function(e) {
+      startScrollX = window.pageXOffset;
+      startScrollY = window.pageYOffset;
+      isPanning = true;
+    });
+
+    hammerManager.on('panmove', function(e) {
+      if (isPanning) {
+        // e.deltaX, e.deltaY는 pan 시작 지점으로부터의 이동 거리입니다.
+        // 이를 반대로 적용해서 스크롤 위치를 업데이트합니다.
+        window.scrollTo(startScrollX - e.deltaX, startScrollY - e.deltaY);
+      }
+    });
+
+    hammerManager.on('panend', function(e) {
+      isPanning = false;
+    });
+    
+    console.log("Hammer.js를 활용한 터치 스크롤 시뮬레이션이 활성화되었습니다.");
+  </script>
+</body>
+</html>
