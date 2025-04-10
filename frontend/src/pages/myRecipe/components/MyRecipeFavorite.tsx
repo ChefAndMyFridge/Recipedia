@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { PagenationRecipeInfo } from "@/types/recipeListTypes";
 
 // import MyRecipeItem from "@pages/myRecipe/components/MyRecipeItem";
-import MyRecipeItem from "@pages/myRecipe/components/MyRecipeItem live";
+import MyRecipeItem from "@/pages/myRecipe/components/MyRecipeItemLive";
 import NoMyRecipeList from "@pages/myRecipe/components/NoMyRecipeList";
 import Pagination from "@pages/myRecipe/components/MyRecipePagenation";
 

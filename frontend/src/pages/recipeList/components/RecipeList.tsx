@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import MenuList from "@pages/recipeList/components/RecipeMenuList";
 // import Carousel from "@pages/recipeList/components/RecipeCarousel";
-import Carousel from "@pages/recipeList/components/RecipeCarousel live";
+import Carousel from "@/pages/recipeList/components/RecipeCarouselLive";
 
 import recipeStore from "@stores/recipeStore";
 

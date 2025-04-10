@@ -4,7 +4,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import HomeHeader from "@pages/home/components/HomeHeader.tsx";
 import HomeFilter from "@pages/home/components/HomeFilter";
 // import HomeIngredients from "@pages/home/components/HomeIngredients.tsx";
-import HomeIngredients from "@pages/home/components/HomeIngredients live.tsx";
+import HomeIngredients from "@/pages/home/components/HomeIngredientsLive";
 import HomeFooter from "@pages/home/components/HomeFooter.tsx";
 
 import ErrorPage from "@components/common/error/ErrorPage";
