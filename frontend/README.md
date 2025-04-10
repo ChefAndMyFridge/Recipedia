@@ -1,258 +1,202 @@
-# RECIPEDIA
+# RECIPEDIA Frontend
 
 <img src="/uploads/350bf6bbb93dbe34f7fb9cf9f61b5f00/recipediaLogo.png" width="50%" alt="레시피디아 로고"/>
 
-### Recipedia 링크 : https://j12s003.p.ssafy.io/
+## 🧰 사용 기술 스택
 
-## 목차
+- **Framework**: React 18, Vite
+- **Language**: TypeScript
+- **UI**: TailwindCSS
+- **State Management**: Zustand
+- **API 통신**: Axios + React Query
+- **비동기 처리 및 오류 복구**: React Query + React Error Boundary
+- **환경 구성**: Vite 환경변수 시스템 (`.env`)
+- **기타 도구**: MSW(Mock Service Worker), ESLint, Prettier
 
-1. [프로젝트 개요](#프로젝트-개요)
-2. [기능 소개](#기능-소개)
-3. [기술 스택](#기술-스택)
-4. [서비스 아키텍처](#서비스-아키텍처)
-5. [ERD](#erd)
-6. [프로젝트 구조](#프로젝트-구조)
-   - [Frontend](#frontend-1)
-   - [Backend](#backend-1)
-   - [AI](#ai-1)
-7. [포팅메뉴얼](#포팅메뉴얼)
-8. [팀 소개](#팀-소개)
+---
 
-## 프로젝트 개요
+## 📁 디렉토리 구조 (주요 폴더 기준)
 
-### 📋 **서비스 개요**
-
-- 생성형 AI 기반 레시피 추천 서비스
-- 냉장고 재료 및 개인 선호를 반영한 레시피를 제공하는 서비스입니다.
-- **기간:** 2025/2/24 ~ 2025/4/11 (7주)
-
-### 💰 **서비스 특징**
-
-1. **재료 입출고**
-   - 사용자는 자유롭게 재료를 입출고할 수 있습니다.
-2. **레시피 생성**
-   - 냉장고 내 재료 및 개인 선호도 (선호/비선호 재료, 식단, 알러지 정보)를 기반으로 LLM을 활용하여 요리 이름을 생성하고,
-     유튜브 내 레시피 영상 리스트를 제공합니다.
-3. **단계별 레시피 텍스트**
-   - 레시피 영상 내 자막 정보를 추출 및 요약하여 단계별 레시피 텍스트를 제공합니다.
-   - 타임스탬프, 자동 스크롤 등의 기능을 통해 간편하게 레시피를 확인할 수 있습니다.
-   - 타이머, 요리 재료 정보 등 요리에 도움이 되는 기능들을 제공받을 수 있습니다.
-4. **즐겨찾기 및 이전 레시피**
-   - 마음에 드는 레시피를 저장하고, 과거에 만든 요리를 다시 찾아볼 수 있습니다.
-
-## 기능 소개
-
-### 메인 화면
-
-#### 재료 입출고
-
-<img src="/uploads/d7fef37c47fcbf06c531d5f5df2474e9/재료_리스트.png" width="50%" alt="재료 입출고 화면"/>
-
-#### 개인 선호 필터링
-
-<img src="/uploads/2730691f58b2f91a6ef98d23b1024d67/선호_필터링.png" width="50%" alt="개인 선호 필터링 화면"/>
-
-### 레시피 생성
-
-<img src="/uploads/e3a720994b8436e6ce68e94423fdd3de/레시피_리스트_-_즐찾.png" width="50%" alt="레시피 생성 화면"/>
-
-### 레시피 추출
-
-<img src="/uploads/65987eeb4f96ce90991498eed4de441a/레시피_상세_-_단계.png" width="50%" alt="레시피 추출 화면"/>
-
-### 사용자 프로필
-
-<div align="center">
-    <img src="/uploads/e0eada06b85377a73c4cd883ab5c883a/프로필_홈.png" width="45%" alt="프로필 홈 화면"/>
-    <img src="/uploads/7244249efc0dd1eaeaecbbed137f78b9/프로필_전환.png" width="45%" alt="프로필 전환 화면"/>
-</div>
-
-
-#### 즐겨찾기
-
-<img src="/uploads/61c354075c4d410cd19aee175625b64c/즐겨찾기_리스트.png" width="50%" alt="즐겨찾기 화면"/>
-
-#### 이전 레시피
-
-<img src="/uploads/b6a31fda97d25edb05cc11d0413ee3ce/이전_레시피.png" width="50%" alt="이전 레시피 화면"/>
-
-## 기술 스택
-
-**Frontend** <br> ![React](https://img.shields.io/badge/react-61DAFB.svg?style=for-the-badge&logo=react&logoColor=white)
-![TypeScript](https://img.shields.io/badge/typescript-3178C6.svg?style=for-the-badge&logo=typescript&logoColor=white)
-![Yarn Berry](https://img.shields.io/badge/yarn_berry-2C8EBB.svg?style=for-the-badge&logo=yarn&logoColor=white)
-![tailwind](https://img.shields.io/badge/tailwind-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
-![Zustand](https://img.shields.io/badge/zustand-E26529.svg?style=for-the-badge&logo=zustand&logoColor=white)
-![React Query](https://img.shields.io/badge/react_query-FF4154.svg?style=for-the-badge&logo=reactquery&logoColor=white)
-![Axios](https://img.shields.io/badge/axios-000000.svg?style=for-the-badge&logo=axios&logoColor=white)
-
-**Backend** <br> ![Java](https://img.shields.io/badge/java-3670A0?style=for-the-badge&logo=java&logoColor=ffdd54)
-![Spring](https://img.shields.io/badge/spring_boot-6DB33F.svg?style=for-the-badge&logo=springboot&logoColor=white)
-![Spring Data JPA](https://img.shields.io/badge/spring_data_jpa-6DB33F.svg?style=for-the-badge&logo=springdatajpa&logoColor=white)
-![QueryDSL](https://img.shields.io/badge/QueryDSL-0089CF?style=for-the-badge&logo=querydsl&logoColor=white)
-![MySQL](https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
-![Elastic Search](https://img.shields.io/badge/elastic-005571?style=for-the-badge&logo=elastic&logoColor=white)
-![Webflux](https://img.shields.io/badge/webflux-000000?style=for-the-badge&logo=webflux&logoColor=white)
-
-**AI** <br> ![Python](https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=FFFFFF)
-![Fast API](https://img.shields.io/badge/Fast_API-009688.svg?style=for-the-badge&logo=FastAPI&logoColor=white)
-![OpenAI](https://img.shields.io/badge/openAI-412991.svg?style=for-the-badge&logo=openai&logoColor=white)
-![YoutubeAPI](https://img.shields.io/badge/Youtube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)
-
-**DevOps** <br> ![NginX](https://img.shields.io/badge/NginX-009639.svg?style=for-the-badge&logo=nginx&logoColor=white)
-![Docker](https://img.shields.io/badge/docker-2496ED.svg?style=for-the-badge&logo=docker&logoColor=white)
-![Jenkins](https://img.shields.io/badge/jenkins-D24939.svg?style=for-the-badge&logo=jenkins&logoColor=white)
-![Amazon EC2](https://img.shields.io/badge/amazon_ec2-FF9900.svg?style=for-the-badge&logo=amazonec2&logoColor=white)
-
-**Tools** <br> ![GitLab](https://img.shields.io/badge/gitlab-FC6D26.svg?style=for-the-badge&logo=gitlab&logoColor=white)
-![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white)
-![Intellij IDEA](https://img.shields.io/badge/Intelij_IDEA-000000?style=for-the-badge&logo=intellijidea&logoColor=white)
-![Swagger](https://img.shields.io/badge/swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)
-![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
-![Figma](https://img.shields.io/badge/figma-F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white)
-![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white)
-![Jira](https://img.shields.io/badge/Jira-%23FFFFFF.svg?style=for-the-badge&logo=jira&logoColor=blue)
-
-<br>
-
-## 서비스 아키텍처
-
-<br>
-
-## ERD
-
-<img src="/uploads/f19c32ae296f9b2c4592406cfbf48dfe/ERD.png" width="50%" alt="ERD"/>
-
-<br>
-
-## 프로젝트 구조
-
-### Frontend
-
-```text
-client
-├── .yarn
-├── public
-├── src
-|   ├── apis
-│   ├── assets
-│   │   ├── fonts
-│   │   ├── icons
-│   │   ├── images
-│   │   ├── sounds
-│   ├── components
-│   │   ├── common
-│   │   ├── Layout
-│   │   ├── profile
-│   │   └── recipeRating
-│   ├── data
-│   ├── hooks
-│   ├── mocks
-│   ├── pages
-|   ├── stores
-|   ├── styles
-|   ├── types
-│   ├── utils
-│   ├── App.tsx
-|   ├── index.css
-|   ├── main.tsx
-│   └── vite-env.d.ts
+```bash
+src/
+├── apis/                     # Axios 기반 API 모듈
+├── assets/                   # 이미지, 폰트, 사운드 리소스
+│   ├── fonts/
+│   ├── icons/
+│   ├── images/
+│   │   ├── loading/
+│   │   ├── logo/
+│   │   └── noIngredient/
+│   └── sounds/
+├── components/               # 공통 UI 컴포넌트 및 모듈
+│   ├── common/               # 버튼, 모달, 입력창 등 공통 요소
+│   │   ├── button/
+│   │   ├── error/
+│   │   ├── input/
+│   │   ├── keypad/
+│   │   │   └── components/
+│   │   ├── loading/
+│   │   ├── modal/
+│   │   ├── timer/
+│   │   ├── toggle/
+│   │   └── videoInfo/
+│   ├── Layout/
+│   ├── profile/
+│   └── recipeRating/
+├── data/                     # 더미 데이터 또는 고정 상수 관리
+├── hooks/                    # 커스텀 훅 정의
+├── mocks/                    # MSW(Mock Service Worker) 관련 설정
+├── pages/                    # 라우팅되는 실제 페이지들
+│   ├── auth/
+│   │   ├── LoginPage.tsx
+│   │   └── auth.css
+│   ├── detailIngredient/
+│   │   ├── DetailIngredientModal.tsx
+│   │   └── components/
+│   ├── detailRecipe/
+│   │   ├── DetailRecipePage.tsx
+│   │   └── components/
+│   ├── home/
+│   │   ├── HomePage.tsx
+│   │   ├── Home.css
+│   │   └── components/
+│   ├── myRecipe/
+│   │   ├── MyRecipePage.tsx
+│   │   └── components/
+│   ├── preference/
+│   │   ├── PreferencePage.tsx
+│   │   └── components/
+│   ├── recipeList/
+│   │   ├── RecipeListPage.tsx
+│   │   └── components/
+│   ├── setting/
+│   │   ├── SettingPage.tsx
+│   │   └── components/
+│   ├── storeIngredient/
+│   │   ├── StoreConfirmModal.tsx
+│   │   ├── StoreIngredientModal.tsx
+│   │   └── components/
+│   └── takeoutIngredient/
+│       ├── TakeoutConfirmModal.tsx
+│       ├── TakeoutIngredientModal.tsx
+│       └── components/
+├── stores/                   # Zustand 기반 전역 상태 관리
+├── styles/                   # Tailwind 및 공통 스타일 정의
+├── types/                    # 전역 타입 정의
+├── utils/                    # 유틸 함수 모음
+├── main.tsx                  # 앱 진입점
+└── App.tsx                   # 라우터 및 글로벌 셋업
 ```
 
-### BackEnd
+---
 
-```text
-backend
-└─ src
-   └─ main
-      ├─ java
-      │  └─ com
-      │     └─ recipidia
-      │        ├─ aop
-      │        ├─ auth
-      │        │  ├─ config
-      │        │  ├─ controller
-      │        │  ├─ dto
-      │        │  └─ jwt
-      │        ├─ config
-      │        ├─ exception
-      │        ├─ filter
-      │        │  ├─ controller
-      │        │  ├─ converter
-      │        │  ├─ dto
-      │        │  ├─ entity
-      │        │  ├─ repository
-      │        │  └─ service
-      │        ├─ ingredient
-      │        │  ├─ controller
-      │        │  ├─ document
-      │        │  ├─ dto
-      │        │  ├─ entity
-      │        │  ├─ enums
-      │        │  ├─ exception
-      │        │  ├─ handler
-      │        │  ├─ repository
-      │        │  │  └─ querydsl
-      │        │  ├─ request
-      │        │  ├─ response
-      │        │  ├─ scheduler
-      │        │  └─ service
-      │        ├─ member
-      │        │  ├─ controller
-      │        │  ├─ dto
-      │        │  ├─ entity
-      │        │  ├─ exception
-      │        │  ├─ handler
-      │        │  ├─ repository
-      │        │  ├─ request
-      │        │  ├─ response
-      │        │  └─ service
-      │        └─ recipe
-      │           ├─ controller
-      │           ├─ converter
-      │           ├─ dto
-      │           ├─ entity
-      │           ├─ exception
-      │           ├─ handler
-      │           ├─ repository
-      │           ├─ request
-      │           ├─ response
-      │           └─ service
-      └─ resources
-         ├─ application.yml
-         └─ data
+## 🧠 상태 관리 구조
+
+- **Zustand**로 전역 상태 관리 (예: 로그인, 재료 목록, 모달 상태 등)
+- **React Query**로 서버 상태를 캐싱하고 요청 흐름을 단순화
+- **React Error Boundary**로 컴포넌트 단위 예외 핸들링 처리
+
+---
+
+## 🔐 API 통신 및 환경 구성
+
+- `.env` 파일을 통해 `VITE_API_URL` 및 릴리즈용 URL 설정
+
+```env
+VITE_API_URL=https://j12s003.p.ssafy.io/api
+VITE_RELEASE_API_URL=https://j12s003.p.ssafy.io/api
 ```
 
-### AI
+- `/apis` 디렉토리에서 Axios 기반 API 모듈화 및 도메인 분리 적용
 
-```text
-ai
-├── app
-│   ├── api
-│   │   └── f1
-│   │       └── endpoints
-│   ├── core
-│   ├── models
-│   ├── services
-│   │   ├── LLM
-│   │   └── external_api
-│   └── utils
-│       └── prompts
-└── test
-    └── utils
-```
+---
 
-## 포팅매뉴얼
+## 🧩 페이지 구성 요약
 
-[포팅매뉴얼 바로가기](https://lab.ssafy.com/s12-s-project/S12P21S003/-/blob/release/exec/README.md?ref_type=heads)
+| 경로                      | 설명                                 |
+|---------------------------|--------------------------------------|
+| `/`                       | 홈 화면 (재료 선택/입출고)          |
+| `/login`                   | 로그인 화면                |
+| `/myRecipe`               | 즐겨찾기한 레시피 목록              |
+| `/detailRecipe/:id`       | 레시피 상세 페이지, 영상+단계 포함  |
+| `/recipeList`             | 생성된 레시피 리스트 페이지         |
+| `/setting`                | 사용자 프로필 화면          |
 
-## 팀 소개
+---
 
-| 이름           | 역할 및 구현 기능                                                                                    |
-| -------------- | ---------------------------------------------------------------------------------------------------- |
-| 🟧이하영(팀장) | **Frontend**<br>- 화면 UI/UX 설계 <br>- 레시피 화면 구현 및 API 연결<br>                             |
-| 🟩이성준       | **Frontend**<br>- 화면 UI/UX 설계<br>- 재료 화면 구현 및 API 연결 <br>                               |
-| 🟦민경훈       | **Backend**<br>- DB 설계<br>- 재료, 레시피 등 API 구현<br> <br>                                      |
-| 🟥최효재       | **Infra**<br>- Docker, Docker-compose로 프로젝트 실행과 배포 환경 구축<br>- Jenkins로 CI/CD 구축<br> |
-| 🟨노규헌       | **AI**<br>- 레시피 생성 로직 설계 및 구현 <br>- AI 성능평가 및 고도화 <br>                           |
-| 🟪안태현       | **AI**<br>- 레시피 추출 로직 설계 및 구현 <br>- AI 성능평가 및 고도화 <br>                           |
+## 🧪 개발 편의 기능
+
+- **MSW**: API Mocking으로 독립적인 프론트 개발 가능
+- **Vite**: 빠른 빌드 및 HMR 지원
+- **ESLint + Prettier**: 코드 품질 및 포맷 일관성 유지
+
+---
+
+## ✨ UX 설계 포인트
+
+- 로딩 애니메이션 활용
+- 오류 시 사용자 안내 문구 출력
+- 페이지 간 전환 시 상태 초기화
+- 자동 스크롤, 타임스탬프, 타이머 등 요리 특화 UX 제공
+
+
+## 🪝 주요 커스텀 훅 (hooks/)
+
+| 훅 이름                | 기능 요약                                      |
+|------------------------|-------------------------------------------------|
+| `useDebounceHook`      | 입력 지연 처리를 통해 API 호출 최적화         |
+| `useIngredientsHooks`  | 재료 검색, 선택, 입출고 로직 통합 관리         |
+| `useRecipeHooks`       | 추천 요청, 생성된 레시피 리스트 핸들링         |
+| `useRecipeDetail`      | 개별 레시피 상세 조회 및 상태 관리             |
+| `useTimerManager`      | 요리 단계별 타이머 제어 및 UI 연동             |
+| `useUserHook`          | 로그인 사용자 정보 및 선호/비선호 재료 연동    |
+
+---
+
+## 🧾 Zustand 상태 관리 (stores/)
+
+| 스토어 파일           | 전역 상태 요약                                   |
+|------------------------|--------------------------------------------------|
+| `userStore.ts`         | 로그인 여부, 사용자 정보, 선호 설정              |
+| `modalStore.ts`        | 전역 모달 열림/닫힘 상태 및 모달 타입            |
+| `ingredientsStore.ts`  | 보유 중인 식재료 목록 및 선택 상태               |
+| `recipeStore.ts`       | 생성된 레시피 리스트 및 상세 상태                |
+
+---
+
+## 📐 타입 정의 전략 (types/)
+
+- 모든 API 요청/응답 및 UI 구성 요소는 전역 타입 파일로 분리 관리합니다.
+
+| 타입 파일              | 주요 역할                                         |
+|------------------------|--------------------------------------------------|
+| `ingredientsTypes.ts`  | 재료 관련 요청/응답 및 구조 정의                |
+| `recipeListTypes.ts`   | 레시피 리스트 응답 타입 및 상태 정의            |
+| `userTypes.ts`         | 사용자 정보, 토큰 응답, 선호 필드                |
+| `filterTypes.ts`       | 필터 조건에 대한 타입 구성                       |
+| `commonProps.ts`       | 컴포넌트 공통 Props 정의 (예: 버튼, 카드 등)    |
+| `iconProps.ts`         | 아이콘 관련 Props 타입 정의                      |
+
+## 🧩 공통 컴포넌트 구조 (components/common/)
+
+| 폴더 이름       | 주요 컴포넌트                                 |
+|----------------|-----------------------------------------------|
+| `button`       | `Button`, `FilterButton`, `IngredientButton`: 다양한 버튼 스타일을 위한 컴포넌트 |
+| `error`        | `ErrorPage`: 오류 발생 시 표시되는 기본 에러 페이지 컴포넌트 |
+| `input`        | `Input`, `IngredientInput`, `DateInput`: 텍스트/날짜 입력 전용 필드 |
+| `keypad`       | `Keypad`: 재료 수량 조절 등을 위한 커스텀 키패드 UI |
+| `loading`      | `LoadingPlayer`: 데이터 로딩 시 표시 |
+| `modal`        | `Modal`, `ModalHeader`: 팝업 UI의 레이아웃 및 제목 영역 구성 |
+| `timer`        | `TimerManager`, `InlineTimer`, `OpenTimer(Live)`, `TimerCarousel(Live)`: 조리 단계별 타이머 구성 요소 |
+| `toggle`       | `Toggle`: ON/OFF 전환 UI |
+| `videoInfo`    | `VideoInfo`, `VideoInfoRow(s)`, `VideoInfos`: 유튜브 영상 자막 및 정보 리스트 렌더링 |
+
+---
+
+## 🛠 주요 유틸 함수 (utils/)
+
+| 유틸 함수 파일                    | 설명                                           |
+|----------------------------------|------------------------------------------------|
+| `getFormattedDate.ts`            | 날짜 포맷 변환 함수 (ex: yyyy-mm-dd 등 처리)   |
+| `getYoutubeThumbnailUrl.ts`      | 유튜브 영상 썸네일 URL 생성                   |
+| `navigationEvent.ts`             | 라우터 이동 시 네비게이션 이벤트 핸들러 |
