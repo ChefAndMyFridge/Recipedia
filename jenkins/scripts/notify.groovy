@@ -1,3 +1,34 @@
+/**
+ * 📦 Jenkins Pipeline Shared Script
+ * ----------------------------------
+ * 🔧 파일명: notify.groovy
+ * ✅ 목적:
+ *     - 빌드 상태(SUCCESS, FAILURE 등)에 따라 Mattermost 채널에 메시지 전송
+ *     - 릴리즈 노트, 커밋 정보, 빌드 시간 등을 포함한 통합 알림 제공
+ *
+ * ✅ 제공 메소드:
+ *     - sendMattermostNotification(String status, String releaseNotes, String commit, String duration)
+ *         ⤷ status: 빌드 상태 (예: SUCCESS, FAILURE, STARTED)
+ *         ⤷ releaseNotes: git 로그 메시지 (줄바꿈 포함 가능)
+ *         ⤷ commit: 트리거된 커밋 메시지
+ *         ⤷ duration: 빌드 시간 (초 단위)
+ *
+ * ✅ 사용 예시 (Jenkinsfile):
+ *     def notify = load 'jenkins/scripts/notify.groovy'
+ *     notify.sendMattermostNotification('SUCCESS', releaseNotes, latestCommit, "23초")
+ *
+ * ✅ 반환값:
+ *     - 없음
+ *
+ * 🛠️ 내부 처리:
+ *     - 메시지 포맷 구성 및 Markdown 형식 알림
+ *     - 줄바꿈/인용문을 포함한 릴리즈 노트를 escape 처리 후 전송
+ *     - `env.MATTERMOST_WEBHOOK_URL`로 POST 요청
+ *
+ * 📅 작성자: 효재
+ */
+
+
 def sendMattermostNotification(String status, String releaseNotes = "- No release notes.", String commit = "Unknown", String duration = "측정 불가") {
     def emoji
     def color
