@@ -24,7 +24,7 @@
 4. **즐겨찾기 및 이전 레시피**
    - 마음에 드는 레시피를 저장하고, 과거에 만든 요리를 다시 찾아볼 수 있습니다.
 
-## 기술 스택
+## 🧰 사용 기술 스택
 
 **Backend** <br> ![Java](https://img.shields.io/badge/java-3670A0?style=for-the-badge&logo=java&logoColor=ffdd54)
 ![Spring](https://img.shields.io/badge/spring_boot-6DB33F.svg?style=for-the-badge&logo=springboot&logoColor=white)
@@ -34,8 +34,8 @@
 ![Elastic Search](https://img.shields.io/badge/elastic-005571?style=for-the-badge&logo=elastic&logoColor=white)
 ![Webflux](https://img.shields.io/badge/webflux-000000?style=for-the-badge&logo=webflux&logoColor=white)
 
-## 프로젝트 구조
-
+## 📁 디렉토리 구조 (물리적 기준)
+> 아래는 실제 소스코드 디렉토리 기반의 구조입니다.
 ```text
 backend
 └── src
@@ -98,7 +98,7 @@ backend
             └── data
 ```
 
-## 프로젝트 설정
+## 🔐 Jenkins 환경 변수 구성
 
 Jenkins Credential에 다음 값들을 설정합니다.
 ```
@@ -110,42 +110,54 @@ X_API : FastAPI와 통신을 위한 헤더로, FASTAPI_SECURITY_KEY와 동일한
 ADMIN_PW : admin 계정에 사용할 비밀번호를 입력합니다.
 ```
 
+## 🧠 도메인 책임 요약
 
-## Config 파일 설정
+| 도메인      | 주요 책임                                                         |
+|-------------|------------------------------------------------------------------|
+| ingredient  | 사용자 보유 식재료 관리, 재료 기반 검색, Elasticsearch 연동         |
+| recipe      | FastAPI 기반 유사 레시피 추천, 냉장고 기반 생성형 레시피 제공       |
+| member      | 사용자 CRUD, 즐겨찾기 관리, 정보수정 등                     |
+| auth        | JWT 인증 및 토큰 발급, 인증 필터 및 시큐리티 설정                |
+| filter      | 사용자 냉장고 재료 기반 조건 필터 제공       |
 
-## 디렉토리 상세 설명
 
-1. aop
-   컨트롤러 메서드 실행 전/후 로그 출력
-   요청정보와 처리 시간을 측정하여 출력함
+## 🗂 주요 패키지 구조 및 핵심 클래스 (논리적 책임 기준)
+>  각 패키지는 도메인 책임 및 역할을 중심으로 설계되었습니다.
 
-2. auth
-   JWT 기반 계정 관리
-   admin 계정 설정
-   로그인 API
+### recipidia.auth
+- `AuthController`: 회원가입, 로그인, 토큰 재발급 처리
+- `JwtProvider`, `JwtAuthenticationFilter`: JWT 토큰 생성, 검증 및 필터 처리
+- `AuthDto`, `LoginRequest`, `TokenResponse`: 인증 요청/응답 객체 정의
 
-3. config
-   비동기 처리, JsonConverter를 위한 ObjectMapper 설정
-   FastAPI와의 통신을 위한 WebClient 설정, Security 설정
-   Swagger 레이아웃 정렬 및 JWT 인증용 openapi 설정
-   CSV 기반 초기 식재료 정보 데이터셋 입력 함수
+### recipidia.ingredient
+- `IngredientController`: 식재료 등록/수정/삭제 API 제공
+- `IngredientFindController`: 키워드 기반 검색
+- `IngredientService`, `IngredientServiceImpl`: 비즈니스 로직 처리 계층
+- `IngredientQueryRepository`: QueryDSL 기반 동적 검색 쿼리 작성
+- `IngredientDocument`: Elasticsearch 인덱싱용 문서 클래스
+- `NutrientUpdateScheduler`: 주기적으로 영양소 정보를 업데이트하는 스케줄러
 
-4. exception
-   GlobalExceptionHandler 설정
+### recipidia.recipe
+- `RecipeController`: 레시피 등록, 조회, 추천 API 제공
+- `RecipeService`, `RecipeServiceImpl`: 레시피 생성 및 조건 기반 추천 로직 포함
+   - `WebClient`를 통해 **논블로킹 방식**으로 처리
+   - 이를 통해 LLM 기반 FastAPI 응답 대기 시간에 대한 병목을 방지
+- `RecipeIngredient`: 레시피와 식재료 간 다대다 관계 엔티티
 
-5. filter
-   멤버 별 개인화 필터 API - 조회/수정
-   레시피 검색 시 필터를 적용해 고내 식재료 필터링 서비스 구현
+### recipidia.member
+- `MemberController`: 사용자 정보 CRUD 처리
+- `MemberService`, `MemberServiceImpl`: 사용자 인증 외의 비즈니스 로직 처리
+- `Member`: 사용자 도메인 엔티티
 
-6. ingredient
-   식재료 관리 API - 입고/출고/조회
-   식재료 영양정보 업데이트 서비스 - FastAPI /nutrient로 요청
-   Elastic Search 기반 자동완성 API
+### recipidia.filter
+- `FilterServiceImpl`: 사용자의 냉장고 재료 기반 필터 알고리즘 처리
+- `FilterController`: 냉장고 기반 추천 API 제공
+- `FilterEntity`, `FilterRequestDto`: 필터 기준과 결과 매핑
 
-7. member
-   냉장고 멤버 프로필 API - 등록/조회/삭제
-   각 멤버 별 즐겨찾기/평점 API - 등록/수정
+### recipidia.config & aop
+- `WebSecurityConfig`: Spring Security 설정 및 JWT 필터 등록
+- `GlobalLoggingAspect`: 주요 서비스 메소드 로깅을 위한 AOP 설정
 
-8. 레시피 API
-
-작성 중 입니다...
+### recipidia.exception & handler
+- `GlobalExceptionHandler`: 예외 응답 포맷 일괄 처리
+- `IngredientException`, `RecipeNotFoundException`: 도메인별 커스텀 예외 정의
