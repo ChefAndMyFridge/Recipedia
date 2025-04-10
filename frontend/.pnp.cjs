@@ -30,6 +30,7 @@ const RAW_RUNTIME_STATE =
           ["@eslint/js", "npm:9.18.0"],\
           ["@tanstack/react-query", "virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:5.68.0"],\
           ["@tanstack/react-query-devtools", "virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:5.68.0"],\
+          ["@types/hammerjs", "npm:2.0.46"],\
           ["@types/node", "npm:22.13.14"],\
           ["@types/react", "npm:18.3.18"],\
           ["@types/react-dom", "virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:18.3.5"],\
@@ -45,6 +46,7 @@ const RAW_RUNTIME_STATE =
           ["eslint-plugin-react-hooks", "virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:5.1.0"],\
           ["eslint-plugin-react-refresh", "virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:0.4.16"],\
           ["globals", "npm:15.14.0"],\
+          ["hammerjs", "npm:2.0.8"],\
           ["msw", "virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:2.7.3"],\
           ["postcss", "npm:8.4.49"],\
           ["prettier", "npm:3.4.2"],\
@@ -1326,6 +1328,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/@types-estree-npm-1.0.6-b5e23f2ea2-cdfd751f6f.zip/node_modules/@types/estree/",\
         "packageDependencies": [\
           ["@types/estree", "npm:1.0.6"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/hammerjs", [\
+      ["npm:2.0.46", {\
+        "packageLocation": "./.yarn/cache/@types-hammerjs-npm-2.0.46-de99d4d9d1-f3c1cb20dc.zip/node_modules/@types/hammerjs/",\
+        "packageDependencies": [\
+          ["@types/hammerjs", "npm:2.0.46"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -3102,6 +3113,7 @@ const RAW_RUNTIME_STATE =
           ["@eslint/js", "npm:9.18.0"],\
           ["@tanstack/react-query", "virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:5.68.0"],\
           ["@tanstack/react-query-devtools", "virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:5.68.0"],\
+          ["@types/hammerjs", "npm:2.0.46"],\
           ["@types/node", "npm:22.13.14"],\
           ["@types/react", "npm:18.3.18"],\
           ["@types/react-dom", "virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:18.3.5"],\
@@ -3117,6 +3129,7 @@ const RAW_RUNTIME_STATE =
           ["eslint-plugin-react-hooks", "virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:5.1.0"],\
           ["eslint-plugin-react-refresh", "virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:0.4.16"],\
           ["globals", "npm:15.14.0"],\
+          ["hammerjs", "npm:2.0.8"],\
           ["msw", "virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:2.7.3"],\
           ["postcss", "npm:8.4.49"],\
           ["prettier", "npm:3.4.2"],\
@@ -3358,6 +3371,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/graphql-npm-16.10.0-bc1b088de1-3037306755.zip/node_modules/graphql/",\
         "packageDependencies": [\
           ["graphql", "npm:16.10.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["hammerjs", [\
+      ["npm:2.0.8", {\
+        "packageLocation": "./.yarn/cache/hammerjs-npm-2.0.8-f656ba2573-5c95e5774b.zip/node_modules/hammerjs/",\
+        "packageDependencies": [\
+          ["hammerjs", "npm:2.0.8"]\
         ],\
         "linkType": "HARD"\
       }]\

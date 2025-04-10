@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Recipedia 라이브 시연</title>
+  <script src="https://hammerjs.github.io/dist/hammer.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <style>
+    /* 전체 화면 설정 */
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden; /* 부모 페이지에는 스크롤 없으나, iframe 내부는 별도 */
+      background: #f8f8f8;
+      position: relative;
+    }
+    .scene-container {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+    /* 냉장고 요소 */
+    .fridge {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(1);
+      transform-origin: top left;
+      width: 380px;
+      height: 760px;
+      background: url('fridge.png') no-repeat center center;
+      background-size: contain;
+      transition: transform 1s ease;
+      cursor: pointer;
+    }
+    /* 디스플레이 영역 */
+    .fridge-screen {
+      position: absolute;
+      top: 88px;
+      left: 205px;
+      width: 155px;
+      height: 275px;
+      overflow: auto; /* 부모 역할 : 내용이 넘치면 잘라내지만, 내부 iframe 페이지가 자체 스크롤 되도록 함 */
+    }
+    /* 내부 웹 콘텐츠 축소 */
+    .scale-wrapper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 375px;
+      height: 667px;
+      transform: scale3d(0.41, 0.41, 1);
+      transform-origin: left top;
+    }
+    .scale-wrapper iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    /* 줌인 상태 (예시) */
+    .fridge.zoom {
+      transform: translate(-150%, -50%) translate(-200px, -200px) scale(2.5);
+    }
+  </style>
+</head>
+<body>
+  <div class="scene-container" id="touchArea">
+    <div class="fridge" id="fridgeElement">
+      <div class="fridge-screen">
+        <div class="scale-wrapper">
+          <iframe src="https://j12s003.p.ssafy.io/" id="myIframe"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const fridgeElement = document.getElementById('fridgeElement');
+    fridgeElement.addEventListener('click', function(e) {
+      e.stopPropagation();
+      fridgeElement.classList.toggle('zoom');
+    });
+  </script>
+</body>
+</html>
