@@ -6,68 +6,94 @@
   <script src="https://hammerjs.github.io/dist/hammer.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <style>
-    /* 전체 화면 설정 */
     html, body {
       margin: 0;
       padding: 0;
       width: 100%;
       height: 100%;
-      overflow: hidden; /* 부모 페이지에는 스크롤 없으나, iframe 내부는 별도 */
-      background: #f8f8f8;
-      position: relative;
+      overflow: hidden;
+      position: absolute;
     }
+
     .scene-container {
       width: 100%;
       height: 100%;
-      position: relative;
-    }
-    /* 냉장고 요소 */
-    .fridge {
       position: fixed;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%) scale(1);
+      overflow: hidden;
+      transition: transform 1s ease;
+      pointer-events: none;
+    }
+
+    .scene-container.zoom {
+      transform: translate(30%, 20%) translate(-60px, 140px) scale(4.5);
+      transform-origin: center center;
+    }
+
+    .background {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('kitchen.png') no-repeat center center;
+      background-size: cover;
+      opacity: 0.6;
+      z-index: -1;
+    }
+
+    .fridge {
+      position: absolute;
+      top: 50vh;
+      left: 50vw;
+      transform: translate(-86.3%, -33.5%) scale(0.79);
       transform-origin: top left;
       width: 380px;
       height: 760px;
       background: url('fridge.png') no-repeat center center;
-      background-size: contain;
-      transition: transform 1s ease;
+      background-size: cover;
       cursor: pointer;
     }
-    /* 디스플레이 영역 */
+
+    .fridge,
+    .fridge * {
+      pointer-events: auto;
+    }
+
     .fridge-screen {
       position: absolute;
-      top: 88px;
-      left: 205px;
-      width: 155px;
-      height: 275px;
-      overflow: auto; /* 부모 역할 : 내용이 넘치면 잘라내지만, 내부 iframe 페이지가 자체 스크롤 되도록 함 */
+      top: 82px;
+      left: 206px;
+      /* width: 155px;
+      height: 275px; */
+      width: 563px;
+      height: 1015px;
+      overflow: hidden;
     }
-    /* 내부 웹 콘텐츠 축소 */
+
     .scale-wrapper {
       position: absolute;
       top: 0;
       left: 0;
-      width: 375px;
-      height: 667px;
-      transform: scale3d(0.41, 0.41, 1);
+      /* width: 375px; 너무 낮은 해상도
+      height: 677px;
+      transform: scale3d(0.41, 0.41, 1); */
+      width: 563px;    /* 375 * 1.5 */
+      height: 1015px;   /* 677 * 1.5 */
+      transform: scale(0.28);  /* 줄여서 원래 크기로 보이게 함 */
       transform-origin: left top;
     }
+
     .scale-wrapper iframe {
       width: 100%;
       height: 100%;
       border: none;
       -webkit-overflow-scrolling: touch;
     }
-    /* 줌인 상태 (예시) */
-    .fridge.zoom {
-      transform: translate(-150%, -50%) translate(-200px, -200px) scale(2.5);
-    }
   </style>
 </head>
 <body>
   <div class="scene-container" id="touchArea">
+    <div class="background"></div>
+
     <div class="fridge" id="fridgeElement">
       <div class="fridge-screen">
         <div class="scale-wrapper">
@@ -79,9 +105,11 @@
 
   <script>
     const fridgeElement = document.getElementById('fridgeElement');
+    const sceneContainer = document.getElementById('touchArea');
+
     fridgeElement.addEventListener('click', function(e) {
       e.stopPropagation();
-      fridgeElement.classList.toggle('zoom');
+      sceneContainer.classList.toggle('zoom');
     });
   </script>
 </body>
