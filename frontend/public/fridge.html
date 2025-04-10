@@ -62,8 +62,10 @@
       position: absolute;
       top: 82px;
       left: 206px;
-      width: 155px;
-      height: 275px;
+      /* width: 155px;
+      height: 275px; */
+      width: 563px;
+      height: 1015px;
       overflow: hidden;
     }
 
@@ -71,9 +73,12 @@
       position: absolute;
       top: 0;
       left: 0;
-      width: 375px;
+      /* width: 375px; 너무 낮은 해상도
       height: 677px;
-      transform: scale3d(0.41, 0.41, 1);
+      transform: scale3d(0.41, 0.41, 1); */
+      width: 563px;    /* 375 * 1.5 */
+      height: 1015px;   /* 677 * 1.5 */
+      transform: scale(0.28);  /* 줄여서 원래 크기로 보이게 함 */
       transform-origin: left top;
     }
 
