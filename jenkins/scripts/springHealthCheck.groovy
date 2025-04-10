@@ -16,7 +16,6 @@
  *
  * ✅ 동작 방식:
  *     - 최대 5회까지 2초 간격으로 /actuator/health 호출
- *     - 응답이 없거나 status != "UP"이면 재시도
  *     - 최종 실패 시 error()로 파이프라인 중단
  *
  * ✅ 반환값:
@@ -29,40 +28,29 @@
  * 📅 작성자: 효재
  */
 
-
-import groovy.json.JsonSlurper
-
 def check(apiUrl) {
   def maxRetries = 5
   def delaySeconds = 2
   def slurper = new JsonSlurper()
 
   for (int i = 0; i < maxRetries; i++) {
-      try {
-          // curl이 실패해도 파이프라인 깨지지 않도록 '|| true' 처리
-          def response = sh(script: "curl -s --connect-timeout 2 ${apiUrl}/actuator/health || true", returnStdout: true).trim()
+    def statusCode = sh(
+        script: "curl -s -o /dev/null -w '%{http_code}' --connect-timeout 2 ${apiUrl}/actuator/health || true",
+        returnStdout: true
+    ).trim()
 
-          // response가 비어있으면 아직 서버가 안 뜬 상태
-          if (!response) {
-              echo "⏳ Spring Boot not responding yet... (${i + 1}/${maxRetries})"
-          } else {
-              def parsed = slurper.parseText(response)
-              if (parsed.status == "UP") {
-                  echo "✅ Spring Boot is UP!"
-                  break
-              } else {
-                  echo "⏳ Spring status: ${parsed.status} (${i + 1}/${maxRetries})"
-              }
-          }
-      } catch (Exception e) {
-          echo "❌ JSON 파싱 실패 또는 기타 오류: ${e.message}"
-      }
+    if (statusCode == '200') {
+        echo "✅ Spring Boot is UP!"
+        break
+    } else {
+        echo "⏳ Status: ${statusCode} (attempt ${i + 1}/${maxRetries})"
+    }
 
-      sleep delaySeconds
+    sleep delaySeconds
 
-      if (i == maxRetries - 1) {
-          error "Spring Boot가 ${maxRetries * delaySeconds}초 내에 기동되지 않았습니다."
-      }
+    if (i == maxRetries - 1) {
+        error "❌ Spring Boot didn't start in time (${maxRetries * delaySeconds} sec)"
+    }
   }
 }
 
