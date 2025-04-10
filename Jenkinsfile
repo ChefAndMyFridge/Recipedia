@@ -58,7 +58,7 @@ pipeline {
                     // def baseUrl = env.BRANCH_NAME == "master" ? "/master" : "/"
                     def baseUrl = "/"
                     // env.API_URL = env.BRANCH_NAME == "master" ? viteMasterApiUrl : viteReleaseApiUrl
-                    env.API_URL = viteMasterApiUrl
+                    env.API_URL = viteReleaseApiUrl
 
                     sh """
                     cd ${env.WORKSPACE}/frontend
