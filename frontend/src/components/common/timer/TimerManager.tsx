@@ -4,7 +4,8 @@ import useTimerManager from "@hooks/useTimerManager";
 import IconTimer from "@assets/icons/IconTimer";
 import IconClose from "@assets/icons/IconClose";
 
-import TimerCarousel from "@components/common/timer/TimerCarousel";
+// import TimerCarousel from "@components/common/timer/TimerCarousel";
+import TimerCarousel from "@components/common/timer/TimerCarouselLive";
 
 interface TimerManagerProps {
   recipeTimers?: { step: string; timer: number }[];
