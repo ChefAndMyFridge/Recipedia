@@ -31,7 +31,6 @@
 def check(apiUrl) {
   def maxRetries = 5
   def delaySeconds = 2
-  def slurper = new JsonSlurper()
 
   for (int i = 0; i < maxRetries; i++) {
     def statusCode = sh(
