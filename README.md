@@ -1,6 +1,6 @@
 # RECIPEDIA
 
-<img src="/uploads/350bf6bbb93dbe34f7fb9cf9f61b5f00/recipediaLogo.png" width="50%" alt="레시피디아 로고"/>
+<img src="https://github.com/user-attachments/assets/76b3ab3f-0bfc-4f2a-8f29-abaee28d3013" width="50%" alt="레시피디아 로고"/>
 
 ### Recipedia 링크 : https://j12s003.p.ssafy.io/
 
@@ -46,35 +46,35 @@
 
 #### 재료 입출고
 
-<img src="/uploads/d7fef37c47fcbf06c531d5f5df2474e9/재료_리스트.png" width="50%" alt="재료 입출고 화면"/>
+<img src="https://github.com/user-attachments/assets/759243c5-b1e1-4fea-89fd-e285e0170f70" width="50%" alt="재료 입출고 화면"/>
 
 #### 개인 선호 필터링
 
-<img src="/uploads/2730691f58b2f91a6ef98d23b1024d67/선호_필터링.png" width="50%" alt="개인 선호 필터링 화면"/>
+<img src="https://github.com/user-attachments/assets/e97b8ab4-d1b0-4dd5-a5b2-142e611cc804" width="50%" alt="개인 선호 필터링 화면"/>
 
 ### 레시피 생성
 
-<img src="/uploads/e3a720994b8436e6ce68e94423fdd3de/레시피_리스트_-_즐찾.png" width="50%" alt="레시피 생성 화면"/>
+<img src="https://github.com/user-attachments/assets/b2a068d4-5f51-47c4-b7fc-3450a7259e86" width="50%" alt="레시피 생성 화면"/>
 
 ### 레시피 추출
 
-<img src="/uploads/65987eeb4f96ce90991498eed4de441a/레시피_상세_-_단계.png" width="50%" alt="레시피 추출 화면"/>
+<img src="https://github.com/user-attachments/assets/1b463bfd-c717-4a69-9c16-8ec9529cc778" width="50%" alt="레시피 추출 화면"/>
 
 ### 사용자 프로필
 
 <div align="center">
-    <img src="/uploads/4433461e5e5bcde69cfba87dd20d9e8b/프로필_홈.png" width="45%" alt="프로필 홈 화면"/>
-    <img src="/uploads/7a5e5254dd6616618be237fc261fddeb/프로필_전환.png" width="45%" alt="프로필 전환 화면"/>
+    <img src="https://github.com/user-attachments/assets/6ee3855b-f489-4f12-ab66-9d2e9de9b2ac" width="45%" alt="프로필 홈 화면"/>
+    <img src="https://github.com/user-attachments/assets/74d0e974-032e-423c-bcb0-92b3807df4f3" width="45%" alt="프로필 전환 화면"/>
 </div>
 
 
 #### 즐겨찾기
 
-<img src="/uploads/61c354075c4d410cd19aee175625b64c/즐겨찾기_리스트.png" width="50%" alt="즐겨찾기 화면"/>
+<img src="https://github.com/user-attachments/assets/2a58a8c3-1ebf-4545-88db-79504521a6be" width="50%" alt="즐겨찾기 화면"/>
 
 #### 이전 레시피
 
-<img src="/uploads/b6a31fda97d25edb05cc11d0413ee3ce/이전_레시피.png" width="50%" alt="이전 레시피 화면"/>
+<img src="https://github.com/user-attachments/assets/6703affc-dbe9-4a65-93ba-31433955e6f5" width="50%" alt="이전 레시피 화면"/>
 
 ## 기술 스택
 
@@ -116,13 +116,13 @@
 <br>
 
 ## 서비스 아키텍처
-<img src="/uploads/9a46786b144b1a9255a057060f63be5c/웹아키텍처.jpg" alt="ERD"/>
+<img src="https://github.com/user-attachments/assets/90a51318-c5e9-450d-85b0-92414097712f" alt="ERD"/>
 
 <br>
 
 ## ERD
 
-<img src="/uploads/f19c32ae296f9b2c4592406cfbf48dfe/ERD.png" width="50%" alt="ERD"/>
+<img src="https://github.com/user-attachments/assets/1c30769b-b566-4002-ab3a-3fff3769b9b2" width="50%" alt="ERD"/>
 
 <br>
 
@@ -245,7 +245,7 @@ ai
 
 ## 포팅매뉴얼
 
-[포팅매뉴얼 바로가기](https://lab.ssafy.com/s12-s-project/S12P21S003/-/blob/release/exec/README.md?ref_type=heads)
+[포팅매뉴얼 바로가기](https://github.com/ChefAndMyFridge/Recipedia/tree/master/exec)
 
 ## 팀 소개
 
