@@ -11,6 +11,12 @@ import IconIncrease from "@assets/icons/IconIncrease";
 import { User } from "@/types/userTypes";
 import defaultProfile from "@assets/images/DefaultProfile.png";
 
+// 임시 프로필 이미지
+import dadProfile from "@assets/images/ProfileDad.png";
+import momProfile from "@assets/images/ProfileMom.png";
+import sisterProfile from "@assets/images/ProfileGirl.png";
+import brotherProfile from "@assets/images/ProfileBoy.png";
+
 const ProfileChangeModal = () => {
   const { setCurrentProfileImg, setUserName, setUserId } = useUserStore();
   const { openModal, closeModal } = useModalStore();
@@ -18,12 +24,30 @@ const ProfileChangeModal = () => {
   // 등록된 가족 구성원 리스트 조회
   const { data: profiles } = useGetMemberList();
 
-  const handleProfileChange = (profile: User) => {
+  function handleProfileChange(profile: User) {
+    const selectedProfileImage = getProfileImage(profile.membername);
+
     setUserId(profile.memberId);
-    setCurrentProfileImg(defaultProfile);
+    setCurrentProfileImg(selectedProfileImage);
     setUserName(profile.membername);
+
     closeModal();
-  };
+  }
+
+  function getProfileImage(membername: string): string {
+    switch (membername) {
+      case "아빠":
+        return dadProfile;
+      case "엄마":
+        return momProfile;
+      case "딸":
+        return sisterProfile;
+      case "아들":
+        return brotherProfile;
+      default: // 기본 프로필 이미지
+        return defaultProfile;
+    }
+  }
 
   return (
     <>
@@ -38,7 +62,7 @@ const ProfileChangeModal = () => {
                 onClick={() => handleProfileChange(profile)}
               >
                 <img
-                  src={defaultProfile} // 이미지 서버가 추가된다면 변경 필요
+                  src={getProfileImage(profile.membername)}
                   alt={profile.membername}
                   onError={(event) => (event.currentTarget.src = defaultProfile)} // 이미지 로드 실패 시 대체 이미지
                   className="w-28 aspect-[1/1] rounded-full object-cover"
