@@ -102,15 +102,15 @@ pipeline {
             }
         }
 
-        // stage('Wait for Spring Boot to be Ready') {
-        //     steps {
-        //         script {
-        //             echo "⏳ Spring Boot가 준비될 때까지 대기 중..."
-        //             def springCheck = load 'jenkins/scripts/springHealthCheck.groovy'
-        //             springCheck.check(env.API_URL)
-        //         }
-        //     }
-        // }
+        stage('Wait for Spring Boot to be Ready') {
+            steps {
+                script {
+                    echo "⏳ Spring Boot가 준비될 때까지 대기 중..."
+                    def springCheck = load 'jenkins/scripts/springHealthCheck.groovy'
+                    springCheck.check(env.API_URL)
+                }
+            }
+        }
 
         stage("API Health Check via Login") {
             steps {
